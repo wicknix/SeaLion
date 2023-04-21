@@ -1,7 +1,6 @@
-# Building SeaLion (requires the 10.7sdk)
-Download UXP (Unified XUL Platform) and extract it's contents in to the
-/mozilla directory. Edit the mozconfig to your liking and run ./mach build
-then ./fix-pkg.sh ~/Desktop/SeaLion.app
+# SeaLion - A web browser for Mac OS X 10.7 - 12.6
+Built upon the unified XUL platform (UXP).
+https://repo.palemoon.org/MoonchildProductions/UXP
 
 What features are included
 =========================================================================
