@@ -13,7 +13,7 @@ What features are included
 * Supports Plug-ins
 * Open Search Engine Providers
 * TLS 1.3 support
-* Updated certificates
+* Based on a mature code base
 
 What is not included
 =========================================================================
