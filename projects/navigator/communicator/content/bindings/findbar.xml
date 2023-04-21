@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!--
+   SeaMonkey Flexible Findbar
+
+   The binding implemented here mostly works like its toolkit ancestor,
+   except that it will not appear during a manually triggered type ahead find
+   if accessibility.typeaheadfind.usefindbar is false, and the automatic
+   typeahead find is controlled by the accessibility.typeaheadfind.autostart
+   preference instead of the accessibility.typeaheadfind preference.
+
+   This allows the in status bar type ahead find to be used in place of the
+   findbar implementation and allows the in status bar type ahead find
+   to only need to cache the accessibility.typeaheadfind preference branch.
+-->
+
+<!DOCTYPE bindings>
+
+<bindings id="findbarBindings"
+          xmlns="http://www.mozilla.org/xbl">
+
+  <binding id="findbar"
+           extends="chrome://global/content/bindings/findbar.xml#findbar">
+    <implementation>
+      <constructor><![CDATA[
+        var prefsvc =
+          Components.classes["@mozilla.org/preferences-service;1"]
+                    .getService(Components.interfaces.nsIPrefBranch);
+
+        prefsvc.removeObserver("accessibility.typeaheadfind",
+                               this._observer);
+        prefsvc.addObserver("accessibility.typeaheadfind.autostart",
+                            this._suiteObserver, false);
+        prefsvc.addObserver("accessibility.typeaheadfind.usefindbar",
+                            this._suiteObserver, false);
+
+        this._findAsYouType =
+          prefsvc.getBoolPref("accessibility.typeaheadfind.autostart");
+        this._useFindbar =
+          prefsvc.getBoolPref("accessibility.typeaheadfind.usefindbar");
+      ]]></constructor>
+
+      <field name="_suiteObserver"><![CDATA[({
+        _self: this,
+
+        QueryInterface: function(aIID) {
+          if (aIID.equals(Components.interfaces.nsIObserver) ||
+              aIID.equals(Components.interfaces.nsISupportsWeakReference) ||
+              aIID.equals(Components.interfaces.nsISupports))
+            return this;
+
+          throw Components.results.NS_ERROR_NO_INTERFACE;
+        },
+
+        observe: function(aSubject, aTopic, aPrefName) {
+          if (aTopic != "nsPref:changed")
+            return;
+
+          var prefsvc =
+            aSubject.QueryInterface(Components.interfaces.nsIPrefBranch);
+
+          switch (aPrefName) {
+            case "accessibility.typeaheadfind.autostart":
+              this._self._findAsYouType = prefsvc.getBoolPref(aPrefName);
+              this._self._updateBrowserWithState();
+              break;
+            case "accessibility.typeaheadfind.usefindbar":
+              this._self._useFindbar = prefsvc.getBoolPref(aPrefName);
+              break;
+           }
+        }
+      })]]></field>
+
+      <!-- This is necessary because the destructor isn't called when
+           we are removed from a document that is not destroyed. This
+           needs to be explicitly called in this case -->
+      <method name="destroy">
+        <body><![CDATA[
+          if (this._destroyed)
+            return;
+          this._destroyed = true;
+
+          this.browser = null;
+
+          var prefsvc =
+            Components.classes["@mozilla.org/preferences-service;1"]
+                      .getService(Components.interfaces.nsIPrefBranch);
+          prefsvc.removeObserver("accessibility.typeaheadfind.linksonly",
+                                 this._observer);
+          prefsvc.removeObserver("accessibility.typeaheadfind.casesensitive",
+                                 this._observer);
+          prefsvc.removeObserver("findbar.entireword", this._observer);
+          prefsvc.removeObserver("findbar.highlightAll", this._observer);
+          prefsvc.removeObserver("findbar.modalHighlight", this._observer);
+
+          prefsvc.removeObserver("accessibility.typeaheadfind.usefindbar",
+                                 this._suiteObserver);
+          prefsvc.removeObserver("accessibility.typeaheadfind.autostart",
+                                 this._suiteObserver);
+
+          // Clear all timers that might still be running.
+          this._cancelTimers();
+        ]]></body>
+      </method>
+
+      <method name="_updateBrowserWithState">
+        <body><![CDATA[
+          window.messageManager.broadcastAsyncMessage("Findbar:UpdateState", {
+            findMode: this._findMode,
+            findAsYouType: this._findAsYouType,
+          });
+        ]]></body>
+      </method>
+
+      <method name="receiveMessage">
+        <parameter name="aMessage"/>
+        <body><![CDATA[
+          switch (aMessage.name) {
+            case "Findbar:Mouseup":
+              if (!this.hidden && this._findMode != this.FIND_NORMAL)
+                this.close();
+              break;
+
+            case "Findbar:Keypress":
+              if (this._useFindbar)
+                return this._onBrowserKeypress(aMessage.data.fakeEvent,
+                                               aMessage.data.shouldFastFind);
+              break;
+          }
+          return undefined;
+        ]]></body>
+      </method>
+
+      <method name="startFastFind">
+        <parameter name="aMode"/>
+        <body><![CDATA[
+          if (this._findMode == aMode && this._quickFindTimeout) {
+            this._findField.select();
+            this._findField.focus();
+            return;
+          }
+
+          // Clear bar first, so that when openFindBar() calls setCaseSensitivity()
+          // it doesn't get confused by a lingering value
+          this._findField.value = "";
+
+          if (this._quickFindTimeout)
+            clearTimeout(this._quickFindTimeout);
+          this.open(aMode);
+          this._setFindCloseTimeout();
+          this._findField.select();
+          this._findField.focus();
+
+          this._updateStatusUI(this.nsITypeAheadFind.FIND_FOUND);
+        ]]></body>
+      </method>
+    </implementation>
+  </binding>
+</bindings>

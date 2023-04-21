@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://editor/skin/editor.css" type="text/css"?>
+<?xml-stylesheet href="chrome://editor/skin/EditorDialog.css" type="text/css"?>
+
+<?xul-overlay href="chrome://editor/content/EdDialogOverlay.xul"?> 
+<?xul-overlay href="chrome://editor/content/EditorPublishOverlay.xul"?> 
+
+<!DOCTYPE dialog SYSTEM "chrome://editor/locale/EditorPublish.dtd">
+
+<dialog title="&windowTitleSettings.label;"
+        id="publishSettingsDlg"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        onload="Startup()"
+        buttons="accept,cancel"
+        ondialogaccept="return onAccept();"
+        ondialogcancel="return onCancel();">
+
+  <!-- Methods common to all editor dialogs -->
+  <script type="application/javascript" src="chrome://editor/content/editorUtilities.js"/>
+  <script type="application/javascript" src="chrome://editor/content/EdDialogCommon.js"/>
+  <script type="application/javascript" src="chrome://editor/content/EditorPublishSettings.js"/>
+  <script type="application/javascript" src="chrome://editor/content/publishprefs.js"/>
+
+  <spacer id="location" offsetY="50" persist="offsetX offsetY"/>
+  <broadcaster id="args" value=""/>
+
+  <hbox id="SettingsPanel">
+    <groupbox align="center">
+      <caption label="&publishSites.label;"/>
+      <!-- XXX: If tree isn't wrapped in vbox, it appears BELOW next vbox -->
+      <vbox flex="1">
+        <listbox rows="4" id="SiteList" flex="1"  onselect="SelectSiteList();"/>
+      </vbox>
+      <hbox pack="center">
+        <vbox>
+          <button id="NewSiteButton" label="&newSiteButton.label;"
+                  accesskey="&newSiteButton.accesskey;" oncommand="AddNewSite();"/>
+          <button id="SetDefaultButton" label="&setDefaultButton.label;"
+                  accesskey="&setDefaultButton.accesskey;" oncommand="SetDefault();"/>
+          <button id="RemoveSiteButton" label="&removeButton.label;"
+                  accesskey="&removeButton.accesskey;" oncommand="RemoveSite();"/>
+        </vbox>
+      </hbox>
+    </groupbox>
+    <!-- from EditorPublishOverlay.xul -->
+    <vbox id="PublishSettingsInputs"/>
+  </hbox>
+  <spacer class="spacer"/>
+</dialog>

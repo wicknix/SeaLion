@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://communicator/skin/" type="text/css"?>
+
+<!DOCTYPE overlay [
+  <!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+  <!ENTITY % prefPass SYSTEM "chrome://communicator/locale/pref/pref-masterpass.dtd">
+  %brandDTD;
+  %prefPass;
+]>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <prefpane id="masterpass_pane"
+            label="&pref.masterpass.title;"
+            script="chrome://communicator/content/pref/pref-masterpass.js">
+
+    <preferences id="masterpass_preferences">
+      <preference id="signon.rememberSignons"
+                  name="signon.rememberSignons"
+                  type="bool"/>
+      <preference id="pref.advanced.password.disable_button.view_stored_password"
+                  name="pref.advanced.password.disable_button.view_stored_password"
+                  type="bool"/>
+    <preference id="security.disable_button.changePassword"
+                  name="security.disable_button.changePassword"
+                  type="bool"/>
+      <preference id="security.ask_for_password"
+                  name="security.ask_for_password"
+                  type="int"
+                  onchange="EnableLifetimeTextbox(this.value);"/>
+      <preference id="security.password_lifetime"
+                  name="security.password_lifetime"
+                  type="int"/>
+      <preference id="security.disable_button.resetPassword"
+                  name="security.disable_button.resetPassword"
+                  type="bool"/>
+    </preferences>
+
+    <groupbox>
+      <caption label="&signonHeader.caption;"/>
+      <description>&signonDescription.label;</description>
+      <hbox>
+        <checkbox id="signonRememberSignons"
+                  label="&signonEnabled.label;"
+                  accesskey="&signonEnabled.accesskey;"
+                  preference="signon.rememberSignons"/>
+      </hbox>
+      <hbox pack="end">
+        <button id="viewStoredPassword"
+                label="&viewSignons.label;"
+                accesskey="&viewSignons.accesskey;"
+                oncommand="toPasswordManager();"
+                preference="pref.advanced.password.disable_button.view_stored_password"/>
+      </hbox>
+    </groupbox>
+
+    <!-- Change Password -->
+    <groupbox>
+      <caption label="&changepassword.caption;"/>
+      <description>&changepassword.text;</description>
+      <hbox>
+        <button label="&changepassword.button;"
+                oncommand="ChangePW();"
+                id="changePasswordButton"
+                accesskey="&changepassword.accesskey;"
+                preference="security.disable_button.changePassword"/>
+      </hbox>
+    </groupbox>
+
+    <!-- Password Prefs -->
+    <groupbox>
+      <caption label="&managepassword.caption;"/>
+      <description>&managepassword.text;</description>
+      <radiogroup id="passwordAskTimes"
+                  preference="security.ask_for_password"
+                  onsyncfrompreference="return document.getElementById('masterpass_pane').ReadAskForPassword();"
+                  onsynctopreference="return document.getElementById('masterpass_pane').WriteAskForPassword(this);">
+
+        <!-- note that these values are different than what NSS uses, which
+             are (0, -1, 1) respectively -->
+        <radio value="0"
+               label="&managepassword.askfirsttime;"
+               accesskey="&managepassword.askfirsttime.accesskey;"/>
+        <radio value="1"
+               label="&managepassword.askeverytime;"
+               accesskey="&managepassword.askeverytime.accesskey;"/>
+        <hbox align="center">
+          <radio id="askTimeout"
+                 value="2"
+                 label="&managepassword.asktimeout;"
+                 accesskey="&managepassword.asktimeout.accesskey;"/>
+          <textbox id="passwordTimeout"
+                   size="4"
+                   type="number"
+                   aria-labelledby="askTimeout passwordTimeout passwordTimeoutAfter"
+                   preference="security.password_lifetime"
+                   onsyncfrompreference="return document.getElementById('masterpass_pane').ReadPasswordLifetime();"
+                   onsynctopreference="return document.getElementById('masterpass_pane').WritePasswordLifetime(this);"/>
+          <label id="passwordTimeoutAfter"
+                 value="&managepassword.timeout.unit;"/>
+        </hbox>
+      </radiogroup>
+    </groupbox>
+
+    <!-- Reset Password -->
+    <groupbox>
+      <caption label="&resetpassword.caption;"/>
+      <description>&resetpassword.text;</description>
+      <hbox>
+        <button label="&resetpassword.button;"
+                oncommand="ResetPW();"
+                id="resetPasswordButton"
+                accesskey="&resetpassword.accesskey;"
+                preference="security.disable_button.resetPassword"/>
+      </hbox>
+    </groupbox>
+
+  </prefpane>
+</overlay>

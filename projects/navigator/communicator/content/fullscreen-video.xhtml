@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" accelerated="11">
+<head>
+  <link href="chrome://communicator/skin/fullscreen-video.css"
+        rel="stylesheet" type="text/css"/>
+  <script type="application/javascript"><![CDATA[
+
+var contentVideo = window.arguments[0];
+var isPaused = window.arguments[1];
+var video;
+var closeIcon;
+
+var title = (contentVideo.currentSrc || contentVideo.src).replace(/^.*\//, "");
+try {
+  title = decodeURI(title);
+} catch (e) {}
+document.title = title;
+
+window.addEventListener("focus", onFocus, false);
+window.addEventListener("unload", onUnload, false);
+window.addEventListener("keypress", onKeyPress, false);
+
+function onFocus() {
+  window.removeEventListener("focus", onFocus, false);
+
+  window.fullScreen = true;
+
+  window.addEventListener("deactivate", autoClose, false);
+
+  video = document.querySelector("video");
+  closeIcon = document.querySelector("div");
+
+  video.addEventListener("loadeddata", onLoadedData, false);
+
+  // Automatically close this window when the playback ended, unless the user
+  // interacted with it.
+  video.addEventListener("ended", autoClose, false);
+  window.addEventListener("click", cancelAutoClose, false);
+  window.addEventListener("keypress", cancelAutoClose, false);
+
+  video.addEventListener("playing", hideUI, false);
+  video.addEventListener("seeked", hideUI, false);
+  video.addEventListener("seeking", showUI, false);
+  video.addEventListener("pause", showUI, false);
+  video.addEventListener("ended", showUI, false);
+
+  window.addEventListener("mousemove", onMouseMove, false);
+
+  video.src = contentVideo.currentSrc || contentVideo.src;
+}
+
+function onLoadedData() {
+  video.removeEventListener("loadeddata", onLoadedData, false);
+  video.volume = contentVideo.volume;
+  video.muted = contentVideo.muted;
+  video.poster = contentVideo.poster;
+
+  if (contentVideo.currentTime && !contentVideo.ended) {
+    video.addEventListener("seeked", playbackStarts, false);
+
+    video.currentTime = contentVideo.currentTime;
+  } else {
+    playbackStarts();
+  }
+
+  video.controls = true;
+
+  if (!isPaused)
+    video.play();
+}
+
+function onMouseMove() {
+  showUI();
+  resetIdleTimer();
+}
+
+function onUnload() {
+  if (video.currentSrc) {
+    contentVideo.currentTime = video.currentTime;
+    contentVideo.volume = video.volume;
+    contentVideo.muted = video.muted;
+    if (!video.paused && !video.ended) {
+      video.pause();
+      contentVideo.play();
+    }
+  }
+}
+
+function onKeyPress(event) {
+  if (event.keyCode == event.DOM_VK_ESCAPE) {
+    window.close();
+    return;
+  }
+
+  resetIdleTimer();
+
+  if (!video.controls &&
+      String.fromCharCode(event.charCode) == " ")
+    video.pause();
+}
+
+function playbackStarts() {
+  video.removeEventListener("seeked", playbackStarts, false);
+
+  // Loading the data from the content video may take a second or two. We hide
+  // the video during that period.
+  document.body.style.visibility = "visible";
+  video.focus();
+}
+
+function autoClose() {
+  window.close();
+}
+
+function cancelAutoClose() {
+  video.removeEventListener("ended", autoClose, false);
+  window.removeEventListener("click", cancelAutoClose, false);
+  window.removeEventListener("keypress", cancelAutoClose, false);
+}
+
+var idleTimer = 0;
+function resetIdleTimer() {
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(hideUI, 2000);
+}
+
+function showUI() {
+  if (!video.controls) {
+    window.setCursor("auto");
+    closeIcon.style.visibility = "visible";
+    video.controls = true;
+  }
+}
+
+function hideUI() {
+  if (!video.paused && !video.ended && !video.seeking && !video.error) {
+    window.setCursor("none");
+    closeIcon.style.visibility = "hidden";
+    video.controls = false;
+  }
+}
+
+  ]]></script>
+</head>
+<body>
+  <div onclick="window.close();"/>
+  <video/>
+</body>
+</html>

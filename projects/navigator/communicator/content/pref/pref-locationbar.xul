@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay SYSTEM "chrome://communicator/locale/pref/pref-locationbar.dtd">
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <prefpane id="locationBar_pane"
+            label="&pref.locationBar.title;"
+            script="chrome://communicator/content/pref/pref-locationbar.js">
+
+    <preferences id="locationBar_preferences">
+      <!-- The suggest preferences need to come first otherwise the backend
+           will enable both bookmarks and history if either is enabled -->
+      <preference id="browser.urlbar.suggest.bookmark"
+                  name="browser.urlbar.suggest.bookmark"
+                  type="bool"
+                  onchange="updateDependent();"/>
+      <preference id="browser.urlbar.suggest.history"
+                  name="browser.urlbar.suggest.history"
+                  type="bool"
+                  onchange="updateDependent();"/>
+      <preference id="browser.urlbar.suggest.history.onlyTyped"
+                  name="browser.urlbar.suggest.history.onlyTyped"
+                  type="bool"/>
+      <preference id="browser.urlbar.autocomplete.enabled"
+                  name="browser.urlbar.autocomplete.enabled"
+                  type="bool"/>
+      <preference id="browser.urlbar.matchBehavior"
+                  name="browser.urlbar.matchBehavior"
+                  type="int"/>
+      <preference id="browser.urlbar.autoFill"
+                  name="browser.urlbar.autoFill"
+                  type="bool"
+                  onchange="updateMatchPrefs();"/>
+      <preference id="browser.urlbar.showPopup"
+                  name="browser.urlbar.showPopup"
+                  type="bool"
+                  onchange="updateMatchPrefs();"/>
+      <preference id="browser.urlbar.showSearch"
+                  name="browser.urlbar.showSearch"
+                  type="bool"/>
+      <preference id="browser.urlbar.formatting.enabled"
+                  name="browser.urlbar.formatting.enabled"
+                  type="bool"/>
+      <preference id="browser.urlbar.highlight.secure"
+                  name="browser.urlbar.highlight.secure"
+                  type="bool"/>
+      <preference id="browser.fixup.alternate.enabled"
+                  name="browser.fixup.alternate.enabled"
+                  type="bool"/>
+      <preference id="keyword.enabled"
+                  name="keyword.enabled"
+                  type="bool"/>
+    </preferences>
+
+    <groupbox>
+      <caption label="&autoComplete.label;"/>
+      <checkbox id="matchHistory"
+                label="&autoCompleteMatchHistory.label;"
+                accesskey="&autoCompleteMatchHistory.accesskey;"
+                preference="browser.urlbar.suggest.history"/>
+      <checkbox id="matchOnlyTyped"
+                class="indent"
+                label="&autoCompleteMatchOnlyTyped.label;"
+                accesskey="&autoCompleteMatchOnlyTyped.accesskey;"
+                preference="browser.urlbar.suggest.history.onlyTyped"/>
+      <checkbox id="matchBookmark"
+                label="&autoCompleteMatchBookmarks.label;"
+                accesskey="&autoCompleteMatchBookmarks.accesskey;"
+                preference="browser.urlbar.suggest.bookmark"/>
+      <hbox align="center" class="indent">
+        <label value="&autoCompleteMatch.label;" control="matchBehavior"
+               accesskey="&autoCompleteMatch.accesskey;"/>
+        <menulist id="matchBehavior"
+                  preference="browser.urlbar.matchBehavior">
+          <menupopup>
+            <menuitem value="0" label="&autoCompleteMatchAnywhere;"/>
+            <menuitem value="1" label="&autoCompleteMatchWordsFirst;"/>
+            <menuitem value="2" label="&autoCompleteMatchWords;"/>
+            <menuitem value="3" label="&autoCompleteMatchStart;"/>
+          </menupopup>
+        </menulist>
+      </hbox>
+      <checkbox id="autoFill"
+                class="indent"
+                label="&autoCompleteAutoFill.label;"
+                accesskey="&autoCompleteAutoFill.accesskey;"
+                preference="browser.urlbar.autoFill"/>
+      <checkbox id="showPopup"
+                class="indent"
+                label="&autoCompleteShowPopup.label;"
+                accesskey="&autoCompleteShowPopup.accesskey;"
+                preference="browser.urlbar.showPopup"/>
+      <checkbox id="showSearch"
+                label="&showInternetSearch.label;"
+                accesskey="&showInternetSearch.accesskey;"
+                preference="browser.urlbar.showSearch"/>
+    </groupbox>
+
+    <groupbox>
+      <caption label="&formatting.label;"/>
+      <checkbox id="domainFormattingEnabled"
+                label="&domainFormatting.label;"
+                accesskey="&domainFormatting.accesskey;"
+                preference="browser.urlbar.formatting.enabled"/>
+      <checkbox id="highlightSecureEnabled"
+                label="&highlightSecure.label;"
+                accesskey="&highlightSecure.accesskey;"
+                preference="browser.urlbar.highlight.secure"/>
+    </groupbox>
+
+    <groupbox>
+      <caption label="&unknownLocations.label;"/>
+      <checkbox id="domainGuessingEnabled"
+                label="&domainGuessing.label;"
+                accesskey="&domainGuessing.accesskey;"
+                preference="browser.fixup.alternate.enabled"/>
+      <checkbox id="browserGoBrowsingEnabled"
+                label="&keywords.label;"
+                accesskey="&keywords.accesskey;"
+                preference="keyword.enabled"/>
+    </groupbox>
+  </prefpane>
+</overlay>

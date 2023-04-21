@@ -1,0 +1,39 @@
+# -*- Mode: python; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 40 -*-
+# vim: set filetype=python:
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This option is contrary to how moz.configure normally works as it typically
+# uses postive options only but this is a very special case
+option(name='--disable-platform',
+       help='Builds the application/extension without binary components or the platform')
+
+# This function will handle setting the minimum required configuration when the
+# platform isn't built.
+#
+# It also will supply the following include with an empty string which it will silently
+# ignore if platform building is disabled else it will supply the toolkit moz.configure
+# path.
+#
+# @depends are not allowed access to many things so we steal a cheat used elsewhere to
+# allow it to set the config by directly addressing the implimenting functions in the
+# bowls of moz.configure
+#
+# As a side note these @depends functions don't return something useful in a normal
+# pythonic way as they are sandboxed functions or something that only evaluate properly
+# by other parts of moz.configure. So despite looking rational it doesn't internally
+# work like you would expect.
+@depends('--disable-platform')
+@imports('__sandbox__')
+def platform(value):
+    if not bool(value):
+      __sandbox__.set_config_impl('MOZ_DISABLE_PLATFORM', '1')
+      __sandbox__.set_config_impl('MOZ_PACKAGER_FORMAT', 'omni')
+      __sandbox__.set_config_impl('MOZ_JAR_MAKER_FILE_FORMAT', 'flat')
+      return ''
+    else:
+      return '../mozilla/toolkit/moz.configure'
+
+# Include the toolkit moz.configure or silently continue with an empty string from above
+include(platform)

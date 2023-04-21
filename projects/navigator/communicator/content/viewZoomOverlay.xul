@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay SYSTEM "chrome://communicator/locale/viewZoomOverlay.dtd">
+
+<overlay id="viewZoomOverlay"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/javascript" src="chrome://global/content/viewZoomOverlay.js"/>
+  <script type="application/javascript" src="chrome://communicator/content/viewZoomOverlay.js"/>
+
+  <stringbundle id="bundle_viewZoom" src="chrome://communicator/locale/viewZoomOverlay.properties"/>
+
+  <keyset id="viewZoomKeys">
+    <key id="key_zoomReduce"  key="&zoomReduceCmd.commandkey;"   command="cmd_zoomReduce"  modifiers="accel"/>
+    <key id="key_zoomEnlarge" key="&zoomEnlargeCmd.commandkey;"  command="cmd_zoomEnlarge" modifiers="accel"/>
+    <key                      key="&zoomEnlargeCmd.commandkey;"  command="cmd_zoomEnlarge" modifiers="accel,shift"/>
+    <key                      key="&zoomEnlargeCmd.commandkey2;" command="cmd_zoomEnlarge" modifiers="accel"/>
+    <key id="key_zoomReset"   key="&zoomResetCmd.commandkey;"    command="cmd_zoomReset"   modifiers="accel"/>
+  </keyset>
+
+  <commandset id="viewZoomCommands">
+    <command id="cmd_zoomReduce"  oncommand="FullZoom.reduce();"/>
+    <command id="cmd_zoomEnlarge" oncommand="FullZoom.enlarge();"/>
+    <command id="cmd_zoomReset"   oncommand="FullZoom.reset();"/>
+    <command id="cmd_zoomOther"   oncommand="FullZoom.setOther();"/>
+    <command id="cmd_fullZoomToggle" oncommand="ZoomManager.toggleZoom();"/>
+  </commandset>
+
+  <menu id="menu_zoom">
+    <menupopup id="menu_zoomPopup" onpopupshowing="updateZoomMenu();" oncommand="FullZoom.zoom(event.target.value / 100);">
+      <menuitem id="menu_zoomReduce"
+                key="key_zoomReduce"
+                label="&zoomReduceCmd.label;"
+                accesskey="&zoomReduceCmd.accesskey;"
+                command="cmd_zoomReduce"/>
+      <menuitem id="menu_zoomEnlarge"
+                key="key_zoomEnlarge"
+                label="&zoomEnlargeCmd.label;"
+                accesskey="&zoomEnlargeCmd.accesskey;"
+                command="cmd_zoomEnlarge"/>
+      <menuseparator/>
+      <menuseparator id="menu_zoomInsertBefore"/>
+      <menuitem id="menu_zoomOther"
+                type="radio"
+                name="zoom"
+                command="cmd_zoomOther"/>
+    </menupopup>
+  </menu>
+
+</overlay>

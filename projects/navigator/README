@@ -1,0 +1,11 @@
+SeaLion - Old School Styled Navigator for OS X 10.7 - 12.6
+===============================================================================
+
+SeaLion is a web browsing application forked from Mozilla community code that
+is built using the Unified XUL Platform (UXP).
+
+* https://github.com/MoonchildProductions/uxp
+
+Its user interface is similar to SeaMonkey's Navigator/Browser component
+which was derived from the Mozilla Application Suite developed largely by
+Netscape for Netscape Communicator 6/7.

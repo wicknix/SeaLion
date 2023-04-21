@@ -1,0 +1,8 @@
+/*.app/***
+/*.dylib
+/certutil
+/sealion-bin
+/pk12util
+/ssltunnel
+/xpcshell
+/XUL

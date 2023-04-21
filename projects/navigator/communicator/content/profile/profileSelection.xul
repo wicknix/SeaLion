@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!-- -*- Mode: SGML; indent-tabs-mode: nil; -*- -->
+<!--
+
+ This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://communicator/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://communicator/skin/profile/profile.css" type="text/css"?>
+
+<!DOCTYPE dialog [
+<!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+%brandDTD;
+<!ENTITY % profileDTD SYSTEM "chrome://communicator/locale/profile/profileSelection.dtd">
+%profileDTD;
+]>
+
+<dialog id="profileWindow"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        title="&windowTitle.label;"
+        windowtype="mozilla:profileSelection"
+        orient="vertical"
+        style="width: 42em;"
+        buttons="accept,cancel,extra2"
+        buttonlabelaccept="&select.label;"
+        buttonlabelstart="&start.label;"
+        buttonlabelexit="&exit.label;"
+        buttonlabelextra2="&manage.label;"
+        buttonaccesskeyextra2="&manage.accesskey;"
+        ondialogaccept="return AcceptDialog();"
+        ondialogextra2="SwitchProfileManagerMode();"
+        onload="StartUp();">
+
+  <stringbundle id="bundle_profile"
+                src="chrome://communicator/locale/profile/profileSelection.properties"/>
+  <stringbundle id="bundle_brand"
+                src="chrome://branding/locale/brand.properties"/>
+
+  <script type="application/javascript" src="chrome://communicator/content/profile/profileSelection.js"/>
+  <script type="application/javascript" src="chrome://mozapps/content/profile/createProfileWizard.js"/>
+
+  <dialogheader class="header-large" id="header" title="&profileManager.title;" description="&windowTitle.label;"/>
+
+  <hbox class="wizard-box" flex="1">
+
+    <!-- instructions -->
+    <deck id="prattle">
+      <description id="intro" start="&introStart.label;">&introSwitch.label;</description>
+      <vbox>
+        <description id="label">&profileManagerText.label;</description>
+        <separator/>
+        <hbox>
+          <vbox flex="1" id="managebuttons">
+            <button id="newButton" label="&newButton.label;" accesskey="&newButton.accesskey;" oncommand="CreateProfileWizard();"/>
+            <button id="renameButton" label="&renameButton.label;" accesskey="&renameButton.accesskey;" oncommand="RenameProfile();"/>
+            <button id="deleteButton" label="&deleteButton.label;" accesskey="&deleteButton.accesskey;" oncommand="ConfirmDelete();"/>
+          </vbox>
+          <spacer flex="2"/>
+        </hbox>
+      </vbox>
+    </deck>
+
+    <separator class="thin" orient="vertical"/>
+
+    <vbox flex="1">
+      <tooltip id="treetip"
+               onpopupshowing="HandleToolTipEvent(event);">
+      </tooltip>
+      <tree id="profiles" flex="1" seltype="single"
+            hidecolumnpicker="true"
+            onselect="DoEnabling();"
+            onkeypress="HandleKeyEvent(event);">
+        <treecols>
+          <treecol label="&availableProfiles.label;" flex="1" sortLocked="true"/>
+        </treecols>
+        <treechildren tooltip="treetip"
+                      ondblclick="HandleClickEvent(event);"/>
+      </tree>
+      <checkbox id="offlineState" label="&offlineState.label;" accesskey="&offlineState.accesskey;" hidden="true"/>
+      <checkbox id="autoSelect" label="&autoSelect.label;" accesskey="&autoSelect.accesskey;"/>
+    </vbox>
+  </hbox>
+
+</dialog>

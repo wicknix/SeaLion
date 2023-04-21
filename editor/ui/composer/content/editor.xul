@@ -1,0 +1,386 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://editor/skin/" type="text/css"?>
+
+<?xml-stylesheet href="chrome://editor/skin/editorPrimaryToolbar.css" type="text/css"?>
+<?xml-stylesheet href="chrome://editor/skin/editorFormatToolbar.css" type="text/css"?>
+<?xml-stylesheet href="chrome://editor/skin/editorModeToolbar.css" type="text/css"?>
+<?xul-overlay href="chrome://editor/content/editorOverlay.xul"?>
+<?xul-overlay href="chrome://editor/content/editingOverlay.xul"?>
+<?xul-overlay href="chrome://editor/content/composerOverlay.xul"?>
+<?xul-overlay href="chrome://communicator/content/contentAreaContextOverlay.xul"?>
+<?xul-overlay href="chrome://editor/content/EditorContextMenuOverlay.xul"?>
+<?xul-overlay href="chrome://communicator/content/charsetOverlay.xul"?>
+<?xul-overlay href="chrome://communicator/content/utilityOverlay.xul"?>
+<?xul-overlay href="chrome://communicator/content/tasksOverlay.xul"?>
+<?xul-overlay href="chrome://communicator/content/sidebar/sidebarOverlay.xul"?>
+
+<!DOCTYPE window [
+<!ENTITY % editorDTD SYSTEM "chrome://editor/locale/editor.dtd" >
+%editorDTD;
+<!ENTITY % editorOverlayDTD SYSTEM "chrome://editor/locale/editorOverlay.dtd" >
+%editorOverlayDTD;
+<!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd" >
+%brandDTD;
+]>
+
+<window id="editorWindow"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        onload="EditorOnLoad()"
+        onunload="EditorShutdown()"
+        onclose="return EditorCanClose()"
+        onfocus="EditorOnFocus()"
+        title="&editorWindow.titlemodifier;"
+        titlemodifier="&editorWindow.titlemodifier;"
+        titlemenuseparator="&editorWindow.titlemodifiermenuseparator;"
+        toggletoolbar="true"
+        lightweightthemes="true"
+        lightweightthemesfooter="status-bar"
+        windowtype="composer:html"
+        macanimationtype="document"
+        drawtitle="true"
+        width="640" height="480"
+        screenX="10" screenY="10"
+        persist="screenX screenY width height sizemode">
+
+  <script type="application/javascript" src="chrome://editor/content/editor.js"/>
+  <script type="application/javascript" src="chrome://editor/content/publishprefs.js"/>
+  <script type="application/javascript" src="chrome://communicator/content/contentAreaDD.js"/>
+  <script type="application/javascript" src="chrome://communicator/content/contentAreaClick.js"/>
+  <script type="application/javascript" src="chrome://global/content/printUtils.js"/>
+  <script type="application/javascript" src="chrome://global/content/nsDragAndDrop.js"/>
+
+  <popupset id="contentAreaContextSet"/>
+  <menupopup id="structToolbarContext"/>
+  <menupopup id="sidebarPopup"/>
+  <menupopup id="popupNotificationMenu"/>
+
+  <commandset id="editorCommands">
+    <commandset id="commonEditorMenuItems"/>
+    <commandset id="composerMenuItems"/>
+    <commandset id="composerOnlyMenuItems"
+                commandupdater="true"
+                events="create, mode_switch"
+                oncommandupdate="goUpdateComposerMenuItems(this);">
+      <!-- file menu -->
+      <command id="cmd_exportToText"
+               label="&exportToTextCmd.label;"
+               accesskey="&exportToTextCmd.accesskey;"
+               oncommand="goDoCommand('cmd_exportToText');"/>
+      <command id="cmd_preview"
+               oncommand="goDoCommand('cmd_preview');"/>
+      <command id="cmd_editSendPage"
+               label="&sendPageCmd.label;"
+               accesskey="&sendPageCmd.accesskey;"
+               oncommand="goDoCommand('cmd_editSendPage');"/>
+      <!-- format menu -->
+      <command id="cmd_pageProperties"
+               oncommand="goDoCommand('cmd_pageProperties');"/>
+      <!-- tools menu -->
+      <command id="cmd_validate"
+               oncommand="goDoCommand('cmd_validate');"/>
+      <!-- toolbars -->
+      <command id="cmd_NormalMode"
+               oncommand="goDoCommand('cmd_NormalMode');"/>
+      <command id="cmd_AllTagsMode"
+               oncommand="goDoCommand('cmd_AllTagsMode');"/>
+      <command id="cmd_HTMLSourceMode"
+               oncommand="goDoCommand('cmd_HTMLSourceMode');"/>
+      <command id="cmd_PreviewMode"
+               oncommand="goDoCommand('cmd_PreviewMode');"/>
+    </commandset>
+    <commandset id="composerEditMenuItems"/>
+    <commandset id="composerSaveMenuItems"/>
+    <commandset id="composerStyleMenuItems">
+      <command id="cmd_updateStructToolbar"
+               oncommand="goDoCommand('cmd_updateStructToolbar');"/>
+    </commandset>
+    <commandset id="composerTableMenuItems"/>
+    <commandset id="composerListMenuItems"/>
+    <commandset id="tasksCommands"/>
+    <!-- view menu -->
+    <command id="cmd_viewEditModeToolbar"
+             oncommand="goToggleToolbar('EditModeToolbar','cmd_viewEditModeToolbar');"
+             checked="true"/>
+  </commandset>
+
+  <tooltip id="aHTMLTooltip" onpopupshowing="return FillInHTMLTooltipEditor(this);"/>
+
+  <broadcasterset id="editorBroadcasters">
+    <broadcaster id="Editor:Throbber" busy="false"/>
+    <broadcaster id="Communicator:WorkMode"/>
+    <broadcaster id="args" value="about:blank"/>
+  </broadcasterset>
+
+  <broadcasterset id="mainBroadcasterSet"/>
+
+  <!-- keys are appended from the overlay -->
+  <keyset id="editorKeys">
+    <keyset id="tasksKeys"/>
+    <key id="showHideSidebar"/>
+    <!-- eat these tab events here to stop focus from moving -->
+    <key keycode="VK_TAB" oncommand="return true;"/>
+    <key keycode="VK_TAB" modifiers="shift" oncommand="return true;"/>
+    <key keycode="VK_TAB" modifiers="control" oncommand="return true;"/>
+    <key keycode="VK_TAB" modifiers="control,shift" oncommand="return true;"/>
+  </keyset>
+
+  <vbox id="titlebar"/>
+
+  <toolbox class="toolbox-top" id="EditorToolbox">
+  <menubar id="main-menubar" class="chromeclass-menubar" persist="collapsed" grippytooltiptext="&menuBar.tooltip;">
+    <menu id="menu_File"/>
+    <menu id="menu_Edit"/>
+
+    <menu id="menu_View">
+    <!-- id pulls in "Show Sidebar" item from sidebarOverlay -->
+    <menupopup id="menu_View_Popup">
+      <menu id="menu_Toolbars">
+        <menupopup id="view_toolbars_popup">
+          <menuitem id="viewComposerToolbar" label="&compositionToolbarCmd.label;" type="checkbox" accesskey="&compositionToolbarCmd.accesskey;" command="cmd_viewCompToolbar"  />
+          <menuitem id="viewFormatToolbar"   label="&formattingToolbarCmd.label;"  type="checkbox" accesskey="&formattingToolbarCmd.accesskey;"  command="cmd_viewFormatToolbar" />
+          <menuitem id="viewEditModeToolbar" label="&editmodeToolbarCmd.label;"    type="checkbox" accesskey="&editmodeToolbarCmd.accesskey;"    command="cmd_viewEditModeToolbar" />
+          <menuitem id="menu_showTaskbar"/>
+        </menupopup>
+      </menu>
+      <menuseparator id="viewSep1"/>
+      <menuitem id="viewNormalMode"
+                type="radio"
+                group="mode"
+                checked="true"
+                label="&NormalMode.label;"
+                accesskey="&NormalMode.accesskey;"
+                command="cmd_NormalMode"/>
+      <menuitem id="viewAllTagsMode"
+                type="radio"
+                group="mode"
+                label="&AllTagsMode.label;"
+                accesskey="&AllTagsMode.accesskey;"
+                command="cmd_AllTagsMode"/>
+      <menuitem id="viewSourceMode"
+                type="radio"
+                group="mode"
+                label="&HTMLSourceMode.label;"
+                accesskey="&HTMLSourceMode.accesskey;"
+                command="cmd_HTMLSourceMode"/>
+      <menuitem id="viewPreviewMode"
+                type="radio"
+                group="mode"
+                label="&PreviewMode.label;"
+                accesskey="&PreviewMode.accesskey;"
+                command="cmd_PreviewMode"/>
+      <menuseparator id="viewSep2"/>
+      <menu id="charsetMenu"
+            onpopupshowing="EditorUpdateCharsetMenu(event.target);"
+            oncommand="EditorSetCharacterSet(event);"/>
+    </menupopup>
+    </menu>
+
+    <menu id="insertMenu"/>
+
+    <menu id="formatMenu" label="&formatMenu.label;" accesskey="&formatMenu.accesskey;">
+      <menupopup id="formatMenuPopup">
+        <menuitem id="snapToGrid"
+                  label="&grid.label;"
+                  accesskey="&grid.accesskey;"
+                  oncommand="goDoCommand('cmd_grid')"
+                  observes="cmd_renderedHTMLEnabler"/>
+        <menuseparator/>
+        <menuitem id="objectProperties"/>
+        <menuitem id="colorsAndBackground"/>
+        <!-- Don't use 'observes', must call command correctly -->
+        <menuitem id="pageProperties"
+                  label="&pageProperties.label;"
+                  accesskey="&pageProperties.accesskey;"
+                  oncommand="goDoCommand('cmd_pageProperties')"
+                  observes="cmd_renderedHTMLEnabler"/>
+      </menupopup>
+    </menu>
+
+    <menu id="tableMenu"/>
+
+    <!-- tasks menu filled from tasksOverlay -->
+    <menu id="tasksMenu">
+      <menupopup id="taskPopup">
+        <menuitem id="menu_validate"
+                  label="&validateCmd.label;"
+                  accesskey="&validateCmd.accesskey;"
+                  command="cmd_validate"/>
+        <menuseparator id="sep_validate"/>
+      </menupopup>
+    </menu>
+
+    <menu id="windowMenu"/>
+
+    <!-- help menu filled from globalOverlay -->
+    <menu id="menu_Help"/>
+
+    <spacer flex="1"/>
+  </menubar>
+
+  <!-- toolbar mostly filled out from editorOverlay -->
+  <!-- add  class="standard" for dark blue background (icons need rework first) -->
+  <toolbar class="chromeclass-toolbar toolbar-primary" id="EditToolbar" persist="collapsed"
+           grippytooltiptext="&compositionToolbar.tooltip;">
+    <toolbarbutton id="newButton"/>
+    <toolbarbutton id="openButton"/>
+    <toolbarbutton id="saveButton"/>
+    <toolbarbutton id="publishButton"/>
+    <toolbarbutton id="previewButton"
+                   class="toolbarbutton-1"
+                   label="&previewToolbarCmd.label;"
+                   command="cmd_preview"
+                   tooltiptext="&previewToolbarCmd.tooltip;"/>
+    <toolbarbutton id="cutButton"/>
+    <toolbarbutton id="copyButton"/>
+    <toolbarbutton id="pasteButton"/>
+    <toolbarbutton id="print-button"/>
+    <toolbarbutton id="findButton"/>
+    <toolbarseparator class="toolbarseparator-primary"/>
+    <toolbarbutton id="linkButton"/>
+    <toolbarbutton id="namedAnchorButton"/>
+    <toolbarbutton id="imageButton"/>
+    <toolbarbutton id="hlineButton"/>
+    <toolbarbutton id="tableButton"/>
+    <toolbarbutton id="spellingButton"/>
+    <spacer flex="1"/>
+    <hbox id="throbber-box" align="center" class="toolbaritem-noline">
+      <button id="navigator-throbber"
+              oncommand="goClickThrobber('editor.throbber.url', event)"
+              onclick="checkForMiddleClick(this, event);"
+              tooltiptext="&throbber.tooltip;">
+        <observes element="Editor:Throbber" attribute="busy"/>
+      </button>
+    </hbox>
+  </toolbar>
+  <toolbar id="FormatToolbar"
+           class="chromeclass-toolbar"
+           persist="collapsed"
+           grippytooltiptext="&formatToolbar.tooltip;"
+           nowindowdrag="true">
+    <!-- from editorOverlay -->
+    <toolbaritem id="paragraph-select-container"/>
+    <toolbaritem id="color-buttons-container"/>
+    <toolbarbutton id="HighlightColorButton"/>
+
+    <toolbarseparator class="toolbarseparator-standard"/>
+
+    <!-- Enable if required for SeaMonkey.
+    <toolbarbutton id="AbsoluteFontSizeButton"/>
+    -->
+    <toolbarbutton id="DecreaseFontSizeButton"/>
+    <toolbarbutton id="IncreaseFontSizeButton"/>
+
+    <toolbarseparator class="toolbarseparator-standard"/>
+
+    <toolbarbutton id="boldButton"/>
+    <toolbarbutton id="italicButton"/>
+    <toolbarbutton id="underlineButton"/>
+
+    <toolbarseparator class="toolbarseparator-standard"/>
+
+    <toolbarbutton id="ulButton"/>
+    <toolbarbutton id="olButton"/>
+    <toolbarbutton id="outdentButton"/>
+    <toolbarbutton id="indentButton"/>
+
+    <toolbarseparator class="toolbarseparator-standard"/>
+
+    <toolbarbutton id="align-left-button"/>
+    <toolbarbutton id="align-center-button"/>
+    <toolbarbutton id="align-right-button"/>
+    <toolbarbutton id="align-justify-button"/>
+
+    <toolbarbutton id="absolutePositionButton"/>
+    <toolbarbutton id="decreaseZIndexButton"/>
+    <toolbarbutton id="increaseZIndexButton"/>
+
+    <!-- TODO: Change to a menulist? -->
+    <!-- menu>
+      <button id="AlignPopupButton"/>
+      <menupopup id="AlignmentPopup"/>
+    </menu -->
+
+
+    <spacer flex="1"/>
+  </toolbar>
+</toolbox>
+
+<!-- sidebar/toolbar/content/status -->
+<hbox id="sidebar-parent" flex="1">
+  <!-- From sidebarOverlay.xul -->
+  <vbox id="sidebar-box" class="chromeclass-extrachrome" hidden="true"/>
+  <splitter id="sidebar-splitter" class="chromeclass-extrachrome" hidden="true"/>
+
+  <vbox id="appcontent" flex="1">
+    <deck id="ContentWindowDeck" selectedIndex="0" flex="1">
+      <vbox>
+        <findbar id="FindToolbar" browserid="content-frame"/>
+        <editor editortype="html"
+                type="content-primary"
+                id="content-frame"
+                onclick="EditorClick(event);"
+                ondblclick="EditorDblClick(event);"
+                context="contentAreaContextMenu"
+                flex="1"
+                tooltip="aHTMLTooltip"/>
+      </vbox>
+      <vbox>
+        <label id="doctype-text" crop="right"/>
+        <editor type="content"
+                id="content-source"
+                context="contentAreaContextMenu"
+                flex="1"/>
+      </vbox>
+    </deck>
+
+    <!-- Edit Mode toolbar -->
+    <tabbox id="EditModeToolbar"
+          persist="collapsed">
+      <tabs id="EditModeTabs"
+            class="tabs-bottom"
+            flex="1"
+            onselect="this.selectedItem.doCommand();">
+        <tab id="NormalModeButton"
+             class="tab-bottom edit-mode"
+             label="&NormalModeTab.label;"
+             tooltiptext="&NormalMode.tooltip;"
+             command="cmd_NormalMode"/>
+        <tab id="TagModeButton"
+             class="tab-bottom edit-mode"
+             label="&AllTagsModeTab.label;"
+             tooltiptext="&AllTagsMode.tooltip;"
+             command="cmd_AllTagsMode"/>
+        <tab id="SourceModeButton"
+             class="tab-bottom edit-mode"
+             label="&HTMLSourceModeTab.label;"
+             tooltiptext="&HTMLSourceMode.tooltip;"
+             dir="&HTMLSourceModeTab.dir;"
+             command="cmd_HTMLSourceMode"/>
+        <tab id="PreviewModeButton"
+             class="tab-bottom edit-mode"
+             label="&PreviewModeTab.label;"
+             tooltiptext="&PreviewMode.tooltip;"
+             command="cmd_PreviewMode"/>
+      </tabs>
+    </tabbox>
+
+  </vbox> <!-- appcontent -->
+</hbox><!-- sidebar-parent -->
+
+    <!-- Some of this is from globarOverlay.xul -->
+    <statusbar class="chromeclass-status" id="status-bar">
+      <statusbarpanel id="component-bar"/>
+      <statusbarpanel id="structToolbar" flex="1" pack="end">
+	    <label id="structSpacer" value="" flex="1"/>
+      </statusbarpanel>
+      <statusbarpanel class="statusbarpanel-iconic" id="offline-status"/>
+    </statusbar>
+
+
+
+</window>

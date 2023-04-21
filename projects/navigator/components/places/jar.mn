@@ -1,0 +1,16 @@
+#filter substitution
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+comm.jar:
+* content/communicator/places/browserPlacesViews.js                (content/browserPlacesViews.js)
+  content/communicator/places/controller.js                        (content/controller.js)
+* content/communicator/places/menu.xml                             (content/menu.xml)
+  content/communicator/places/places.css                           (content/places.css)
+  content/communicator/places/sidebarUtils.js                      (content/sidebarUtils.js)
+  content/communicator/places/tree.xml                             (content/tree.xml)
+  content/communicator/places/treeView.js                          (content/treeView.js)
+
+en-US.jar:
+  locale/en-US/communicator/places/places.properties               (locale/places.properties)

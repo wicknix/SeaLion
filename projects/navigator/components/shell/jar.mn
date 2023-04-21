@@ -1,0 +1,14 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+comm.jar:
+  content/communicator/defaultClientDialog.js          (content/defaultClientDialog.js)
+  content/communicator/defaultClientDialog.xul         (content/defaultClientDialog.xul)
+  content/communicator/setDesktopBackground.js         (content/setDesktopBackground.js)
+  content/communicator/setDesktopBackground.xul        (content/setDesktopBackground.xul)
+
+en-US.jar:
+  locale/en-US/communicator/defaultClientDialog.dtd    (locale/defaultClientDialog.dtd)
+  locale/en-US/communicator/shellservice.properties    (locale/shellservice.properties)
+  locale/en-US/communicator/setDesktopBackground.dtd   (locale/setDesktopBackground.dtd)

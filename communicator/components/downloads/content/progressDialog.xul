@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://communicator/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://communicator/skin/downloads/downloadmanager.css" type="text/css"?>
+
+<?xul-overlay href="chrome://communicator/content/utilityOverlay.xul"?>
+
+<!DOCTYPE window SYSTEM "chrome://communicator/locale/downloads/progressDialog.dtd">
+
+<window id="dlProgressWindow"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        onload="progressStartup();" onunload="progressShutdown();"
+        title="&progress.title;"
+        persist="screenX screenY"
+        style="width:40em;">
+
+  <script type="application/javascript"
+          src="chrome://communicator/content/downloads/downloadmanager.js"/>
+  <script type="application/javascript"
+          src="chrome://communicator/content/downloads/progressDialog.js"/>
+
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="dmBundle"
+                  src="chrome://communicator/locale/downloads/downloadmanager.properties"/>
+    <stringbundle id="tkdlBundle"
+                  src="chrome://global/locale/mozapps/downloads/downloads.properties"/>
+  </stringbundleset>
+
+  <commandset id="dlProgressCommands">
+    <commandset id="commandUpdate_DlProgress"
+                commandupdater="true"
+                events="focus,dlstate-change"
+                oncommandupdate="ProgressDlgController.onCommandUpdate();"/>
+
+    <commandset id="downloadCommands">
+      <command id="cmd_pause"
+               oncommand="goDoCommand('cmd_pause');"/>
+      <command id="cmd_resume"
+               oncommand="goDoCommand('cmd_resume');"/>
+      <command id="cmd_retry"
+               oncommand="goDoCommand('cmd_retry');"/>
+      <command id="cmd_cancel"
+               oncommand="goDoCommand('cmd_cancel');"/>
+      <command id="cmd_open"
+               oncommand="goDoCommand('cmd_open');"/>
+      <command id="cmd_show"
+               oncommand="goDoCommand('cmd_show');"/>
+      <command id="cmd_openReferrer"
+               oncommand="goDoCommand('cmd_openReferrer');"/>
+      <command id="cmd_copyLocation"
+               oncommand="goDoCommand('cmd_copyLocation');"/>
+      <command id="cmd_close" oncommand="window.close();"/>
+    </commandset>
+  </commandset>
+
+  <keyset>
+    <key key="&closeWindow.key;" modifiers="accel" command="cmd_close"/>
+    <key keycode="VK_ESCAPE"                       command="cmd_close"/>
+    <key key="."                 modifiers="meta"  command="cmd_close"/>
+  </keyset>
+
+  <hbox align="end">
+    <vbox flex="1" align="start">
+      <button id="fileName" crop="center" label="" type="menu">
+        <menupopup id="file-popup">
+          <menuitem id="dlContext-open"
+                    label="&cmd.open.label;"
+                    accesskey="&cmd.open.accesskey;"
+                    command="cmd_open"/>
+          <menuitem id="dlContext-show"
+                    label="&cmd.show.label;"
+                    accesskey="&cmd.show.accesskey;"
+                    command="cmd_show"/>
+        </menupopup>
+      </button>
+      <button id="fileSource" crop="center" label="" type="menu">
+        <menupopup id="source-popup">
+          <menuitem id="dlContext-openReferrer"
+                    label="&cmd.goToDownloadPage.label;"
+                    accesskey="&cmd.goToDownloadPage.accesskey;"
+                    command="cmd_openReferrer"/>
+          <menuitem id="dlContext-copyLocation"
+                    label="&cmd.copyDownloadLink.label;"
+                    accesskey="&cmd.copyDownloadLink.accesskey;"
+                    command="cmd_copyLocation"/>
+        </menupopup>
+      </button>
+      <label id="dlSize" value=""/>
+      <label id="timeElapsed" value=""/>
+      <label id="dlStatus" value=""/>
+    </vbox>
+    <button id="pauseButton" class="mini-button"
+            command="cmd_pause" tooltiptext="&cmd.pause.tooltip;"/>
+    <button id="resumeButton" class="mini-button"
+            command="cmd_resume" tooltiptext="&cmd.resume.tooltip;"/>
+    <button id="retryButton" class="mini-button"
+            command="cmd_retry" tooltiptext="&cmd.retry.tooltip;"/>
+    <button id="cancelButton" class="mini-button"
+            command="cmd_cancel" tooltiptext="&cmd.cancel.tooltip;"/>
+  </hbox>
+  <hbox id="progressBox">
+    <progressmeter id="progressMeter" mode="determined" flex="1"/>
+    <label id="progressText" value=""/>
+  </hbox>
+  <checkbox id="closeWhenDone"
+            label="&closeWhenDone.label;"
+            accesskey="&closeWhenDone.accesskey;"/>
+</window>

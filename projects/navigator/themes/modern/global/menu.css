@@ -1,0 +1,233 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ===== menu.css =======================================================
+  == Styles used by XUL menu-related elements.
+  ======================================================================= */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* ::::: menu/menuitem ::::: */
+
+menu, 
+menuitem {
+  -moz-box-align: center;
+  color: #000000;
+  font: menu;
+  list-style-image: none;
+  -moz-image-region: auto;
+}
+
+menuitem[default="true"] {
+  font-weight: bold;
+}  
+  
+menu[disabled="true"],
+menuitem[disabled="true"],
+menu[_moz-menuactive="true"][disabled="true"],
+menuitem[_moz-menuactive="true"][disabled="true"] {
+  color: #8C99AB;
+}
+
+/* ..... internal content .... */
+
+.menu-text, 
+.menu-iconic-left,
+.menu-iconic-text {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+  margin-inline-start: 0px !important;
+  margin-inline-end: 2px !important;
+  color: inherit;
+}
+
+.menu-text {
+  margin-inline-start: 18px !important;
+  font-weight: inherit;
+}
+
+.menu-description {
+  font-style: italic;
+  color: #8C99AB;
+  margin-inline-start: 1ex !important;
+}
+
+.menu-accel,
+.menu-iconic-accel {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+  margin-inline-start: 7px !important;
+  margin-inline-end: 2px !important;
+  padding-inline-end: 14px;
+  color: inherit;
+}
+
+.menu-iconic-icon {
+  width: 16px;
+  height: 16px;
+  list-style-image: inherit;
+}
+
+/* ..... menu arrow box ..... */
+
+.menu-right {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-inline-start: 6px;
+  margin-inline-end: 4px;
+  width: 4px;
+  list-style-image: url("chrome://global/skin/menu/menu-arrow.gif");
+  -moz-image-region: auto;
+}
+
+.menu-right[_moz-menuactive="true"] {
+  list-style-image: url("chrome://global/skin/menu/menu-arrow-hov.gif");
+  -moz-image-region: auto;
+}
+
+.menu-right[disabled="true"] {
+  list-style-image: url("chrome://global/skin/menu/menu-arrow-dis.gif") !important;
+  -moz-image-region: auto;
+}
+
+/* ::::: menu/menuitems in menubar ::::: */
+
+menubar > menu {
+  border: 1px solid transparent;
+  padding: 1px 4px 2px;
+  margin: 1px 0px;
+}
+
+menubar > menu[_moz-menuactive="true"] {
+  border: 1px outset #DDE3EB;
+  background-color: transparent;
+  color: #000000;
+}
+
+menubar > menu[_moz-menuactive="true"][open="true"] {
+  border-style: inset;
+}
+
+/* ..... internal content .... */
+
+.menubar-left {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-inline-start: 0px;
+  margin-inline-end: 2px;
+  color: inherit;
+}
+
+.menubar-text {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+  margin-inline-start: 0px !important;
+  margin-inline-end: 2px !important;
+  color: inherit;
+}
+
+/* ::::: menu/menuitems in popups ::::: */
+
+menu,
+menuitem {
+  padding: 2px;
+  max-width: 42em;
+}
+
+menu[_moz-menuactive="true"],
+menuitem[_moz-menuactive="true"] {
+  background-color: #424F63;
+  color: #FFFFFF;
+}
+
+/* ::::: menu/menuitems in menulist popups ::::: */
+
+.menulist-menupopup > menuitem,
+menulist > menupopup > menuitem,
+.menulist-menupopup > menu,
+menulist > menupopup > menu {
+  padding-top: 1px;
+  padding-bottom: 1px;
+  max-width: none;
+  font: message-box;
+}
+
+menulist > menupopup > menuitem {
+  padding-inline-end: 30px;
+}
+    
+/* ..... selected state ..... */
+
+menulist > menupopup > menuitem[selected="true"] {
+  list-style-image: url("chrome://global/skin/menu/menu-check.gif");
+  -moz-image-region: auto;
+}
+  
+menulist > menupopup > menuitem[_moz-menuactive="true"][selected="true"] {
+  list-style-image: url("chrome://global/skin/menu/menu-check-hov.gif");
+  -moz-image-region: auto;
+}
+
+/* ::::: checkbox menuitem ::::: */
+
+menuitem[checked="true"] {
+  list-style-image: url("chrome://global/skin/menu/menu-check.gif");
+  -moz-image-region: auto;
+}
+
+menuitem[checked="true"][disabled="true"] {
+  list-style-image: url("chrome://global/skin/menu/menu-check-dis.gif");
+  -moz-image-region: auto;
+}
+
+menuitem[checked="true"][_moz-menuactive="true"] {
+  list-style-image: url("chrome://global/skin/menu/menu-check-hov.gif");
+  -moz-image-region: auto;
+}
+
+/* ::::: radio menuitem ::::: */
+
+menuitem[checked="true"][type="radio"] {
+  list-style-image: url("chrome://global/skin/menu/menu-radio.gif");
+  -moz-image-region: auto;
+}
+
+menuitem[checked="true"][type="radio"][disabled="true"] {
+  list-style-image: url("chrome://global/skin/menu/menu-radio-dis.gif");
+  -moz-image-region: auto;
+}
+
+menuitem[checked="true"][type="radio"][_moz-menuactive="true"] {
+  list-style-image: url("chrome://global/skin/menu/menu-radio-hov.gif");
+  -moz-image-region: auto;
+}
+
+/* ::::: menuseparator ::::: */
+
+menuseparator {
+  margin: 2px 3px;
+  border-top: 1px solid #A5ABC0;
+  border-bottom: 1px solid #EEF1F7;
+}
+
+menulist > menupopup > menuseparator,
+.menulist-menupopup > menuseparator {
+  margin: 2px 0;
+  border-bottom: none;
+}
+
+/* ::::: autocomplete ::::: */
+
+.autocomplete-history-popup > menuitem {
+  max-width: none !important;
+  font: message-box;
+}
+
+/* ::::: tree column picker ::::: */
+
+.treecell-popupcell-menu {
+  margin-inline-start: -2px;
+  list-style-image: url("chrome://global/skin/tree/columnpicker.gif");
+  -moz-image-region: auto;
+}

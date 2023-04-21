@@ -1,0 +1,251 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+STANDALONE_MAKEFILE := 1
+
+include $(topsrcdir)/config/rules.mk
+
+MOZ_PKG_REMOVALS = $(srcdir)/removed-files.in
+
+MOZ_PKG_MANIFEST_P = $(srcdir)/package-manifest.in
+# Be fatal, except when building with XULRunner which already bundles some files.
+ifndef SYSTEM_LIBXUL
+MOZ_PKG_FATAL_WARNINGS = 1
+endif
+
+MOZ_PKG_DUPEFLAGS = \
+	-w \
+	-f $(srcdir)/allowed-dupes.mn \
+	$(NULL)
+
+MOZ_NONLOCALIZED_PKG_LIST = \
+	xpcom \
+	browser \
+	$(NULL)
+
+MOZ_LOCALIZED_PKG_LIST = \
+	$(AB_CD) \
+	$(NULL)
+
+DEFINES += -DMOZ_APP_NAME=$(MOZ_APP_NAME) -DPREF_DIR=$(PREF_DIR)
+
+DEFINES += -DJAREXT=
+
+ifdef ENABLE_TESTS
+DEFINES += -DENABLE_TESTS=1
+endif
+
+ifdef MOZ_ANGLE_RENDERER
+DEFINES += -DMOZ_ANGLE_RENDERER=$(MOZ_ANGLE_RENDERER)
+ifdef MOZ_D3DCOMPILER_VISTA_DLL
+DEFINES += -DMOZ_D3DCOMPILER_VISTA_DLL=$(MOZ_D3DCOMPILER_VISTA_DLL)
+endif
+ifdef MOZ_D3DCOMPILER_XP_DLL
+DEFINES += -DMOZ_D3DCOMPILER_XP_DLL=$(MOZ_D3DCOMPILER_XP_DLL)
+endif
+endif
+
+ifdef NIGHTLY_BUILD
+DEFINES += -DNIGHTLY_BUILD=1
+endif
+
+ifdef MOZ_CALENDAR
+DEFINES += -DMOZ_CALENDAR=1
+endif
+
+ifdef MOZ_DEBUG
+DEFINES += -DMOZ_DEBUG=1
+endif
+
+ifdef MOZ_ENABLE_GNOME_COMPONENT
+DEFINES += -DMOZ_ENABLE_GNOME_COMPONENT=1
+endif
+
+ifneq (,$(filter gtk%,$(MOZ_WIDGET_TOOLKIT)))
+DEFINES += -DMOZ_GTK=1
+ifeq ($(MOZ_WIDGET_TOOLKIT),gtk3)
+DEFINES += -DMOZ_GTK3=1
+endif
+endif
+
+# Check whether this build is an alpha or nightly:
+# replace "pre" with "a" in the version then look if "a" matches.
+# This should match /suite/Makefile.in.
+ifneq (,$(findstring a,$(MOZ_APP_VERSION:pre=a)))
+DEFINES += -DMOZ_PACKAGE_DEBUGQA=1
+endif
+
+ifdef NSS_DISABLE_DBM
+DEFINES += -DNSS_DISABLE_DBM=1
+endif
+
+ifdef _MSC_VER
+DEFINES += -D_MSC_VER=$(_MSC_VER)
+endif
+
+ifdef MOZ_UPDATER
+DEFINES += -DMOZ_UPDATER=1
+endif
+ifdef MOZ_SYSTEM_NSPR
+DEFINES += -DMOZ_SYSTEM_NSPR=1
+endif
+
+ifdef MOZ_SYSTEM_NSS
+DEFINES += -DMOZ_SYSTEM_NSS=1
+endif
+
+ifdef MOZ_MOVEMAIL
+DEFINES += -DMOZ_MOVEMAIL=1
+endif
+
+ifdef NECKO_WIFI
+DEFINES += -DNECKO_WIFI=1
+endif
+
+ifdef MOZ_BUNDLED_FONTS
+DEFINES += -DMOZ_BUNDLED_FONTS=1
+endif
+
+ifdef MOZ_LDAP_XPCOM
+DEFINES += -DMOZ_LDAP_XPCOM=1
+endif
+
+# Set MSVC dlls version to package, if any.
+# With VS2015+ it does not make sense to define the ucrt libs without
+# the base c++ libs and vice versa. 
+ifdef MOZ_NO_DEBUG_RTL
+ifdef WIN32_REDIST_DIR
+ifdef WIN_UCRT_REDIST_DIR
+DEFINES += -DMOZ_PACKAGE_MSVC_DLLS=1
+DEFINES += -DMSVC_C_RUNTIME_DLL=$(MSVC_C_RUNTIME_DLL)
+DEFINES += -DMSVC_CXX_RUNTIME_DLL=$(MSVC_CXX_RUNTIME_DLL)
+DEFINES += -DMOZ_PACKAGE_WIN_UCRT_DLLS=1
+endif
+endif
+endif
+
+ifneq (,$(filter WINNT Darwin Android,$(OS_TARGET)))
+DEFINES += -DMOZ_SHARED_MOZGLUE=1
+endif
+
+ifneq (en-US, $(AB_CD))
+DEFINES += -DLOCALE_BUILD=1
+endif
+
+DEFINES += -DMOZ_CHILD_PROCESS_NAME=$(MOZ_CHILD_PROCESS_NAME)
+
+ifdef MAKENSISU
+DEFINES += -DHAVE_MAKENSISU=1
+endif
+
+ifdef MOZ_PKG_MANIFEST_P
+MOZ_PKG_MANIFEST = package-manifest
+
+$(MOZ_PKG_MANIFEST): $(MOZ_PKG_MANIFEST_P) $(GLOBAL_DEPS)
+	$(call py_action,preprocessor,$(DEFINES) $(ACDEFINES) $< -o $@)
+
+GARBAGE += $(MOZ_PKG_MANIFEST)
+endif
+
+ifeq ($(MOZ_WIDGET_TOOLKIT),cocoa)
+MOZ_PKG_MAC_DSSTORE=branding/dsstore
+MOZ_PKG_MAC_BACKGROUND=branding/background.png
+MOZ_PKG_MAC_ICON=branding/disk.icns
+MOZ_PKG_MAC_EXTRA=--symlink "/Applications:/ "
+endif
+
+NON_OMNIJAR_FILES = \
+	defaults/messenger/mailViews.dat \
+	defaults/profile/panels.rdf \
+	defaults/profile/mimeTypes.rdf \
+	defaults/profile/chrome/userChrome-example.css \
+	defaults/profile/chrome/userContent-example.css \
+	$(NULL)
+
+INSTALL_SDK = 1
+
+include $(MOZILLA_SRCDIR)/toolkit/mozapps/installer/packager.mk
+
+ifeq (Darwin, $(OS_ARCH))
+BINPATH = $(_BINPATH)
+DEFINES += -DAPPNAME=$(_APPNAME)
+else
+BINPATH = bin
+endif
+DEFINES += -DBINPATH=$(BINPATH)
+
+ifeq (cocoa,$(MOZ_WIDGET_TOOLKIT))
+RESPATH = $(_APPNAME)/Contents/Resources
+else
+RESPATH = $(BINPATH)
+endif
+DEFINES += -DRESPATH=$(RESPATH)
+
+LPROJ_ROOT = $(firstword $(subst -, ,$(AB_CD)))
+ifeq (cocoa,$(MOZ_WIDGET_TOOLKIT))
+ifeq (zh-TW,$(AB_CD))
+LPROJ_ROOT := $(subst -,_,$(AB_CD))
+endif
+endif
+DEFINES += -DLPROJ_ROOT=$(LPROJ_ROOT)
+
+DEFINES += -DMOZ_ICU_VERSION=$(MOZ_ICU_VERSION)
+ifdef MOZ_SYSTEM_ICU
+DEFINES += -DMOZ_SYSTEM_ICU
+endif
+ifdef MOZ_ICU_DATA_ARCHIVE
+DEFINES += -DMOZ_ICU_DATA_ARCHIVE
+endif
+DEFINES += -DMOZ_ICU_DBG_SUFFIX=$(MOZ_ICU_DBG_SUFFIX)
+DEFINES += -DICU_DATA_FILE=$(ICU_DATA_FILE)
+ifdef CLANG_CXX
+DEFINES += -DCLANG_CXX
+endif
+ifdef CLANG_CL
+DEFINES += -DCLANG_CL
+endif
+
+ifeq (x86,$(CPU_ARCH))
+ifdef _MSC_VER
+ifndef CLANG_CL
+DEFINES += -DWOW_HELPER
+endif
+endif
+endif
+
+ifeq ($(MOZ_PACKAGER_FORMAT),omni)
+DEFINES += -DMOZ_OMNIJAR=1
+endif
+
+
+
+ifeq (WINNT,$(OS_ARCH))
+PKGCOMP_FIND_OPTS =
+else
+PKGCOMP_FIND_OPTS = -L
+endif
+ifeq (Darwin, $(OS_ARCH))
+FINDPATH = $(_APPNAME)/Contents/MacOS
+else
+FINDPATH=bin
+endif
+
+package-compare:: $(MOZ_PKG_MANIFEST)
+ifdef MOZ_PKG_MANIFEST_P
+	cd $(DIST); find $(PKGCOMP_FIND_OPTS) $(FINDPATH) -type f | sort > bin-list.txt
+	grep "^$(BINPATH)" $(MOZ_PKG_MANIFEST) | sed -e 's/^\///' | sort > $(DIST)/pack-list.txt
+	-diff -u $(DIST)/pack-list.txt $(DIST)/bin-list.txt
+	rm -f $(DIST)/pack-list.txt $(DIST)/bin-list.txt
+endif
+
+installer:
+ifdef INSTALLER_DIR
+	$(MAKE) -C $(INSTALLER_DIR)
+endif
+
+# The comm-* source stamp is already there.
+PLATFORM_SOURCE_STAMP = $(firstword $(shell hg -R "$(topsrcdir)" parent --template="{node|short}\n" 2>/dev/null))
+PLATFORM_SOURCE_REPO = $(shell hg -R "$(topsrcdir)" showconfig paths.default 2>/dev/null | sed -e "s/^ssh:/https:/")
+make-sourcestamp-file::
+	@echo "$(PLATFORM_SOURCE_REPO)/rev/$(PLATFORM_SOURCE_STAMP)" >> $(MOZ_SOURCESTAMP_FILE)

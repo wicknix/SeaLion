@@ -1,0 +1,28 @@
+<?xml version="1.0"?> 
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay [
+<!ENTITY % editorDTD SYSTEM "chrome://editor/locale/editor.dtd">
+%editorDTD;
+]>
+
+<overlay id="composerOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <!-- Items in the File menu used only by Composer app -->
+  <menupopup id="menu_FilePopup">
+    <menuitem id="fileExportToText"
+              insertafter="sep_print"
+              command="cmd_exportToText"/>
+    <menuitem id="previewInBrowser"
+              label="&previewCmd.label;"
+              accesskey="&previewCmd.accesskey;"
+              insertafter="fileExportToText"
+              command="cmd_preview"/>
+    <!-- menuitem id="menu_SendPage" is merged here from mailEditorOverlay.xul,
+         where "position" is assumed to be just after 'previewInBrowser' -->
+  </menupopup>
+
+</overlay>

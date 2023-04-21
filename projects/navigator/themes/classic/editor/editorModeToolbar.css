@@ -1,0 +1,39 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* ::::: edit mode toolbar ::::: */
+
+#EditModeToolbar {
+  -moz-box-align: start;
+  border-left: 1px solid ThreeDDarkShadow;
+  border-right: 1px solid ThreeDLightShadow;
+  padding: 0px 2px 2px;
+  min-width: 1px;
+}
+
+.tab-bottom[selected="true"] {
+  color: -moz-FieldText;
+  -moz-border-top-colors: -moz-Field;
+  -moz-border-bottom-colors: ThreeDShadow -moz-Field;
+  -moz-border-left-colors: ThreeDHighlight -moz-Field;
+}
+
+#NormalModeButton {
+  list-style-image: url("chrome://editor/skin/icons/editmode-normal.gif");
+}
+
+#TagModeButton {
+  list-style-image: url("chrome://editor/skin/icons/editmode-tags.gif");
+}
+
+#SourceModeButton {
+  list-style-image: url("chrome://editor/skin/icons/editmode-html.gif");
+}
+
+#PreviewModeButton {
+  list-style-image: url("chrome://editor/skin/icons/editmode-preview.gif"); 
+}
+

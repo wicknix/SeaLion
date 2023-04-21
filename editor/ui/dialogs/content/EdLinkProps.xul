@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://editor/skin/editor.css" type="text/css"?>
+<?xml-stylesheet href="chrome://editor/skin/EditorDialog.css" type="text/css"?>
+
+<?xul-overlay href="chrome://editor/content/EdDialogOverlay.xul"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://editor/locale/EditorLinkProperties.dtd">
+
+<dialog id="linkDlg" title="&windowTitle.label;"
+   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+   onload = "Startup()"
+   ondialogaccept="return onAccept();"
+   ondialogcancel="return onCancel();">
+
+  <script type="application/javascript" src="chrome://editor/content/editorUtilities.js"/>
+  <script type="application/javascript" src="chrome://editor/content/EdDialogCommon.js"/>
+  <script type="application/javascript" src="chrome://editor/content/EdLinkProps.js"/>
+
+  <broadcaster id="args" value=""/>
+  <spacer id="location" offsetY="50" persist="offsetX offsetY"/>
+
+  <vbox style="min-width: 20em">
+    <groupbox><caption id="linkTextCaption"/>
+      <vbox>
+        <label id="linkTextMessage" control="linkTextInput"/>
+        <textbox id="linkTextInput"/>
+      </vbox>
+    </groupbox>
+
+    <groupbox id="LinkURLBox"><caption label="&LinkURLBox.label;"/>
+      <vbox id="LinkLocationBox"/>
+      <!-- mail compose will insert custom item here defined in mailComposeEditorOverlay.xul -->
+    </groupbox>
+  </vbox>
+  <!-- from EdDialogOverlay -->
+  <vbox id="AdvancedEdit"/>
+</dialog>

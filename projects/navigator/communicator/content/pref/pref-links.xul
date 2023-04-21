@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay [
+<!ENTITY % platformCommunicationDTD SYSTEM "chrome://communicator-platform/locale/pref/platformPrefOverlay.dtd">
+%platformCommunicationDTD;
+<!ENTITY % tabsDTD SYSTEM "chrome://communicator/locale/pref/pref-links.dtd">
+%tabsDTD;
+]>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <prefpane id="links_pane"
+            label="&linksHeader.label;"
+            script="chrome://communicator/content/pref/pref-links.js">
+
+    <preferences id="links_preferences">
+      <preference id="browser.link.open_newwindow"
+                  name="browser.link.open_newwindow"
+                  type="int"
+                  onchange="ToggleRestrictionGroup(this.value);"/>
+      <preference id="browser.link.open_newwindow.restriction"
+                  name="browser.link.open_newwindow.restriction"
+                  type="int"/>
+      <preference id="browser.link.open_external"
+                  name="browser.link.open_external"
+                  type="int"/>
+    </preferences>
+
+    <groupbox>
+      <caption label="&newWindow.label;"/>
+      <description>&newWindowDescription.label;</description>
+      <radiogroup id="newWindowGroup"
+                  class="indent"
+                  preference="browser.link.open_newwindow">
+        <radio value="1"
+               label="&openCurrent.label;"
+               accesskey="&newWindowGroupCurrent.accesskey;"/>
+        <radio value="3"
+               label="&openTab.label;"
+               accesskey="&newWindowGroupTab.accesskey;"/>
+        <radio value="2"
+               label="&openWindow.label;"
+               accesskey="&newWindowGroupWindow.accesskey;"/>
+      </radiogroup>
+      <separator class="thin"/>
+      <description>&newWindowRestriction.label;</description>
+      <radiogroup id="restrictionGroup"
+                  class="indent"
+                  preference="browser.link.open_newwindow.restriction">
+        <radio value="0"
+               label="&divertAll.label;"
+               accesskey="&divertAll.accesskey;"/>
+        <radio value="2"
+               label="&divertNoFeatures.label;"
+               accesskey="&divertNoFeatures.accesskey;"/>
+        <radio value="1"
+               label="&dontDivert.label;"
+               accesskey="&dontDivert.accesskey;"/>
+      </radiogroup>
+    </groupbox>
+
+    <groupbox>
+      <caption label="&external.label;"/>
+      <description>&externalDescription.label;</description>
+      <radiogroup id="externalGroup"
+                  class="indent"
+                  preference="browser.link.open_external">
+        <radio value="1"
+               label="&openCurrent.label;"
+               accesskey="&externalGroupCurrent.accesskey;"/>
+        <radio value="3"
+               label="&openTab.label;"
+               accesskey="&externalGroupTab.accesskey;"/>
+        <radio value="2"
+               label="&openWindow.label;"
+               accesskey="&externalGroupWindow.accesskey;"/>
+      </radiogroup>
+    </groupbox>
+  </prefpane>
+</overlay>

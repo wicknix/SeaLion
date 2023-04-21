@@ -1,0 +1,17 @@
+#filter substitution
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+navigator.jar:
+  content/navigator/pageinfo/feeds.js                              (content/feeds.js)
+  content/navigator/pageinfo/feeds.xml                             (content/feeds.xml)
+  content/navigator/pageinfo/pageInfo.css                          (content/pageInfo.css)
+  content/navigator/pageinfo/pageInfo.js                           (content/pageInfo.js)
+  content/navigator/pageinfo/pageInfo.xul                          (content/pageInfo.xul)
+  content/navigator/pageinfo/permissions.js                        (content/permissions.js)
+  content/navigator/pageinfo/security.js                           (content/security.js)
+
+en-US.jar:
+  locale/en-US/navigator/pageInfo.dtd                              (locale/pageInfo.dtd)
+  locale/en-US/navigator/pageInfo.properties                       (locale/pageInfo.properties)

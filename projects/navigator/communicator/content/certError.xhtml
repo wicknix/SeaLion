@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html [
+<!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd" >
+  %brandDTD;
+  <!ENTITY % htmlDTD
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "DTD/xhtml1-strict.dtd">
+  %htmlDTD;
+  <!ENTITY % netErrorDTD SYSTEM "chrome://global/locale/netError.dtd">
+  %netErrorDTD;
+  <!ENTITY % globalDTD
+    SYSTEM "chrome://global/locale/global.dtd">
+  %globalDTD;
+  <!ENTITY % certerrorDTD
+    SYSTEM "chrome://communicator/locale/certError.dtd">
+  %certerrorDTD;
+]>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>&certerror.pagetitle;</title>
+    <link rel="stylesheet" href="chrome://communicator/content/certError.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="chrome://communicator/skin/certError.css" type="text/css" media="all" />
+    <link rel="icon" type="image/png" id="favicon" href="chrome://global/skin/icons/warning-16.png"/>
+  </head>
+
+  <body dir="&locale.dir;">
+
+    <!-- PAGE CONTAINER (for styling purposes only) -->
+    <div id="errorPageContainer">
+
+      <!-- Error Title -->
+      <div id="errorTitle">
+        <h1 id="errorTitleText">&certerror.longpagetitle;</h1>
+      </div>
+
+      <!-- LONG CONTENT (the section most likely to require scrolling) -->
+      <div id="errorLongContent">
+        <div id="introContent">
+          <p id="introContentP1">&certerror.introPara1;</p>
+          <p>&certerror.introPara2;</p>
+        </div>
+
+        <div id="whatShouldIDoContent">
+          <h2>&certerror.whatShouldIDo.heading;</h2>
+          <div id="whatShouldIDoContentText">
+            <p>&certerror.whatShouldIDo.content;</p>
+            <p id="badStsCertExplanation">&certerror.whatShouldIDo.badStsCertExplanation;</p>
+            <span id="getMeOutOfHereButton"
+                  class="button"
+                  label="&certerror.getMeOutOfHere.label;"/>
+          </div>
+        </div>
+
+        <!-- The following sections can be unhidden by default by setting the
+             "browser.xul.error_pages.expert_bad_cert" pref to true -->
+        <div id="technicalContent" collapsed="true">
+          <h2 id="technicalContentHeading">&certerror.technical.heading;</h2>
+          <p id="technicalContentText"/>
+        </div>
+
+        <div id="expertContent" collapsed="true">
+          <h2 id="expertContentHeading">&certerror.expert.heading;</h2>
+          <div>
+            <p>&certerror.expert.content;</p>
+            <p>&certerror.expert.contentPara2;</p>
+            <span id="exceptionDialogButton"
+                  class="button"
+                  label="&certerror.addException.label;"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--
+    - Note: It is important to run the script this way, instead of using
+    - a window.onload function. This is because error pages are loaded as
+    - LOAD_BACKGROUND, which means that onload handlers will not be executed.
+    -->
+    <script type="application/javascript" src="chrome://communicator/content/certError.js"/>
+
+  </body>
+</html>

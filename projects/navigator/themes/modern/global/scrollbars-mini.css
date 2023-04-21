@@ -1,0 +1,117 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ===== scrollbars.css =================================================
+  == Styles used by XUL scrollbar-related elements.
+  ======================================================================= */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+
+/* ::::: scrollbar ::::: */
+
+scrollbar {
+  -moz-binding: url("chrome://global/content/bindings/scrollbar.xml#scrollbar");
+  cursor: default;
+  min-width: 11px;
+  min-height: 11px;
+}
+
+/* ::::: square at the corner of two scrollbars ::::: */
+
+scrollcorner { 
+  -moz-binding: url("chrome://global/content/bindings/scrollbar.xml#scrollbar-base");
+  cursor: default;
+  background-color: #B1BBC5;
+}
+
+/* ::::: slider ::::: */
+
+slider {
+  background: url("chrome://global/skin/scrollbar/mini-slider-hrz.gif") repeat-x;
+}
+
+slider[orient="vertical"] {
+  background: url("chrome://global/skin/scrollbar/mini-slider-vrt.gif") repeat-y;
+}
+
+/* ::::: borders for thumb and buttons ::::: */
+
+thumb,
+scrollbarbutton {
+  border: 3px solid;
+  -moz-border-top-colors: #000000 #E4EBF2 #C3CAD2;
+  -moz-border-right-colors: #000000 #8F9DAD #A4AFBB;
+  -moz-border-bottom-colors: #000000 #8F9DAD #A4AFBB;
+  -moz-border-left-colors: #000000 #E4EBF2 #C3CAD2;
+  background: #B1BBC5 50% 50% no-repeat;
+}
+
+thumb:active {
+  background-color: #C2CCD6;
+  -moz-border-top-colors: #111111 #F5FCF3 #D4DBE3;
+  -moz-border-right-colors: #111111 #9FAEBE #B5BFCC;
+  -moz-border-bottom-colors: #111111 #9FAEBE #B5BFCC;
+  -moz-border-left-colors: #111111 #D5FCF3 #D4DBE3;
+}
+
+/* ::::: thumb (horizontal) ::::: */
+
+thumb {
+  background-image: url("chrome://global/skin/scrollbar/thumb-vrt-grip.gif");
+}
+
+thumb[orient="horizontal"] {
+  background-image: url("chrome://global/skin/scrollbar/thumb-hrz-grip.gif");
+}
+
+/* ::::: scrollbar button ::::: */
+
+scrollbarbutton {
+  width: 11px;
+  height: 14px;
+  max-width: 11px;
+  max-height: 14px;
+  -moz-box-flex: 1;
+}
+
+scrollbar[orient="horizontal"] > scrollbarbutton {
+  width: 14px;
+  height: 11px;
+  max-width: 14px;
+  max-height: 11px;
+}
+
+scrollbarbutton[disabled="true"],
+scrollbarbutton[active="true"],
+scrollbarbutton:hover:active {
+  border-left-width: 2px;
+  border-right-width: 2px;
+  -moz-border-top-colors: #000000 #708092 #939FAD;
+  -moz-border-right-colors: #000000 #718193 #9EA9B5;
+  -moz-border-bottom-colors: #000000 #8795A4 #929EAC;
+  -moz-border-left-colors: #000000 #ADB6C0 #9EA9B5;
+  background-color: #9CA8B4;
+}
+
+/* ..... increment .... */
+
+scrollbarbutton[type="increment"] {
+  background-image: url("chrome://global/skin/scrollbar/mini-btn-rit.gif")
+}
+
+scrollbar[orient="vertical"] > scrollbarbutton[type="increment"] {
+  background-image: url("chrome://global/skin/scrollbar/mini-btn-dn.gif")
+}
+
+/* ..... decrement .... */
+
+scrollbarbutton[type="decrement"] {
+   background-image: url("chrome://global/skin/scrollbar/mini-btn-lft.gif")
+}
+
+scrollbar[orient="vertical"] > scrollbarbutton[type="decrement"] {
+   background-image: url("chrome://global/skin/scrollbar/mini-btn-up.gif")
+}
+

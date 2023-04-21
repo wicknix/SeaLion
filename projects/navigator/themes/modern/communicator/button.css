@@ -1,0 +1,115 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+/* ==== button.css ==========================================================
+   == Styles for special buttons in the Communicator suite.
+   ========================================================================== */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* ::::: large toolbar buttons ::::: */
+
+.toolbarbutton-1 {
+  color: #323642;
+  font-size: 83.3333%;
+}
+
+toolbar[mode="text"] .toolbarbutton-1,
+toolbar[labelalign="end"] .toolbarbutton-1 {
+  color: inherit;
+  font-size: 100%;
+  padding: 0px 2px !important;
+}
+
+toolbar[iconsize="small"] .toolbarbutton-1 {
+  border: 1px solid transparent !important;
+}
+
+.toolbarbutton-1,
+.toolbarbutton-1[type="menu-button"] > .toolbarbutton-menubutton-stack 
+  > .toolbarbutton-menubutton-button,
+.toolbarbutton-1[type="menu-button"] > .toolbarbutton-menubutton-button
+{
+  -moz-box-orient: vertical;
+  -moz-box-pack: center;
+  border: none !important;
+  padding: 0px !important;
+}
+
+.toolbarbutton-1 .toolbarbutton-text {
+  min-width: 33px;
+}
+
+.toolbarbutton-1:hover:active {
+  color: #FFFFFF;
+}
+
+.toolbarbutton-1[disabled="true"]:hover:active {
+  color: #9399AB;
+}
+
+.toolbarbutton-1 > .toolbarbutton-icon,
+.toolbarbutton-1[type="menu-button"] > .toolbarbutton-menubutton-stack 
+  > .toolbarbutton-menubutton-button > .toolbarbutton-icon,
+.toolbarbutton-1[type="menu-button"]
+  > .toolbarbutton-menubutton-button > .toolbarbutton-icon {
+  margin-bottom: 2px;
+}
+
+.toolbarbutton-1[type="menu"] > .toolbarbutton-menu-dropmarker {
+  display: none;
+}
+
+toolbar[mode="text"] .toolbarbutton-1 {
+  min-width: 46px;
+}
+
+toolbar[mode="text"] .toolbarbutton-1,
+toolbar[mode="text"] .toolbarbutton-1[type="menu-button"]
+  > .toolbarbutton-menubutton-button,
+toolbar[labelalign="end"] .toolbarbutton-1,
+toolbar[labelalign="end"] .toolbarbutton-1[type="menu-button"]
+  > .toolbarbutton-menubutton-button {
+  -moz-box-orient: horizontal;
+}
+
+toolbar[mode="icons"] .toolbarbutton-text,
+toolbar[mode="text"] .toolbarbutton-icon {
+  display: none;
+}
+
+toolbar[mode="icons"] .toolbarbutton-menubutton-dropmarker {
+  margin-top: 20px;
+  margin-bottom: 0px;
+  margin-inline-start: 40px;
+  margin-inline-end: 0px;
+}
+
+toolbar[mode="text"] .toolbarbutton-menubutton-dropmarker,
+toolbar[labelalign="end"]:not([mode="icons"])
+  .toolbarbutton-menubutton-dropmarker {
+  margin: 0px 2px !important;
+}
+
+toolbar[iconsize="small"] .toolbarbutton-menubutton-dropmarker {
+  margin-top: 0px;
+  margin-bottom: 2px;
+  margin-inline-start: 14px;
+  margin-inline-end: 0px;
+}
+
+toolbar[iconsize=small][mode="icons"] .toolbarbutton-menubutton-dropmarker {
+  margin-top: 8px;
+  margin-bottom: 0px;
+  margin-inline-start: 14px;
+  margin-inline-end: 0px;
+}
+
+/* ::::: standard toolbar buttons ::::: */
+ 
+.button-toolbar {
+  -moz-user-focus: ignore !important;
+  margin: 0px;
+}

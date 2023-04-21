@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xul-overlay href="chrome://navigator/content/navigatorOverlay.xul"?>
+
+<!-- hiddenwindow is a "minimal" XUL window intended for creating the,
+     er, hidden window.  This window is never shown, but on platforms
+     which leave the app running after the last (visible) window is shut
+     down, this window does hold a browser menubar.
+       Though this window looks a lot like navigator.xul, that xul
+     is unsuitable because it's subject to the whims of its associated
+     appcore, which among other things causes it to load content documents
+     undesirable for this window.
+       Arguably a simpler menu structure could be substituted, but
+     the full one was included for now in anticipation of the whole thing
+     becoming an included file someday. -->
+
+<!-- Localizable string definitions from navigator.xul. -->
+<!DOCTYPE window [
+<!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd" >
+%brandDTD;
+<!ENTITY % navigatorDTD SYSTEM "chrome://navigator/locale/navigator.dtd" >
+%navigatorDTD;
+]>
+
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  title="hidden"
+  titlemodifier="&mainWindow.titlemodifier;"
+  titlemenuseparator="&mainWindow.titlemodifiermenuseparator;"
+  onload="hiddenWindowStartup();"
+  onunload="Shutdown();">
+
+  <stringbundleset id="stringbundleset"/>
+
+  <!-- keys are appended from the overlay -->
+  <keyset id="navKeys"/>
+
+  <!-- commands are appended from the overlay -->
+  <commandset id="commands"/>
+
+  <broadcasterset id="navBroadcasters"/>
+
+  <!-- it's the whole navigator.xul menubar! hidden windows need to
+       have a menubar for situations where they're the only window remaining
+       on a platform that wants to leave the app running, like the Mac.
+  -->
+  <toolbox id="toolbox">
+    <menubar id="main-menubar" position="1"/>
+  </toolbox>
+
+</window>

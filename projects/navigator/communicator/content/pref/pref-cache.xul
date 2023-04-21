@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<!DOCTYPE overlay [
+<!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+%brandDTD;
+<!ENTITY % prefCacheDTD SYSTEM "chrome://communicator/locale/pref/pref-cache.dtd">
+%prefCacheDTD;
+]>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <prefpane id="cache_pane"
+            label="&pref.cache.title;"
+            script="chrome://communicator/content/pref/pref-cache.js">
+
+    <preferences>
+      <preference id="browser.cache.disk.capacity"
+                  name="browser.cache.disk.capacity"
+                  type="int"/>
+      <preference id="browser.cache.disk.smart_size.enabled"
+                  name="browser.cache.disk.smart_size.enabled"
+                  type="bool"/>
+      <preference id="pref.advanced.cache.disable_button.clear_disk"
+                  name="pref.advanced.cache.disable_button.clear_disk"
+                  type="bool"/>
+      <preference id="browser.cache.check_doc_frequency"
+                  name="browser.cache.check_doc_frequency"
+                  type="int"/>
+      <preference id="network.prefetch-next"
+                  name="network.prefetch-next"
+                  type="bool"/>
+      <preference id="browser.cache.disk.parent_directory"
+                  name="browser.cache.disk.parent_directory"
+                  type="file"/>
+    </preferences>
+
+    <groupbox>
+      <caption label="&pref.cache.caption;"/>
+
+      <description>&cachePara;</description>
+
+      <vbox align="start">
+        <label id="cacheSizeInfo"/>
+        <checkbox id="allowSmartSize"
+                  label="&cacheCheck.label;"
+                  accesskey="&cacheCheck.accesskey;"
+                  onsyncfrompreference="return document.getElementById('cache_pane').ReadSmartSizeEnabled();"
+                  preference="browser.cache.disk.smart_size.enabled"/>
+      </vbox>
+      <hbox align="center">
+        <label id="browserCacheDiskCacheBefore"
+               value="&diskCacheUpTo.label;"
+               accesskey="&diskCacheUpTo.accesskey;"
+               control="browserCacheDiskCache"/>
+        <textbox id="browserCacheDiskCache"
+                 size="5"
+                 type="number"
+                 aria-labelledby="browserCacheDiskCacheBefore browserCacheDiskCache browserCacheDiskCacheAfter"
+                 preference="browser.cache.disk.capacity"
+                 onsyncfrompreference="return document.getElementById('cache_pane').ReadCacheDiskCapacity();"
+                 onsynctopreference="return document.getElementById('cache_pane').WriteCacheDiskCapacity(this);"/>
+        <label id="browserCacheDiskCacheAfter"
+               value="&spaceMbytes;"/>
+        <button label="&clearDiskCache.label;"
+                accesskey="&clearDiskCache.accesskey;"
+                oncommand="ClearDiskAndMemCache();"
+                id="clearDiskCache"
+                preference="pref.advanced.cache.disable_button.clear_disk"/>
+      </hbox>
+
+      <vbox>
+        <label value="&diskCacheFolder.label;"/>
+        <hbox align="center">
+          <filefield id="browserCacheDiskCacheFolder"
+                     flex="1"
+                     preference="browser.cache.disk.parent_directory"
+                     preference-editable="true"
+                     onsyncfrompreference="return document.getElementById('cache_pane').ReadCacheFolder(this);"/>
+          <button label="&chooseDiskCacheFolder.label;"
+                  accesskey="&chooseDiskCacheFolder.accesskey;"
+                  oncommand="CacheSelectFolder();"
+                  id="chooseDiskCacheFolder">
+            <observes element="browserCacheDiskCacheFolder"
+                      attribute="disabled"/>
+          </button>
+        </hbox>
+      </vbox>
+      <description>&diskCacheFolderExplanation;</description>
+
+      <separator class="thin"/>
+
+      <label control="browserCacheCheckDocFrequency"
+             value="&docCache.label;"
+             accesskey="&docCache.accesskey;"/>
+      <hbox align="start">
+        <menulist id="browserCacheCheckDocFrequency"
+                  class="indent"
+                  preference="browser.cache.check_doc_frequency">
+          <menupopup>
+            <menuitem value="1" label="&checkEveryTime.label;"/>
+            <menuitem value="3" label="&checkAutomatically.label;"/>
+            <menuitem value="0" label="&checkOncePerSession.label;"/>
+            <menuitem value="2" label="&checkNever.label;"/>
+          </menupopup>
+        </menulist>
+      </hbox>
+
+    </groupbox>
+
+    <groupbox id="prefetch">
+      <caption id="prefetchLabel" label="&prefetchTitle.label;"/>
+      <vbox id="prefetchBox" align="start">
+        <checkbox id="enablePrefetch"
+                  label="&enablePrefetch.label;"
+                  accesskey="&enablePrefetch.accesskey;"
+                  preference="network.prefetch-next"/>
+      </vbox>
+    </groupbox>
+
+  </prefpane>
+</overlay>

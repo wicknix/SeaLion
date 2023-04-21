@@ -1,0 +1,37 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ===== xpinstall.css ==================================================
+  == Styles used by the XPInstall dialogs.
+  ======================================================================= */
+
+@import url("chrome://communicator/skin");
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* ::::: Install Confirm and Progress dialogs ::::: */
+
+.packageName {
+  font-weight: bold;
+}
+
+#confirmBox {
+  margin: 1ex;
+}
+
+.confirmSeparator {
+  height: 1em;
+}
+
+.confirmName {
+  font-weight: bold;
+}
+
+#urlColumn {
+  margin-inline-start: 1ex;
+}
+
+#alert-image {
+  margin: 1em;
+}

@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay SYSTEM "chrome://communicator/locale/pref/pref-cookies.dtd">
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <prefpane id="cookies_pane"
+            label="&pref.cookies.title;"
+            script="chrome://communicator/content/pref/pref-cookies.js">
+    <preferences id="cookies_preferences">
+      <preference id="network.cookie.cookieBehavior"
+                  name="network.cookie.cookieBehavior"
+                  type="int"
+                  onchange="SetDisables(false);"/>
+      <preference id="network.cookie.lifetimePolicy"
+                  name="network.cookie.lifetimePolicy"
+                  type="int"
+                  onchange="SetDisables(this.value == '3');"/>
+      <preference id="network.cookie.lifetime.days"
+                  name="network.cookie.lifetime.days"
+                  type="int"/>
+      <preference id="pref.advanced.cookies.disable_button.view_cookies"
+                  name="pref.advanced.cookies.disable_button.view_cookies"
+                  type="bool"/>
+    </preferences>
+
+    <groupbox id="manageCookiesAndSites">
+      <caption label="&manageCookies.label;"/>
+      <description>&manageCookiesDescription.label;</description>
+      <hbox pack="end">
+        <button id="viewCookieButton"
+                label="&viewCookies.label;"
+                accesskey="&viewCookies.accesskey;"
+                preference="pref.advanced.cookies.disable_button.view_cookies"
+                oncommand="toCookieManager();"/>
+      </hbox>
+    </groupbox>
+    <groupbox id="networkCookieAcceptPolicy">
+      <caption label="&cookiePolicy.label;"/>
+      <radiogroup id="networkCookieBehavior"
+                  preference="network.cookie.cookieBehavior">
+        <radio value="2"
+               label="&disableCookies.label;"
+               accesskey="&disableCookies.accesskey;"/>
+        <radio value="1"
+               label="&accNo3rdPartyCookies.label;"
+               accesskey="&accNo3rdPartyCookies.accesskey;"/>
+        <radio value="3"
+               label="&acc3rdPartyVisited.label;"
+               accesskey="&acc3rdPartyVisited.accesskey;"/>
+        <radio value="0"
+               label="&accAllCookies.label;"
+               accesskey="&accAllCookies.accesskey;"/>
+      </radiogroup>
+    </groupbox>
+    <groupbox id="networkCookieLifetimePolicy">
+      <caption label="&cookieRetentionPolicy.label;"/>
+      <radiogroup id="networkCookieLifetime"
+                  preference="network.cookie.lifetimePolicy">
+        <radio value="0"
+               label="&acceptNormally.label;"
+               accesskey="&acceptNormally.accesskey;"/>
+        <radio value="2"
+               label="&acceptForSession.label;"
+               accesskey="&acceptForSession.accesskey;"/>
+        <hbox align="center">
+          <radio id="acceptForNDays"
+                 value="3"
+                 label="&acceptforNDays.label;"
+                 accesskey="&acceptforNDays.accesskey;"
+                 aria-labelledby="acceptForNDays lifetimeDays daysLabel"/>
+          <textbox id="lifetimeDays"
+                   type="number"
+                   max="999"
+                   min="0"
+                   size="3"
+                   maxlength="3"
+                   preference="network.cookie.lifetime.days"
+                   aria-labelledby="acceptForNDays lifetimeDays daysLabel"/>
+          <label id="daysLabel"
+                 value="&days.label;"/>
+        </hbox>
+      </radiogroup>
+    </groupbox>
+  </prefpane>
+</overlay>

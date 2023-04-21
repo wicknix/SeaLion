@@ -1,0 +1,21 @@
+dnl -*- Mode: Autoconf; tab-width: 2; indent-tabs-mode: nil; -*-
+dnl vi: set tabstop=2 shiftwidth=2 expandtab:
+dnl This Source Code Form is subject to the terms of the Mozilla Public
+dnl License, v. 2.0. If a copy of the MPL was not distributed with this
+dnl file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+dnl Things we need to carry from confvars.sh
+
+AC_DEFINE(MOZ_SUITE)
+AC_SUBST(MOZ_SUITE)
+
+AC_DEFINE(BINOC_BOREALIS)
+AC_SUBST(BINOC_BOREALIS)
+
+AC_SUBST(BINOC_COMM_DLMGR)
+
+AC_DEFINE(MOZ_SEPARATE_MANIFEST_FOR_THEME_OVERRIDES)
+
+dnl Optional parts of the build.
+
+

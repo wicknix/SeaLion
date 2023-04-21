@@ -1,0 +1,24 @@
+# vim: set filetype=python:
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+DIRS += ['locales']
+
+if not CONFIG['MOZ_STANDALONE_COMPOSER']:
+    if CONFIG['MOZ_SUITE']:
+        EXTRA_COMPONENTS += [
+            'nsComposerCmdLineHandler.js',
+            'nsComposerCmdLineHandler.manifest',
+        ]
+
+EXTRA_JS_MODULES += [
+    'editorUtilities.jsm',
+]
+
+JAR_MANIFESTS += ['jar.mn']
+
+if not CONFIG['MOZ_STANDALONE_COMPOSER']:
+    JS_PREFERENCE_PP_FILES += [
+        'composer.js'
+    ]

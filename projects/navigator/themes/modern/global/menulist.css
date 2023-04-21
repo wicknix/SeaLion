@@ -1,0 +1,183 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ===== menulist.css ===================================================
+  == Styles used by the XUL menulist element.
+  ======================================================================= */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+@namespace html url("http://www.w3.org/1999/xhtml"); /* namespace for HTML elements */
+
+/* :::::::::: menulist :::::::::: */
+
+menulist {
+  margin: 1px 4px;
+  border: 2px solid transparent;
+  min-height: 19px;
+  color: #000000;
+  font: message-box;
+}
+
+.menulist-label {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+  margin-inline-start: 0px !important;
+  margin-inline-end: 2px !important;
+}
+
+.menulist-description {
+  font-style: italic;
+  color: #5D616E;
+  margin-inline-start: 1em !important;
+}
+
+.menulist-icon {
+  margin-inline-end: 2px;
+}
+
+.menulist-label-box {
+  -moz-box-align: center;
+  -moz-box-pack: center;
+  border-top: 3px solid;
+  border-bottom: 3px solid;
+  border-left: 3px solid;
+  -moz-border-top-colors: #000000 #BBC4D1 #B3BBC9;
+  -moz-border-bottom-colors: #000000 #99A7B7 #9EACBB;
+  -moz-border-left-colors: #000000 #BBC4D1 #B3BBC9;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+  background-color: #A6B3C0;
+  padding-inline-start: 8px;
+}
+
+.menulist-dropmarker {
+  border-left: 2px solid;
+  -moz-border-left-colors: #6D7C8F #C1CBD9;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
+.menulist-dropmarker > .dropmarker-icon {
+  margin: 1px 2px 0px;
+}
+
+/* ..... focused state ..... */
+
+menulist:focus {
+  border-color: #98A5B2;
+  border-radius: 7px;
+  background-color: #98A5B2;
+}
+
+/* ..... active state ..... */
+  
+menulist[open="true"] {
+  color: #FFFFFF;
+}
+  
+menulist[open="true"] > .menulist-label-box {
+  -moz-border-top-colors: #313948 #8393A7 #8C9DAF;
+  -moz-border-bottom-colors: #313948 #8393A7 #8C9DAF;
+  -moz-border-left-colors: #313948 #8393A7 #8C9DAF;
+  background-color: #91A2B4;
+}
+
+menulist[open="true"] > .menulist-dropmarker {
+  list-style-image: url("chrome://global/skin/menulist/mlist-act-arrow.gif");
+}
+
+/* ..... disabled state ..... */
+
+menulist[disabled="true"] {
+  color: #8C99AB !important;
+}
+  
+menulist[disabled="true"] > .menulist-label-box {
+  -moz-border-top-colors: #727D8E #D0D6DF #BDC6D2 !important;
+  -moz-border-bottom-colors: #727D8E #AAB5C2 #B3BBC8 !important;
+  background-color: #B7BFCB !important;
+}
+
+menulist[disabled="true"] > .menulist-label-box {
+  -moz-border-left-colors: #727D8E #C9D0D9 #BDC6D2 !important;
+}
+
+menulist[disabled="true"] > .menulist-dropmarker {
+  -moz-border-left-colors: #95A1AD #C7D0DC !important;
+}
+
+/* ::::: editable menulists ::::: */
+
+.menulist-editable-box {
+  border: 1px solid #000000;
+  border-right: none;
+  background-color: #FFFFFF;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-inline-start: 2px;
+  padding-inline-end: 0px;
+}
+
+html|*.menulist-editable-input {
+  margin: 0px !important;
+  border: none !important;
+  padding: 0px !important;
+  background: inherit;
+  font: inherit;
+}
+
+menulist[focused="true"] {
+  border-color: #98A5B2;
+  border-top-right-radius: 7px;
+  border-bottom-right-radius: 7px;
+  background-color: #98A5B2;
+}
+
+/* ::::: compact menulists ::::: */
+
+.menulist-compact {
+  -moz-box-align: center;
+  -moz-box-pack: center;
+  margin: 0;
+  border: 2px solid;
+  -moz-border-top-colors: #CED5DD #A6B3C0;
+  -moz-border-right-colors: #5D616E #99A9BA;
+  -moz-border-bottom-colors: #5D616E #99A9BA;
+  -moz-border-left-colors: #CED5DD #A6B3C0;
+  border-radius: 0;
+  padding: 1px;
+  min-height: 0px;
+  background-color: #A6B3C0;
+  color: #000000;
+}
+
+.menulist-compact > .menulist-label {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+  margin-inline-start: 0px !important;
+  margin-inline-end: 3px !important;
+  text-align: end;
+}  
+
+.menulist-compact > .menulist-dropmarker {
+  border: none;
+  background: transparent;
+}
+
+.menulist-compact > .menulist-dropmarker,
+.menulist-compact[open="true"] > .menulist-dropmarker {
+  list-style-image: url("chrome://global/skin/menulist/mlist-compact-arrow.gif");
+}
+
+.menulist-compact:focus {
+  border-radius: 0;
+}
+      
+.menulist-compact[open="true"] {
+  -moz-border-top-colors: #788797 #91A2B4;
+  -moz-border-right-colors: #5D616E #788797;
+  -moz-border-bottom-colors: #5D616E #788797;
+  -moz-border-left-colors: #788797 #91A2B4;
+  background-color: #91A2B4;
+}

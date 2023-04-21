@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay [
+<!ENTITY % platformCommunicationDTD SYSTEM "chrome://communicator-platform/locale/pref/platformPrefOverlay.dtd">
+%platformCommunicationDTD;
+<!ENTITY % tabsDTD SYSTEM "chrome://communicator/locale/pref/pref-tabs.dtd">
+%tabsDTD;
+]>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <prefpane id="tabs_pane"
+            label="&tabHeader.label;">
+
+    <preferences id="tabs_preferences">
+      <preference id="browser.tabs.autoHide"
+                  name="browser.tabs.autoHide"
+                  type="bool"/>
+      <preference id="browser.tabs.loadInBackground"
+                  name="browser.tabs.loadInBackground"
+                  type="bool"
+                  inverted="true"/>
+      <preference id="browser.tabs.warnOnClose"
+                  name="browser.tabs.warnOnClose"
+                  type="bool"/>
+      <preference id="browser.tabs.insertRelatedAfterCurrent"
+                  name="browser.tabs.insertRelatedAfterCurrent"
+                  type="bool"/>
+      <preference id="browser.tabs.loadGroup"
+                  name="browser.tabs.loadGroup"
+                  type="int"/>
+      <preference id="browser.tabs.opentabfor.middleclick"
+                  name="browser.tabs.opentabfor.middleclick"
+                  type="bool"/>
+      <preference id="browser.tabs.opentabfor.urlbar"
+                  name="browser.tabs.opentabfor.urlbar"
+                  type="bool"/>
+      <preference id="suite.manager.dataman.openAsDialog"
+                  name="suite.manager.dataman.openAsDialog"
+                  inverted="true"
+                  type="bool"/>
+      <preference id="suite.manager.addons.openAsDialog"
+                  name="suite.manager.addons.openAsDialog"
+                  inverted="true"
+                  type="bool"/>
+    </preferences>
+
+      <groupbox id="generalTabPreferences" align="start">
+        <caption label="&tabDisplay.label;"/>
+        <checkbox id="tabStrip"
+                  label="&autoHide.label;"
+                  accesskey="&autoHide.accesskey2;"
+                  preference="browser.tabs.autoHide"/>
+        <checkbox id="tabBackground"
+                  label="&background.label;"
+                  accesskey="&background.accesskey;"
+                  preference="browser.tabs.loadInBackground"/>
+        <checkbox id="tabWarnOnClose"
+                  label="&warnOnClose.label;"
+                  accesskey="&warnOnClose.accesskey;"
+                  preference="browser.tabs.warnOnClose"/>
+        <checkbox id="tabRelatedAfterCurrent"
+                  label="&relatedAfterCurrent.label;"
+                  accesskey="&relatedAfterCurrent.accesskey;"
+                  preference="browser.tabs.insertRelatedAfterCurrent"/>
+      </groupbox>
+
+      <groupbox id="loadGroupPreferences" align="start">
+        <caption label="&loadGroup.label;"/>
+        <radiogroup id="loadGroup"
+                    orient="horizontal"
+                    preference="browser.tabs.loadGroup">
+          <radio value="0"
+                 label="&loadGroupAppend.label;"
+                 accesskey="&loadGroupAppend.accesskey;"/>
+          <radio value="1"
+                 label="&loadGroupReplace.label;"
+                 accesskey="&loadGroupReplace.accesskey;"/>
+        </radiogroup>
+      </groupbox>
+
+      <groupbox id="useTabPreferences" align="start">
+        <caption label="&openTabs.label;"/>
+          <checkbox id="middleClick"
+                    label="&middleClick.label;"
+                    accesskey="&middleClick.accesskey;"
+                    preference="browser.tabs.opentabfor.middleclick"/>
+          <checkbox id="urlBar"
+                    label="&urlbar.label;"
+                    accesskey="&urlbar.accesskey;"
+                    preference="browser.tabs.opentabfor.urlbar"/>
+      </groupbox>
+
+      <groupbox id="useManagersPreferences" align="start">
+        <caption label="&openManagers.label;"/>
+          <checkbox id="openDataManager"
+                    label="&openDataManager.label;"
+                    accesskey="&openDataManager.accesskey;"
+                    preference="suite.manager.dataman.openAsDialog"/>
+          <checkbox id="openAddOnsManager"
+                    label="&openAddOnsManager.label;"
+                    accesskey="&openAddOnsManager.accesskey;"
+                    preference="suite.manager.addons.openAsDialog"/>
+      </groupbox>
+  </prefpane>
+</overlay>

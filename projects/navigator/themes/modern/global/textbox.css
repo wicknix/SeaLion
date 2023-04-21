@@ -1,0 +1,126 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ===== textbox.css ==================================================
+  == Styles used by the XUL textbox element.
+  ======================================================================= */
+
+@import url("chrome://global/content/autocomplete.css");
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+@namespace html url("http://www.w3.org/1999/xhtml"); /* namespace for HTML elements */
+
+/* ::::: textbox ::::: */
+
+textbox {
+  margin: 2px 4px;
+  border: 2px solid;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-inline-start: 2px;
+  padding-inline-end: 0px;
+  background-color: #FFFFFF;
+  color: #000000;
+  font: inherit;
+}
+
+html|*.textbox-input::placeholder,
+html|*.textbox-textarea::placeholder {
+  color: #999999;
+  opacity: 1.0;
+}
+
+textbox,
+textbox[readonly="true"][focused="true"] {
+  -moz-border-top-colors: #BEC3D3 #5D616E;
+  -moz-border-right-colors: #F8FAFE #5D616E;
+  -moz-border-bottom-colors: #F8FAFE #5D616E;
+  -moz-border-left-colors: #BEC3D3 #5D616E;
+}
+
+html|*.textbox-input,
+html|*.textbox-textarea {
+  cursor: text;
+  margin: 0px !important;
+  border: none !important;
+  padding: 0px !important;
+  background-color: inherit;
+  color: inherit;
+  font: inherit;
+}
+
+/* ..... focused state ..... */
+
+textbox[focused="true"] {
+  -moz-border-top-colors: #98A5B2 #000000;
+  -moz-border-right-colors: #98A5B2 #000000;
+  -moz-border-bottom-colors: #98A5B2 #000000;
+  -moz-border-left-colors: #98A5B2 #000000;
+}
+
+/* ..... disabled state ..... */
+
+textbox[disabled="true"] {
+  -moz-border-top-colors: #BEC3D3 #98A5B2;
+  -moz-border-right-colors: #F8FAFE #98A5B2;
+  -moz-border-bottom-colors: #F8FAFE #98A5B2;
+  -moz-border-left-colors: #BEC3D3 #98A5B2;
+  background-color: #C7D0D9;
+  color: #999999;
+  cursor: default !important;
+}
+
+/* ..... readonly state ..... */
+
+textbox[readonly="true"] {
+  background-color: #C7D0D9;
+}
+
+/* ::::: plain textbox ::::: */
+
+textbox.plain {
+  background-color: transparent;
+  margin: 0px !important;
+  border: none !important;
+  padding: 0px !important;
+}
+
+/* ::::: search textbox ::::: */
+
+.textbox-search-icon {
+  list-style-image: url("chrome://global/skin/icons/search.gif");
+}
+
+.textbox-search-clear {
+  list-style-image: url("chrome://global/skin/icons/closebox.gif");
+}
+
+/* ::::: scrollable textbox ::::: */
+
+.scrollfield {
+  border: none !important;
+  margin: 0px;
+  margin-top: 1px;
+  padding: 0px !important;
+  background: inherit;
+}
+
+.scrollfield > .textbox-internal-box {
+  border: none !important;
+  margin: 0px !important;
+  padding: 0px !important;
+}
+
+/* ::::: inline-edit textbox ::::: */
+
+.textbox-inline-edit {
+  margin: 0px !important;
+  border: 1px solid #000000 !important;
+}
+
+/* ::::: textboxes inside toolbarpaletteitems ::::: */
+
+toolbarpaletteitem > toolbaritem > textbox > .textbox-input-box > html|*.textbox-input {
+  visibility: hidden;
+}

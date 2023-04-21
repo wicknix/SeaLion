@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://editor/skin/editor.css" type="text/css"?>
+<?xml-stylesheet href="chrome://editor/skin/EditorDialog.css" type="text/css"?>
+
+<?xul-overlay href="chrome://editor/content/EdDialogOverlay.xul"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://editor/locale/EditorHLineProperties.dtd">
+
+<dialog title="&windowTitle.label;"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    onload="Startup()"
+    ondialogaccept="return onAccept();"
+    ondialogcancel="return onCancel();">
+
+  <!-- Methods common to all editor dialogs -->
+  <script type="application/javascript" src="chrome://editor/content/editorUtilities.js"/>
+  <script type="application/javascript" src="chrome://editor/content/EdDialogCommon.js"/>
+  <!--- Element-specific methods -->
+  <script type="application/javascript" src="chrome://editor/content/EdHLineProps.js"/>
+
+  <spacer id="location" offsetY="50" persist="offsetX offsetY"/>
+
+  <groupbox><caption label="&dimensionsBox.label;"/>
+    <grid>
+      <columns><column/><column/><column /></columns>
+      <rows>
+        <row align="center">
+          <label control="width"
+                 value="&widthEditField.label;"
+                 accesskey="&widthEditField.accessKey;"/>
+          <textbox class="narrow" id="width" flex="1" oninput="forceInteger('width')"/>
+          <menulist id="pixelOrPercentMenulist" />
+          <!-- menupopup and menuitems added by JS -->
+        </row>
+        <row align="center">
+          <label control="height"
+                 value="&heightEditField.label;"
+                 accesskey="&heightEditField.accessKey;"/>
+          <textbox class="narrow" id="height" oninput="forceInteger('height')"/>
+          <label value="&pixelsPopup.value;" />
+        </row>
+      </rows>
+    </grid>
+    <checkbox id="3dShading" label="&threeDShading.label;" accesskey="&threeDShading.accessKey;"/>
+  </groupbox>
+  <groupbox><caption label="&alignmentBox.label;"/>
+    <radiogroup id="alignmentGroup" orient="horizontal">
+      <spacer class="spacer"/>
+      <radio id="leftAlign"   label="&leftRadio.label;"   accesskey="&leftRadio.accessKey;"/>
+      <radio id="centerAlign" label="&centerRadio.label;" accesskey="&centerRadio.accessKey;"/>
+      <radio id="rightAlign"  label="&rightRadio.label;"  accesskey="&rightRadio.accessKey;"/>
+    </radiogroup>
+  </groupbox>
+  <spacer class="spacer"/>
+  <hbox>
+    <button  id="SaveDefault" label="&saveSettings.label;"
+         accesskey="&saveSettings.accessKey;"
+         oncommand="onSaveDefault()"
+         tooltiptext="&saveSettings.tooltip;" />
+    <spacer flex="1"/>
+    <button id="AdvancedEditButton"/>
+  </hbox>
+  <separator class="groove"/>
+</dialog>

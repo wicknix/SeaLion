@@ -1,0 +1,72 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ===== radio.css ======================================================
+  == Styles used by the XUL radio element.
+  ======================================================================= */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* ::::: radio ::::: */
+
+radio {
+  -moz-box-align: center;
+  margin: 0px 2px;
+  border: 2px solid transparent;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-inline-start: 4px;
+  padding-inline-end: 2px;
+  border-radius: 4px 5px;
+}
+
+.radio-icon {
+  margin-inline-start: 2px;
+}
+
+.radio-text {
+  margin: 0px 2px !important;
+}
+
+/* ..... focused state ..... */
+
+radio[focused="true"] {
+  border-color: #98A5B2;
+}
+  
+/* ..... disabled state ..... */
+
+radio[disabled="true"] > .radio-label-box > .radio-label {
+  color: #8C99AB !important;
+}
+
+/* ::::: checkmark image ::::: */
+
+.radio-check {
+  width: 13px;
+  height: 13px;
+  list-style-image: url("chrome://global/skin/radio/radio.gif");
+}
+
+radio:hover:active > .radio-check {
+  list-style-image: url("chrome://global/skin/radio/radio-act.gif");
+}
+
+radio[disabled="true"] > .radio-check {
+  list-style-image: url("chrome://global/skin/radio/radio-dis.gif") !important;
+}
+
+/* ..... checked state ..... */
+
+radio[selected] > .radio-check {
+  list-style-image: url("chrome://global/skin/radio/radio-check.gif");
+}
+  
+radio[selected]:hover:active > .radio-check {
+  list-style-image: url("chrome://global/skin/radio/radio-act-check.gif");  
+}
+
+radio[selected][disabled="true"] > .radio-check {
+  list-style-image: url("chrome://global/skin/radio/radio-dis-check.gif") !important;
+}

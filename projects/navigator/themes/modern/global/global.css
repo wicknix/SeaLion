@@ -1,0 +1,356 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ===== global.css =====================================================
+  == Styles that apply everywhere.
+  ======================================================================= */
+
+/* all localizable skin settings shall live here */
+@import url("chrome://global/locale/intl.css");
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* ::::: XBL bindings ::::: */
+
+toolbarbutton[type="menu-button"] {
+  -moz-binding: url("chrome://global/skin/globalBindings.xml#toolbar-menu-button");
+}
+
+toolbarbutton.devtools-toolbarbutton[type="menu-button"] {
+  -moz-binding: url("chrome://global/content/bindings/toolbarbutton.xml#menu-button");
+}
+
+.menulist-compact {
+  -moz-binding: url("chrome://global/skin/globalBindings.xml#menulist-compact");
+}
+
+/* ::::: root elements ::::: */
+
+window, 
+page,
+dialog,
+wizard,
+prefwindow { 
+  background-color: #C7D0D9;
+  color: #000000;
+  font: message-box;
+}
+  
+[wait-cursor] { 
+  cursor: wait !important; 
+}
+
+/* deprecated */  
+window.dialog { 
+  padding: 7px 5px 5px;
+}
+
+/* ::::: alert icons :::::*/
+
+.message-icon {
+  width: 48px;
+  height: 48px;
+  list-style-image: url("chrome://global/skin/icons/information-48.png");
+}
+
+.alert-icon {
+  width: 48px;
+  height: 48px;
+  list-style-image: url("chrome://global/skin/icons/warning-48.png");
+}
+
+.error-icon {
+  width: 48px;
+  height: 48px;
+  list-style-image: url("chrome://global/skin/icons/error-48.png");
+}
+
+.question-icon {
+  width: 48px;
+  height: 48px;
+  list-style-image: url("chrome://global/skin/icons/question-48.png");
+}
+
+.authentication-icon {
+  width: 48px;
+  height: 48px;
+  list-style-image: url("chrome://global/skin/icons/authentication-48.png");
+}
+
+/* ::::: iframe ::::: */
+
+iframe {
+  border: none;
+  width: 100px;
+  height: 100px;
+  min-width: 10px;
+  min-height: 10px;
+}
+
+/* ::::: statusbar ::::: */
+
+statusbar {
+  border-top: 1px solid #C7D0D9;
+  min-height: 18px;
+  min-width: 1px; /* DON'T DELETE!
+    Prevents hiding of scrollbars in browser when window is made smaller.*/
+  background-color: #C7D0D9;
+  color: #22262F;
+  font-size: 83.3333%;
+}
+
+statusbarpanel {
+  -moz-box-align: center;
+  -moz-box-pack: center;
+  border-top: 1px solid #E0ECF6;
+  border-right: 1px solid #8997A1;
+  border-left: 1px solid #E0ECF6;
+  padding: 0px 4px;
+}
+
+.statusbar-resizerpanel 
+{
+  border: 0px;
+  -moz-box-align: end;
+  -moz-box-pack: end;
+  padding: 0px;
+}
+
+.statusbarpanel-progress {
+  -moz-box-align: stretch;
+  border: 0px;
+  margin: 0px;
+  padding: 0px;
+}
+
+.statusbarpanel-iconic {
+  padding: 0px;
+}
+
+.statusbarpanel-text {
+  margin: 0px !important;
+}
+
+/* Override resizer.css for "normal" resizers */
+resizer {
+  background-color: transparent;
+}
+
+/* ::::: miscellaneous ::::: */
+
+.toolbar-focustarget {
+  -moz-user-focus: ignore !important;
+}
+
+description.error {
+  color: #FF0000;
+}
+/* :::::: autoscroll popup ::::: */
+
+.autoscroller {
+  height: 28px;
+  width: 28px;
+  border: none;
+  margin: -14px;
+  padding: 0;
+  background-image: url("chrome://global/skin/icons/autoscroll.png");
+  background-color: transparent;
+  -moz-appearance: none;
+  -moz-window-shadow: none;
+}
+
+.autoscroller[scrolldir="NS"] {
+  background-position: left center;
+}
+
+.autoscroller[scrolldir="EW"] {
+  background-position: left bottom;
+}
+
+.autoscroller[transparent="true"] {
+  background-position: center top;
+}
+
+.autoscroller[transparent="true"][scrolldir="NS"] {
+  background-position: center center;
+}
+
+.autoscroller[transparent="true"][scrolldir="EW"] {
+  background-position: center bottom;
+}
+
+.autoscroller[translucent="true"] {
+  background-position: right top;
+}
+
+.autoscroller[translucent="true"][scrolldir="NS"] {
+  background-position: right center;
+}
+
+.autoscroller[translucent="true"][scrolldir="EW"] {
+  background-position: right bottom;
+}
+
+/* :::::: Close button icons ::::: */
+
+.close-icon {
+  list-style-image: url("chrome://global/skin/icons/close.gif");
+}
+
+.close-icon:hover {
+  list-style-image: url("chrome://global/skin/icons/close-hov.gif");
+}
+
+.close-icon:hover:active {
+  list-style-image: url("chrome://global/skin/icons/close-act.gif");
+}
+
+/* ===== taken from formatting.css ===== */
+
+/* ::::: inset areas ::::: */
+
+.inset {
+  border: 1px inset #C7D0D9;
+  margin: 0px 5px 5px 5px;
+}
+
+/* ::::: formatting ::::: */
+
+.outset {
+  border: 1px outset #C7D0D9;
+}
+
+/* ::::: separator rules ::::: */
+
+/* ..... standard separators ..... */
+
+separator, separator[orient="horizontal"] {
+  height: 1.5em;
+}
+
+separator[orient="vertical"] {
+  width: 1.5em;
+}
+
+/* ..... thinner separators ..... */
+
+separator.thin, separator.thin[orient="horizontal"] {
+  height: 0.5em;
+}
+
+separator.thin[orient="vertical"] {
+  width: 0.5em;
+}
+
+/* ..... groove separators ..... */
+
+separator.groove,
+separator.groove[orient="horizontal"] {
+  border-top: 1px solid #7A8490;
+  border-bottom: 1px solid #FEFEFE;
+  height: 0px;
+  margin-top: 0.4em;
+  margin-bottom: 0.4em;
+}
+
+separator.groove[orient="vertical"] {
+  border-left: 1px solid #7A8490;
+  border-right: 1px solid #FEFEFE;
+  margin: 0 .4em;
+}
+
+/* ..... thin groove separators ..... */
+
+separator.groove-thin {
+  border-top: 2px groove #D7D9E0;
+  height: 0px;
+}
+
+separator[orient="vertical"].groove-thin {
+  border-left: 2px groove #D7D9E0;
+}
+
+/* ::::: text formatting rules ::::: */
+
+/* ..... label (with margins) ..... */
+
+/* reduced margin for some UI */
+.small-margin {
+  margin: 1px 2px 1px 2px;
+}
+
+.plain {
+  margin: 0px !important;
+  border: none;
+  padding: 0px;
+}
+
+description, label {
+  cursor: default;
+}
+
+description {
+  margin: 1px 5px 4px 5px;
+}
+
+label {
+  margin: 1px 5px 2px 5px;
+}
+
+description[disabled="true"],
+label[disabled="true"] {
+  color: #8C99AB;
+}
+
+.tooltip-label {
+  margin: 0px;
+}
+
+.header {
+  font-weight: bold;
+}
+
+.monospace {
+  font-family: monospace;
+}
+
+.indent {
+  margin-inline-start: 20px;
+}
+
+.box-padded {
+  padding: 5px;
+}
+
+.spaced {
+  margin: 3px 5px 4px 5px;
+}
+
+.wizard-box {
+  padding: 20px 44px 10px;
+}
+
+/* class for text with a 'link' appearance */
+.text-link {
+  color: blue;
+  text-decoration: underline;
+}
+
+.text-link:focus {
+  color: red;
+  /* Don't specify the outline-color, we should always use initial value. */
+  outline: 1px dotted;
+}
+
+.text-link:hover {
+  cursor: pointer;
+}
+
+.text-link:hover:active {
+  color: red;
+}
+
+.text-link[visited="true"] {
+  color: purple;
+}

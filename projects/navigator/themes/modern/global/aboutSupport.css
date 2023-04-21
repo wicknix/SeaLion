@@ -1,0 +1,108 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@import url("chrome://global/skin/plugins.css");
+@import url("chrome://global/skin/button.css");
+
+body {
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.page-subtitle {
+  margin-bottom: 1.5em;
+}
+
+.major-section {
+  margin-top: 2em;
+  margin-bottom: 1em;
+  text-align: start;
+}
+
+button {
+  margin-inline-start: 0;
+  margin-inline-end: 8px;
+}
+
+th.title-column {
+  white-space: nowrap;
+  width: 0px;
+  font-size: medium;
+}
+
+th.column {
+  text-align: start;
+  border-top: 1px dotted #2D3B49;
+  white-space: nowrap;
+  width: 0px;
+}
+
+tr:first-child > th,
+tr:first-child > td {
+  border-top: 0;
+}
+
+.prefs-table {
+  table-layout: fixed;
+}
+
+.name {
+  width: 70%;
+}
+
+.value {
+  width: 30%;
+}
+
+.pref-name,
+.pref-value {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+#action-box {
+  background-color: #C7D0D9;
+  border: 1px solid #2D3B49;
+  border-radius: 6px;
+  color: #22262F;
+  float: right;
+  margin-top: 2em;
+  margin-bottom: 20px;
+  margin-inline-start: 20px;
+  margin-inline-end: 0;
+  padding: 16px;
+  width: 30%;
+}
+
+#action-box,
+#reset-box,
+#safe-mode-box {
+  display: none;
+}
+
+#action-box:dir(rtl) {
+  float: left;
+}
+
+#reset-box > h3 {
+  margin-top: 0;
+}
+
+#action-box button {
+  display: block;
+}
+
+#verify-place-result {
+  max-height: 200px;
+  overflow: auto;
+}
+
+.block {
+  display: block;
+}
+
+.hidden {
+  display: none;
+}

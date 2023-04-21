@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay [
+<!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+%brandDTD;
+<!ENTITY % prefSecurityDTD SYSTEM "chrome://communicator/locale/pref/pref-security.dtd">
+%prefSecurityDTD;
+]>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <prefpane id="security_pane" label="&pref.security.title;"
+            script="chrome://communicator/content/pref/pref-security.js">
+    <preferences id="security_preferences">
+      <!-- User Tracking -->
+      <preference id="privacy.donottrackheader.enabled"
+                  name="privacy.donottrackheader.enabled"
+                  type="bool"/>
+      <preference id="privacy.trackingprotection.enabled"
+                  name="privacy.trackingprotection.enabled"
+                  type="bool"
+                  onchange="SetWarnTrackEnabled(this.value);"/>
+      <preference id="privacy.warn_tracking_content"
+                  name="privacy.warn_tracking_content"
+                  type="bool"/>
+
+      <!-- Location Aware Browsing -->
+      <preference id="geo.enabled"
+                  name="geo.enabled"
+                  type="bool"/>
+
+      <!-- Opportunistic Encryption -->
+      <preference id="network.http.upgrade-insecure-requests"
+                  name="network.http.upgrade-insecure-requests"
+                  type="bool"/>
+      <preference id="network.http.altsvc.oe"
+                  name="network.http.altsvc.oe"
+                  type="bool"/>
+    </preferences>
+
+    <!-- User Tracking -->
+    <groupbox id="trackingGroup">
+      <caption label="&tracking.label;"/>
+
+      <description>&trackingIntro.label;</description>
+      <checkbox id="doNotTrack"
+                label="&doNotTrack.label;"
+                accesskey="&doNotTrack.accesskey;"
+                preference="privacy.donottrackheader.enabled"/>
+      <checkbox id="trackProtect"
+                label="&trackProtect.label;"
+                accesskey="&trackProtect.accesskey;"
+                preference="privacy.trackingprotection.enabled"/>
+      <checkbox id="warnTrackContent"
+                class="indent"
+                label="&warnTrackContent.label;"
+                accesskey="&warnTrackContent.accesskey;"
+                preference="privacy.warn_tracking_content"/>
+    </groupbox>
+
+    <!-- Location Aware Browsing -->
+    <groupbox id="geoLocationGroup">
+      <caption label="&geoLocation.label;"/>
+
+      <description>&geoIntro.label;</description>
+      <radiogroup id="geoSelection"
+                  preference="geo.enabled">
+        <radio id="geoEnabled"
+               value="true"
+               label="&geoEnabled.label;"
+               accesskey="&geoEnabled.accesskey;"/>
+        <radio id="geoDisabled"
+               value="false"
+               label="&geoDisabled.label;"
+               accesskey="&geoDisabled.accesskey;"/>
+      </radiogroup>
+    </groupbox>
+
+    <!-- Opportunistic Encryption -->
+    <groupbox id="OpportunisticEncryption">
+      <caption label="&OpEnc.label;"/>
+      <checkbox id="enableUIROpEnc"
+                label="&enableUIROpEnc.label;"
+                preference="network.http.upgrade-insecure-requests" />
+      <checkbox id="enableAltSvcOpEnc"
+                label="&enableAltSvcOpEnc.label;"
+                preference="network.http.altsvc.oe" />
+    </groupbox>
+  </prefpane>
+</overlay>

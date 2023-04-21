@@ -1,0 +1,713 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+
+<!DOCTYPE bindings [
+  <!ENTITY % textcontextDTD SYSTEM "chrome://communicator/locale/utilityOverlay.dtd">
+  %textcontextDTD;
+  <!ENTITY % navigatorDTD SYSTEM "chrome://navigator/locale/navigator.dtd">
+  %navigatorDTD;
+]>
+
+<bindings id="urlbarBindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <binding id="urlbar" extends="chrome://global/content/autocomplete.xml#autocomplete">
+    <content sizetopopup="pref">
+      <xul:hbox class="autocomplete-textbox-container" flex="1">
+        <xul:hbox class="urlbar-security-level" flex="1" align="center" xbl:inherits="level">
+          <children includes="image|deck|stack|box">
+            <xul:image class="autocomplete-icon" allowevents="true"/>
+          </children>
+
+          <xul:hbox class="textbox-input-box paste-and-go" flex="1" tooltip="_child" xbl:inherits="context">
+            <children/>
+            <html:input anonid="input" class="autocomplete-textbox textbox-input"
+                        allowevents="true"
+                        xbl:inherits="value,type,maxlength,disabled,size,readonly,placeholder,tabindex,accesskey,mozactionhint,userAction"/>
+            <xul:tooltip anonid="tooltip"
+                         onpopupshowing="document.getBindingParent(this)._showTooltip(event);"/>
+          </xul:hbox>
+          <children includes="hbox"/>
+        </xul:hbox>
+      </xul:hbox>
+
+      <xul:dropmarker class="autocomplete-history-dropmarker" allowevents="true"
+                      xbl:inherits="open" anonid="historydropmarker"/>
+
+      <xul:popupset>
+        <xul:panel type="autocomplete" anonid="popup"
+                   ignorekeys="true" noautofocus="true" level="top"
+                   xbl:inherits="for=id,nomatch"/>
+      </xul:popupset>
+
+      <children includes="menupopup"/>
+    </content>
+
+    <implementation implements="nsIDOMEventListener">
+      <constructor><![CDATA[
+        this.mPrefs.addObserver("browser.urlbar", this.mPrefObserver, false);
+
+        this.updatePref("browser.urlbar.showPopup");
+        this.updatePref("browser.urlbar.autoFill");
+        this.updatePref("browser.urlbar.showSearch");
+        this.updatePref("browser.urlbar.formatting.enabled");
+        this.inputField.controllers.insertControllerAt(0, this._editItemsController);
+        this.inputField.addEventListener("overflow", this, false);
+        this.inputField.addEventListener("underflow", this, false);
+      ]]></constructor>
+
+      <destructor><![CDATA[
+        this.inputField.removeEventListener("underflow", this, false);
+        this.inputField.removeEventListener("overflow", this, false);
+        this.inputField.controllers.removeController(this._editItemsController);
+        this.mPrefs.removeObserver("browser.urlbar", this.mPrefObserver);
+      ]]></destructor>
+
+      <field name="mPrefs">
+        var svc = Components.classes["@mozilla.org/preferences-service;1"]
+                            .getService(Components.interfaces.nsIPrefService);
+        svc.getBranch(null);
+      </field>
+
+      <field name="mPrefObserver"><![CDATA[
+        ({
+          urlbar: this,
+
+          observe: function(aObserver, aBlah, aPref) {
+            if (/^browser\.urlbar\./.test(aPref))
+              this.urlbar.updatePref(aPref);
+          }
+        });
+      ]]></field>
+
+      <method name="updatePref">
+        <parameter name="aPref"/>
+        <body><![CDATA[
+          if (aPref == "browser.urlbar.showPopup") {
+            this.showPopup = this.mPrefs.getBoolPref(aPref);
+          } else if (aPref == "browser.urlbar.autoFill") {
+            this.autoFill = this.mPrefs.getBoolPref(aPref);
+          } else if (aPref == "browser.urlbar.showSearch") {
+            this.minResultsForPopup = this.mPrefs.getBoolPref(aPref) ?  0 : 1;
+          } else if (aPref == "browser.urlbar.formatting.enabled") {
+            this._formattingEnabled = this.mPrefs.getBoolPref(aPref);
+            this._formatValue(this._formattingEnabled && !this.focused);
+          }
+        ]]></body>
+      </method>
+
+      <field name="_overflowing">false</field>
+
+      <method name="handleEvent">
+        <parameter name="aEvent"/>
+        <body><![CDATA[
+          switch (aEvent.type) {
+            case "overflow":
+              this._overflowing = true;
+              break;
+            case "underflow":
+              this._overflowing = false;
+              break;
+          }
+        ]]></body>
+      </method>
+
+      <method name="_showTooltip">
+        <parameter name="aEvent"/>
+        <body><![CDATA[
+          var tooltip = aEvent.target;
+          if (this._overflowing)
+            tooltip.label = this.value;
+          else if (this.value)
+            tooltip.label = this.placeholder;
+          else
+            aEvent.preventDefault();
+        ]]></body>
+      </method>
+
+      <field name="_formattingEnabled">true</field>
+
+      <method name="_formatValue">
+        <parameter name="formattingEnabled"/>
+        <body><![CDATA[
+          if (!this.editor)
+            return;
+
+          var controller = this.editor.selectionController;
+          var selection = controller.getSelection(controller.SELECTION_URLSECONDARY);
+          selection.removeAllRanges();
+          if (!formattingEnabled)
+            return;
+
+          var textNode = this.editor.rootElement.firstChild;
+          var value = textNode.textContent;
+
+          var protocol = value.match(/^[a-z\d.+\-]+:(?=[^\d])/);
+          if (protocol && !/^https?:|ftp:/.test(protocol[0]))
+            return;
+          var matchedURL = value.match(/^((?:[a-z]+:\/\/)?(?:[^\/]+@)?)(.+?)(?::\d+)?(?:\/|$)/);
+          if (!matchedURL)
+            return;
+
+          var [, preDomain, domain] = matchedURL;
+          var subDomain = "";
+          // getBaseDomainFromHost doesn't recognize IPv6 literals in brackets as IPs (bug 667159)
+          if (domain[0] != "[") {
+            try {
+              var baseDomain = Services.eTLD.getBaseDomainFromHost(domain);
+              if (!domain.endsWith(baseDomain)) {
+                // getBaseDomainFromHost converts its resultant to ACE.
+                let IDNService = Components.classes["@mozilla.org/network/idn-service;1"]
+                                           .getService(Components.interfaces.nsIIDNService);
+                baseDomain = IDNService.convertACEtoUTF8(baseDomain);
+              }
+              if (baseDomain != domain) {
+                subDomain = domain.slice(0, -baseDomain.length);
+              }
+            } catch (e) {}
+          }
+
+          var startLength = preDomain.length + subDomain.length;
+          if (startLength) {
+            var startRange = document.createRange();
+            startRange.setStart(textNode, 0);
+            startRange.setEnd(textNode, startLength);
+            selection.addRange(startRange);
+          }
+
+          var endLength = preDomain.length + domain.length;
+          if (endLength < value.length) {
+            var endRange = document.createRange();
+            endRange.setStart(textNode, endLength);
+            endRange.setEnd(textNode, value.length);
+            selection.addRange(endRange);
+          }
+        ]]></body>
+      </method>
+
+      <method name="autoFillInput">
+        <parameter name="aSessionName"/>
+        <parameter name="aResults"/>
+        <parameter name="aUseFirstMatchIfNoDefault"/>
+        <body><![CDATA[
+          if (this.mInputElt.selectionEnd < this.currentSearchString.length ||
+              this.mDefaultMatchFilled)
+            return;
+
+          if (!this.mFinishAfterSearch && this.autoFill &&
+              this.mLastKeyCode != KeyEvent.DOM_VK_BACK_SPACE &&
+              this.mLastKeyCode != KeyEvent.DOM_VK_DELETE) {
+            var indexToUse = aResults.defaultItemIndex;
+            if (aUseFirstMatchIfNoDefault && indexToUse == -1)
+              indexToUse = 0;
+
+            if (indexToUse != -1) {
+              var result = this.getSessionValueAt(aSessionName, indexToUse);
+              var entry = this.value;
+              var suffix = "";
+              if (/^ftp:\/\/ftp\b/.test(result) &&
+                  result.lastIndexOf("ftp://" + entry, 0) == 0)
+                suffix = result.slice(entry.length + 6);
+              else if (!/^http:\/\/ftp\b/.test(result) &&
+                       result.lastIndexOf("http://" + entry, 0) == 0)
+                suffix = result.slice(entry.length + 7);
+              else if (result.lastIndexOf(entry, 0) == 0)
+                suffix = result.slice(entry.length);
+
+              if (suffix) {
+                this.setTextValue(this.value + suffix);
+                this.mInputElt.setSelectionRange(entry.length, this.value.length);
+                this.mDefaultMatchFilled = true;
+              }
+              this.mNeedToComplete = true;
+            }
+          }
+        ]]></body>
+      </method>
+
+      <method name="_getSelectedValueForClipboard">
+        <body>
+          <![CDATA[
+            var inputVal = this.inputField.value;
+            var val = inputVal.substring(this.selectionStart, this.selectionEnd);
+
+            /* If the entire value is selected and it's a valid non-javascript,
+               non-data URI, encode it. */
+            if (val == inputVal &&
+                gProxyButton.getAttribute("pageproxystate") == "valid") {
+              var uri;
+              try {
+                uri = makeURI(val);
+              } catch (e) {}
+
+              if (uri && !uri.schemeIs("javascript") && !uri.schemeIs("data")) {
+                val = uri.spec;
+
+                // Parentheses are known to confuse third-party applications (bug 458565).
+                val = val.replace(/[()]/g, c => escape(c));
+              }
+            }
+
+            return val;
+          ]]>
+        </body>
+      </method>
+
+      <field name="_editItemsController"><![CDATA[
+        ({
+          supportsCommand: function(aCommand) {
+            switch (aCommand) {
+              case "cmd_copy":
+              case "cmd_cut":
+              case "cmd_pasteAndGo":
+                return true;
+            }
+            return false;
+          },
+          isCommandEnabled: function(aCommand) {
+            var hasSelection = this.selectionStart < this.selectionEnd;
+            switch (aCommand) {
+              case "cmd_copy":
+                return hasSelection;
+              case "cmd_cut":
+                return !this.readOnly && hasSelection;
+              case "cmd_pasteAndGo":
+                return document.commandDispatcher
+                               .getControllerForCommand("cmd_paste")
+                               .isCommandEnabled("cmd_paste");
+            }
+            return false;
+          }.bind(this),
+          doCommand: function(aCommand) {
+            switch (aCommand) {
+              case "cmd_copy":
+              case "cmd_cut":
+                var val = this._getSelectedValueForClipboard();
+                var controller = this._editItemsController;
+                if (!val || !controller.isCommandEnabled(aCommand))
+                  return;
+
+                Components.classes["@mozilla.org/widget/clipboardhelper;1"]
+                          .getService(Components.interfaces.nsIClipboardHelper)
+                          .copyString(val);
+
+                if (aCommand == "cmd_cut")
+                  goDoCommand("cmd_delete");
+                break;
+
+              case "cmd_pasteAndGo":
+                this.select();
+                goDoCommand("cmd_paste");
+                this._fireEvent("textentered", "pasting");
+                break;
+            }
+          }.bind(this),
+          onEvent: function(aEventName) {}
+        })
+      ]]></field>
+    </implementation>
+
+    <handlers>
+      <handler event="keypress"
+               key="&locationBar.accesskey;"
+               modifiers="access"
+               action="this.select();"/>
+
+      <handler event="ValueChange"><![CDATA[
+        if (this._formattingEnabled && !this.focused)
+          this._formatValue(true);
+      ]]></handler>
+
+      <handler event="blur"><![CDATA[
+        if (this._formattingEnabled)
+          this._formatValue(true);
+      ]]></handler>
+
+      <handler event="focus"><![CDATA[
+        this._formatValue(false);
+      ]]></handler>
+    </handlers>
+  </binding>
+
+  <binding id="autocomplete-result-popup" extends="chrome://global/content/autocomplete.xml#autocomplete-result-popup">
+    <content>
+      <xul:tree anonid="tree" class="autocomplete-tree plain" flex="1">
+        <xul:treecols anonid="treecols">
+          <xul:treecol class="autocomplete-treecol" id="treecolAutoCompleteValue" flex="2"/>
+          <xul:treecol class="autocomplete-treecol" id="treecolAutoCompleteComment" flex="1" hidden="true"/>
+        </xul:treecols>
+        <xul:treechildren anonid="treebody" class="autocomplete-treebody" flex="1"/>
+      </xul:tree>
+      <xul:box role="search-box" class="autocomplete-search-box"/>
+    </content>
+
+    <implementation>
+      <constructor><![CDATA[
+        // listen for changes to default search engine
+        this.mPrefs.addObserver("browser.search", this.mObserver, false);
+        this.mPrefs.addObserver("browser.urlbar", this.mObserver, false);
+        this.mObSvc.addObserver(this.mObserver,
+                                "browser-search-engine-modified", false);
+        this.updateEngines();
+      ]]></constructor>
+
+      <destructor><![CDATA[
+        this.mPrefs.removeObserver("browser.search", this.mObserver);
+        this.mPrefs.removeObserver("browser.urlbar", this.mObserver);
+        this.mObSvc.removeObserver(this.mObserver,
+                                   "browser-search-engine-modified");
+      ]]></destructor>
+
+      <property name="showSearch" onget="return this.mShowSearch;">
+        <setter><![CDATA[
+          this.mShowSearch = val;
+          if (val) {
+            this.updateEngines();
+            this.mSearchBox.removeAttribute("hidden");
+          } else {
+            this.clearEngines();
+            this.mSearchBox.setAttribute("hidden", "true");
+          }
+        ]]></setter>
+      </property>
+
+      <property name="defaultSearchEngine"
+                onget="return this.textbox.getAttribute('defaultSearchEngine') == 'true';"
+                onset="this.textbox.setAttribute('defaultSearchEngine', val); return val;"/>
+
+      <field name="mSearchBox">
+         document.getAnonymousElementByAttribute(this, "role", "search-box");
+      </field>
+
+      <field name="mPrefs">
+        Components.classes["@mozilla.org/preferences-service;1"]
+                  .getService(Components.interfaces.nsIPrefService)
+                  .getBranch(null);
+      </field>
+
+      <field name="mObSvc">
+        Components.classes["@mozilla.org/observer-service;1"]
+                  .getService(Components.interfaces.nsIObserverService);
+      </field>
+
+      <field name="mSearchService">
+        Components.classes["@mozilla.org/browser/search-service;1"]
+                  .getService(Components.interfaces.nsIBrowserSearchService);
+      </field>
+
+      <field name="mObserver"><![CDATA[
+        ({
+          resultsPopup: this,
+
+          observe: function(aSubject, aTopic, aData) {
+            switch (aTopic) {
+              case "browser-search-engine-modified":
+                if (aData == "engine-current") {
+                  this.resultsPopup.updateEngines();
+                }
+                break;
+              case "nsPref:changed":
+                if (/^browser\.search\./.test(aData))
+                  this.resultsPopup.updateEngines();
+                else if (/^browser\.urlbar\./.test(aData))
+                  this.resultsPopup.updatePref(aData);
+                break;
+              default:
+            }
+          }
+        });
+      ]]></field>
+
+      <field name="mInputListener"><![CDATA[
+        (function(aEvent) {
+          // "this" is the textbox, not the popup
+          if (this.mSearchInputTO)
+            window.clearTimeout(this.mSearchInputTO);
+          this.mSearchInputTO = window.setTimeout(this.popup.mInputTimeout, this.timeout, this);
+        });
+      ]]></field>
+
+      <field name="mInputTimeout"><![CDATA[
+        (function(me) {
+          me.popup.mSearchBox.searchValue = me.value;
+          me.mSearchInputTO = 0;
+        });
+      ]]></field>
+
+      <field name="mEnginesReady">false</field>
+
+      <property name="overrideValue" readonly="true">
+        <getter><![CDATA[
+          if (this.mSearchBox.selectedIndex != -1) {
+            return this.mSearchBox.overrideValue;
+          }
+          return null;
+        ]]></getter>
+      </property>
+
+      <method name="updatePref">
+        <parameter name="aPref"/>
+        <body><![CDATA[
+          if (aPref == "browser.urlbar.showSearch")
+            this.showSearch = this.mPrefs.getBoolPref("browser.urlbar.showSearch");
+        ]]></body>
+      </method>
+
+      <method name="addEngine">
+        <parameter name="aName"/>
+        <parameter name="aIcon"/>
+        <parameter name="aSearchBarUrl"/>
+        <body><![CDATA[
+          var box = document.createElement("box");
+          box.setAttribute("class", "autocomplete-search-engine");
+          box.setAttribute("name", aName);
+          if (aIcon)
+            box.setAttribute("icon", aIcon.spec);
+          box.setAttribute("searchBarUrl", aSearchBarUrl);
+          box.setAttribute("engineIndex", this.childNodes.length);
+          this.mSearchBox.appendChild(box);
+        ]]></body>
+      </method>
+
+      <method name="clearEngines">
+        <body><![CDATA[
+          while (this.mSearchBox.hasChildNodes())
+            this.mSearchBox.lastChild.remove();
+        ]]></body>
+      </method>
+
+      <method name="updateEngines">
+        <body><![CDATA[
+          var defaultEngine = this.mSearchService.defaultEngine;
+          if (defaultEngine) {
+            this.clearEngines();
+            this.addEngine(defaultEngine.name, defaultEngine.iconURI,
+                           defaultEngine.searchForm);
+          }
+
+          this.mEnginesReady = true;
+        ]]></body>
+      </method>
+
+      <method name="readRDFString">
+        <parameter name="aDS"/>
+        <parameter name="aRes"/>
+        <parameter name="aProp"/>
+        <body><![CDATA[
+          var n = aDS.GetTarget(aRes, aProp, true);
+          return n ? n.QueryInterface(Components.interfaces.nsIRDFLiteral).Value : null;
+        ]]></body>
+      </method>
+
+      <method name="clearSelection">
+        <body>
+          this.view.selection.clearSelection();
+          this.mSearchBox.selectedIndex = -1;
+        </body>
+      </method>
+
+      <method name="selectBy">
+        <parameter name="aReverse"/>
+        <parameter name="aPage"/>
+        <body><![CDATA[
+          var sel;
+          if (this.selectedIndex == -1 && aReverse ||
+              this.mSearchBox.selectedIndex != -1) {
+            sel = this.mSearchBox.selectBy(aReverse, aPage);
+            if (sel != -1 || !aReverse)
+              return -1;
+          }
+
+          sel = this.getNextIndex(aReverse, aPage, this.selectedIndex, this.view.rowCount - 1);
+          this.selectedIndex = sel;
+          if (sel == -1 && !aReverse)
+            this.mSearchBox.selectBy(aReverse, aPage);
+          else if (this.mSearchBox.selectedIndex != -1)
+            this.mSearchBox.selectedIndex = -1;
+          return sel;
+        ]]></body>
+      </method>
+    </implementation>
+
+    <handlers>
+      <handler event="popupshowing"><![CDATA[
+        // sync up with prefs about showing search in the URL bar if
+        // the URL bar hasn't finished initializing the default engine info
+        //   -or-
+        // the search sidebar tab was displayed already triggering a change
+        // notification to the browser.search pref branch listener here which
+        // calls updateEngines but doesn't cause the ``Search for ...''
+        // display string to be updated
+        if ( (!this.mEnginesReady && this.defaultSearchEngine) ||
+             !("mShowSearch" in this) )
+          this.updatePref("browser.urlbar.showSearch");
+
+        if (this.mShowSearch) {
+          this.textbox.mSearchInputTO = 0;
+          this.textbox.addEventListener("input", this.mInputListener, false);
+          if ("searchValue" in this.mSearchBox)
+            this.mSearchBox.searchValue = this.textbox.currentSearchString;
+          else
+            this.mSearchBox.setAttribute("searchvalue", this.textbox.currentSearchString);
+        }
+      ]]></handler>
+
+      <handler event="popuphiding"><![CDATA[
+        if (this.mShowSearch)
+          this.textbox.removeEventListener("input", this.mInputListener, false);
+      ]]></handler>
+    </handlers>
+  </binding>
+
+  <binding id="autocomplete-search-box">
+    <content orient="vertical"/>
+
+    <implementation>
+      <constructor><![CDATA[
+        this.navigatorBundle =
+          Components.classes["@mozilla.org/intl/stringbundle;1"]
+                    .getService(Components.interfaces.nsIStringBundleService)
+                    .createBundle("chrome://navigator/locale/navigator.properties");
+
+        var text = this.getAttribute("searchvalue");
+        if (text)
+          this.searchValue = text;
+      ]]></constructor>
+
+      <field name="mSelectedIndex">
+        -1
+      </field>
+
+      <field name="mSearchService">
+        Components.classes["@mozilla.org/browser/search-service;1"]
+                  .getService(Components.interfaces.nsIBrowserSearchService);
+      </field>
+
+      <property name="activeChild"
+                onget="return this.childNodes[this.mSelectedIndex]"/>
+
+      <property name="selectedIndex">
+        <getter>return this.mSelectedIndex;</getter>
+
+        <setter><![CDATA[
+          if (this.mSelectedIndex != -1)
+            this.activeChild.removeAttribute("menuactive");
+
+          this.mSelectedIndex = val;
+
+          if (val != -1)
+            this.activeChild.setAttribute("menuactive", "true");
+          return val;
+        ]]></setter>
+
+      </property>
+
+      <property name="searchValue">
+        <getter><![CDATA[
+          return this.mSearchValue;
+        ]]></getter>
+        <setter><![CDATA[
+          this.mSearchValue = val;
+
+          const kids = this.childNodes;
+          for (var i = 0; i < kids.length; ++i) {
+            kids[i].setAttribute("label",
+              this.navigatorBundle.formatStringFromName(
+                "searchFor", [kids[i].getAttribute("name"), val], 2));
+          }
+        ]]></setter>
+      </property>
+
+      <method name="selectBy">
+        <parameter name="aReverse"/>
+        <parameter name="aPage"/>
+        <body><![CDATA[
+          return this.selectedIndex = this.parentNode.getNextIndex(aReverse, aPage, this.selectedIndex, this.childNodes.length - 1);
+        ]]></body>
+      </method>
+
+      <property name="overrideValue" readonly="true">
+        <getter><![CDATA[
+          var item = this.activeChild;
+          if (item) {
+            // XXXsearch: using default engine for now, this ignores the following values:
+            //            item.getAttribute("searchEngine") and item.getAttribute("searchBarUrl")
+            var engine = this.mSearchService.defaultEngine;
+
+            var submission = engine.getSubmission(this.mSearchValue); // HTML response
+
+            // getSubmission can return null if the engine doesn't have a URL
+            // with a text/html response type.  This is unlikely (since
+            // SearchService._addEngineToStore() should fail for such an engine),
+            // but let's be on the safe side.
+            if (!submission)
+              return null;
+
+            // XXXsearch: the submission object may have postData but .overrideValue can't deal with that
+            //            see http://mxr.mozilla.org/comm-central/source/mozilla/netwerk/base/public/nsIBrowserSearchService.idl#47
+            //            we need to figure out what to do with that case here
+
+            return submission.uri.spec;
+          }
+          return null;
+        ]]></getter>
+      </property>
+
+    </implementation>
+
+    <handlers>
+      <handler event="mouseup">
+        this.parentNode.textbox.onResultClick();
+      </handler>
+    </handlers>
+
+  </binding>
+
+  <binding id="autocomplete-search-engine">
+    <content>
+      <xul:image class="autocomplete-search-engine-img" xbl:inherits="src=icon"/>
+      <xul:label class="autocomplete-search-engine-text" xbl:inherits="value=label" crop="right" flex="1"/>
+    </content>
+
+    <handlers>
+      <handler event="mousemove">
+        this.parentNode.selectedIndex = Number(this.getAttribute("engineIndex"));
+      </handler>
+
+      <handler event="mouseout">
+        this.parentNode.selectedIndex = -1;
+      </handler>
+    </handlers>
+  </binding>
+
+  <binding id="input-box-paste" extends="chrome://global/content/bindings/textbox.xml#input-box">
+    <content context="_child">
+      <children/>
+      <xul:menupopup anonid="input-box-contextmenu"
+                     class="textbox-contextmenu"
+                     onpopupshowing="var input =
+                                       this.parentNode.getElementsByAttribute('anonid', 'input')[0];
+                                     if (document.commandDispatcher.focusedElement != input)
+                                       input.focus();
+                                     this.parentNode._doPopupItemEnabling(this);"
+                     oncommand="var cmd = event.originalTarget.getAttribute('cmd'); if(cmd) { this.parentNode.doCommand(cmd); event.stopPropagation(); }">
+        <xul:menuitem label="&undoCmd.label;" accesskey="&undoCmd.accesskey;" cmd="cmd_undo"/>
+        <xul:menuseparator/>
+        <xul:menuitem label="&cutCmd.label;" accesskey="&cutCmd.accesskey;" cmd="cmd_cut"/>
+        <xul:menuitem label="&copyCmd.label;" accesskey="&copyCmd.accesskey;" cmd="cmd_copy"/>
+        <xul:menuitem label="&pasteCmd.label;" accesskey="&pasteCmd.accesskey;" cmd="cmd_paste"/>
+        <xul:menuitem label="&pasteGoCmd.label;" accesskey="&pasteGoCmd.accesskey;" cmd="cmd_pasteAndGo"/>
+        <xul:menuitem label="&deleteCmd.label;" accesskey="&deleteCmd.accesskey;" cmd="cmd_delete"/>
+        <xul:menuseparator/>
+        <xul:menuitem label="&selectAllCmd.label;" accesskey="&selectAllCmd.accesskey;" cmd="cmd_selectAll"/>
+      </xul:menupopup>
+    </content>
+  </binding>
+
+</bindings>

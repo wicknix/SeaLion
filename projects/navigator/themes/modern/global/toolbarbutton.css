@@ -1,0 +1,146 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ===== toolbarbutton.css ==============================================
+  == Styles used by XUL toolbarbutton elements.
+  ======================================================================= */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* ::::: toolbarbutton ::::: */
+
+toolbarbutton {
+  -moz-box-align: center;
+  -moz-box-pack: center;
+  border: 1px solid transparent;
+  padding: 1px 2px;
+  font: message-box;
+}
+
+.toolbarbutton-icon[label]:not([label=""]),
+.toolbarbutton-icon[type="menu"] {
+  margin-inline-end: 2px;
+}
+
+.toolbarbutton-text {
+  margin: 0px !important;
+  text-align: center;
+}
+
+.tabbable {
+  -moz-user-focus: normal !important;
+}
+
+toolbarbutton:focus,
+toolbarbutton:hover {
+  border-top-color: #EEF0F3;
+  border-right-color: #86929E;
+  border-bottom-color: #86929E;
+  border-left-color: #EEF0F3;
+}
+
+toolbarbutton:hover:active,
+toolbarbutton[open="true"] {
+  border-top-color: #86929E;
+  border-right-color: #EEF0F3;
+  border-bottom-color: #EEF0F3;
+  border-left-color: #86929E;
+  padding-top: 2px;
+  padding-bottom: 0px;
+  padding-inline-start: 3px;
+  padding-inline-end: 1px;
+}
+
+toolbarbutton[disabled="true"] {
+  border-color: transparent !important;
+  padding: 1px 2px !important;
+  color: #9399AB !important;
+}
+
+/* ..... checked state ..... */
+
+toolbarbutton[checked="true"] {
+  border-top-color: #454C55 !important;
+  border-right-color: #7D848D !important;
+  border-bottom-color: #7D848D !important;
+  border-left-color: #454C55 !important;
+}
+
+toolbarbutton:not(.devtools-toolbarbutton)[checked="true"] {
+  background-color: #8C9AA8 !important;
+  color: #EFF1F4;
+}
+
+toolbarbutton[checked="true"]:hover:active {
+  padding: 1px 2px;
+}
+
+/* ::::: toolbarbutton menu ::::: */
+
+.toolbarbutton-menu-dropmarker {
+  list-style-image: url("chrome://global/skin/button/tbmenu-arrow.gif");
+  -moz-image-region: auto; /* cut off inheritance */
+  padding: 0px;
+  border: none !important;
+  background-color: transparent !important;
+}
+
+.toolbarbutton-menu-dropmarker[disabled="true"] {
+  list-style-image: url("chrome://global/skin/button/tbmenu-arrow-dis.gif");
+}
+
+.toolbarbutton-menu-dropmarker[open="true"] {
+  list-style-image: url("chrome://global/skin/button/tbmenu-arrow-act.gif");
+}
+
+/* ::::: toolbarbutton menu-button ::::: */
+
+.toolbarbutton-menubutton-button {
+  font: inherit;
+}
+
+/* ..... dropmarker ..... */
+
+.toolbarbutton-menubutton-dropmarker {
+  -moz-box-align: center;
+  -moz-box-pack: center;
+  margin-top: 20px;
+  margin-bottom: 15px;
+  margin-inline-start: 40px;
+  margin-inline-end: 5px;
+  padding: 0px;
+  border: none !important;
+  background-color: transparent !important;
+  width: 13px;
+  height: 11px;
+  list-style-image: url("chrome://global/skin/button/tbmbtn-arrow.gif");
+  -moz-image-region: auto; /* cut off inheritance */
+}
+
+toolbarbutton:hover > .toolbarbutton-menubutton-dropmarker,
+toolbarbutton:hover > stack > .toolbarbutton-menubutton-dropmarker {
+  list-style-image: url("chrome://global/skin/button/tbmbtn-arrow-hov.gif");
+}
+
+toolbarbutton[open="true"] > .toolbarbutton-menubutton-dropmarker,
+toolbarbutton[open="true"] > stack > .toolbarbutton-menubutton-dropmarker {
+  list-style-image: url("chrome://global/skin/button/tbmbtn-arrow-act.gif");
+}
+
+toolbarbutton[disabled="true"] > .toolbarbutton-menubutton-dropmarker,
+toolbarbutton[disabled="true"] > stack > .toolbarbutton-menubutton-dropmarker,
+toolbarbutton[disabled="true"]:hover > stack > .toolbarbutton-menubutton-dropmarker
+{
+  list-style-image: none;
+}
+
+/* ::::: Devtools toolbarbuttons ::::: */
+
+.devtools-toolbarbutton[type=menu] > .toolbarbutton-menu-dropmarker,
+.devtools-toolbarbutton[type=menu-button] > .toolbarbutton-menubutton-dropmarker {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+}

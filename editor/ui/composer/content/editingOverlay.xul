@@ -1,0 +1,174 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xul-overlay href="chrome://communicator/content/viewZoomOverlay.xul"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://editor/locale/editingOverlay.dtd">
+
+<overlay id="editingOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/javascript"
+          src="chrome://editor/content/editingOverlay.js"/>
+
+  <stringbundleset>
+    <stringbundle id="bundle_viewZoom"/>
+  </stringbundleset>
+
+  <keyset id="editorKeys">
+    <key id="key_openRemoteEditor"
+         key="&openRemoteCmd.key;"
+         command="cmd_openRemote"
+         modifiers="accel,shift"/>
+    <key id="key_openEditor"
+         key="&openFileCmd.key;"
+         command="cmd_open"
+         modifiers="accel"/>
+    <key id="key_publish"
+         key="&publishCmd.key;"
+         command="cmd_publish"
+         modifiers="accel,shift"/>
+    <keyset id="viewZoomKeys"/>
+  </keyset>
+
+  <!-- commands updated when the editor gets created -->
+  <commandset id="commonEditorMenuItems">
+    <command id="cmd_open"
+             oncommand="goDoCommand('cmd_open');"/>
+    <command id="cmd_openRemote"
+             oncommand="goDoCommand('cmd_openRemote');"/>
+  </commandset>
+
+  <commandset id="composerSaveMenuItems"
+          commandupdater="true"
+          events="create, save"
+          oncommandupdate="goUpdateComposerMenuItems(this);">
+    <command id="cmd_save"
+             label="&saveCmd.label;"
+             oncommand="goDoCommand('cmd_save');"/>
+    <command id="cmd_saveAs"
+             oncommand="goDoCommand('cmd_saveAs');"/>
+    <command id="cmd_saveAndChangeEncoding"
+             oncommand="goDoCommand('cmd_saveAndChangeEncoding');"/>
+    <command id="cmd_publish"
+             label="&publishCmd.label;"
+             oncommand="goDoCommand('cmd_publish');"/>
+    <command id="cmd_publishAs"
+             oncommand="goDoCommand('cmd_publishAs');"/>
+    <command id="cmd_revert"
+             oncommand="goDoCommand('cmd_revert');"/>
+  </commandset>
+
+  <commandset id="composerEditMenuItems">
+    <command id="cmd_publishSettings"
+             oncommand="goDoCommand('cmd_publishSettings');"/>
+  </commandset>
+
+  <commandset id="editorCommands">
+    <commandset id="viewZoomCommands"/>
+  </commandset>
+
+  <!-- File menu items -->
+  <menu id="menu_File">
+    <menupopup id="menu_FilePopup" onpopupshowing="EditorInitFileMenu();">
+      <menu id="menu_New">
+        <menupopup id="menu_NewPopup">
+          <menuitem id="menu_newEditor"/>
+          <menuseparator id="sep_NewPopup"/>
+          <menuitem id="menu_newNavigator"/>
+          <menuitem id="menu_newPrivateWindow"/>
+        </menupopup>
+      </menu>
+      <menuitem id="menu_openRemote"
+                label="&openRemoteCmd.label;"
+                accesskey="&openRemoteCmd.accesskey;"
+                key="key_openRemoteEditor"
+                command="cmd_openRemote"/>
+      <menuitem id="menu_openFile"
+                label="&openFileCmd.label;"
+                accesskey="&openFileCmd.accesskey;"
+                key="key_openEditor"
+                command="cmd_open"/>
+      <menu id="menu_RecentFiles"
+            label="&fileRecentMenu.label;"
+            accesskey="&fileRecentMenu.accesskey;"
+            onpopupshowing="BuildRecentPagesMenu();">
+        <menupopup id="menupopup_RecentFiles"
+                   oncommand="editPage(event.target.getAttribute('value'),
+                                       event.target.getAttribute('fileType'));"/>
+          <!-- menuitems appended at runtime -->
+      </menu>
+      <menuitem id="menu_close"/>
+      <menuseparator id="sep_close"/>
+      <menuitem id="menu_saveCmd"
+                accesskey="&saveCmd.accesskey;"
+                key="key_save"
+                command="cmd_save"/>
+      <menuitem id="menu_saveAsCmd"
+                label="&saveAsCmd.label;"
+                accesskey="&saveAsCmd.accesskey;"
+                command="cmd_saveAs"/>
+      <menuitem id="menu_saveAsChangeEncoding"
+                label="&saveAsChangeEncodingCmd2.label;"
+                accesskey="&saveAsChangeEncodingCmd2.accesskey;"
+                command="cmd_saveAndChangeEncoding"/>
+      <menuseparator id="sep_saveCmd"/>
+      <menuitem id="menu_publish"
+                accesskey="&publishCmd.accesskey;"
+                key="key_publish"
+                command="cmd_publish"/>
+      <menuitem id="menu_publishAs"
+                label="&publishAsCmd.label;"
+                accesskey="&publishAsCmd.accesskey;"
+                command="cmd_publishAs"/>
+      <menuseparator id="sep_publishAs"/>
+      <menuitem id="menu_fileRevert"
+                label="&fileRevert.label;"
+                accesskey="&fileRevert.accesskey;"
+                command="cmd_revert"/>
+      <menuseparator id="sep_print"/>
+      <!-- menuitems are merged in here from composerOverlay.xul -->
+      <menuitem id="menu_printSetup"/>
+      <menuitem id="menu_printPreview"/>
+      <menuitem id="menu_print"/>
+      <!-- The Exit/Quit item is merged from platformGlobalOverlay.xul -->
+    </menupopup>
+  </menu>
+
+  <!-- Edit menu items -->
+  <menupopup id="menu_EditPopup">
+    <menuitem id="menu_inlineSpellCheck"
+              oncommand="InlineSpellCheckerUI.enabled = !InlineSpellCheckerUI.enabled"/>
+    <menuitem id="menu_publishSettings"
+              insertafter="sep_preferences"
+              label="&publishSettings.label;"
+              accesskey="&publishSettings.accesskey;"
+              command="cmd_publishSettings"/>
+  </menupopup>
+
+  <menupopup id="menu_View_Popup">
+    <menu id="menu_zoom" insertbefore="charsetMenu"/>
+  </menupopup>
+
+  <!-- Toolbar buttons/items -->
+  <toolbarbutton id="newButton"
+                 class="toolbarbutton-1"
+                 label="&newToolbarCmd.label;"
+                 command="cmd_newEditor"
+                 tooltiptext="&newToolbarCmd.tooltip;"/>
+  <toolbarbutton id="openButton"
+                 class="toolbarbutton-1"
+                 label="&openToolbarCmd.label;"
+                 command="cmd_open"
+                 tooltiptext="&openToolbarCmd.tooltip;"/>
+  <toolbarbutton id="saveButton"
+                 class="toolbarbutton-1"
+                 command="cmd_save"
+                 tooltiptext="&saveToolbarCmd.tooltip;"/>
+  <toolbarbutton id="publishButton"
+                 class="toolbarbutton-1"
+                 command="cmd_publish"
+                 tooltiptext="&publishToolbarCmd.tooltip;"/>
+</overlay>

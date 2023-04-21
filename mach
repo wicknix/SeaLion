@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if BINOC_GIT_PATH="$(which git 2>/dev/null)"; then
+  export BINOC_GIT_BRANCH=`git symbolic-ref --short HEAD`
+fi
+
+./mozilla/mach $@

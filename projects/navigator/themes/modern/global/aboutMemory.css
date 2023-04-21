@@ -1,0 +1,26 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@import url("chrome://global/content/aboutMemory.css");
+@import url("chrome://global/skin/button.css");
+
+html {
+  background-color: #FFF;
+}
+
+div.section, div.opsRow {
+  background-color: #C7D0D9;
+}
+
+h2 {
+  background-color: #90A1B3;
+}
+
+a:link, a:visited, a:active {
+ color: #313063;
+}
+
+input[type="checkbox"] {
+  -moz-appearance: none;
+}

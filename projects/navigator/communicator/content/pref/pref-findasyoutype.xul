@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay SYSTEM "chrome://communicator/locale/pref/pref-findasyoutype.dtd">
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <prefpane id="findasyoutype_pane"
+            label="&pref.findAsYouType.title;"
+            script="chrome://communicator/content/pref/pref-findasyoutype.js">
+
+    <preferences id="findasyoutype_preferences">
+      <preference id="accessibility.typeaheadfind.autostart"
+                  name="accessibility.typeaheadfind.autostart"
+                  onchange="SetLinksOnlyEnabled(this.value);"
+                  type="bool"/>
+      <preference id="accessibility.typeaheadfind.linksonly"
+                  name="accessibility.typeaheadfind.linksonly"
+                  type="bool"/>
+      <preference id="accessibility.typeaheadfind.enablesound"
+                  name="accessibility.typeaheadfind.enablesound"
+                  type="bool"/>
+      <preference id="accessibility.typeaheadfind.enabletimeout"
+                  name="accessibility.typeaheadfind.enabletimeout"
+                  type="bool"/>
+      <preference id="accessibility.typeaheadfind.usefindbar"
+                  name="accessibility.typeaheadfind.usefindbar"
+                  type="bool"/>
+    </preferences>
+
+    <groupbox align="start">
+      <caption label="&findAsYouTypeBehavior.label;"/>
+      <checkbox id="findAsYouTypeEnableAuto"
+                label="&findAsYouTypeEnableAuto.label;"
+                accesskey="&findAsYouTypeEnableAuto.accesskey;"
+                preference="accessibility.typeaheadfind.autostart"/>
+      <radiogroup id="findAsYouTypeAutoWhat"
+                  class="indent"
+                  preference="accessibility.typeaheadfind.linksonly">
+        <radio value="false"
+               label="&findAsYouTypeAutoText.label;"
+               accesskey="&findAsYouTypeAutoText.accesskey;"/>
+        <radio value="true"
+               label="&findAsYouTypeAutoLinks.label;"
+               accesskey="&findAsYouTypeAutoLinks.accesskey;"/>
+      </radiogroup>
+      <description>&findAsYouTypeTip.label;</description>
+
+      <vbox class="box-padded"
+            align="start">
+        <separator class="thin" />
+        <checkbox id="findAsYouTypeSound"
+                  label="&findAsYouTypeSound.label;"
+                  accesskey="&findAsYouTypeSound.accesskey;"
+                  preference="accessibility.typeaheadfind.enablesound"/>
+        <checkbox id="findAsYouTypeTimeout"
+                  label="&findAsYouTypeTimeout.label;"
+                  accesskey="&findAsYouTypeTimeout.accesskey;"
+                  preference="accessibility.typeaheadfind.enabletimeout"/>
+      <checkbox id="findAsYouTypeFindbarEnable"
+                  label="&findAsYouTypeFindbarEnable.label;"
+                  accesskey="&findAsYouTypeFindbarEnable.accesskey;"
+                  preference="accessibility.typeaheadfind.usefindbar"/>
+      </vbox>
+      <description>&findAsYouTypeFindbarEnableTip.label;</description>
+    </groupbox>
+
+  </prefpane>
+</overlay>

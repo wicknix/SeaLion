@@ -1,0 +1,89 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ==== prefpanels.css ==================================================
+   == Styles used by all preference panels in the Communicator suite.
+   ====================================================================== */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* ::::: Fonts ::::: */
+
+#sizeVar,
+#sizeMono {
+  width: 4em;
+}
+
+.prefpanel-font-list {
+  -moz-box-flex: 1;
+}
+
+/* checkbox which is disabled for changes but non-gray text (i.e., in effect) */
+
+checkbox.nogray-disabled[disabled="true"][nogray="true"] {
+  color: inherit;
+  text-shadow: inherit;
+}
+
+/* ::::: Applications ::::: */
+.handler-action > .menu-iconic-left {
+  /**
+    * Make the icons appear.
+    * Note: we display the icon box for every item whether or not it has an icon
+    * so the labels of all the items align vertically.
+    */
+  display: -moz-box;
+  min-width: 16px;
+}
+
+/* Set icons on app pane elements */
+
+.handler-action > .listcell-icon,
+.handler-type > .listcell-icon {
+  height: 16px;
+  width: 16px;
+}
+
+.handler-action[appHandlerIcon="app"] {
+  list-style-image: url("chrome://communicator/skin/icons/application.png");
+}
+
+.handler-action[appHandlerIcon="ask"] {
+  list-style-image: url("chrome://communicator/skin/icons/alwaysAsk.png");
+}
+
+.handler-action[appHandlerIcon="save"] {
+  list-style-image: url("chrome://communicator/skin/icons/save.png");
+}
+
+.handler-action[appHandlerIcon="feed"] {
+  list-style-image: url("chrome://communicator/skin/icons/feedIcon16.png");
+}
+
+.handler-action[appHandlerIcon="plugin"] {
+  list-style-image: url("chrome://communicator/skin/icons/plugin.png");
+}
+
+.handler-type[typeClass="unknown"] {
+  list-style-image: url("moz-icon://goat?size=16");
+}
+
+.handler-type[typeClass="webFeed"],
+.handler-type[typeClass="videoPodcastFeed"],
+.handler-type[typeClass="audioPodcastFeed"] {
+  list-style-image: url("chrome://communicator/skin/icons/feedIcon16.png");
+}
+
+/* ::::: Search ::::: */
+
+#engineList > .menulist-label-box > .menulist-icon {
+  height: 16px;
+  width: 16px;
+}
+
+/* ::::: Sync ::::: */
+
+#syncDesc {
+  padding: 0 12em;
+}

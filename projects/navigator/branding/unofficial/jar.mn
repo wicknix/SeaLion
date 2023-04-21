@@ -1,0 +1,15 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+comm.jar:
+% content branding %content/branding/ contentaccessible=yes
+  content/branding/about.png                              (content/about.png)
+  content/branding/icon32.png                             (content/icon32.png)
+  content/branding/icon48.png                             (content/icon48.png)
+  content/branding/icon64.png                             (content/icon64.png)
+
+en-US.jar:
+% locale branding en-US %locale/en-US/branding/
+  locale/en-US/branding/brand.dtd                         (locale/brand.dtd)
+  locale/en-US/branding/brand.properties                  (locale/brand.properties)

@@ -1,0 +1,261 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+@namespace html url("http://www.w3.org/1999/xhtml");
+
+.controlBar {
+  height: 28px;
+  background-color: #989EA6;
+}
+
+/* Remove the button styling */
+button {
+  -moz-binding: none;
+  min-height: 28px;
+  min-width: 28px;
+}
+
+.playButton {
+  background: url(chrome://global/skin/media/pauseButton.png) no-repeat center;
+  margin-right: -22px; /* 1/2 of scrubber thumb width, for overhang. */
+  position: relative; /* Trick to work around negative margin interfering with clicking on the button. */
+}
+
+.playButton[paused="true"] {
+  background: url(chrome://global/skin/media/playButton.png) no-repeat center;
+}
+
+.muteButton {
+  background: url(chrome://global/skin/media/muteButton.png) no-repeat center;
+  min-width: 33px;
+}
+.muteButton[muted="true"] {
+  background: url(chrome://global/skin/media/unmuteButton.png) no-repeat center;
+}
+
+.backgroundBar {
+  /* make bar 8px tall (control height = 28, minus 2 * 10 margin) */
+  /* margin left/right: 1/2 of scrubber thumb width, for overhang. */
+  margin: 10px 22px;
+  background-color: #C7D0D9;
+  border-radius: 4px;
+}
+
+.bufferBar, .progressBar {
+  /* make bar 8px tall (control height = 28, minus 2 * 10 margin) */
+  /* margin left/right: 1/2 of scrubber thumb width, for overhang. */
+  margin: 10px 22px;
+  height: 8px;
+  border: none;
+  min-width: 0px;
+  min-height: 0px;
+}
+
+/* .progress-bar is an element inside the <progressmeter> implementation. */
+.bufferBar > .progress-bar {
+  background-color: #B1BBC5;
+  border-radius: 4px;
+}
+
+.progressBar > .progress-bar {
+  background-color: #6B7B8D;
+  border-radius: 4px;
+}
+
+/* .scale-slider is an element inside the <scale> implementation. */
+.scale-slider {
+  /* Hide the default box. */
+  background: none;
+  border: none;
+  margin: 0px;
+  min-height: 20px;
+}
+
+.volumeControl {
+  width: 32px;
+}
+
+/* .scale-thumb is an element inside the <scale> implementation. */
+.volumeControl .scale-thumb {
+  /* Override the default thumb appearance. */
+  background-color: #B1BBC5;
+  background-image: none;
+  border: 2px solid;
+  -moz-border-top-colors: #000000;
+  -moz-border-right-colors: #000000;
+  -moz-border-bottom-colors: #000000;
+  -moz-border-left-colors: #000000;
+  border-radius: 4px;
+  min-height: 20px;
+  min-width: 8px;
+}
+
+/* Draws a right-angled triangle. */
+.volumeBackground {
+  margin: 6px 0px;
+  border: 0px solid transparent;
+  border-top-width: 16px;
+  border-inline-end-width: 32px;
+  border-inline-end-color: #B1BBC5;
+}
+
+.durationBox {
+  -moz-box-pack: center;
+}
+
+.durationLabel {
+  margin-left: -22px; /* 1/2 of scrubber thumb width, for overhang. */
+  padding-left: 8px; /* don't bump into the scrubber bar */
+  padding-top: 0px; /* center vertically with scrubber bar */
+  color: #000000;
+  font-size: 11px;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.positionLabel {
+  display: none;
+}
+
+.scrubber .scale-slider {
+  /* abs(margin-top) + margin-bottom + bar height == timeThumb height */
+  margin-top: -9px;
+  margin-bottom: 15px;
+}
+
+/* .scale-thumb is an element inside the <scale> implementation. */
+.scrubber .scale-thumb {
+  /* Override the default thumb appearance with a custom image. */
+  background: transparent;
+  border: none;
+}
+
+.timeThumb {
+  background: url(chrome://global/skin/media/scrubberThumb.png) no-repeat center;
+  min-width: 48px;
+  min-height: 28px;
+  -moz-box-pack: center;
+}
+
+.timeThumb[showhours="true"] {
+  background: url(chrome://global/skin/media/scrubberThumbWide.png) no-repeat center;
+}
+
+.timeLabel {
+  color: #000000;
+  font-size: 10px;
+  font-family: Helvetica, Arial, sans-serif;
+  padding-top: 4px;
+}
+
+.statusOverlay {
+  -moz-box-align: center;
+  -moz-box-pack: center;
+  background-color: #000000;
+}
+
+.statusIcon {
+  margin-bottom: 30px; /* same height as .controlBar, to keep icon centered above it */
+  width: 36px;
+  height: 36px;
+}
+
+.statusIcon[type="throbber"] {
+  background: url(chrome://global/skin/media/throbber.png) no-repeat center;
+}
+
+.statusIcon[type="throbber"][stalled] {
+  background: url(chrome://global/skin/media/stalled.png) no-repeat center;
+}
+
+.statusIcon[type="error"] {
+  background: url(chrome://global/skin/media/error.png) no-repeat center;
+}
+
+/* Overlay Play button */
+.clickToPlay {
+  width: 64px;
+  height: 64px;
+  -moz-box-pack: center;
+  -moz-box-align: center;
+  opacity: 0.7;
+  background-image: url(chrome://global/skin/media/clicktoplay-bgtexture.png),
+                    url(chrome://global/skin/media/videoClickToPlayButton.svg);
+  background-repeat: repeat, no-repeat;
+  background-position: center, center;
+  background-size: auto, 64px 64px;
+  background-color: hsla(0,0%,10%,.5);
+}
+
+.clickToPlay:hover {
+  opacity: 1;
+}
+
+/* Statistics formatting */
+html|*.statsDiv {
+  position: relative;
+}
+
+html|td {
+  height: 1em;
+  max-height: 1em;
+  padding: 0 2px;
+}
+
+html|table {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  color: #FFFFFF;
+  text-shadow: -1px -1px 0 #000000, 1px -1px 0 #000000, -1px 1px 0 #000000, 1px 1px 0 #000000;
+  min-width: 100%;
+  background: rgba(68,68,68,.7);
+  table-layout: fixed;
+  border-collapse: collapse;
+  position: absolute;
+}
+
+/* CSS Transitions */
+.clickToPlay {
+  transition-property: opacity, background-size;
+  transition-duration: 400ms, 400ms;
+}
+
+.clickToPlay[fadeout] {
+  background-size: auto, 192px 192px;
+  opacity: 0;
+}
+
+.clickToPlay[fadeout][immediate] {
+  transition-property: opacity, background-size;
+  transition-duration: 0s, 0s;
+}
+
+.controlBar:not([immediate]) {
+  transition-property: opacity;
+  transition-duration: 200ms;
+}
+
+.controlBar[fadeout] {
+  opacity: 0.0;
+}
+
+.volumeStack:not([immediate]) {
+  transition-property: opacity, margin-top;
+  transition-duration: 200ms, 200ms;
+}
+
+.volumeStack[fadeout] {
+  opacity: 0.0;
+  margin-top: 0px;
+}
+
+.statusOverlay:not([immediate]) {
+  transition-property: opacity;
+  transition-duration: 300ms;
+  transition-delay: 750ms;
+}
+
+.statusOverlay[fadeout] {
+  opacity: 0.0;
+}

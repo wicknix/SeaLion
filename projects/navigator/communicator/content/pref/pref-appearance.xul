@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay [
+  <!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd"> %brandDTD;
+  <!ENTITY % prefAppearanceDTD SYSTEM "chrome://communicator/locale/pref/pref-appearance.dtd"> %prefAppearanceDTD;
+]>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <prefpane id="appearance_pane"
+            label="&pref.appearance.title;"
+            script="chrome://communicator/content/pref/pref-appearance.js">
+
+    <preferences id="appearance_preferences">
+      <preference id="general.startup.browser"
+                  name="general.startup.browser"
+                  type="bool"/>
+      <preference id="browser.chrome.toolbar_style"
+                  name="browser.chrome.toolbar_style"
+                  type="int"/>
+      <preference id="browser.chrome.toolbar_tips"
+                  name="browser.chrome.toolbar_tips"
+                  type="bool"/>
+      <preference id="general.useragent.locale"
+                  name="general.useragent.locale"
+                  type="string"/>
+    </preferences>
+
+    <groupbox id="generalStartupPreferences" align="start">
+      <caption label="&onStartLegend.label;"/>
+
+      <checkbox id="generalStartupBrowser"
+                label="&navCheck.label;"
+                accesskey="&navCheck.accesskey;"
+                preference="general.startup.browser"/>
+    </groupbox>
+
+    <groupbox id="toolbarStyleBox">
+      <caption label="&showToolsLegend.label;"/>
+
+      <radiogroup id="toolbarStyle" orient="horizontal"
+                  preference="browser.chrome.toolbar_style">
+        <radio value="2"
+               label="&picsNtextRadio.label;"
+               accesskey="&picsNtextRadio.accesskey;"/>
+        <radio value="0"
+               label="&picsOnlyRadio.label;"
+               accesskey="&picsOnlyRadio.accesskey;"/>
+        <radio value="1"
+               label="&textonlyRadio.label;"
+               accesskey="&textonlyRadio.accesskey;"/>
+      </radiogroup>
+    </groupbox>
+
+    <separator class="thin" />
+    <vbox class="box-padded" align="start">
+      <checkbox id="showHideTooltips"
+                label="&showHideTooltips.label;"
+                accesskey="&showHideTooltips.accesskey;"
+                preference="browser.chrome.toolbar_tips"/>
+    </vbox>
+
+    <groupbox id="switchLocaleBox" align="start">
+      <caption label="&pref.locales.title;"/>
+      <description>&selectLocale.label;</description>
+
+      <menulist id="switchLocales"
+                preference="general.useragent.locale"
+                onsyncfrompreference="return document.getElementById('appearance_pane').SelectLocale(this);"/>
+
+      <description>&restartOnLangChange.label;</description>
+    </groupbox>
+
+  </prefpane>
+</overlay>

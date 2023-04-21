@@ -1,0 +1,114 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ===== console.css ====================================================
+  == Styles used by the Error Console window.
+  ======================================================================= */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+.console-box {
+  background-color: #FFFFFF;
+  color: #000000;
+}
+ 
+/* ::::: console rows ::::: */
+
+.console-row {
+  border-bottom: 2px solid #000000;
+  padding: 0px;
+}
+
+.console-row-icon {
+  border-right: 1px outset #C7D0D9;
+  padding: 5px;
+  background-color: #C7D0D9;
+  -moz-box-align: start !important;
+}
+
+.console-icon {
+  list-style-image: inherit;
+}
+
+/* ..... error rows ..... */
+
+.console-row-code {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-inline-start: 3px;
+  padding-inline-end: 0px;
+  color: #0000BB;
+  font-size: 120%;
+}
+
+.console-dots, 
+.console-caret {
+  height: 9px;
+}
+
+.console-dots {
+  background: url("chrome://global/skin/console/error-dash.gif") repeat-x top;
+}
+
+.console-caret {
+  width: 7px;
+  background: url("chrome://global/skin/console/error-caret.gif") no-repeat top;
+}
+
+/* ..... message rows ..... */
+
+.console-row[type="message"] {
+  font-family: monospace;
+} 
+
+/* ..... selected state ..... */
+
+.console-row[selected="true"] {
+  background-color: #B7DBEB !important;
+}
+
+.console-row-code[selected="true"],
+.console-row-content[selected="true"] > .console-row-file > .console-error-source > .text-link {
+  color: inherit !important;  
+}
+
+/* ::::: icons ::::: */
+
+.console-row[type="error"],
+.console-row[type="exception"] {
+  list-style-image: url("chrome://global/skin/icons/error-48.png");
+}
+
+.console-row[type="warning"] {
+  list-style-image: url("chrome://global/skin/icons/warning-48.png");
+}
+
+.console-row[type="message"] {
+  list-style-image: url("chrome://global/skin/icons/information-48.png");
+}
+
+/* ::::: toolbars ::::: */
+
+#ToolbarMode {
+  background-image: url("chrome://communicator/skin/toolbar/prtb-bg-noline.gif");
+}
+
+#ToolbarEval {
+  background: url("chrome://global/skin/toolbar/tb-mid.gif") #C7D0D9 repeat-x top;
+}
+
+#TextfieldEval {
+  margin: 2px !important;
+}
+
+#ButtonEval {
+  margin-top: 2px !important;
+  margin-bottom: 2px !important;
+  margin-inline-start: 0px !important;
+  margin-inline-end: 2px !important;
+}
+
+toolbarseparator {
+  min-height: 1em;
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<bindings id="generalBindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <binding id="statusbarpanel-backgroundbox" display="xul:button"
+           extends="chrome://global/content/bindings/general.xml#statusbarpanel-iconic-text">
+    <content>
+      <xul:hbox class="statusbarpanel-contentbox" xbl:inherits="dir">
+        <xul:image class="statusbarpanel-icon" xbl:inherits="src,src=image"/>
+        <xul:label class="statusbarpanel-text" xbl:inherits="value=label,crop"/>
+      </xul:hbox>
+    </content>
+  </binding>
+
+</bindings>

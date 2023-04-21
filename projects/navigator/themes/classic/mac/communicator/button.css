@@ -1,0 +1,65 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ==== button.css ==========================================================
+   == Styles for special buttons in the Communicator suite.
+   ========================================================================== */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* ::::: large toolbar buttons ::::: */
+
+.toolbarbutton-1,
+.toolbarbutton-1 > .toolbarbutton-menubutton-button {
+  -moz-box-orient: vertical;
+}
+
+.toolbarbutton-1[open],
+.toolbarbutton-1[open] > .toolbarbutton-menubutton-button {
+  text-shadow: none;
+}
+
+.toolbarbutton-1[type="menu-button"] {
+  -moz-box-orient: horizontal;
+  padding: 0;
+}
+
+.toolbarbutton-1[type="menu"] {
+  -moz-binding: url("chrome://global/content/bindings/toolbarbutton.xml#menu-vertical");
+}
+
+/* Override global/toolbarbutton.css */
+.toolbarbutton-1 > .toolbarbutton-text,
+.toolbarbutton-menubutton-button > .toolbarbutton-text {
+  margin: 2px 6px !important;
+}
+
+toolbar[mode="icons"] .toolbarbutton-1,
+toolbar[mode="icons"] .toolbarbutton-menubutton-button,
+toolbar[iconsize="small"] .toolbarbutton-1,
+toolbar[iconsize="small"] .toolbarbutton-menubutton-button {
+  min-width: 0px;
+}
+
+toolbar[mode="icons"] .toolbarbutton-text,
+toolbar[mode="text"] .toolbarbutton-icon {
+  display: none;
+}
+
+toolbar[mode="text"] .toolbarbutton-1,
+toolbar[mode="text"] .toolbarbutton-1 > .toolbarbutton-menubutton-button {
+ -moz-box-orient: horizontal;
+}
+
+toolbar[labelalign="end"] .toolbarbutton-1,
+toolbar[labelalign="end"] .toolbarbutton-1 > .toolbarbutton-menubutton-button,
+toolbar[labelalign="end"] .toolbarbutton-1 > hbox > vbox {
+  -moz-box-orient: horizontal;
+}
+
+/* ::::: taskbuttons ::::: */
+
+.taskbutton {
+  padding: 1px;
+}

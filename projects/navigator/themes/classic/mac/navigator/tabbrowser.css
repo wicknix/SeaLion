@@ -1,0 +1,238 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+tabbrowser {
+  border: 0 !important;
+}
+
+tabbox {
+  margin: 0;
+}
+
+tabpanels {
+  -moz-appearance: none;
+}
+
+.tabs-bottom {
+  border-bottom: 3px solid;
+  -moz-border-bottom-colors: #888 rgba(0, 0, 0, 0.08);
+}
+
+.tabbrowser-tabs {
+  font: icon;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 0;
+  margin: 0;
+  -moz-box-align: end;
+}
+
+.tabs-stack {
+  margin-top: -1px;
+}
+
+.tab-icon {
+  margin-inline-end: 3px;
+  width: 16px;
+  height: 16px;
+}
+
+.tabbrowser-tab {
+  margin: 0;
+  padding: 0;
+  list-style-image: url("chrome://communicator/skin/bookmarks/bookmark-item.png");
+  border: solid transparent;
+  border-width: 0 2px;
+  -moz-appearance: none;
+}
+
+.tabbrowser-tab:not([selected="true"]):-moz-locale-dir(ltr),
+.tabbrowser-tab:not([selected="true"]):-moz-locale-dir(rtl):first-child {
+  -moz-border-right-colors: transparent rgba(0, 0, 0, 0.19);
+}
+
+.tabbrowser-tab:not([selected="true"]):-moz-locale-dir(ltr):first-child,
+.tabbrowser-tab:not([selected="true"]):-moz-locale-dir(rtl) {
+  -moz-border-left-colors: transparent rgba(0, 0, 0, 0.19);
+}
+
+.tabbrowser-tab:not(:first-child) {
+  margin-inline-start: -3px;
+}
+
+.tab-middle {
+  padding: 4px 7px;
+}
+
+.tab-middle:-moz-lwtheme {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.tab-middle:-moz-lwtheme:not([selected="true"]) > .tab-text {
+  opacity: 0.8;
+}
+
+.tab-middle[selected="true"] {
+  padding: 1px 7px 4px;
+  background-color: #E8E8E8;
+}
+
+.tab-middle[selected="true"]:-moz-lwtheme {
+  background-color: transparent;
+}
+
+.tabbrowser-tab:hover > .tab-middle:not([selected="true"]) {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.tabbrowser-tab:-moz-lwtheme:hover > .tab-middle:not([selected="true"]) {
+  background-color: rgba(0, 0, 0, 0.20);
+}
+
+.tabbrowser-tab[busy] {
+  list-style-image: url("chrome://communicator/skin/icons/loading.png");
+}
+
+.tabbrowser-tab[selected="true"] {
+  color: #000000;
+  text-shadow: none;
+  border-radius: 2px;
+  border-top-width: 2px;
+  -moz-border-top-colors: rgba(0, 0, 0, 0.1) #888;
+  -moz-border-left-colors: rgba(0, 0, 0, 0.08) #888;
+  -moz-border-right-colors: rgba(0, 0, 0, 0.08) #888;
+  margin-top: 1px;
+}
+
+.tabbrowser-tab:focus {
+  outline: 2px solid -moz-mac-focusring;
+  outline-offset: -2px;
+  -moz-outline-radius: 5px;
+}
+
+.tabbrowser-tab[beforeselected="true"]:-moz-locale-dir(ltr) {
+  -moz-border-right-colors: transparent transparent;
+}
+
+.tabbrowser-tab[beforeselected="true"]:-moz-locale-dir(rtl) {
+  -moz-border-left-colors: transparent transparent;
+}
+
+.tabs-newbutton > .toolbarbutton-text,
+.tabs-alltabs-button > .toolbarbutton-text,
+.tabs-closebutton > .toolbarbutton-text {
+  display: none;
+}
+
+/* ::::: Tab scrollbox arrow ::::: */
+
+.scrollbutton-up,
+.scrollbutton-down {
+  border: 0;
+  padding: 0 4px;
+  margin: 0;
+}
+
+.scrollbutton-up:-moz-locale-dir(ltr),
+.scrollbutton-down:-moz-locale-dir(rtl) {
+  border-right: 2px solid;
+  -moz-border-right-colors: rgba(0, 0, 0, 0.19) transparent;
+  list-style-image: url("chrome://messenger/skin/icons/tab-arrow-left.png");
+  -moz-image-region: rect(0, 7px, 11px, 0);
+}
+
+.scrollbutton-up[disabled="true"]:-moz-locale-dir(ltr),
+.scrollbutton-down[disabled="true"]:-moz-locale-dir(rtl) {
+  -moz-image-region: rect(0, 14px, 11px, 7px);
+  -moz-border-right-colors: transparent transparent;
+}
+
+.scrollbutton-down:-moz-locale-dir(ltr),
+.scrollbutton-up:-moz-locale-dir(rtl) {
+  border-left: 2px solid;
+  -moz-border-left-colors: rgba(0, 0, 0, 0.19) transparent;
+  list-style-image: url("chrome://messenger/skin/icons/tab-arrow-right.png");
+  -moz-image-region: rect(0, 7px, 11px, 0);
+  box-shadow: 0 0 0 9px transparent inset;
+  transition: box-shadow 1s ease-out;
+}
+
+.scrollbutton-down[notifybgtab="true"] {
+  box-shadow: 0 0 0 9px rgba(0, 0, 0, 0.2) inset;
+  transition: none;
+}
+
+.scrollbutton-down[disabled="true"]:-moz-locale-dir(ltr),
+.scrollbutton-up[disabled="true"]:-moz-locale-dir(rtl) {
+  -moz-image-region: rect(0, 14px, 11px, 7px);
+  -moz-border-left-colors: transparent transparent;
+}
+
+.scrollbutton-up:hover:not([disabled="true"]),
+.scrollbutton-down:hover:not([disabled="true"]) {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.scrollbutton-up:hover:active:not([disabled="true"]),
+.scrollbutton-down:hover:active:not([disabled="true"]) {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* All Tabs Menupopup */
+.alltabs-item {
+  list-style-image: url("chrome://communicator/skin/bookmarks/bookmark-item.png");
+}
+
+.alltabs-item[busy] {
+  list-style-image: url("chrome://communicator/skin/icons/loading.png") !important;
+}
+
+.alltabs-item[tabIsScrolled] {
+  font-style: italic;
+}
+
+/* ::::: close button ::::: */
+
+.tabs-closebutton {
+  margin: 3px;
+  padding: 1px;
+  list-style-image: url("chrome://global/skin/icons/close.png");
+  -moz-image-region: rect(0, 16px, 16px, 0);
+}
+
+.tabs-closebutton:hover {
+  -moz-image-region: rect(0, 32px, 16px, 16px);
+}
+
+.tabs-closebutton:active:hover {
+  -moz-image-region: rect(0, 48px, 16px, 32px);
+}
+
+.tabs-newbutton {
+  margin: 0;
+  padding: 1px;
+  list-style-image: url("chrome://navigator/skin/icons/tab-new.gif");
+}
+
+.tab-drop-indicator-bar {
+  height: 11px;
+  margin-top: -11px;
+  margin-inline-start: -6px;
+  position: relative;
+}
+
+.tab-drop-indicator {
+  height: 11px;
+  width: 11px;
+  margin-bottom: -5px;
+  position: relative;
+  list-style-image: url('chrome://navigator/skin/icons/tab-drag-indicator.gif');
+}
+
+tooltip[tabpreview="true"] {
+  max-width: none;
+}

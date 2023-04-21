@@ -1,0 +1,113 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@import "chrome://global/skin/";
+
+/* Misc */
+tree {
+  margin: .5em;
+}
+
+.gridSeparator {
+  width: .5em;
+}
+
+textbox {
+  background: transparent !important;
+  border: none;
+  padding: 0px;
+  -moz-user-focus: none;
+}
+
+textbox.header {
+  margin-inline-start: 0;
+}
+
+textbox.meta-properties {
+  margin-top: 1px;
+}
+
+.iframe {
+  margin: .5em;
+  background: white;
+  overflow: auto;
+}
+
+.fixedsize {
+  height: 8.5em;
+}
+
+textbox[disabled] {
+  font-style: italic;
+}
+
+/* General Tab */
+#general-security-identity {
+  white-space: pre-wrap;
+  line-height: 2em;
+}
+
+/* Media Tab */
+#imagetree {
+  min-height: 10em;
+}
+
+#thepreviewimage {
+  margin: 1em;
+}
+
+treechildren::-moz-tree-cell-text(broken) {
+  font-style: italic;
+  color: #999999;
+}
+
+/* Feeds Tab */
+#feedListbox > richlistitem {
+  padding: 6px 7px;
+  min-height: 25px;
+  border-bottom: 1px dotted #C7D0D9;
+}
+
+.feedTitle { 
+  font-weight: bold;
+}
+
+/* Permissions Tab */
+#permList {
+  margin-top: .5em;
+  overflow: auto;
+}
+
+.permission {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-inline-start: 7px;
+  padding-inline-end: 7px;
+  min-height: 25px;
+  border-bottom: 1px dotted #C7D0D9;
+}
+
+.permissionLabel {
+  font-weight: bold;
+}
+
+/* Security Tab */
+.fieldValue {
+  font-weight: bold;
+}
+
+#identity-icon {
+  width: 64px;
+  height: 64px;
+  list-style-image: url("chrome://navigator/skin/icons/identity.png");
+  -moz-image-region: rect(0px, 64px, 64px, 0px);
+}
+
+#identity-icon.verifiedDomain {
+  -moz-image-region: rect(64px, 64px, 128px, 0px);
+}
+
+#identity-icon.verifiedIdentity {
+  -moz-image-region: rect(128px, 64px, 192px, 0px);
+}

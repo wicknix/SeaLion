@@ -1,0 +1,54 @@
+<?xml version="1.0"?> <!-- -*- Mode: SGML; indent-tabs-mode: nil; -*- -->
+<!--
+
+ This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://communicator/skin/" type="text/css"?>
+
+<!DOCTYPE prefwindow SYSTEM "chrome://communicator/locale/pref/pref-languages.dtd" >
+
+
+<prefwindow xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+            id="addLanguagesPreferences"
+            title="&languages.customize.add.title.label;"
+            type="child"
+            onload="OnLoadAddLanguages();"
+            onbeforeaccept="DoBeforeAccept();"
+            ondialogaccept="return OnAccept();">
+
+  <script type="application/javascript" src="chrome://communicator/content/pref/pref-languages-add.js"/>
+
+  <prefpane id="addLanguagesPane">
+    <preferences id="addLanguages">
+      <preference id="intl.accept_languages"
+                  name="intl.accept_languages"
+                  type="wstring"/>
+    </preferences>
+
+    <stringbundleset id="langAddBundleset">
+      <stringbundle id="prefLangAddBundle"
+                    src="chrome://communicator/locale/pref/pref-languages.properties"/>
+    </stringbundleset>
+
+    <description style="width: 1px;">&languages.customize.prefAddLangDescript;</description>
+    <separator class="thin"/>
+    <description style="width: 1px;">&languages.customize.available.label;</description>
+
+    <listbox id="availableLanguages"
+             flex="1"
+             seltype="multiple"
+             preference="intl.accept_languages"
+             ondblclick="HandleDoubleClick();"
+             onsynctopreference="return WriteAddedLanguages(this);"/>
+
+    <hbox align="center">
+      <label value="&languages.customize.others.label;"
+             accesskey="&languages.customize.others.accesskey;"
+             control="otherLanguages"/>
+      <textbox id="otherLanguages" size="12" flex="1"/>
+      <label value="&languages.customize.others.examples;" control="otherLanguages"/>
+    </hbox>
+  </prefpane>
+</prefwindow>

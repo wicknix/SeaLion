@@ -1,0 +1,108 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ===== autocomplete.css =================================================
+  == Styles used by the autocomplete widget.
+  ======================================================================= */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+@namespace html url("http://www.w3.org/1999/xhtml");
+
+/* ::::: autocomplete ::::: */
+
+textbox[type="autocomplete"] {
+  cursor: default !important;
+}
+
+textbox[nomatch="true"][highlightnonmatches="true"] {
+  color: #F00;
+}
+
+.textbox-input-box {
+  -moz-box-align: center;
+}
+
+/* ::::: history button ::::: */
+
+.autocomplete-history-dropmarker {
+  margin: 2px;
+  padding: 0;
+  border: none !important;
+  background-color: transparent !important;
+}
+
+.autocomplete-history-dropmarker[open="true"] {
+  margin-top: 3px;
+  margin-bottom: 1px;
+  margin-inline-start: 3px;
+  margin-inline-end: 1px;
+}
+
+/* ::::: autocomplete popups ::::: */
+
+panel[type="autocomplete"],
+panel[type="autocomplete-richlistbox"],
+.autocomplete-history-popup {
+  -moz-appearance: none;
+  border: 1px solid;
+  -moz-border-top-colors: #6B747E;
+  -moz-border-right-colors: #6B747E;
+  -moz-border-bottom-colors: #6B747E;
+  -moz-border-left-colors: #6B747E;
+  background-color: #FFFFFF;
+}
+
+.autocomplete-history-popup {
+  max-height: 180px;
+}
+
+/* ::::: tree ::::: */
+
+.autocomplete-tree {
+  border: none;
+  background-color: transparent !important;
+}
+
+.autocomplete-treecol {
+  margin: 0px !important;
+  border: none !important;
+  padding: 0px !important;
+}
+
+.autocomplete-treebody::-moz-tree-cell-text {
+  padding-inline-start: 8px;
+  color: #000000;
+}
+
+.autocomplete-treebody::-moz-tree-row(selected) {
+  background-color: #9499AC;
+}
+
+.autocomplete-treebody::-moz-tree-cell-text(selected) {
+  color: #FFFFFF !important;
+}
+
+.autocomplete-treebody::-moz-tree-image(treecolAutoCompleteValue) {
+  max-width: 16px;
+  height: 16px;
+}
+
+/* ::::: richlistbox autocomplete ::::: */
+
+.autocomplete-richlistbox {
+  -moz-appearance: none;
+  margin: 0px !important;
+  border: none !important;
+  padding: 0px !important;
+}
+
+/* ::::: textboxes inside toolbarpaletteitems ::::: */
+
+toolbarpaletteitem > toolbaritem > textbox > hbox > hbox > html|*.textbox-input {
+  visibility: hidden;
+}
+
+toolbarpaletteitem > toolbaritem > * > textbox > hbox > hbox > html|*.textbox-input {
+  visibility: hidden;
+}

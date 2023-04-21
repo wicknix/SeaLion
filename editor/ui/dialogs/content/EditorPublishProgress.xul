@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://editor/skin/editor.css" type="text/css"?>
+<?xml-stylesheet href="chrome://editor/skin/EditorDialog.css" type="text/css"?>
+
+<?xul-overlay href="chrome://editor/content/EdDialogOverlay.xul"?> 
+
+<!DOCTYPE dialog SYSTEM "chrome://editor/locale/EditorPublishProgress.dtd">
+<!-- dialog containing a control requiring initial setup -->
+<dialog title=""
+    id="publishProgressDlg"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    buttons="cancel"
+    buttonlabelclose="&closeButton.label;"
+    onload="Startup()"
+    ondialogaccept="return onEnterKey();"
+    ondialogcancel="return onClose();">
+
+  <!-- Methods common to all editor dialogs -->
+  <script type="application/javascript" src="chrome://editor/content/editorUtilities.js"/>
+  <script type="application/javascript" src="chrome://editor/content/publishprefs.js"/>
+  <script type="application/javascript" src="chrome://editor/content/EdDialogCommon.js"/>
+  <script type="application/javascript" src="chrome://editor/content/EditorPublishProgress.js"/>
+
+  <spacer id="location" offsetY="50" persist="offsetX offsetY"/>
+  <broadcaster id="args" value=""/>
+
+  <groupbox>
+    <caption><label id="PublishToSite"/></caption>
+    <label value="&siteUrl.label;"/>
+    <hbox>
+      <label class="indent bold" id="PublishUrl"/>
+    </hbox>
+    <spacer class="spacer"/>
+    <grid id="Subdirectories">
+      <columns><column/><column/></columns>
+      <rows>
+        <row id="DocSubdir">
+          <label value="&docSubdir.label;"/>
+          <label id="docDir"/>
+        </row>
+        <row id="OtherSubdir">
+          <label value="&otherSubdir.label;"/>
+          <label id="otherDir"/>
+        </row>
+      </rows>
+    </grid>
+    <label id="OtherUrl" class="bold" style="margin-left:3em"/>
+  </groupbox>
+  <groupbox>
+    <caption><label value="&fileList.label;"/></caption>
+    <vbox align="center" style="max-width:30em">
+      <label id="FinalStatusMessage" class="bold" value="&status.label;"/>
+    </vbox>
+    <description id="StatusMessage" class="wrap" style="max-width:30em; min-height: 1em"/>
+    <vbox flex="1">
+      <listbox id="FileList" rows="1"/>
+    </vbox>
+    <hbox align="center" id="failureBox" hidden="true">
+      <image class="progressitem" progress="done"/>
+      <label value="&succeeded.label;"/>
+      <spacer class="bigspacer"/>
+      <image class="progressitem" progress="failed"/>
+      <label value="&failed.label;"/>
+    </hbox>
+  </groupbox>
+  <checkbox id="KeepOpen" label="&keepOpen;" oncommand="CheckKeepOpen();" persist="checked"/>
+  <separator class="groove"/>
+</dialog>

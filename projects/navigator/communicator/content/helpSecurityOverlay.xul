@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<overlay id="securityManagerOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/javascript" src="chrome://help/content/contextHelp.js"/>
+  <script type="application/javascript">
+  <![CDATA[
+    setHelpFileURI('chrome://communicator/locale/help/suitehelp.rdf');
+
+    function doCertManagerHelpButton()
+    {
+      var selTab = document.getElementById('certMgrTabbox').selectedItem;
+      var selTabID = selTab.getAttribute('id');
+      switch (selTabID) {
+        case 'mine_tab':
+          openHelp("my_certs");
+          break;
+        case 'others_tab':
+          openHelp("others_certs");
+          break;
+        case 'websites_tab':
+          openHelp("web_certs");
+          break;
+        case 'ca_tab':
+          openHelp("ca_certs");
+          break;
+        case 'orphan_tab':
+          openHelp("orphan_certs");
+          break;
+      }
+    }
+
+    function doDeleteCertificateHelpButton()
+    {
+      switch (gParams.GetString(0)) {
+        case "mine_tab":
+          openHelp("delete_my_certs");
+          break;
+        case "websites_tab":
+          openHelp("delete_web_certs");
+          break;
+        case "ca_tab":
+          openHelp("delete_ca_certs");
+          break;
+        case "others_tab":
+          openHelp("delete_email_certs");
+          break;
+      }
+    }
+  ]]>
+  </script>
+
+  <dialog id="certmanager"
+          buttons="accept,help"
+          ondialoghelp="return doCertManagerHelpButton();"/>
+
+  <dialog id="certDetails"
+          buttons="accept,help"
+          ondialoghelp="openHelp('cert_details');"/>
+
+  <dialog id="set_password"
+          buttons="accept,cancel,help"
+          ondialoghelp="openHelp('change_pwd');"/>
+
+  <dialog id="devicemanager"
+          buttons="accept,help"
+          ondialoghelp="openHelp('sec_devices');"/>
+
+  <dialog id="ssl_warning"
+          buttons="accept,cancel,help"
+          ondialoghelp="openHelp('which_token');"/>
+
+  <dialog id="certAuthAsk"
+          buttons="accept,cancel,help"
+          ondialoghelp="openHelp('which_cert');"/>
+
+  <dialog id="crlImportSuccess"
+          buttons="accept,cancel,help"
+          ondialoghelp="openHelp('validation-crl-import');"/>
+
+  <dialog id="deleteCertificate"
+          buttons="accept,cancel,help"
+          ondialoghelp="doDeleteCertificateHelpButton();"/>
+
+  <dialog id="editCaCert"
+          buttons="accept,cancel,help"
+          ondialoghelp="openHelp('edit_ca_certs');"/>
+
+  <dialog id="editEmailCert"
+          buttons="accept,cancel,help"
+          ondialoghelp="openHelp('edit_email_certs');"/>
+
+  <dialog id="editWebsiteCert"
+          buttons="accept,cancel,help"
+          ondialoghelp="openHelp('edit_web_certs');"/>
+
+  <dialog id="escrowWarnDialog"
+          spacerflex="1"
+          buttons="accept,cancel,help,extra2"
+          ondialoghelp="openHelp('priv_key_copy');"/>
+
+  <dialog id="getp12password"
+          buttons="accept,cancel,help"
+          ondialoghelp="openHelp('my_certs');"/>
+
+  <dialog id="setp12password"
+          buttons="accept,cancel,help"
+          ondialoghelp="openHelp('cert_backup_pwd');"/>
+
+  <dialog id="crlUpdatePref"
+          buttons="accept,cancel,help"
+          ondialoghelp="openHelp('validation-crl-auto-update-prefs');"/>
+
+  <dialog id="serverCrlNextupdate"
+          buttons="accept,help"
+          ondialoghelp="openHelp('exp_crl');"/>
+
+  <dialog id="crlviewer"
+          buttons="help"
+          ondialoghelp="openHelp('validation-crl-manage');">
+    <hbox id="dialogButtons">
+      <button dlgtype="help"/>
+    </hbox>
+  </dialog>
+
+  <dialog id="reset_password"
+          buttons="accept,cancel,help"
+          ondialoghelp="openHelp('reset_pwd');"/>
+
+  <dialog id="download_cert"
+          buttons="accept,cancel,help"
+          ondialoghelp="openHelp('new_ca');"/>
+</overlay>

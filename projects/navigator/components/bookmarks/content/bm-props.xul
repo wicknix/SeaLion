@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://communicator/skin/"?>
+<?xml-stylesheet href="chrome://communicator/content/places/places.css"?>
+<?xml-stylesheet href="chrome://communicator/skin/bookmarks/editBookmarkOverlay.css"?>
+<?xml-stylesheet href="chrome://communicator/skin/bookmarks/bookmarks.css"?>
+
+<?xul-overlay href="chrome://communicator/content/bookmarks/placesOverlay.xul"?>
+<?xul-overlay href="chrome://communicator/content/bookmarks/editBookmarkOverlay.xul"?>
+
+<!DOCTYPE dialog [
+  <!ENTITY % editBookmarkOverlayDTD SYSTEM "chrome://communicator/locale/bookmarks/editBookmarkOverlay.dtd">
+  %editBookmarkOverlayDTD;
+]>
+
+<dialog id="bookmarkproperties"
+        buttons="accept, cancel"
+        buttoniconaccept="save"
+        ondialogaccept="BookmarkPropertiesPanel.onDialogAccept();"
+        ondialogcancel="BookmarkPropertiesPanel.onDialogCancel();"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        onload="BookmarkPropertiesPanel.onDialogLoad();"
+        onunload="BookmarkPropertiesPanel.onDialogUnload();"
+        style="min-width: 30em;"
+        persist="screenX screenY height width">
+
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="stringBundle"
+                  src="chrome://communicator/locale/bookmarks/bm-props.properties"/>
+  </stringbundleset>
+
+  <script type="application/javascript"
+          src="chrome://communicator/content/bookmarks/editBookmarkOverlay.js"/>
+  <script type="application/javascript"
+          src="chrome://communicator/content/bookmarks/bm-props.js"/>
+
+<vbox id="editBookmarkPanelContent"/>
+
+</dialog>

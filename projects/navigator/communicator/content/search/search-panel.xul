@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://communicator/content/search/searchbarBindings.css"?>
+<?xml-stylesheet href="chrome://communicator/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://communicator/skin/search/search.css" type="text/css"?>
+
+<!DOCTYPE page SYSTEM "chrome://communicator/locale/search/search-panel.dtd" >
+<page id="searchPanel"
+      xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+      onload="Startup();"
+      elementtofocus="sidebar-search-text">
+
+  <script type="application/javascript" src="chrome://global/content/globalOverlay.js"/>
+  <script type="application/javascript" src="chrome://communicator/content/search/search-panel.js"/>
+  <script type="application/javascript" src="chrome://communicator/content/utilityOverlay.js"/>
+
+    <popupset id="sidebarPopupset">
+      <panel id="PopupAutoComplete"
+             type="autocomplete"
+             noautofocus="true"/>
+    </popupset>
+
+    <menulist id="sidebar-search-engines"
+              oncommand="SelectEngine(this);"/>
+
+    <hbox align="center">
+      <textbox id="sidebar-search-text" flex="1"
+               class="search-textbox padded"
+               ontextentered="doSearch();"
+               placeholder="&search.placeholder;"
+               type="autocomplete"
+               inputtype="search"
+               autocompletepopup="PopupAutoComplete"
+               autocompletesearch="search-autocomplete"
+               autocompletesearchparam="searchbar-history"
+               maxrows="10"
+               completeselectedindex="true"
+               tabscrolling="true"/>
+      <button id="searchButton" label="&search.button.label;"
+              oncommand="doSearch();"/>
+    </hbox>
+    <button id="managerButton"
+            label="&search.engineManager.label;"
+            oncommand="window.top.OpenSearchEngineManager();"/>
+</page>

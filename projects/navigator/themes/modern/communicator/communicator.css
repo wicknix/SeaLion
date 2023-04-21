@@ -1,0 +1,177 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ==== communicator.css ====================================================
+   == Styles shared everywhere throughout the Communicator suite.
+   ========================================================================== */
+
+@import url("chrome://global/skin/");
+@import url("chrome://communicator/content/communicator.css");
+@import url("chrome://communicator/skin/brand.css");
+@import url("chrome://communicator/skin/button.css");
+@import url("chrome://communicator/skin/toolbar.css");
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* ::::: autocomplete ::::: */
+
+.autocomplete-history-popup {
+  max-height: 25em;
+}
+
+textbox[autocompletesearch="history file"] .autocomplete-treebody::-moz-tree-image(treecolAutoCompleteValue) {
+  width: 16px;
+  height: 16px;
+  margin-left: 1px;
+}
+
+textbox[autocompletesearch="history file"] .autocomplete-treebody::-moz-tree-image(treecolAutoCompleteValue, directory) {
+  /*list-style-image: url("chrome://global/skin/filepicker/dir-closed.gif");*/
+  list-style-image: url("chrome://communicator/skin/bookmarks/bookmark-folder-closed.gif");
+}
+
+textbox[autocompletesearch="history file"] .autocomplete-treebody::-moz-tree-image(treecolAutoCompleteValue, file) {
+  list-style-image: url("chrome://communicator/skin/bookmarks/bookmark-item.gif");
+}
+
+/* ::::: online/offline icons ::::: */
+
+#offline-status[offline="true"] {
+  list-style-image: url("chrome://communicator/skin/icons/offline.gif");
+}
+
+#offline-status {
+  list-style-image: url("chrome://communicator/skin/icons/online.gif");
+}
+
+/* ::::: spell checker ::::: */
+
+.spell-suggestion {
+  font-weight: bold;
+}
+
+/* ::::: directional button icons ::::: */
+
+.up {
+  min-width: 0px;
+  list-style-image: url("chrome://global/skin/arrow/arrow-up.gif");
+}
+
+.up[disabled="true"] {
+  list-style-image: url("chrome://global/skin/arrow/arrow-up-dis.gif");
+}
+
+.down {
+  min-width: 0px;
+  list-style-image: url("chrome://global/skin/arrow/arrow-dn.gif");
+}
+
+.down[disabled="true"] {
+  list-style-image: url("chrome://global/skin/arrow/arrow-dn-dis.gif");
+}
+
+.sidebarTree {
+  border: none;
+  margin: 0px !important;
+}
+
+/* ::::: toolbar print button ::::: */
+#print-button {
+  list-style-image: url("chrome://communicator/skin/icons/common.png");
+  -moz-image-region: rect(0 42px 39px 0);
+}
+
+#print-button:hover {
+  -moz-image-region: rect(0 84px 39px 42px);
+}
+
+#print-button:hover:active {
+  -moz-image-region: rect(0 126px 39px 84px);
+}
+
+#print-button[disabled="true"] {
+  -moz-image-region: rect(0 168px 39px 126px) !important;
+}
+
+toolbar[iconsize="small"] > toolbarpaletteitem > #print-button,
+toolbar[iconsize="small"] > #print-button {
+  list-style-image: url("chrome://communicator/skin/icons/common-small.png");
+  -moz-image-region: rect(0 19px 19px 0);
+}
+
+toolbar[iconsize="small"] > #print-button:hover {
+  -moz-image-region: rect(0 38px 19px 19px);
+}
+
+toolbar[iconsize="small"] > #print-button:hover:active {
+  -moz-image-region: rect(0 57px 19px 38px);
+}
+
+toolbar[iconsize="small"] > #print-button[disabled="true"] {
+  -moz-image-region: rect(0 76px 19px 57px) !important;
+}
+
+/* ::::: notification bars ::::: */
+
+.messageImage[value="refresh-blocked"] {
+  list-style-image: url("chrome://communicator/skin/icons/application.png");
+}
+
+.messageImage[value="blocked-plugins"],
+.messageImage[value="carbon-failure-plugins"],
+.messageImage[value="disabled-plugins"],
+.messageImage[value="missing-plugins"],
+.messageImage[value="outdated-plugins"],
+.messageImage[value="click-to-play-plugins"],
+.messageImage[value="plugin-crashed"] {
+  list-style-image: url("chrome://mozapps/skin/plugins/pluginGeneric-16.png");
+}
+
+.messageImage[value="geolocation"] {
+  list-style-image: url("chrome://communicator/skin/icons/geo.png");
+}
+
+.messageImage[value="webNotifications"] {
+  list-style-image: url("chrome://communicator/skin/icons/notification-16.png");
+}
+
+.messageImage[value="indexedDB-permissions-prompt"],
+.messageImage[value="indexedDB-quota-prompt"] {
+  list-style-image: url("chrome://global/skin/icons/question-16.png");
+}
+
+.messageImage[value="addon-install-blocked"],
+.messageImage[value="addon-install-cancelled"],
+.messageImage[value="addon-install-complete"],
+.messageImage[value="addon-install-disabled"],
+.messageImage[value="addon-install-failed"],
+.messageImage[value="addon-install-started"],
+.messageImage[value="lwtheme-install-request"],
+.messageImage[value="lwtheme-install-notification"] {
+  list-style-image: url("chrome://mozapps/skin/extensions/extensionGeneric-16.png");
+}
+
+.messageImage[value="popup-blocked"] {
+  list-style-image: url("chrome://navigator/skin/icons/popup-blocked.png");
+}
+
+.messageImage[value="blocked-badware-page"] {
+  list-style-image: url("chrome://global/skin/icons/blacklist_favicon.png");
+}
+
+.messageImage[value="EnterInsecureMessage"] {
+  list-style-image: url("chrome://communicator/skin/icons/lock-insecure-16.png");
+}
+
+.messageImage[value="EnterSecureMessage"],
+.messageImage[value="BlockedActiveContentMessage"],
+.messageImage[value="BlockedDisplayContentMessage"] {
+  list-style-image: url("chrome://communicator/skin/icons/lock-secure-16.png");
+}
+
+.messageImage[value="MixedContentMessage"],
+.messageImage[value="MixedActiveContentMessage"],
+.messageImage[value="MixedDisplayContentMessage"] {
+  list-style-image: url("chrome://communicator/skin/icons/lock-broken-16.png");
+}

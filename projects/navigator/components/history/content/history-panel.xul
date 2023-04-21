@@ -1,0 +1,73 @@
+<?xml version="1.0"?> <!-- -*- Mode: xml; indent-tabs-mode: nil; -*- -->
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://communicator/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://communicator/skin/sidebar/sidebarListView.css" type="text/css"?>
+
+<?xul-overlay href="chrome://global/content/editMenuOverlay.xul"?>
+<?xul-overlay href="chrome://communicator/content/history/placesOverlay.xul"?>
+<?xul-overlay href="chrome://communicator/content/utilityOverlay.xul"?>
+
+<!DOCTYPE page SYSTEM "chrome://communicator/locale/history/history.dtd">
+
+<!-- we need to keep id="history-panel" for upgrade and switching
+     between versions of the browser -->
+
+<page id="history-panel" orient="vertical"
+      xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+      onload="HistoryCommonInit();"
+      onunload="SidebarUtils.setMouseoverURL('');"
+      elementtofocus="search-box">
+
+  <script type="application/javascript"
+          src="chrome://communicator/content/places/sidebarUtils.js"/>
+
+  <commandset id="editMenuCommands"/>
+  <commandset id="placesCommands"/>
+
+  <keyset id="editMenuKeys">
+    <key id="key_delete2"/>
+  </keyset>
+
+  <menupopup id="placesContext"/>
+
+  <hbox align="center">
+    <textbox id="search-box" flex="1" type="search"
+             placeholder="&search.placeholder;" clickSelectsAll="true"
+             aria-controls="historyTree"
+             oncommand="searchHistory(this.value);"/>
+    <toolbarbutton id="viewButton" type="menu" class="tabbable"
+                   label="&view.label;">
+      <menupopup id="viewPopup"/>
+    </toolbarbutton>
+  </hbox>
+
+  <tree id="historyTree"
+        class="sidebar-placesTree plain"
+        flex="1"
+        type="places"
+        context="placesContext"
+        onselect="historyOnSelect();"
+        onkeypress="SidebarUtils.handleTreeKeyPress(event);"
+        onclick="SidebarUtils.handleTreeClick(this, event, true);"
+        onmousemove="SidebarUtils.handleTreeMouseMove(event);"
+        onmouseout="SidebarUtils.setMouseoverURL('');">
+    <treecols context="">
+      <treecol label="&col.title.label;" id="Name" flex="4"
+               persist="width hidden ordinal sortActive sortDirection"/>
+      <splitter class="tree-splitter"/>
+      <treecol label="&col.url.label;" id="URL" flex="4" hidden="true"
+               persist="width hidden ordinal sortActive sortDirection"/>
+      <splitter class="tree-splitter"/>
+      <treecol label="&col.lastvisit.label;" id="Date" flex="1" hidden="true"
+               persist="width hidden ordinal sortActive sortDirection"/>
+      <splitter class="tree-splitter"/>
+      <treecol label="&col.visitcount.label;" id="VisitCount" flex="1" hidden="true"
+               persist="width hidden ordinal sortActive sortDirection"/>
+    </treecols>
+    <treechildren class="sidebar-placesTreechildren" flex="1"/>
+  </tree>
+</page>

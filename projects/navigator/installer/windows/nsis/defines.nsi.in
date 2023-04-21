@@ -1,0 +1,46 @@
+#filter substitution
+!define AppName               "@MOZ_APP_DISPLAYNAME@"
+!define AppVersion            "@APP_VERSION@"
+!define GREVersion            @MOZILLA_VERSION@
+!define AB_CD                 "@AB_CD@"
+!define NO_UNINSTALL_SURVEY
+
+!define FileMainEXE           "@MOZ_APP_NAME@.exe"
+!define WindowClass           "BorealisMessageWindow"
+!define DDEApplication        "Borealis"
+
+!define AppRegName            "Borealis"
+!define AppRegNameMail        "Borealis (Mail)"
+!define AppRegNameNews        "Borealis (News)"
+
+!define BrandShortName        "@MOZ_APP_DISPLAYNAME@"
+!define BrandFullName         "${BrandFullNameInternal}"
+
+# ARCH is used when it is necessary to differentiate the x64 registry keys from
+# the x86 registry keys (e.g. the uninstall registry key).
+#ifdef HAVE_64BIT_BUILD
+!define HAVE_64BIT_BUILD
+!define ARCH "x64"
+!define MinSupportedVer "Microsoft Windows 7 x64"
+#else
+!define ARCH "x86"
+!define MinSupportedVer "Microsoft Windows 7"
+#endif
+
+!define MinSupportedCPU "SSE2"
+
+# File details shared by both the installer and uninstaller
+VIProductVersion "1.0.0.0"
+VIAddVersionKey "ProductName"     "${BrandShortName}"
+VIAddVersionKey "CompanyName"     "${CompanyName}"
+#ifdef MOZ_OFFICIAL_BRANDING
+VIAddVersionKey "LegalTrademarks" "${BrandShortName} is a Trademark of Binary Outcast."
+#else
+VIAddVersionKey "LegalTrademarks" "All marks are trademark of their respective owners."
+#endif
+VIAddVersionKey "LegalCopyright"  "${CompanyName}"
+VIAddVersionKey "FileVersion"     "${AppVersion}"
+VIAddVersionKey "ProductVersion"  "${AppVersion}"
+# Comments is not used but left below commented out for future reference
+# VIAddVersionKey "Comments"        "Comments"
+

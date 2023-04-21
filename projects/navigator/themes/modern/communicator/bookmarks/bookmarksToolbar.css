@@ -1,0 +1,103 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ 
+/* ===== bookmarksToolbar.css ===========================================
+  == Styles specific to bookmark items in a toolbar.
+  ======================================================================= */
+
+@import url("chrome://communicator/skin/bookmarks/bookmarks.css");
+
+/* ::::: bookmark toolbar buttons ::::: */
+
+/* ..... bookmark items ..... */
+
+toolbarbutton.bookmark-item {
+  cursor: pointer;
+  min-width: 0;
+  max-width: 10em;  
+}
+
+toolbarbutton.bookmark-item:hover {
+  text-decoration: underline;
+}
+
+toolbarbutton.bookmark-item[container="true"],
+toolbarbutton.bookmark-item[container="true"]:hover {
+  cursor: default;
+  text-decoration: none;
+}
+
+/* removes border from non-container bookmark items */
+toolbarbutton.bookmark-item:not([container="true"]):hover,
+toolbarbutton.bookmark-item:not([container="true"]):hover:active {
+  border: 1px solid transparent;
+}
+
+toolbarbutton.bookmark-item[disabled="true"] {
+  cursor: default !important;
+  text-decoration: none !important;
+  list-style-image: url("chrome://communicator/skin/bookmarks/bookmark-item-dis.gif") !important;
+}
+
+toolbarbutton.bookmark-item[disabled="true"][container="true"] {
+  list-style-image: url("chrome://communicator/skin/bookmarks/bookmark-folder-dis.gif") !important;
+}
+
+.bookmark-item > .toolbarbutton-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.bookmark-item > .toolbarbutton-menu-dropmarker {
+  display: none;
+}
+
+/* Prevent [mode="icons"] from hiding the label */
+.bookmark-item > .toolbarbutton-text {
+  display: -moz-box !important;
+}
+
+/* ..... drag and drop styles ..... */
+
+#PlacesToolbarDropIndicator {
+  list-style-image: url("chrome://communicator/skin/bookmarks/toolbarDropMarker.png");
+}
+
+toolbarbutton.bookmark-item[dragover="true"][open="true"] {
+  border: 1px solid #000000;
+}
+
+/* ::::: bookmark menus ::::: */
+
+menu.bookmark-item,
+menuitem.bookmark-item {
+  border-top: 1px solid transparent !important;
+  border-bottom: 1px solid transparent !important;
+  padding: 1px 2px;
+}
+
+menuitem.bookmark-item[disabled="true"] {
+  list-style-image: url("chrome://communicator/skin/bookmarks/bookmark-item-dis.gif");
+}
+
+menuitem.bookmark-item[disabled="true"][container="true"] {
+  list-style-image: url("chrome://communicator/skin/bookmarks/bookmark-folder-dis.gif");
+}
+
+/* ..... drag and drop styles ..... */
+
+/* rules for menupopup drop indicators */
+.menupopup-drop-indicator-bar {
+  position: relative;
+  /* these two margins must together compensate the indicator's height */
+  margin-top: -1px;
+  margin-bottom: -1px;
+}
+
+.menupopup-drop-indicator {
+  list-style-image: none;
+  height: 2px;
+  margin-inline-end: -4em;
+  background-color: #424F63;
+}

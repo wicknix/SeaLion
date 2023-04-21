@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://editor/skin/editor.css" type="text/css"?>
+<?xml-stylesheet href="chrome://editor/skin/EditorDialog.css" type="text/css"?>
+
+<?xul-overlay href="chrome://editor/content/EdDialogOverlay.xul"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://editor/locale/EditorSnapToGrid.dtd">
+
+<dialog title="&windowTitle.label;"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    onload="Startup()"
+    ondialogaccept="return onAccept();"
+    ondialogcancel="return onCancel();">
+
+  <!-- Methods common to all editor dialogs -->
+  <script type="application/javascript" src="chrome://editor/content/editorUtilities.js"/>
+  <script type="application/javascript" src="chrome://editor/content/EdDialogCommon.js"/>
+  <!--- Element-specific methods -->
+  <script type="application/javascript" src="chrome://editor/content/EdSnapToGrid.js"/>
+
+  <spacer id="location" offsetY="50" persist="offsetX offsetY"/>
+
+  <checkbox id="enableSnapToGrid"
+            label="&enableSnapToGrid.label;"
+            accesskey="&enableSnapToGrid.accessKey;"
+            oncommand="toggleSnapToGrid();"/>
+
+  <spacer class="spacer"/>
+
+  <grid>
+    <columns><column/><column/><column /></columns>
+    <rows>
+      <row align="center">
+        <label value="&sizeEditField.label;"
+               id="sizeLabel"
+               control="size"
+               accesskey="&sizeEditField.accessKey;"/>
+        <textbox class="narrow" id="size" oninput="forceInteger('size')"/>
+        <label id="unitLabel"
+               value="&pixelsLabel.value;" />
+      </row>
+    </rows>
+  </grid>
+
+  <spacer class="spacer"/>
+  <separator class="groove"/>
+</dialog>

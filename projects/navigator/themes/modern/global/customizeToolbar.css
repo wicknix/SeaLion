@@ -1,0 +1,25 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+window,
+dialog {
+  width: 568px;
+  min-width: 568px;
+  padding: 7px 5px 5px 5px;
+}
+
+#instructions {
+  font-weight: bold;
+  font-size: 120%;
+}
+
+#CustomizeToolbarWindow > #main-box {
+  border-top: none;
+  border-left: 2px solid;
+  border-right: 2px solid;
+  border-bottom: 3px solid;
+  -moz-border-right-colors: #F8FAFE #5D616E;
+  -moz-border-bottom-colors: #5D616E #5D616E #BEC3D3;
+  -moz-border-left-colors: #5D616E #F8FAFE;
+}

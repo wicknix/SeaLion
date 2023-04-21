@@ -1,0 +1,101 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ===== plugins.css =====================================================
+   == Styles used by the about:plugins dialog.
+   ======================================================================= */
+
+body {
+  background-color: #FFFFFF;
+  color: #22262F;
+  font: message-box;
+  text-align: start;
+}
+
+a:link, a:visited, a:active {
+ color: #313063;
+}
+
+hr {
+ display: none;
+}
+
+div#outside {
+ text-align: justify;
+ width: 90%;
+ margin: 0 5%;
+}
+
+div#plugs {
+  text-align: center;
+  font-size: x-large;
+  font-weight: bold;
+  color: #5D616E;
+}
+
+div#noplugs {
+  font-size: large;
+  font-weight: bold;
+  color: #5D616E;
+}
+
+div#findmore {
+  margin-top: 2em;
+}
+
+div.plugname {
+  margin-top: 2em;
+  margin-bottom: 1em;
+  font-size: large;
+  text-align: left;
+  font-weight: bold;
+  color: #5D616E;
+}
+
+dl {
+  margin: 0px 0px 3px;
+}
+
+table {
+  background-color: #C7D0D9;
+  color: #22262F;
+  font: message-box;
+  text-align: left;
+  width: 100%;
+  border: 1px solid #2D3B49;
+  border-spacing: 0px;
+}
+
+th {
+  text-align: center;
+  font-weight: bold;
+  background-color: #90A1B3;
+  color: #000000;
+}
+
+th + th,
+td + td {
+  border-left: 1px dotted #2D3B49; 
+}
+
+td {
+  text-align: left;
+  border-top: 1px dotted #2D3B49;
+}
+
+th, td {
+  padding: 3px;
+}
+
+th.type, th.suff {
+  width: 20%;
+}
+
+th.desc {
+  width: 50%;
+}
+
+th.enabled {
+  width: 10%;
+}

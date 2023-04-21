@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://editor/skin/editor.css" type="text/css"?>
+<?xml-stylesheet href="chrome://editor/skin/EditorDialog.css" type="text/css"?>
+
+<?xul-overlay href="chrome://editor/content/EdImageOverlay.xul"?> 
+<?xul-overlay href="chrome://editor/content/EdDialogOverlay.xul"?> 
+
+<!DOCTYPE dialog SYSTEM "chrome://editor/locale/EditorInputProperties.dtd">
+<dialog title="&windowTitleImage.label;"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        onload="Startup();"
+        ondialogaccept="return onAccept();"
+        ondialogcancel="return onCancel();">
+
+  <!-- Methods common to all editor dialogs -->
+  <script type="application/javascript" src="chrome://editor/content/editorUtilities.js"/>
+  <script type="application/javascript" src="chrome://editor/content/EdDialogCommon.js"/>
+  <script type="application/javascript" src="chrome://editor/content/EdInputImage.js"/>
+
+  <broadcaster id="args" value=""/>
+  <spacer id="location" offsetY="50" persist="offsetX offsetY"/>
+
+  <tabbox id="TabBox">
+    <tabs flex="1">
+      <tab id="imageInputTab"/>
+      <tab id="imageLocationTab"/>
+      <tab id="imageDimensionsTab"/>
+      <tab id="imageAppearanceTab"/>
+    </tabs>
+    <tabpanels>
+      <groupbox><caption label="&InputSettings.label;"/>
+        <grid><columns><column/><column/></columns>
+          <rows>
+            <row align="center">
+              <label value="&InputName.label;"/>
+              <textbox id="InputName"/>
+            </row>
+            <row>
+              <spacer/>
+              <checkbox id="InputDisabled" label="&InputDisabled.label;"/>
+            </row>
+            <row align="center">
+              <label value="&tabIndex.label;"/>
+              <hbox>
+                <textbox id="InputTabIndex" class="narrow" oninput="forceInteger(this.id);"/>
+              </hbox>
+            </row>
+          </rows>
+        </grid>
+      </groupbox>
+
+      <!-- panels overlayed from EdImageOverlay.xul -->
+      <vbox id="imageLocation"/>
+      <vbox id="imageDimensions"/>
+      <hbox id="imageAppearance"/>
+
+    </tabpanels>
+  </tabbox>
+
+  <hbox align="end">
+    <groupbox id="imagePreview"/>
+
+    <!-- from EdDialogOverlay -->
+    <vbox id="AdvancedEdit"/>
+  </hbox>
+
+</dialog>

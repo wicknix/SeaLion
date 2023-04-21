@@ -1,0 +1,72 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ===== config.css ==============================================
+   == Styles for about:config
+   ======================================================================= */
+
+@import url("chrome://global/skin/");
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* ::::: warning screen ::::: */
+
+#warningScreen
+{
+  background-color: #FFF;
+}
+
+#warningBox
+{
+  background-color: #C7D0D9;
+  background-image: url("chrome://global/skin/icons/warning-48.png");
+  background-repeat: no-repeat;
+  background-position: 30px 3em;
+  color: #22262F;
+  border: 1px solid #494F5D;
+  border-radius: 10px;
+  padding: 3em;
+  padding-inline-start: 78px;
+  margin: 0 1em;
+}
+
+.title, .description
+{
+  max-width: 50em;
+  padding-inline-start: 3em;
+}
+
+#warningTitle
+{
+  margin: 0 0 .6em;
+  font-size: 160%;
+  border-bottom: 1px solid #7A8490;
+}
+
+#warningText
+{
+  font-size: 110%;
+  margin-inline-start: 0;
+}
+
+#warningButton
+{
+  margin-top: 0.6em;
+}
+
+#showWarningNextTime
+{
+  margin-top: 0.6em;
+}
+
+/* ::::: tree rows ::::: */
+
+treechildren::-moz-tree-cell-text(user)
+{
+  font-weight: bold;
+}
+
+treechildren::-moz-tree-cell-text(locked)
+{
+  font-style: italic;
+}

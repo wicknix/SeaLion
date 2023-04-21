@@ -1,0 +1,179 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ==== button.css ==========================================================
+   == Styles for special buttons in the Communicator suite.
+   ========================================================================== */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* ::::: large toolbar buttons ::::: */
+
+.toolbarbutton-1,
+.toolbarbutton-1 > .toolbarbutton-menubutton-button {
+  min-width: 47px;
+  -moz-box-orient: vertical;
+}
+
+.toolbarbutton-1[type="menu-button"] {
+  -moz-box-orient: horizontal;
+}
+
+.toolbarbutton-1,
+.toolbarbutton-1 > .toolbarbutton-menubutton-button,
+.toolbarbutton-1[disabled="true"]:hover:active,
+.toolbarbutton-1[disabled="true"]:hover:active > .toolbarbutton-menubutton-button {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-inline-start: 2px;
+  padding-inline-end: 3px;
+}
+
+.toolbarbutton-1:hover:active,
+.toolbarbutton-1[open="true"],
+.toolbarbutton-1:hover:active > .toolbarbutton-menubutton-button {
+  padding-top: 3px;
+  padding-bottom: 1px;
+  padding-inline-start: 3px;
+  padding-inline-end: 2px;
+}
+
+.toolbarbutton-1[type="menu-button"],
+.toolbarbutton-1[type="menu-button"]:hover:active,
+.toolbarbutton-1[type="menu-button"][open="true"] {
+  padding: 0;
+}
+
+.toolbarbutton-1[type="menu"] {
+  -moz-binding: url("chrome://global/content/bindings/toolbarbutton.xml#menu-vertical");
+}
+
+toolbar[mode="icons"] .toolbarbutton-1,
+toolbar[mode="icons"] .toolbarbutton-menubutton-button,
+toolbar[iconsize="small"] .toolbarbutton-1,
+toolbar[iconsize="small"] .toolbarbutton-menubutton-button {
+  min-width: 0px;
+}
+
+toolbar[mode="icons"] .toolbarbutton-text,
+toolbar[mode="text"] .toolbarbutton-icon {
+  display: none;
+}
+
+toolbar[mode="text"] .toolbarbutton-1,
+toolbar[mode="text"] .toolbarbutton-1 > .toolbarbutton-menubutton-button {
+ -moz-box-orient: horizontal;
+}
+
+toolbar[labelalign="end"] .toolbarbutton-1,
+toolbar[labelalign="end"] .toolbarbutton-1 > .toolbarbutton-menubutton-button,
+toolbar[labelalign="end"] .toolbarbutton-1 > hbox > vbox {
+  -moz-box-orient: horizontal;
+}
+
+/* ::::: standard toolbar buttons ::::: */
+
+.button-toolbar {
+  -moz-user-focus: ignore;
+  border: 2px solid;
+  border-radius: 0;
+  min-width: 0;
+  background-color: transparent;
+}  
+  
+.button-toolbar > .button-box  {
+  margin: 0;
+  padding: 1px 2px;
+}
+
+.button-toolbar:hover:active > .button-box  {
+  padding-top: 2px;
+  padding-bottom: 0px;
+  padding-inline-start: 3px;
+  padding-inline-end: 1px;
+}
+
+.button-toolbar > .button-box > .button-icon,
+.button-toolbar > .button-box > .button-text {
+  margin-inline-end: 2px;
+}  
+
+.button-toolbar, 
+.button-toolbar[disabled="true"]:hover,
+.button-toolbar[disabled="true"]:hover:active {
+  -moz-border-top-colors: transparent ThreeDHighlight;
+  -moz-border-right-colors: transparent ThreeDShadow;
+  -moz-border-bottom-colors: transparent ThreeDShadow;
+  -moz-border-left-colors: transparent ThreeDHighlight;
+}
+  
+.button-toolbar:hover {
+  -moz-border-top-colors: ThreeDDarkShadow ThreeDHighlight;
+  -moz-border-right-colors: ThreeDDarkShadow ThreeDShadow;
+  -moz-border-bottom-colors: ThreeDDarkShadow ThreeDShadow;
+  -moz-border-left-colors: ThreeDDarkShadow ThreeDHighlight;
+}
+
+.button-toolbar:hover:active {
+  -moz-border-top-colors: ThreeDDarkShadow ThreeDShadow;
+  -moz-border-right-colors: ThreeDDarkShadow ThreeDHighlight;
+  -moz-border-bottom-colors: ThreeDDarkShadow ThreeDHighlight;
+  -moz-border-left-colors: ThreeDDarkShadow ThreeDShadow;
+}
+
+/* ::::: taskbuttons ::::: */
+
+.taskbutton {
+  padding: 1px;
+}
+
+.taskbutton:hover:active {
+  padding-top: 2px;
+  padding-bottom: 0px;
+  padding-inline-start: 2px;
+  padding-inline-end: 0px;
+}
+
+/* override windows */
+
+.toolbarbutton-icon[label]:not([label=""]),
+.toolbarbutton-icon[type="menu"] {
+  margin-inline-end: 2px;
+}
+
+/**
+ * Fix the missing dropmarker bevel in Classic (bug 216266)
+ * Not used in Firefox but used elsewhere,
+ **/
+
+@media (-moz-windows-classic) {
+
+  .toolbarbutton-menubutton-dropmarker {
+    border: 1px solid;
+    padding: 2px;
+    -moz-border-top-colors: transparent;
+    -moz-border-right-colors: transparent;
+    -moz-border-bottom-colors: transparent;
+    -moz-border-left-colors: transparent;
+  }
+
+  toolbarbutton[type="menu-button"]:hover > .toolbarbutton-menubutton-dropmarker:not([disabled="true"]) {
+    -moz-border-top-colors: ThreeDHighlight;
+    -moz-border-right-colors: ThreeDShadow;
+    -moz-border-bottom-colors: ThreeDShadow;
+    -moz-border-left-colors: ThreeDHighlight;
+  }
+
+  toolbarbutton[type="menu-button"]:hover:active > .toolbarbutton-menubutton-dropmarker:not([disabled="true"]),
+  toolbarbutton[type="menu-button"][open="true"] > .toolbarbutton-menubutton-dropmarker:not([disabled="true"]) {
+    -moz-border-top-colors: ThreeDShadow;
+    -moz-border-right-colors: ThreeDHighlight;
+    -moz-border-bottom-colors: ThreeDHighlight;
+    -moz-border-left-colors: ThreeDShadow;
+    padding-top: 3px;
+    padding-bottom: 1px;
+    padding-inline-start: 3px;
+    padding-inline-end: 1px;
+  }
+}

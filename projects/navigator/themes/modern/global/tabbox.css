@@ -1,0 +1,130 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ===== tabbox.css =================================================
+  == Styles used by XUL tab-related elements.
+  ======================================================================= */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* ::::: tabs ::::: */
+
+tabs {
+  -moz-box-align: end;
+}
+
+.tabs-left,
+.tabs-right {
+  border-bottom: 1px solid #000000;
+}
+
+/* ::::: tabpanels ::::: */
+
+tabpanels {
+  border-right: 3px solid;
+  border-left: 3px solid;
+  border-bottom: 3px solid;
+  -moz-border-right-colors: #000000 #BAC2CD #C1C9D3;
+  -moz-border-bottom-colors: #000000 #BAC2CD #C1C9D3;
+  -moz-border-left-colors: #000000 #DFE2E6 #D0D7DD;
+  padding: 5px;
+  background-color: #C7D0D9;
+}
+
+/* ::::: tab ::::: */
+
+tab {
+  margin: 0px;
+  border: 3px solid;
+  border-bottom-width: 3px;
+  -moz-border-top-colors: #000000 #90A0B0 #98A7B5;
+  -moz-border-right-colors: #000000 #90A0B0 #98A7B5;
+  -moz-border-bottom-colors: #000000 #98A7B5;
+  -moz-border-left-colors: #000000 #90A0B0 #98A7B5;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  padding: 1px 3px;
+  /*background-color: #8C9DAF;*/
+  background-color: #9CABBA;
+  color: #000000;
+  font: menu;
+}
+
+.tab-text {
+  margin: 0px !important;
+}
+
+.tab-image {
+  list-style-image: inherit;
+}
+
+/* ..... active state ..... */
+
+tab:hover:active {
+  -moz-border-top-colors: transparent #8190A5 #899AAC;
+  -moz-border-right-colors: transparent #8190A5 #899AAC;
+  -moz-border-left-colors: transparent #8190A5 #899AAC;
+  background-color: #8B9AAD;
+  color: #FFFFFF;
+}
+
+/* ..... selected state ..... */
+
+tab[selected="true"],
+tab[selected="true"]:hover:active {
+  -moz-border-top-colors: #000000 #DFE2E6 #D0D7DD;
+  -moz-border-right-colors: #000000 #BAC2CD #C1C9D3;
+  -moz-border-bottom-colors: transparent;
+  -moz-border-left-colors: #000000 #DFE2E6 #D0D7DD;
+  background-color: #C7D0D9;
+  color: #000000;
+}
+
+/* ::::: tab-bottom ::::::::::
+   :: Tabs that are attached to the bottom of a panel, but not necessarily
+   :: a tabpanels.
+   ::::: */
+
+.tab-bottom {
+  -moz-border-top-colors: #000000 #8C9DAF #8C9DAF;
+  -moz-border-bottom-colors: #000000 #8190A5 #899AAC #8D9EB0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.tab-bottom:hover:active {
+  -moz-border-top-colors: #000000 #8C9DAF #8C9DAF;
+  -moz-border-bottom-colors: transparent #8190A5 #899AAC #8D9EB0;
+}
+   
+.tab-bottom[selected="true"] {
+  -moz-border-top-colors: transparent !important;
+  -moz-border-bottom-colors: #000000 #DFE2E6 #D0D7DD transparent !important;
+}
+
+tab:focus {
+  -moz-border-top-colors: #000000 #8C9DAF #8C9DAF;
+  -moz-border-left-colors: #000000 #8C9DAF #8C9DAF;
+  -moz-border-right-colors: #000000 #8C9DAF #8C9DAF;
+  -moz-border-bottom-colors: #8190A5 #8190A5 #899AAC;
+}
+
+.tab-bottom > .tab-text {
+  font: message-box;
+  font-weight: bold;
+}
+   
+/* ::::: tabs-bottom ::::: */
+
+.tabs-bottom {
+  -moz-box-align: start;
+}
+
+.tabs-bottom > .tabs-left,
+.tabs-bottom > .tabs-right {
+  border-top: 1px solid #000000;
+  border-bottom: none;
+}

@@ -1,0 +1,179 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/**
+ * General
+ */
+wizardpage {
+  height: 360px;
+  width: 700px;
+}
+
+#updates, .wizard-page-box {
+  margin: 0;
+  padding: 0;
+}
+
+.update-header {
+  padding: 0px 10px;
+}
+
+.update-content {
+  padding: 10px;
+}
+
+/**
+ * License Page
+ */
+.loadingBox {
+  padding: 3px 5px;
+}
+
+.remoteLoadingThrobber {
+  margin-top: 3px;
+}
+
+.remoteLoadingThrobber[state="loading"] {
+  list-style-image: url("chrome://communicator/skin/icons/loading.gif");
+}
+
+.remoteLoadingThrobber[state="error"] {
+  list-style-image: url("chrome://global/skin/icons/notfound.png");
+}
+
+/**
+ * Update Found Page
+ */
+.wizard-buttons-separator {
+  margin-top: 0 !important;
+}
+
+/* Update Found Basic Page */
+#updateName, #updateFinishedName {
+  font-weight: bold;
+  font-size: 120%;
+}
+
+/* License Page */
+#licenseContent {
+  margin: 2px 4px;
+  border: 2px solid;
+  -moz-border-top-colors: #BEC3D3 #5D616E;
+  -moz-border-right-colors: #F8FAFE #5D616E;
+  -moz-border-bottom-colors: #F8FAFE #5D616E;
+  -moz-border-left-colors: #BEC3D3 #5D616E;
+  background-color: #FFFFFF;
+  color: #000000;
+}
+
+/**
+ * Downloading Page
+ */
+#downloadStatusLine {
+  -moz-box-align: center;
+}
+
+#downloadStatus {
+  height: 3em !important;
+}
+
+#downloadStatusProgress {
+  padding-inline-end: 5px;
+}
+
+#pauseButton > .button-box > .button-icon {
+  margin-inline-start: 0;
+}
+
+#pauseButton > .button-box > .button-text {
+  margin-inline-start: 0 !important;
+  margin-inline-end: 0 !important;
+}
+
+#pauseButton {
+  min-width: 0;
+  min-height: 0;
+  color: #000000 !important;
+  background-color: transparent !important;
+  list-style-image: url("chrome://mozapps/skin/icons/buttons.png");
+  -moz-image-region: rect(0px, 48px, 16px, 32px);
+  margin: 0;
+  border: 1px solid !important;
+  -moz-border-top-colors: transparent !important;
+  -moz-border-right-colors: transparent !important;
+  -moz-border-bottom-colors: transparent !important;
+  -moz-border-left-colors: transparent !important;
+  border-radius: 0 !important;
+  outline: none !important;
+}
+
+#pauseButton:focus {
+  border-style: dotted !important;
+  -moz-border-top-colors: #000000 !important;
+  -moz-border-right-colors: #000000 !important;
+  -moz-border-bottom-colors: #000000 !important;
+  -moz-border-left-colors: #000000 !important;
+}
+
+#pauseButton[disabled="true"] {
+  -moz-image-region: rect(16px, 48px, 32px, 32px);
+}
+
+#pauseButton[paused="true"] {
+  -moz-image-region: rect(0px, 16px, 16px, 0px);
+}
+
+#pauseButton[paused="true"][disabled="true"] {
+  -moz-image-region: rect(16px, 16px, 32px, 0px);
+}
+
+#verificationFailedIcon {
+  margin-inline-start: 5px;
+  list-style-image: url("chrome://global/skin/icons/notfound.png");
+}
+
+/**
+ * Error Page
+ */
+#errorReason {
+  margin-top: 1px;
+  margin-bottom: 2px;
+  margin-inline-start: 6px !important;
+  margin-inline-end: 5px;
+  font-weight: bold;
+}
+
+/**
+ * Update History Window
+ */
+update {
+  border-bottom: 1px solid #90A1B3;
+}
+
+.update-name {
+  font-weight: bold;
+}
+
+.update-label-column {
+  -moz-box-align: end;
+}
+
+.update-type {
+  font-weight: bold;
+  color: #990000;
+}
+
+#historyItems {
+  height: 200px;
+  margin: 1px 5px 4px;
+  border: 2px solid;
+  -moz-border-top-colors: #BEC3D3 #5D616E;
+  -moz-border-right-colors: #F8FAFE #5D616E;
+  -moz-border-bottom-colors: #F8FAFE #5D616E;
+  -moz-border-left-colors: #BEC3D3 #5D616E;
+}
+
+#historyItems > scrollbox {
+  margin-bottom: 1px;
+}

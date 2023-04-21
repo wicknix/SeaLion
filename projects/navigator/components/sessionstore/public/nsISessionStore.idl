@@ -1,0 +1,196 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsISupports.idl"
+
+interface nsIDOMWindow;
+interface nsIDOMNode;
+
+/**
+ * nsISessionStore keeps track of the current browsing state - i.e.
+ * tab history, cookies, scroll state, form data, POSTDATA and window features
+ * - and allows to restore everything into one window.
+ */
+
+[scriptable, uuid(a2f14785-c4d4-4bac-b048-a849d2e74513)]
+interface nsISessionStore : nsISupports
+{
+  /**
+   * Initialize the service
+   */
+  void init(in nsIDOMWindow aWindow);
+
+  /**
+   * Is it possible to restore the previous session. Will always be false when
+   * in Private Browsing mode.
+   */
+  attribute boolean canRestoreLastSession;
+
+  /**
+   * Restore the previous session if possible. This will not overwrite the
+   * current session. Instead the previous session will be merged into the
+   * current session. Current windows will be reused if they were windows that
+   * pinned tabs were previously restored into. New windows will be opened as
+   * needed.
+   *
+   * Note: This will throw if there is no previous state to restore. Check with
+   * canRestoreLastSession first to avoid thrown errors.
+   */
+  void restoreLastSession();
+
+  /**
+   * Get the current browsing state.
+   * @return a JSON string representing the session state.
+   */
+  AString getBrowserState();
+
+  /**
+   * Set the browsing state.
+   * This will immediately restore the state of the whole application to the state
+   * passed in, *replacing* the current session.
+   *
+   * @param aState is a JSON string representing the session state.
+   */
+  void setBrowserState(in AString aState);
+
+  /**
+   * @param aWindow is the window whose state is to be returned.
+   *
+   * @return a JSON string representing a session state with only one window.
+   */
+  AString getWindowState(in nsIDOMWindow aWindow);
+
+  /**
+   * @param aWindow    is the window whose state is to be set.
+   * @param aState     is a JSON string representing a session state.
+   * @param aOverwrite boolean overwrite existing tabs
+   */
+  void setWindowState(in nsIDOMWindow aWindow, in AString aState, in boolean aOverwrite);
+
+  /**
+   * @param aTab is the tab whose state is to be returned.
+   *
+   * @return a JSON string representing the state of the tab
+   *         (note: doesn't contain cookies - if you need them, use getWindowState instead).
+   */
+  AString getTabState(in nsIDOMNode aTab);
+
+  /**
+   * @param aTab   is the tab whose state is to be set.
+   * @param aState is a JSON string representing a session state.
+   */
+  void setTabState(in nsIDOMNode aTab, in AString aState);
+
+  /**
+   * Duplicates a given tab as thoroughly as possible.
+   *
+   * @param aWindow  is the window into which the tab will be duplicated.
+   *                 Pass null if you want to create a new window.
+   * @param aTab     is the tab to duplicate (can be from a different window).
+   * @param aDelta   is the offset to the history entry that you want to load.
+   * @param aRelated is a flag to be passed to addTab().
+   * @return a reference to the newly created tab, or null if opening a window.
+   */
+  nsIDOMNode duplicateTab(in nsIDOMWindow aWindow, in nsIDOMNode aTab,
+                          [optional] in long aDelta,
+                          [optional] in boolean aRelated);
+
+  /**
+   * Get the number of restore-able tabs for a window
+   */
+  unsigned long getClosedTabCount(in nsIDOMWindow aWindow);
+
+  /**
+   * Get closed tab data
+   * @return a JSON string representing the list of closed tabs.
+   */
+  AString getClosedTabData(in nsIDOMWindow aWindow);
+
+  /**
+   * @param aWindow
+   *          The window to reopen a closed tab in.
+   * @param aIndex
+   *          Indicates the window to be restored (FIFO ordered).
+   * @returns a reference to the reopened tab.
+   */
+  nsIDOMNode undoCloseTab(in nsIDOMWindow aWindow, in unsigned long aIndex);
+
+  /**
+   * @param aWindow is the browser window associated with the closed tab.
+   * @param aIndex  is the index of the closed tab to be removed (FIFO ordered).
+   */
+  nsIDOMNode forgetClosedTab(in nsIDOMWindow aWindow, in unsigned long aIndex);
+
+  /**
+   * @param aWindow is the window to get the value for.
+   * @param aKey    is the value's name.
+   *
+   * @return A string value or "" if none is set.
+   */
+  AString getWindowValue(in nsIDOMWindow aWindow, in AString aKey);
+
+  /**
+   * @param aWindow      is the window to set the value for.
+   * @param aKey         is the value's name.
+   * @param aStringValue is the value itself (use toSource/eval before setting JS objects).
+   */
+  void setWindowValue(in nsIDOMWindow aWindow, in AString aKey, in AString aStringValue);
+
+  /**
+   * @param aWindow is the window to get the value for.
+   * @param aKey    is the value's name.
+   */
+  void deleteWindowValue(in nsIDOMWindow aWindow, in AString aKey);
+
+  /**
+   * @param aTab is the tab to get the value for.
+   * @param aKey is the value's name.
+   *
+   * @return A string value or "" if none is set.
+   */
+  AString getTabValue(in nsIDOMNode aTab, in AString aKey);
+
+  /**
+   * @param aTab         is the tab to set the value for.
+   * @param aKey         is the value's name.
+   * @param aStringValue is the value itself (use toSource/eval before setting JS objects).
+   */
+  void setTabValue(in nsIDOMNode aTab, in AString aKey, in AString aStringValue);
+
+  /**
+   * @param aTab is the tab to get the value for.
+   * @param aKey is the value's name.
+   */
+  void deleteTabValue(in nsIDOMNode aTab, in AString aKey);
+
+  /**
+   * @param aName is the name of the attribute to save/restore for all xul:tabs.
+   */
+  void persistTabAttribute(in AString aName);
+
+  /**
+   * Get the number of restore-able windows
+   */
+  unsigned long getClosedWindowCount();
+
+  /**
+   * Get closed windows data
+   *
+   * @returns a JSON string representing the list of closed windows.
+   */
+  AString getClosedWindowData();
+
+  /**
+   * @param aIndex is the index of the windows to be restored (FIFO ordered).
+   * @returns the nsIDOMWindow object of the reopened window
+   */
+  nsIDOMWindow undoCloseWindow(in unsigned long aIndex);
+
+  /**
+   * Returns true if the last window was closed and should be restored
+   *
+   * @returns true if the last window was closed and should be restored
+   */
+  boolean doRestoreLastWindow();
+};

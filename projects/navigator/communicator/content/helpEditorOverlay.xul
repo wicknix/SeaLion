@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<overlay id="helpEditorOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/javascript" src="chrome://help/content/contextHelp.js"/>
+  <script type="application/javascript">
+  <![CDATA[
+    setHelpFileURI('chrome://communicator/locale/help/suitehelp.rdf');
+
+    function doPublishDialogHelpButton()
+    {
+     var selTab = document.getElementById('TabBox').selectedTab;
+
+     if (selTab.id == "PublishTab")
+       openHelp('comp-doc-publish-publishtab');
+     else
+       openHelp('comp-doc-publish-settingstab');
+    }
+    ]]>
+  </script>
+
+  <dialog id="advancedEditDlg"
+    buttons="accept,cancel,help"
+    ondialoghelp="openHelp('advanced_property_editor');"/>
+
+  <dialog id="imageDlg"
+    buttons="accept,cancel,help"
+    ondialoghelp="openHelp('image_properties');"/>
+
+  <dialog id="linkDlg"
+    buttons="accept,cancel,help"
+    ondialoghelp="openHelp('link_properties');"/>
+
+  <dialog id="publishDlg"
+    buttons="accept,cancel,help"
+    ondialoghelp="doPublishDialogHelpButton();"/>
+
+  <dialog id="publishProgressDlg"
+    buttons="cancel,help"
+    ondialoghelp="openHelp('comp-doc-publish-troubleshooting');"/>
+
+  <dialog id="publishSettingsDlg"
+    buttons="accept,cancel,help"
+    ondialoghelp="openHelp('comp-doc-publish-site-settings');"/>
+
+  <dialog id="tableDlg"
+    buttons="accept,extra1,cancel,help"
+    ondialoghelp="openHelp('table_properties');"/>
+
+</overlay>

@@ -1,0 +1,95 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ===== arrowscrollbox.css =============================================
+  == Styles used by the XUL arrowscrollbox and related elements.
+  ======================================================================= */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* ::::: auto-repeat button ::::: */
+
+autorepeatbutton {
+  -moz-box-align: center;
+  -moz-box-pack: center;
+  margin-top: 1px;
+  margin-bottom: 2px;
+  margin-inline-start: 1px;
+  margin-inline-end: 2px;
+  border: 1px solid transparent;
+  padding: 3px;
+}
+
+autorepeatbutton:not([disabled="true"]):hover {
+  margin: 1px;
+  border: 1px inset #A5B2C2;
+  padding-top: 4px;
+  padding-bottom: 3px;
+  padding-inline-start: 4px;
+  padding-inline-end: 3px;
+  background-color: #A5B2C2;
+}
+
+.scrollbutton-up,
+.scrollbutton-down {
+  -moz-box-align: center;
+  -moz-box-pack: center;
+}
+
+.scrollbutton-up > .toolbarbutton-text,
+.scrollbutton-down > .toolbarbutton-text {
+  display: none;
+}
+
+/* Vertical enabled */
+.autorepeatbutton-up,
+.scrollbutton-up {
+  list-style-image: url("chrome://global/skin/arrow/arrow-up.gif")
+}
+
+.autorepeatbutton-down,
+.scrollbutton-down {
+  list-style-image: url("chrome://global/skin/arrow/arrow-dn.gif")
+}
+
+/* Vertical disabled */
+.autorepeatbutton-up[disabled="true"],
+.scrollbutton-up[disabled="true"] {
+  list-style-image: url("chrome://global/skin/arrow/arrow-up-dis.gif");
+}
+
+.autorepeatbutton-down[disabled="true"],
+.scrollbutton-down[disabled="true"] {
+  list-style-image: url("chrome://global/skin/arrow/arrow-dn-dis.gif");
+}
+
+/* Horizontal enabled */
+.autorepeatbutton-up[orient="horizontal"],
+.autorepeatbutton-down[orient="horizontal"]:-moz-locale-dir(rtl),
+.scrollbutton-up[orient="horizontal"],
+.scrollbutton-down[orient="horizontal"]:-moz-locale-dir(rtl) {
+  list-style-image: url("chrome://global/skin/arrow/arrow-lft.gif");
+}
+
+.autorepeatbutton-down[orient="horizontal"],
+.autorepeatbutton-up[orient="horizontal"]:-moz-locale-dir(rtl),
+.scrollbutton-down[orient="horizontal"],
+.scrollbutton-up[orient="horizontal"]:-moz-locale-dir(rtl) {
+  list-style-image: url("chrome://global/skin/arrow/arrow-rit.gif");
+}
+
+ /* Horizontal disabled */
+.autorepeatbutton-up[orient="horizontal"][disabled="true"],
+.autorepeatbutton-down[orient="horizontal"][disabled="true"]:-moz-locale-dir(rtl),
+.scrollbutton-up[orient="horizontal"][disabled="true"],
+.scrollbutton-down[orient="horizontal"][disabled="true"]:-moz-locale-dir(rtl) {
+  list-style-image: url("chrome://global/skin/arrow/arrow-lft-dis.gif");
+}
+
+.autorepeatbutton-down[orient="horizontal"][disabled="true"],
+.autorepeatbutton-up[orient="horizontal"][disabled="true"]:-moz-locale-dir(rtl),
+.scrollbutton-down[orient="horizontal"][disabled="true"],
+.scrollbutton-up[orient="horizontal"][disabled="true"]:-moz-locale-dir(rtl) {
+  list-style-image: url("chrome://global/skin/arrow/arrow-rit-dis.gif");
+}

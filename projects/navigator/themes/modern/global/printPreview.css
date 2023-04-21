@@ -1,0 +1,37 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ::::: print preview toolbar ::::: */
+
+/* ..... page navigation ..... */
+
+.home-arrow,
+.end-arrow:-moz-locale-dir(rtl) {
+  list-style-image: url("chrome://global/skin/arrow/arrow-lft-sharp-end.gif");
+}
+
+.end-arrow,
+.home-arrow:-moz-locale-dir(rtl) {
+  list-style-image: url("chrome://global/skin/arrow/arrow-rit-sharp-end.gif");
+}
+
+.previous-arrow,
+.next-arrow:-moz-locale-dir(rtl) {
+  list-style-image: url("chrome://global/skin/arrow/arrow-lft-sharp.gif");
+}
+
+.next-arrow,
+.previous-arrow:-moz-locale-dir(rtl) {
+  list-style-image: url("chrome://global/skin/arrow/arrow-rit-sharp.gif");
+}
+
+/* ..... orientation ..... */
+
+.toolbar-portrait-page {
+  list-style-image: url("chrome://global/skin/icons/pg-portrait-small.gif");
+}
+
+.toolbar-landscape-page {
+  list-style-image: url("chrome://global/skin/icons/pg-landscape-small.gif");
+}

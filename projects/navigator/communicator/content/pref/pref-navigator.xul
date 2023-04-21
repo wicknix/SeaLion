@@ -1,0 +1,186 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay [
+  <!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd"> %brandDTD;
+  <!ENTITY % navigatorDTD SYSTEM "chrome://communicator/locale/pref/pref-navigator.dtd"> %navigatorDTD;
+]>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <prefpane id="navigator_pane"
+            label="&pref.navigator.title;"
+            script="chrome://communicator/content/pref/pref-navigator.js">
+
+    <preferences id="navigator_preferences">
+      <preference id="browser.startup.page"
+                  name="browser.startup.page"
+                  type="int"/>
+      <preference id="browser.windows.loadOnNewWindow"
+                  name="browser.windows.loadOnNewWindow"
+                  type="int"/>
+      <preference id="browser.tabs.loadOnNewTab"
+                  name="browser.tabs.loadOnNewTab"
+                  type="int"/>
+      <preference id="browser.startup.homepage"
+                  name="browser.startup.homepage"
+                  type="wstring"/>
+      <preference id="browser.startup.homepage.count"
+                  name="browser.startup.homepage.count"
+                  type="int"/>
+      <preference id="pref.browser.disable_button.default_browser"
+                  name="pref.browser.disable_button.default_browser"
+                  type="bool"/>
+      <preference id="browser.sessionstore.max_concurrent_tabs"
+                  name="browser.sessionstore.max_concurrent_tabs"
+                  type="int"/>
+      <preference id="pref.browser.homepage.disable_button.select_file"
+                  name="pref.browser.homepage.disable_button.select_file"
+                  type="bool"/>
+      <preference id="pref.browser.homepage.disable_button.current_page"
+                  name="pref.browser.homepage.disable_button.current_page"
+                  type="bool"/>
+      <preference id="pref.browser.homepage.disable_button.current_group"
+                  name="pref.browser.homepage.disable_button.current_group"
+                  type="bool"/>
+      <preference id="pref.browser.homepage.disable_button.default_page"
+                  name="pref.browser.homepage.disable_button.default_page"
+                  type="bool"/>
+    </preferences>
+
+    <hbox id="pref-nav-platform-extensions">
+      <!-- navigator startup / new window / new tab behaviour -->
+      <groupbox flex="1">
+        <caption align="center">
+          <label value="&navRadio.label;" accesskey="&navRadio.accesskey;" control="selectDisplayOn"/>
+          <menulist id="selectDisplayOn" oncommand="SwitchPage(this.selectedIndex);">
+            <menupopup>
+              <menuitem label="&navStartPageMenu.label;"/>
+              <menuitem label="&newWinPageMenu.label;"/>
+              <menuitem label="&newTabPageMenu.label;"/>
+            </menupopup>
+          </menulist>
+        </caption>
+        <deck id="behaviourDeck" flex="1">
+          <radiogroup id="startupPage" preference="browser.startup.page">
+            <radio value="0"
+                   label="&blankPageRadio.label;"
+                   accesskey="&blankPageRadio.accesskey;"/>
+            <radio value="1"
+                   label="&homePageRadio.label;"
+                   accesskey="&homePageRadio.accesskey;"/>
+            <radio value="2"
+                   label="&lastPageRadio.label;"
+                   accesskey="&lastPageRadio.accesskey;"/>
+            <radio value="3"
+                   label="&restoreSessionRadio.label;"
+                   accesskey="&restoreSessionRadio.accesskey;"/>
+          </radiogroup>
+          <radiogroup id="newWinPage" preference="browser.windows.loadOnNewWindow">
+            <radio value="0"
+                   label="&blankPageRadio.label;"
+                   accesskey="&blankPageRadio.accesskey;"/>
+            <radio value="1"
+                   label="&homePageRadio.label;"
+                   accesskey="&homePageRadio.accesskey;"/>
+            <radio value="2"
+                   label="&lastPageRadio.label;"
+                   accesskey="&lastPageRadio.accesskey;"/>
+          </radiogroup>
+          <radiogroup id="newTabPage" preference="browser.tabs.loadOnNewTab">
+            <radio value="0"
+                   label="&blankPageRadio.label;"
+                   accesskey="&blankPageRadio.accesskey;"/>
+            <radio value="1"
+                   label="&homePageRadio.label;"
+                   accesskey="&homePageRadio.accesskey;"/>
+            <radio value="2"
+                   label="&lastPageRadio.label;"
+                   accesskey="&lastPageRadio.accesskey;"/>
+          </radiogroup>
+        </deck>
+      </groupbox>
+
+      <!-- default browser settings are shown only if supported by the platform -->
+      <groupbox id="defaultBrowserGroup" flex="1000" align="center" hidden="true">
+        <caption label="&defaultBrowserGroup.label;"/>
+        <!-- We have four use cases, identified by their index:
+             0: not already the default => button enabled
+             1: already the default => button disabled
+             2: user pushed button => button disabled with different text
+             3: user pushed button (instant apply) => different text
+        -->
+        <description id="defaultBrowserDesc"
+                     desc0="&makeDefaultText;"
+                     desc1="&alreadyDefaultText;"
+                     desc2="&defaultPendingText;"
+                     desc3="&wasMadeDefaultText;"/>
+        <button id="defaultBrowserButton"
+                label="&defaultBrowserButton.label;"
+                accesskey="&defaultBrowserButton.accesskey;"
+                oncommand="SetAsDefaultBrowser()"
+                disabled="true"
+                preference="pref.browser.disable_button.default_browser"/>
+      </groupbox>
+    </hbox>
+
+    <!-- session restore background tabs -->
+    <groupbox>
+      <caption label="&restoreSessionIntro.label;"/>
+      <radiogroup id="maxConcurrentTabsGroup" align="start"
+                  preference="browser.sessionstore.max_concurrent_tabs"
+                  onsyncfrompreference="var val = document.getElementById(this.getAttribute('preference')).value; return val > 0 ? 3 : val;"
+                  onsynctopreference="return document.getElementById('navigator_pane').WriteConcurrentTabs();">
+        <radio value="-1"
+               label="&restoreImmediately.label;"
+               accesskey="&restoreImmediately.accesskey;"/>
+        <hbox align="center">
+          <radio id="restoreTabs" value="3"
+                 onclick="this.nextSibling.focus();"
+                 label="&restoreTabs.label;"
+                 accesskey="&restoreTabs.accesskey;"/>
+          <textbox id="maxConcurrentTabs" type="number" size="2"
+                   min="1" value="3"
+                   aria-labelledby="restoreTabs maxConcurrentTabs restoreTabsAtATime"
+                   preference="browser.sessionstore.max_concurrent_tabs"
+                   onsyncfrompreference="var pref = document.getElementById(this.getAttribute('preference')); var val = pref.value; var valid = val > 0; this.disabled = pref.locked || !valid; return valid ? val : this.value;"
+                   onsynctopreference="return document.getElementById('navigator_pane').WriteConcurrentTabs();"/>
+          <label id="restoreTabsAtATime" value="&restoreTabsAtATime.label;">
+            <observes element="maxConcurrentTabsGroup" attribute="disabled"/>
+          </label>
+        </hbox>
+        <radio value="0"
+               label="&restoreDeferred.label;"
+               accesskey="&restoreDeferred.accesskey;"/>
+      </radiogroup>
+    </groupbox>
+
+    <!-- homepage specification -->
+    <description>&homePageIntro.label;</description>
+    <hbox>
+      <textbox id="browserStartupHomepage" class="uri-element" flex="1"
+               multiline="true" wrap="off" timeout="500"
+               oninput="UpdateHomePageListFromInput();"/>
+      <vbox>
+        <button label="&browseFile.label;" accesskey="&browseFile.accesskey;"
+                oncommand="SelectFile();"
+                id="browserChooseFile"
+                preference="pref.browser.homepage.disable_button.select_file"/>
+        <button label="&useCurrent.label;" accesskey="&useCurrent.accesskey;"
+                oncommand="SetHomePageToCurrentPage();"
+                id="browserUseCurrent"
+                preference="pref.browser.homepage.disable_button.current_page"/>
+        <button label="&useCurrentGroup.label;" accesskey="&useCurrentGroup.accesskey;"
+                oncommand="SetHomePageToCurrentGroup();"
+                id="browserUseCurrentGroup"
+                preference="pref.browser.homepage.disable_button.current_group"/>
+        <button label="&useDefault.label;" accesskey="&useDefault.accesskey;"
+                oncommand="SetHomePageToDefaultPage();"
+                id="browserUseDefault"
+                preference="pref.browser.homepage.disable_button.default_page"/>
+      </vbox>
+    </hbox>
+  </prefpane>
+</overlay>

@@ -1,0 +1,171 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"); 
+
+/* ::::: print preview toolbar ::::: */
+
+toolbar[printpreview="true"] {
+  -moz-binding: url("chrome://global/content/printPreviewBindings.xml#printpreviewtoolbar");
+}
+
+/* ::::: notification box ::::: */
+
+.browser-notificationbox {
+  -moz-binding: url("chrome://communicator/content/bindings/notification.xml#browser-notificationbox");
+}
+
+.browser-notificationbox[popupnotification="true"] {
+  -moz-binding: url("chrome://communicator/content/bindings/notification.xml#popup-notification");
+}
+
+notification[value="addon-install-started"] {
+  -moz-binding: url("chrome://communicator/content/bindings/notification.xml#addon-progress-notification");
+}
+
+/* ::::: toolbaritem ::::: */
+toolbaritem {
+  -moz-binding: url("chrome://global/content/bindings/general.xml#basecontrol");
+}
+
+/* With the move to the new toolkit, SeaMonkey needs to overwrite certain bindings
+ * if it wants to keep its distinctive likeness. The now hidden new toolkit bindings
+ * will stay accessible via a set xpfe="false" attribute, though, where necessary.
+ */
+
+/******* toolkit access layer *******/
+/* These rules reintroduce the toolkit bindings overwritten later below */
+toolbox[xpfe="false"] { 
+  -moz-binding: url("chrome://global/content/bindings/toolbar.xml#toolbox");
+}
+
+toolbox[xpfe="false"] > toolbar,
+toolbar[xpfe="false"][type="menubar"],
+toolbar[xpfe="false"] {
+  -moz-binding: url("chrome://global/content/bindings/toolbar.xml#toolbar");
+}
+
+menubar[xpfe="false"],
+toolbar > toolbaritem > menubar,
+toolbar > menubar {
+  -moz-binding: url("chrome://global/content/bindings/toolbar.xml#menubar");
+}
+
+toolbar > toolbarpaletteitem > toolbaritem > menubar {
+  -moz-binding: url("chrome://global/content/bindings/toolbar.xml#menubar") !important;
+}
+
+.menubar-items {
+  -moz-box-orient: vertical; /* for flex hack */
+}
+
+.menubar-items > menubar {
+  -moz-box-flex: 1; /* make menu items expand to fill toolbar height */
+}
+
+prefwindow[xpfe="false"] {
+  -moz-binding: url("chrome://global/content/bindings/preferences.xml#prefwindow");
+}
+
+prefpane[xpfe="false"] {
+  -moz-binding: url("chrome://global/content/bindings/preferences.xml#prefpane");
+}
+
+findbar[xpfe="false"] {
+  -moz-binding: url("chrome://global/content/bindings/findbar.xml#findbar");
+}
+
+prefwindow[xpfe="false"] > .paneDeckContainer,
+prefpane[xpfe="false"] > .content-box {
+  overflow: hidden;
+}
+
+/******* SeaMonkey XPFE *******/
+/* These bindings reflect SeaMonkey XPFE, modulo new toolkit features. */
+toolbox { 
+  -moz-binding: url("chrome://communicator/content/bindings/toolbar.xml#grippytoolbox");
+}
+  
+toolbar {
+  -moz-binding: url("chrome://communicator/content/bindings/toolbar.xml#grippytoolbar");
+}
+
+toolbar[type="menubar"] {
+  -moz-binding: url("chrome://communicator/content/bindings/toolbar.xml#grippytoolbar-menubar");
+}
+
+toolbargrippy {
+  -moz-binding: url("chrome://communicator/content/bindings/toolbar.xml#toolbargrippy");
+}
+
+menubar {
+  -moz-binding: url("chrome://communicator/content/bindings/toolbar.xml#grippymenubar");
+}
+
+prefwindow {
+  -moz-binding: url("chrome://communicator/content/bindings/prefwindow.xml#prefwindow");
+}
+
+prefpane {
+  -moz-binding: url("chrome://communicator/content/bindings/prefwindow.xml#prefpane");
+}
+
+findbar {
+  -moz-binding: url("chrome://communicator/content/bindings/findbar.xml#findbar");
+}
+
+prefwindow > .paneDeckContainer,
+prefpane > .content-box {
+  overflow: visible;
+}
+
+prefwindow[overflow="auto"] > .paneDeckContainer,
+prefwindow[overflow="auto"] prefpane > .content-box {
+  overflow: auto;
+}
+
+.statusbarpanel-backgroundbox {
+  -moz-binding: url("chrome://communicator/content/bindings/general.xml#statusbarpanel-backgroundbox");
+}
+
+textbox[enablehistory="true"] > .autocomplete-history-dropmarker {
+  display: -moz-box;
+}
+
+/******* lightweight themes *******/
+window[lwtheme="true"] {
+  background-repeat: no-repeat;
+  background-position: top right;
+}
+
+statusbar[lwthemefooter="true"] {
+  background-repeat: no-repeat;
+  background-position: bottom left;
+}
+
+/******* sync *******/
+#sync-notifications {
+  -moz-binding: url("chrome://communicator/content/sync/syncNotification.xml#notificationbox");
+  overflow-y: visible !important;
+}
+
+#sync-notifications > notification {
+  -moz-binding: url("chrome://communicator/content/sync/syncNotification.xml#notification");
+}
+
+/******* autohide toolbars *******/
+
+toolbar[type="menubar"][autohide="true"]
+{
+  -moz-binding: url("chrome://global/content/bindings/toolbar.xml#toolbar-menubar-autohide");
+  overflow: hidden;
+}
+
+toolbar[type="menubar"][autohide="true"][inactive="true"]
+{
+  min-height: 0px !important;
+  height: 0px !important;
+  -moz-appearance: none !important;
+  border-style: none !important;
+}

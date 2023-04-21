@@ -1,0 +1,111 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ===== popup.css =====================================================
+  == Styles used by the XUL popup & menupopup elements.
+  ======================================================================= */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* ::::: popup/menupopup ::::: */
+
+.panel-arrowcontent,
+panel:not([type="arrow"]),
+menupopup,
+popup {
+  cursor: default;
+  border: 2px solid;
+  -moz-border-top-colors: #7F8893 #EEF4FC;
+  -moz-border-right-colors: #7F8893 #B9BFC7;
+  -moz-border-bottom-colors: #7F8893 #B9BFC7;
+  -moz-border-left-colors: #7F8893 #EEF4FC;
+  min-width: 1px;
+  background-color: #DDE3EB;
+  color: #22262F;
+}
+
+menupopup > menu > menupopup,
+popup > menu > menupopup {
+  margin: -2px;
+}
+
+/* Ideally we would set and forget a -16px margin around the entire panel.
+   Unfortunately this makes the panel code think we're hiding the anchor,
+   and it reacts by turning the arrow off. So instead we have to turn off
+   the 16px border on the appropriate side of the arrow. */
+panel[type="arrow"][side="top"],
+panel[type="arrow"][side="bottom"] {
+  margin: 0px -16px;
+}
+
+panel[type="arrow"][side="left"],
+panel[type="arrow"][side="right"] {
+  margin: -16px 0px;
+}
+
+/* The arrow is empty, but it has equal triangular borders on all four sides.
+   We just have to turn on the border on the side touching the content. */
+.panel-arrow {
+  border: 16px solid transparent;
+}
+
+.panel-arrow[side="top"] {
+  border-top-style: none;
+  -moz-border-bottom-colors: #7F8893;
+}
+
+.panel-arrow[side="bottom"] {
+  border-bottom-style: none;
+  -moz-border-top-colors: #7F8893;
+}
+
+.panel-arrow[side="left"] {
+  border-left-style: none;
+  -moz-border-right-colors: #7F8893;
+}
+
+.panel-arrow[side="right"] {
+  border-right-style: none;
+  -moz-border-left-colors: #7F8893;
+}
+
+/* ::::: tooltip ::::: */
+
+tooltip {
+  margin-top: 21px;
+  border: 1px solid #000000;
+  padding: 2px 3px;
+  max-width: 40em;
+  background-color: #FFFFE7;
+  color: #000000;
+  font: message-box;
+}
+
+tooltip[titletip="true"] {
+  /* See bug 32157 comment 128
+   * margin-top: -2px;
+   * margin-bottom: 0px;
+   * margin-inline-start: -4px;
+   * margin-inline-end: 0px;
+   */
+  max-width: none;
+}
+
+/* ::::: menulist popup :::::: */
+
+menulist > menupopup,
+.menulist-menupopup {
+  border-width: 1px;
+  -moz-border-top-colors: #000000;
+  -moz-border-right-colors: #000000;
+  -moz-border-bottom-colors: #000000;
+  -moz-border-left-colors: #000000;
+  padding: 0px;
+  min-width: 0px;
+}
+
+menupopup > menu > .menulist-menupopup,
+popup > menu > .menulist-menupopup {
+  margin: -1px;
+}

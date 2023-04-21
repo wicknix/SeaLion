@@ -1,0 +1,26 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#app-picker {
+  width: 57ch;
+}
+
+#content-description {
+  font-weight: bold;
+}
+
+.listitem-iconic {
+  border-bottom: 1px dotted #C7D0D9;
+}
+
+#content-icon,
+.listcell-icon {
+  margin: 5px;
+  width: 32px;
+  height: 32px;
+}
+
+.listcell-label {
+  padding: 5px;
+}

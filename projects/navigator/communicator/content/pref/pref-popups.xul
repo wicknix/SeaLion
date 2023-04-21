@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay [
+<!ENTITY % prefPopupsDTD SYSTEM "chrome://communicator/locale/pref/pref-popups.dtd">
+%prefPopupsDTD;
+]>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <prefpane id="popups_pane"
+            label="&pref.popups.title;"
+            script="chrome://communicator/content/pref/pref-popups.js">
+    <preferences id="popups_preferences">
+      <preference id="dom.disable_open_during_load"
+                  name="dom.disable_open_during_load"
+                  type="bool"
+                  onchange="SetButtons();"/>
+      <preference id="pref.advanced.popups.disable_button.view_popups"
+                  name="pref.advanced.popups.disable_button.view_popups"
+                  type="bool"/>
+      <preference id="privacy.popups.sound_enabled"
+                  name="privacy.popups.sound_enabled"
+                  type="bool"
+                  onchange="EnableSoundRadio(this.value);"/>
+      <preference id="privacy.popups.sound_type"
+                  name="privacy.popups.sound_type"
+                  type="int"
+                  onchange="EnableSoundUrl(this.value == 1);"/>
+      <preference id="privacy.popups.sound_url"
+                  name="privacy.popups.sound_url"
+                  type="string"
+                  onchange="EnableElementById('previewSound', true, false);"/>
+      <preference id="pref.advanced.popups.disable_button.select_sound"
+                  name="pref.advanced.popups.disable_button.select_sound"
+                  type="bool"/>
+      <preference id="pref.advanced.popups.disable_button.preview_sound"
+                  name="pref.advanced.popups.disable_button.preview_sound"
+                  type="bool"/>
+      <preference id="privacy.popups.statusbar_icon_enabled"
+                  name="privacy.popups.statusbar_icon_enabled"
+                  type="bool"/>
+      <preference id="privacy.popups.showBrowserMessage"
+                  name="privacy.popups.showBrowserMessage"
+                  type="bool"/>
+      <preference id="privacy.popups.prefill_whitelist"
+                  name="privacy.popups.prefill_whitelist"
+                  type="bool"/>
+      <preference id="privacy.popups.remove_blacklist"
+                  name="privacy.popups.remove_blacklist"
+                  type="bool"/>
+      <preference id="privacy.popups.default_whitelist"
+                  name="privacy.popups.default_whitelist"
+                  type="string"/>
+    </preferences>
+
+    <groupbox id="popupsArea">
+      <caption label="&pref.popups.caption;"/>
+
+      <hbox>
+        <checkbox id="popupPolicy"
+                  label="&popupBlock.label;"
+                  accesskey="&popupBlock.accesskey;"
+                  preference="dom.disable_open_during_load"/>
+        <spacer flex="1"/>
+        <button id="exceptionsButton"
+                label="&viewPermissions.label;"
+                accesskey="&viewPermissions.accesskey;"
+                preference="pref.advanced.popups.disable_button.view_popups"
+                oncommand="toPermissionsManager('popup');"/>
+      </hbox>
+      <separator class="thin"/>
+      <description id="whenBlock">&whenBlock.description;</description>
+      <hbox>
+        <checkbox id="playSound"
+                  label="&playSound.label;"
+                  accesskey="&playSound.accesskey;"
+                  preference="privacy.popups.sound_enabled"/>
+      </hbox>
+      <hbox class="indent">
+        <radiogroup id="popupSoundType"
+                    preference="privacy.popups.sound_type"
+                    aria-labelledby="playSound">
+          <radio id="popupSystemSound"
+                 class="iconic"
+                 value="0"
+                 label="&systemSound.label;"
+                 accesskey="&systemSound.accesskey;"/>
+          <radio id="popupCustomSound"
+                 class="iconic"
+                 value="1"
+                 label="&customSound.label;"
+                 accesskey="&customSound.accesskey;"/>
+        </radiogroup>
+      </hbox>
+      <hbox class="indent">
+        <filefield id="playSoundUrl"
+                   flex="1"
+                   preference="privacy.popups.sound_url"
+                   preference-editable="true"
+                   onsyncfrompreference="return WriteSoundField(this, document.getElementById('popups_pane').gSoundUrlPref.value);"
+                   aria-labelledby="popupCustomSound"/>
+        <button id="selectSound"
+                label="&selectSound.label;"
+                accesskey="&selectSound.accesskey;"
+                preference="pref.advanced.popups.disable_button.select_sound"
+                oncommand="SelectSound(gSoundUrlPref);"/>
+        <button id="playSoundButton"
+                label="&playSoundButton.label;"
+                accesskey="&playSoundButton.accesskey;"
+                preference="pref.advanced.popups.disable_button.preview_sound"
+                oncommand="PlaySound(gSoundUrlPref.value, false);"/>
+      </hbox>
+      <hbox>
+        <checkbox id="displayIcon"
+                  label="&displayIcon.label;"
+                  accesskey="&displayIcon.accesskey;"
+                  preference="privacy.popups.statusbar_icon_enabled"/>
+      </hbox>
+      <hbox>
+        <checkbox id="displayPopupsNotification"
+                  label="&displayNotification.label;"
+                  accesskey="&displayNotification.accesskey;"
+                  preference="privacy.popups.showBrowserMessage"/>
+      </hbox>
+      <separator class="thin"/>
+      <description>&popupNote.description;</description>
+    </groupbox>
+  </prefpane>
+</overlay>

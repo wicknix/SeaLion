@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://communicator/skin/eula/eula.css" type="text/css"?>
+
+<!DOCTYPE dialog [
+<!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+%brandDTD;
+<!ENTITY % eulaDTD SYSTEM "chrome://communicator/locale/eula/eula.dtd">
+%eulaDTD;
+]>
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        id="comm-eula"
+        title="&brandFullName;"
+        buttons="accept,cancel"
+        buttonlabelaccept="&eula.accept.label;"
+        buttonlabelcancel="&eula.cancel.label;"
+        ondialogaccept="return onAccept();"
+        ondialogcancel="onCancel();"
+        onload="Startup();">
+
+  <script type="application/javascript" src="chrome://communicator/content/eula/eula.js"/>
+
+  <dialogheader id="eula-header" class="header-large" title="&eula.header.title;" description="&eula.header.description;"/>
+  <separator/>
+  <vbox id="main"/>
+  <separator/>
+</dialog>

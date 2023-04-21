@@ -1,0 +1,19 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ===== preview.css ====================================================
+  == Styles used by the Sidebar Preview dialog.
+  ======================================================================= */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+#previewframe {
+  margin: 0px;
+  border: none;
+  width: 162px;
+  height: 300px;
+  min-width: 10px;
+  min-height: 1px;
+}
+

@@ -1,0 +1,45 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@namespace xhtml "http://www.w3.org/1999/xhtml";
+
+/* HTML link elements do weird things to the layout if they are not hidden */
+xhtml|link {
+  display: none;
+}
+
+/* generic item gets used for permissions that don't need any special treatment */
+richlistitem.permission {
+  -moz-binding: url('chrome://communicator/content/dataman/dataman.xml#perm-generic-item');
+  -moz-box-orient: vertical;
+}
+
+/* cookie item has an allow for session option */
+richlistitem.permission[type="cookie"] {
+  -moz-binding: url('chrome://communicator/content/dataman/dataman.xml#perm-cookie-item');
+}
+
+/* geolocation and indexedDB items default to always ask */
+richlistitem.permission[type="geo"],
+richlistitem.permission[type="indexedDB"] {
+  -moz-binding: url('chrome://communicator/content/dataman/dataman.xml#perm-geo-item');
+}
+
+/* content blocker items have an allow for same domain option */
+richlistitem.permission[type="script"],
+richlistitem.permission[type="image"],
+richlistitem.permission[type="stylesheet"],
+richlistitem.permission[type="object"],
+richlistitem.permission[type="document"],
+richlistitem.permission[type="subdocument"],
+richlistitem.permission[type="refresh"],
+richlistitem.permission[type="xbl"],
+richlistitem.permission[type="ping"],
+richlistitem.permission[type="xmlhttprequest"],
+richlistitem.permission[type="objectsubrequest"],
+richlistitem.permission[type="dtd"],
+richlistitem.permission[type="font"],
+richlistitem.permission[type="media"] {
+  -moz-binding: url('chrome://communicator/content/dataman/dataman.xml#perm-content-item');
+}

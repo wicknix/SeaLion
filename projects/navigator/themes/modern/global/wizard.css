@@ -1,0 +1,58 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ===== wizard.css =====================================================
+  == Styles used by the wizards which contains buttons for stepping
+  == through a wizard.
+  ======================================================================= */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+.wizard-header {
+  border-top: 1px solid #94AACE;
+  border-bottom: 1px solid #000000;
+  padding: 10px 0px;
+  background-color: #5B7693;
+  color: #ffffff;
+}
+
+.wizard-header-description[value=""] {
+  display: none;
+}
+
+.wizard-header-label {
+  margin-inline-start: 23px !important;
+  font-weight: bold;
+}
+
+.wizard-header-description {
+  margin-inline-start: 44px !important;
+}
+
+wizard[branded="true"] .wizard-header-icon {
+  list-style-image: url("chrome://branding/content/icon48.png");
+  margin-inline-end: 5px;
+}
+
+.wizard-page-box {
+  margin: 10px 44px;
+}
+
+.wizard-buttons-separator {
+  margin-bottom: 0px !important;
+}
+
+.wizard-buttons-box-2,
+.wizard-buttons-btm {
+  padding: 5px;
+}
+
+.wizard-button[dlgtype="finish"],
+.wizard-button[dlgtype="next"] {
+  margin-inline-start: 0px;
+}
+
+.wizard-button[dlgtype="back"] {
+  margin-inline-end: 0px;
+}

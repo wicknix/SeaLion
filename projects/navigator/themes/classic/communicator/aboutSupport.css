@@ -1,0 +1,139 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@import url("chrome://communicator/skin/common.css");
+
+html {
+  background-color: var(--in-content-page-background);
+  color: -moz-FieldText;
+  font: message-box;
+}
+
+body {
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.page-subtitle {
+  margin-bottom: 1.5em;
+}
+
+.major-section {
+  margin-top: 2em;
+  margin-bottom: 1em;
+  font-size: large;
+  text-align: start;
+  font-weight: bold;
+}
+
+button {
+  margin-inline-start: 0;
+  margin-inline-end: 8px;
+  border-radius: 3px;
+}
+
+table {
+  background-color: var(--in-content-table-background);
+  color: var(--in-content-text-color);
+  font: message-box;
+  text-align: start;
+  width: 100%;
+  border: 1px solid var(--in-content-border-color);
+  border-spacing: 0px;
+}
+
+th, td {
+  border: var(--in-content-border-dotted-color);
+  padding: 3px;
+}
+
+thead th {
+  text-align: center;
+}
+
+th {
+  text-align: start;
+  background-color: var(--in-content-table-header-background);
+  color: var(--in-content-selected-text);
+}
+
+th.title-column {
+  white-space: nowrap;
+  width: 0px;
+  font-size: medium;
+}
+
+th.column {
+  white-space: nowrap;
+  width: 0px;
+}
+
+td {
+  text-align: start;
+  border-top: var(--in-content-border-dotted-color);
+}
+
+.prefs-table {
+  table-layout: fixed;
+}
+
+.name {
+  width: 70%;
+}
+
+.value {
+  width: 30%;
+}
+
+.pref-name,
+.pref-value {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+#action-box {
+  background-color: var(--in-content-table-background);
+  border: 1px solid var(--in-content-border-color);
+  border-radius: 6px;
+  color: var(--in-content-text-color);
+  float: right;
+  margin-top: 2em;
+  margin-bottom: 20px;
+  margin-inline-start: 20px;
+  margin-inline-end: 0;
+  padding: 16px;
+  width: 30%;
+}
+
+#action-box,
+#reset-box,
+#safe-mode-box {
+  display: none;
+}
+
+#action-box:dir(rtl) {
+  float: left;
+}
+
+#reset-box > h3 {
+  margin-top: 0;
+}
+
+#action-box button {
+  display: block;
+}
+
+#verify-place-result {
+  max-height: 200px;
+  overflow: auto;
+}
+
+.block {
+  display: block;
+}
+
+.hidden {
+  display: none;
+}

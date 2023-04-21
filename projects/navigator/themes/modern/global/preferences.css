@@ -1,0 +1,66 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ===== preferences.css =====================================================
+  == Styles used by the XUL prefwindow element.
+  ======================================================================= */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* ::::: dialog ::::: */
+
+prefwindow {
+  padding: 0px;
+}
+
+prefwindow[type="child"] {
+  padding: 7px 5px 5px;
+}
+
+prefpane {
+  padding: 7px 5px 0px 5px;
+}
+
+prefwindow[type="child"] > prefpane {
+  padding: 0px;
+}
+
+.prefWindow-dlgbuttons {
+  padding: 0px 5px 5px;
+}
+
+prefwindow[type="child"] > .prefWindow-dlgbuttons {
+  padding: 0px;
+}
+
+radio[pane] {
+  margin: 0px 1px;
+  padding: 1px 3px;
+  min-width: 4.5em;
+  background-color: #FFFFFF;
+  color: #000000;
+}
+
+radio[pane][selected="true"] {
+  background-color: #C7D0D9;
+}
+
+radio[pane]:hover:active {
+  background-color: #90A1B3;
+  color: #FFFFFF;
+}
+
+.paneSelector {
+  border-bottom: 2px solid;
+  -moz-border-bottom-colors: #ECEFF2 #2D3B49;
+  margin: 0px;
+  padding-inline-start: 10px;
+  background-color: #FFFFFF;
+  color: #000000;
+}
+
+.paneButtonIcon {
+  width: 32px;
+  height: 32px;
+}

@@ -1,0 +1,118 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ==== toolbar.css =====================================================
+   == Styles for toolbars that are used throughout the Communicator suite.
+   ====================================================================== */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* ::::: toolbar-primary ::::: */
+
+.toolbar-primary {
+  -moz-binding: url("chrome://communicator/skin/toolbar/toolbarBindings.xml#toolbar-primary");
+  background-color: #B1BDC9;
+}
+
+.toolbar-primary-holder {
+  background: url("chrome://communicator/skin/toolbar/prtb-bg-line.gif") repeat-x top;
+  border-top: none;
+  border-right: 1px solid #95A0AD;
+  border-bottom: 1px solid #95A0AD;
+  border-left: none;
+}
+
+.toolbar-primary-holder[mode="icons"],
+.toolbar-primary-holder[mode="text"],
+.toolbar-primary-holder[iconsize="small"],
+.toolbar-primary-holder[labelalign="end"] {
+  background-image: url("chrome://communicator/skin/toolbar/prtb-bg-noline.gif");
+}
+
+.toolbar-primary-icon {
+  width: 77px;
+  height: 50px;
+  background-repeat: no-repeat;
+  background-position: top;
+}
+
+.toolbar-primary-icon[mode="icons"],
+.toolbar-primary-icon[mode="text"],
+.toolbar-primary-icon[iconsize="small"],
+.toolbar-primary-icon[labelalign="end"] {
+  display: none;
+}
+
+.toolbar-primary > .toolbaritem-noline,
+.toolbar-primary > toolbarpaletteitem > .toolbaritem-noline {
+  background: url("chrome://communicator/skin/toolbar/prtb-bg-noline.gif") #B1BDC9 repeat-x top;
+}
+
+toolbar[mode="text"] toolbarbutton[type="menu-button"],
+toolbar[labelalign="end"]:not([mode="icons"]) toolbarbutton[type="menu-button"] {
+  -moz-binding: url("chrome://global/content/bindings/toolbarbutton.xml#menu-button");
+}
+
+toolbar[mode="text"] .toolbarbutton-1 .toolbarbutton-text,
+toolbar[labelalign="end"] .toolbarbutton-1 .toolbarbutton-text {
+  min-width: 0px;
+}
+
+/* ::::: toolbargrippy ::::: */
+ 
+.toolbar-primary-grippy { 
+  -moz-binding: url("chrome://communicator/skin/toolbar/toolbarBindings.xml#toolbargrippy-primary");
+  border: none;
+  background: url("chrome://communicator/skin/toolbar/prtb-grip-mid.gif") repeat-y;
+  list-style-image: url("chrome://communicator/skin/toolbar/prtb-grip-btm.gif");
+} 
+
+.toolbar-primary-grippy > .toolbargrippy-texture {
+  width: 13px;
+  height: 0px;
+  list-style-image: url("chrome://communicator/skin/toolbar/prtb-grip-top.gif");
+}
+
+.toolbar-primary-grippy > .toolbargrippy-arrow {
+  margin: 0px;
+  width: 13px;
+  height: 10px;
+  list-style-image: inherit;
+}
+
+.toolbar-primary-grippy:hover:active {
+  background-image: url("chrome://communicator/skin/toolbar/prtb-grip-mid-act.gif");
+  list-style-image: url("chrome://communicator/skin/toolbar/prtb-grip-btm-act.gif");
+}
+
+.toolbar-primary-grippy:hover:active > .toolbargrippy-texture {
+  list-style-image: url("chrome://communicator/skin/toolbar/prtb-grip-top-act.gif");
+}
+
+/* ::::: toolbar-primary separator ::::: */
+
+.toolbar-primary > toolbarseparator,
+.toolbarseparator-primary {
+  margin: 0px;
+  padding: 0px;
+  border: none;
+  width: 18px;
+  background: none;
+}
+
+.toolbar-primary > toolbarpaletteitem > toolbarseparator {
+  margin: 0px 8px;
+}
+
+/* ::::: solid background status bar panel ::::: */
+
+.statusbarpanel-backgroundbox {
+  -moz-box-align: stretch;
+  padding: 0px;
+}
+
+.statusbarpanel-backgroundbox > .statusbarpanel-contentbox {
+  padding: 0px 4px;
+  -moz-box-align: center;
+}

@@ -1,0 +1,365 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<!DOCTYPE overlay SYSTEM "chrome://communicator/locale/contentAreaCommands.dtd" >
+<overlay id="contentAreaContextOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <!-- Context menu -->
+  <script type="application/javascript">
+    // Global variable that holds the nsContextMenu instance.
+    var gContextMenu = null;
+  </script>
+  <script type="application/javascript" src="chrome://communicator/content/nsContextMenu.js"/>
+  <script type="application/javascript" src="chrome://global/content/contentAreaUtils.js"/>
+
+  <stringbundleset>
+    <stringbundle id="contentAreaCommandsBundle"
+                  src="chrome://communicator/locale/contentAreaCommands.properties"/>
+  </stringbundleset>
+
+  <popupset id="contentAreaContextSet">
+    <!-- This is a generic context menu for a content area. It contains
+         each and every possible menu choice.  The appropriate items are
+         hidden/shown upon display, based on what the user has clicked-on.
+     -->
+    <menupopup id="contentAreaContextMenu"
+               pagemenu="start"
+               onpopupshowing="if (event.target != this) return true; gContextMenu = new nsContextMenu(this, event.shiftKey, event); return gContextMenu.shouldDisplay;"
+               onpopuphiding="if (event.target != this) return; gContextMenu.hiding(); gContextMenu = null;">
+      <menuseparator id="page-menu-separator"/>
+      <menuitem id="popupwindow-reject"
+                label="&popupWindowRejectCmd.label;"
+                accesskey="&popupWindowRejectCmd.accesskey;"
+                oncommand="gContextMenu.rejectPopupWindows(event.shiftKey);"/>
+      <menuitem id="popupwindow-allow"
+                label="&popupWindowAllowCmd.label;"
+                accesskey="&popupWindowAllowCmd.accesskey;"
+                oncommand="gContextMenu.allowPopupWindows();"/>
+      <menuseparator id="context-sep-popup"/>
+
+      <menuitem id="spell-no-suggestions"
+                disabled="true"
+                label="&spellNoSuggestions.label;"/>
+      <menuseparator id="spell-add-separator"/>
+      <menuitem id="spell-add-to-dictionary"
+                label="&spellAddToDictionary.label;"
+                accesskey="&spellAddToDictionary.accesskey;"
+                oncommand="InlineSpellCheckerUI.addToDictionary();"/>
+      <menuitem id="spell-undo-add-to-dictionary"
+                label="&spellUndoAddToDictionary.label;"
+                accesskey="&spellUndoAddToDictionary.accesskey;"
+                oncommand="InlineSpellCheckerUI.undoAddToDictionary();"/>
+      <menuitem id="spell-ignore-word"
+                label="&spellIgnoreWord.label;"
+                accesskey="&spellIgnoreWord.accesskey;"
+                oncommand="InlineSpellCheckerUI.ignoreWord();"/>
+      <menuseparator id="spell-suggestions-separator"/>
+      <menuitem id="context-openlinkintab"
+                label="&openLinkCmdInTab.label;"
+                accesskey="&openLinkCmdInTab.accesskey;"
+                oncommand="gContextMenu.openLinkInTab(event);"/>
+      <menuitem id="context-openlink"
+                label="&openLinkCmd.label;"
+                accesskey="&openLinkCmd.accesskey;"
+                oncommand="gContextMenu.openLinkInWindow();"/>
+      <menuitem id="context-openlinkinprivatewindow"
+                label="&openLinkCmdInPrivateWindow.label;"
+                accesskey="&openLinkCmdInPrivateWindow.accesskey;"
+                oncommand="gContextMenu.openLinkInPrivateWindow();"/>
+      <menuseparator id="context-sep-open"/>
+      <menuitem id="context-bookmarklink"
+                label="&bookmarkLinkCmd.label;"
+                accesskey="&bookmarkLinkCmd.accesskey;"
+                oncommand="gContextMenu.bookmarkLink();"/>
+      <menuitem id="context-savelink"
+                valueSaveAs="&saveLinkAsCmd.label;"
+                valueSave="&saveLinkCmd.label;"
+                accesskey="&saveLinkCmd.accesskey;"
+                oncommand="gContextMenu.saveLink();"/>
+      <menuitem id="context-copyemail"
+                label="&copyEmailCmd.label;"
+                accesskey="&copyEmailCmd.accesskey;"
+                oncommand="gContextMenu.copyEmail();"/>
+      <menuitem id="context-copylink"
+                label="&copyLinkCmd.label;"
+                accesskey="&copyLinkCmd.accesskey;"
+                command="cmd_copyLink"/>
+      <menuseparator id="context-sep-copylink"/>
+      <menuitem id="context-media-play"
+                label="&mediaPlay.label;"
+                accesskey="&mediaPlay.accesskey;"
+                oncommand="gContextMenu.mediaCommand('play');"/>
+      <menuitem id="context-media-pause"
+                label="&mediaPause.label;"
+                accesskey="&mediaPause.accesskey;"
+                oncommand="gContextMenu.mediaCommand('pause');"/>
+      <menuitem id="context-media-mute"
+                label="&mediaMute.label;"
+                accesskey="&mediaMute.accesskey;"
+                oncommand="gContextMenu.mediaCommand('mute');"/>
+      <menuitem id="context-media-unmute"
+                label="&mediaUnmute.label;"
+                accesskey="&mediaUnmute.accesskey;"
+                oncommand="gContextMenu.mediaCommand('unmute');"/>
+      <menu id="context-media-playbackrate"
+            label="&mediaPlaybackRate.label;"
+            accesskey="&mediaPlaybackRate.accesskey;">
+        <menupopup id="media-playbackrate-popup"
+                   oncommand="gContextMenu.mediaCommand('playbackRate',
+                              event.target.id.replace(/.*-/, '') / 100);">
+          <menuitem id="context-media-playbackrate-050"
+                    label="&mediaPlaybackRate050.label;"
+                    accesskey="&mediaPlaybackRate050.accesskey;"
+                    type="radio"
+                    name="playbackrate"/>
+          <menuitem id="context-media-playbackrate-100"
+                    label="&mediaPlaybackRate100.label;"
+                    accesskey="&mediaPlaybackRate100.accesskey;"
+                    type="radio"
+                    name="playbackrate"/>
+          <menuitem id="context-media-playbackrate-150"
+                    label="&mediaPlaybackRate150.label;"
+                    accesskey="&mediaPlaybackRate150.accesskey;"
+                    type="radio"
+                    name="playbackrate"/>
+          <menuitem id="context-media-playbackrate-200"
+                    label="&mediaPlaybackRate200.label;"
+                    accesskey="&mediaPlaybackRate200.accesskey;"
+                    type="radio"
+                    name="playbackrate"/>
+        </menupopup>
+      </menu>
+      <menuitem id="context-media-showcontrols"
+                label="&mediaShowControls.label;"
+                accesskey="&mediaShowControls.accesskey;"
+                oncommand="gContextMenu.mediaCommand('showcontrols');"/>
+      <menuitem id="context-media-hidecontrols"
+                label="&mediaHideControls.label;"
+                accesskey="&mediaHideControls.accesskey;"
+                oncommand="gContextMenu.mediaCommand('hidecontrols');"/>
+      <menuitem id="context-video-showstats"
+                label="&videoShowStats.label;"
+                accesskey="&videoShowStats.accesskey;"
+                oncommand="gContextMenu.mediaCommand('showstats');"/>
+      <menuitem id="context-video-hidestats"
+                label="&videoHideStats.label;"
+                accesskey="&videoHideStats.accesskey;"
+                oncommand="gContextMenu.mediaCommand('hidestats');"/>
+      <menuitem id="context-video-fullscreen"
+                label="&videoFullScreen.label;"
+                accesskey="&videoFullScreen.accesskey;"
+                oncommand="gContextMenu.fullScreenVideo();"/>
+      <menuseparator id="context-media-sep-commands"/>
+      <menuitem id="context-fitimage"
+                type="checkbox"
+                label="&fitImageCmd.label;"
+                accesskey="&fitImageCmd.accesskey;"
+                oncommand="gContextMenu.toggleImageSize();"/>
+      <menuitem id="context-reloadimage"
+                label="&reloadImageCmd.label;"
+                accesskey="&reloadImageCmd.accesskey;"
+                oncommand="gContextMenu.reloadImage();"/>
+      <menuitem id="context-viewimage"
+                label="&viewImageCmd.label;"
+                accesskey="&viewImageCmd.accesskey;"
+                oncommand="gContextMenu.viewMedia(event);"
+                onclick="checkForMiddleClick(this, event);"/>
+      <menuitem id="context-blockimage"
+                oncommand="gContextMenu.toggleImageBlocking(true);"/>
+      <menuitem id="context-unblockimage"
+                oncommand="gContextMenu.toggleImageBlocking(false);"/>
+      <menuitem id="context-copyimage"
+                label="&copyImageCmd.label;"
+                accesskey="&copyImageCmd.accesskey;"
+                command="cmd_copyImage"/>
+      <menuitem id="context-viewvideo"
+                label="&viewVideoCmd.label;"
+                accesskey="&viewVideoCmd.accesskey;"
+                oncommand="gContextMenu.viewMedia(event);"
+                onclick="checkForMiddleClick(this, event);"/>
+      <menuitem id="context-copyvideourl"
+                label="&copyVideoURLCmd.label;"
+                accesskey="&copyVideoURLCmd.accesskey;"
+                oncommand="gContextMenu.copyMediaLocation();"/>
+      <menuitem id="context-copyaudiourl"
+                label="&copyAudioURLCmd.label;"
+                accesskey="&copyAudioURLCmd.accesskey;"
+                oncommand="gContextMenu.copyMediaLocation();"/>
+      <menuseparator id="context-sep-copyimage"/>
+      <menuitem id="context-saveimage"
+                valueSaveAs="&saveImageAsCmd.label;"
+                valueSave="&saveImageCmd.label;"
+                accesskey="&saveImageCmd.accesskey;"
+                oncommand="gContextMenu.saveMedia();"/>
+      <menuitem id="context-setDesktopBackground"
+                label="&setDesktopBackgroundCmd.label;"
+                accesskey="&setDesktopBackgroundCmd.accesskey;"
+                oncommand="gContextMenu.setDesktopBackground();"/>
+      <menuitem id="context-savevideo"
+                label="&saveVideoCmd.label;"
+                accesskey="&saveVideoCmd.accesskey;"
+                oncommand="gContextMenu.saveMedia();"/>
+      <menuitem id="context-saveaudio"
+                label="&saveAudioCmd.label;"
+                accesskey="&saveAudioCmd.accesskey;"
+                oncommand="gContextMenu.saveMedia();"/>
+      <menuitem id="context-video-saveimage"
+                label="&videoSaveImage.label;"
+                accesskey="&videoSaveImage.accesskey;"
+                oncommand="gContextMenu.saveVideoFrameAsImage();"/>
+      <menuseparator id="context-sep-image"/>
+      <menuitem id="context-back"
+                label="&goBackCmd.label;"
+                accesskey="&goBackCmd.accesskey;"
+                oncommand="BrowserBack(event)"
+                onclick="checkForMiddleClick(this, event);"/>
+      <menuitem id="context-forward"
+                label="&goForwardCmd.label;"
+                accesskey="&goForwardCmd.accesskey;"
+                oncommand="BrowserForward(event)"
+                onclick="checkForMiddleClick(this, event);"/>
+      <menuitem id="context-reload"
+                label="&reloadCmd.label;"
+                accesskey="&reloadCmd.accesskey;"
+                oncommand="BrowserReload(event);"
+                onclick="checkForMiddleClick(this, event);"/>
+      <menuitem id="context-stop"
+                label="&stopCmd.label;"
+                accesskey="&stopCmd.accesskey;"
+                disabled="true"
+                oncommand="BrowserStop();"/>
+      <menuseparator id="context-sep-stop"/>
+      <menuitem id="context-bookmarkpage"
+                label="&bookmarkPageCmd.label;"
+                accesskey="&bookmarkPageCmd.accesskey;"
+                oncommand="gContextMenu.bookmarkThisPage();"/>
+      <menuitem id="context-savepage"
+                valueSaveAs="&savePageAsCmd.label;"
+                valueSave="&savePageCmd.label;"
+                accesskey="&savePageCmd.accesskey;"
+                oncommand="saveDocument(window.content.document, true);"/>
+      <menuseparator id="context-sep-viewbgimage"/>
+      <menuitem id="context-viewbgimage"
+                label="&viewBGImageCmd.label;"
+                accesskey="&viewBGImageCmd.accesskey;"
+                oncommand="gContextMenu.viewBGImage(event);"
+                onclick="checkForMiddleClick(this, event);"/>
+      <menuitem id="context-undo"/>
+      <menuitem id="context-redo"/>
+      <menuseparator id="context-sep-undo"/>
+      <menuitem id="context-cut"/>
+      <menuitem id="context-copy"/>
+      <menuitem id="context-paste"/>
+      <menuitem id="context-delete"/>
+      <menuseparator id="context-sep-paste"/>
+      <menuitem id="context-selectall"/>
+      <menuseparator id="context-sep-selectall"/>
+      <menuitem id="context-keywordfield"
+                label="&keywordfield.label;"
+                accesskey="&keywordfield.accesskey;"
+                oncommand="AddKeywordForSearchField();"/>
+      <menuitem id="context-searchselect"
+                oncommand="BrowserSearch.loadSearch(gContextMenu.searchSelected(), true, event);"/>
+      <menuseparator id="context-sep-properties"/>
+      <menuitem id="context-viewpartialsource-selection"
+                label="&viewPartialSourceForSelectionCmd.label;"
+                accesskey="&viewPartialSourceCmd.accesskey;"
+                oncommand="gContextMenu.viewPartialSource('selection');"/>
+      <menuitem id="context-viewpartialsource-mathml"
+                label="&viewPartialSourceForMathMLCmd.label;"
+                accesskey="&viewPartialSourceCmd.accesskey;"
+                oncommand="gContextMenu.viewPartialSource('mathml');"/>
+      <menuitem id="context-viewsource"
+                label="&viewPageSourceCmd.label;"
+                accesskey="&viewPageSourceCmd.accesskey;"
+                observes="isImage"
+                oncommand="BrowserViewSource(gContextMenu.browser);"/>
+      <menuitem id="context-viewinfo"
+                label="&viewPageInfoCmd.label;"
+                accesskey="&viewPageInfoCmd.accesskey;"
+                oncommand="gContextMenu.viewInfo();"/>
+      <menuitem id="context-metadata"
+                label="&metadataCmd.label;"
+                accesskey="&metadataCmd.accesskey;"
+                oncommand="gContextMenu.showMetadata();"/>
+      <menuseparator id="frame-sep"/>
+      <menu id="frame" label="&thisFrameMenu.label;" accesskey="&thisFrameMenu.accesskey;">
+        <menupopup id="frame_popup">
+          <menuitem id="context-showonlythisframe"
+                    label="&showOnlyThisFrameCmd.label;"
+                    accesskey="&showOnlyThisFrameCmd.accesskey;"
+                    oncommand="gContextMenu.showOnlyThisFrame();"/>
+          <menuitem id="context-openframeintab"
+                    label="&openFrameCmdInTab.label;"
+                    accesskey="&openFrameCmdInTab.accesskey;"
+                    oncommand="gContextMenu.openFrameInTab(event);"/>
+          <menuitem id="context-openframe"
+                    label="&openFrameCmd.label;"
+                    accesskey="&openFrameCmd.accesskey;"
+                    oncommand="gContextMenu.openFrame();"/>
+          <menuseparator/>
+          <menuitem id="context-reloadframe"
+                    label="&reloadFrameCmd.label;"
+                    accesskey="&reloadFrameCmd.accesskey;"
+                    oncommand="gContextMenu.reloadFrame();"/>
+          <menuseparator/>
+          <menuitem id="context-bookmarkframe"
+                    label="&bookmarkFrameCmd.label;"
+                    accesskey="&bookmarkFrameCmd.accesskey;"
+                    oncommand="gContextMenu.addBookmarkForFrame();"/>
+          <menuitem id="context-saveframe"
+                    valueSaveAs="&saveFrameAsCmd.label;"
+                    valueSave="&saveFrameCmd.label;"
+                    accesskey="&saveFrameCmd.accesskey;"
+                    oncommand="saveDocument(gContextMenu.target.ownerDocument, true);"/>
+          <menuseparator/>
+          <menuitem id="context-printframe"
+                    label="&printFrameCmd.label;"
+                    accesskey="&printFrameCmd.accesskey;"
+                    oncommand="gContextMenu.printFrame();"/>
+          <menuseparator/>
+          <menuitem id="context-viewframesource"
+                    label="&viewFrameSourceCmd.label;"
+                    accesskey="&viewFrameSourceCmd.accesskey;"
+                    oncommand="gContextMenu.viewFrameSource();"/>
+          <menuitem id="context-viewframeinfo"
+                    label="&viewFrameInfoCmd.label;"
+                    accesskey="&viewFrameInfoCmd.accesskey;"
+                    oncommand="gContextMenu.viewFrameInfo();"/>
+        </menupopup>
+      </menu>
+      <menuseparator id="spell-separator"/>
+      <menuitem id="spell-check-enabled"
+                label="&spellCheckEnable.label;"
+                type="checkbox"
+                accesskey="&spellCheckEnable.accesskey;"
+                oncommand="InlineSpellCheckerUI.toggleEnabled();"/>
+      <menuitem id="spell-add-dictionaries-main"
+                label="&spellAddDictionaries.label;"
+                accesskey="&spellAddDictionaries.accesskey;"
+                oncommand="openDictionaryList();"/>
+      <menu id="spell-dictionaries"
+            label="&spellDictionaries.label;"
+            accesskey="&spellDictionaries.accesskey;">
+        <menupopup id="spell-dictionaries-menu">
+          <menuseparator id="spell-language-separator"/>
+          <menuitem id="spell-add-dictionaries"
+                    label="&spellAddDictionaries.label;"
+                    accesskey="&spellAddDictionaries.accesskey;"
+                    oncommand="openDictionaryList();"/>
+        </menupopup>
+      </menu>
+      <menuseparator hidden="true" id="context-sep-bidi"/>
+      <menuitem hidden="true" id="context-bidi-text-direction-toggle"
+                label="&bidiSwitchTextDirectionItem.label;"
+                accesskey="&bidiSwitchTextDirectionItem.accesskey;"
+                command="cmd_switchTextDirection"/>
+      <menuitem hidden="true" id="context-bidi-page-direction-toggle"
+                label="&bidiSwitchPageDirectionItem.label;"
+                accesskey="&bidiSwitchPageDirectionItem.accesskey;"
+                oncommand="SwitchDocumentDirection(window.content);"/>
+    </menupopup>
+  </popupset>
+</overlay>

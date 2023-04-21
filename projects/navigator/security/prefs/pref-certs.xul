@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://communicator/skin/" type="text/css"?>
+
+<!DOCTYPE overlay [
+  <!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+  %brandDTD;
+  <!ENTITY % prefCertsDTD SYSTEM "chrome://pippki/locale/pref-certs.dtd">
+  %prefCertsDTD;
+  <!ENTITY % prefSslDTD SYSTEM "chrome://pippki/locale/pref-ssl.dtd">
+  %prefSslDTD;
+]>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <prefpane id="certs_pane"
+            label="&pref.certs.title;"
+            script="chrome://pippki/content/pref-certs.js">
+    <preferences id="cert_preferences">
+      <preference id="security.default_personal_cert"
+                  name="security.default_personal_cert"
+                  type="string"/>
+      <preference id="security.disable_button.openCertManager"
+                  name="security.disable_button.openCertManager"
+                  type="bool"/>
+      <preference id="security.disable_button.openDeviceManager"
+                  name="security.disable_button.openDeviceManager"
+                  type="bool"/>
+      <preference id="security.OCSP.enabled"
+                  name="security.OCSP.enabled"
+                  type="int"
+                  onchange="DoEnabling(this.value);"/>
+      <preference id="security.OCSP.require"
+                  name="security.OCSP.require"
+                  type="bool"/>
+    </preferences>
+
+
+  <groupbox align="start">
+    <caption label="&SSLClientAuthMethod.caption;"/>
+    <description>&certselect.description;</description>
+    <radiogroup id="certSelection"
+                orient="horizontal"
+                preference="security.default_personal_cert"
+                aria-labelledby="CertGroupCaption CertSelectionDesc">
+      <radio value="Select Automatically"
+             label="&certselect.auto;"
+             accesskey="&certselect.auto.accesskey;"/>
+      <radio value="Ask Every Time"
+             label="&certselect.ask;"
+             accesskey="&certselect.ask.accesskey;"/>
+    </radiogroup>
+  </groupbox>
+
+  <!-- Certificate manager -->
+  <groupbox>
+    <caption label="&managecerts.caption;"/>
+    <description>&managecerts.text;</description>
+    <hbox align="center">
+      <button label="&managecerts.button;"
+              oncommand="OpenCertManager();"
+              id="openCertManagerButton"
+              accesskey="&managecerts.accesskey;"
+              preference="security.disable_button.openCertManager"/>
+    </hbox>
+  </groupbox>
+
+  <!-- Device manager -->
+  <groupbox>
+    <caption label="&managedevices.caption;"/>
+    <description>&managedevices.text;</description>
+    <hbox align="center">
+      <button label="&managedevices.button;"
+              oncommand="OpenDeviceManager();"
+              id="openDeviceManagerButton"
+              accesskey="&managedevices.accesskey;"
+              preference="security.disable_button.openDeviceManager"/>
+    </hbox>
+  </groupbox>
+
+  <!-- Validation -->
+  <groupbox align="start">
+    <caption label="&validation.ocsp.caption;"/>
+    <checkbox id="enableOCSPBox"
+              label="&enableOCSP.label;"
+              accesskey="&enableOCSP.accesskey;"
+              onsynctopreference="return +this.checked;"
+              preference="security.OCSP.enabled"/>
+    <separator class="thin"/>
+    <checkbox id="requireWorkingOCSP"
+              label="&validation.requireOCSP.description;"
+              accesskey="&validation.requireOCSP.accesskey;"
+              preference="security.OCSP.require"/>
+  </groupbox>
+
+  </prefpane>
+</overlay>

@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://communicator/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://communicator/skin/viewSourceOverlay.css" type="text/css"?>
+
+<?xul-overlay href="chrome://communicator/content/utilityOverlay.xul"?>
+<?xul-overlay href="chrome://communicator/content/tasksOverlay.xul"?>
+
+<!DOCTYPE overlay [
+
+<!ENTITY % navDTD SYSTEM "chrome://navigator/locale/navigator.dtd">
+%navDTD;
+
+]>
+
+<overlay id="viewSourceOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/javascript"
+          src="chrome://communicator/content/viewSourceOverlay.js"/>
+  <script type="application/javascript"
+          src="chrome://communicator/content/findUtils.js"/>
+
+  <window id="viewSource">
+    <commandset id="tasksCommands"/>
+    <command id="cmd_newNavigator"/>
+    <command id="cmd_newPrivateWindow"/>
+    <command id="cmd_find"
+             oncommand="findInPage(getFindInstData());"/>
+    <command id="cmd_findAgain"
+             oncommand="findAgainInPage(getFindInstData(), false);"/>
+    <command id="cmd_findPrevious"
+             oncommand="findAgainInPage(getFindInstData(), true);"/>
+    <stringbundle id="findBundle"
+                  src="chrome://global/locale/finddialog.properties"/>
+  </window>
+
+  <keyset id="viewSourceKeys">
+    <keyset id="tasksKeys"/>
+    <key id="key_newBlankPage"/>
+    <key id="key_newNavigator"/>
+    <key id="key_newPrivateWindow"/>
+  </keyset>
+
+  <menubar id="viewSource-main-menubar"
+           class="chromeclass-menubar"
+           grippytooltiptext="&menuBar.tooltip;">
+    <menu id="menu_file">
+      <menupopup id="menu_FilePopup">
+        <menu id="menu_New" position="1">
+          <menupopup id="menu_NewPopup">
+            <menuitem id="menu_newNavigator"/>
+            <menuitem id="menu_newPrivateWindow"/>
+          </menupopup>
+        </menu>
+        <menuseparator insertbefore="menu_pageSetup"/>
+      </menupopup>
+    </menu>
+
+    <!-- tasks menu filled from tasksOverlay -->
+    <menu id="tasksMenu"/>
+
+    <!-- window menu filled from tasksOverlay -->
+    <menu id="windowMenu"/>
+
+    <!-- help menu filled from globalOverlay -->
+    <menu id="menu_Help"/>
+  </menubar>
+
+</overlay>

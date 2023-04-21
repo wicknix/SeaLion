@@ -1,0 +1,83 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#tabsList {
+  background: #FFFFFF url(chrome://communicator/skin/sync/sync-bg.png) repeat-x center -80px;
+}
+
+#headers {
+  background: url(chrome://communicator/skin/sync/sync-32.png) no-repeat;
+  width: 45em;
+  height: 32px;
+  margin: 4px 2em 0px;
+}
+
+#tabsListHeading {
+  font-size: 140%;
+  font-weight: bold;
+  margin-inline-start: 40px;
+}
+
+richlistitem {
+  margin-inline-end: 2em;
+}
+
+richlistitem[type="tab"] {
+  min-height: 3em;
+  border: #999999 1px solid !important;
+  padding: 2px 5px;
+  margin-bottom: 4px;
+  margin-inline-start: 4em;
+  border-radius: 6px;
+  background-color: #DDE3EB;
+  width: 44em;
+  opacity: 0.9;
+  box-shadow:
+    inset rgba(255, 255, 255, 0.5) 0 1px 0px,
+    inset rgba(0, 0, 0, 0.1) 0 -2px 0px,
+    rgba(0, 0, 0, 0.1) 0px 1px 0px;
+}
+
+richlistitem[type="tab"][selected="true"] {
+  background-color: #424F63;
+}
+
+richlistitem[type="client"] {
+  min-height: 2em;
+  color: #000000;
+  margin-inline-start: 2em;
+  margin-top: 2px;
+  margin-bottom: 3px;
+  width: 42em;
+  border-radius: 6px;
+  background-color: transparent;
+  -moz-user-focus: ignore !important;
+}
+
+.mobile[type="client"] {
+  list-style-image: url("chrome://communicator/skin/sync/sync-mobileIcon.png");
+}
+
+.desktop[type="client"] {
+  list-style-image: url("chrome://communicator/skin/sync/sync-desktopIcon.png");
+}
+
+.title,
+.clientName {
+  font-size: 1.1em;
+}
+
+.url {
+  color: blue;
+  font-size: 0.95em;
+}
+
+.url[selected="true"] {
+  color: inherit;
+}
+
+.tabIcon {
+  padding-inline-start: 2px;
+  padding-top: 2px;
+}

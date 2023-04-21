@@ -1,0 +1,26 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/*
+
+  The Sidebar API for 3rd parties
+
+*/
+
+#include "nsISupports.idl"
+
+[scriptable, uuid(97bfa970-8222-4c3f-bbe8-42141e4c7982)]
+interface nsISidebar : nsISupports
+{
+    void addPanel(in DOMString aTitle, in DOMString aContentURL,
+                  in DOMString aCustomizeURL);
+    void addPersistentPanel(in DOMString aTitle, in DOMString aContentURL,
+                            in DOMString aCustomizeURL);
+    void addSearchEngine(in DOMString engineURL, in DOMString iconURL,
+                         in DOMString suggestedTitle, in DOMString suggestedCategory);
+    void AddSearchProvider(in DOMString aDescriptionURL);
+    unsigned long IsSearchProviderInstalled(in DOMString aSearchURL);
+};

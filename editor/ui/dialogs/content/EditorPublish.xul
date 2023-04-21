@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://editor/skin/editor.css" type="text/css"?>
+<?xml-stylesheet href="chrome://editor/skin/EditorDialog.css" type="text/css"?>
+
+<?xul-overlay href="chrome://editor/content/EdDialogOverlay.xul"?> 
+<?xul-overlay href="chrome://editor/content/EditorPublishOverlay.xul"?> 
+
+<!DOCTYPE dialog SYSTEM "chrome://editor/locale/EditorPublish.dtd">
+
+<dialog title="&windowTitle.label;"
+        id="publishDlg"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        onload="Startup()"
+        buttons="accept,cancel"
+        buttonlabelaccept="&publishButton.label;"
+        ondialogaccept="return onAccept();"
+        ondialogcancel="return onCancel();">
+
+  <!-- Methods common to all editor dialogs -->
+  <script type="application/javascript" src="chrome://editor/content/editorUtilities.js"/>
+  <script type="application/javascript" src="chrome://editor/content/EdDialogCommon.js"/>
+  <script type="application/javascript" src="chrome://editor/content/EditorPublish.js"/>
+  <script type="application/javascript" src="chrome://editor/content/publishprefs.js"/>
+
+  <spacer id="location" offsetY="50" persist="offsetX offsetY"/>
+  <broadcaster id="args" value=""/>
+
+  <tabbox id="TabBox">
+    <tabs flex="1">
+      <tab id="PublishTab" oncommand="SelectPublishTab()" label="&publishTab.label;"/>
+      <tab id="SettingsTab" oncommand="SelectSettingsTab()" label="&settingsTab.label;"/>
+    </tabs>
+    <tabpanels>
+      <!-- PUBLISH PANEL -->
+      <vbox>
+        <spacer class="spacer"/>
+        <grid pack="start">
+          <columns><column/><column/><column/></columns>
+          <rows>
+            <row align="center">
+              <label value="&siteList.label;"
+                     accesskey="&siteList.accesskey;"
+                     control="SiteList"/>
+              <!-- Contents filled in at runtime -->
+              <menulist id="SiteList" 
+                style="min-width:18em; max-width:18em;" crop="right"
+                tooltiptext="&siteList.tooltip;"
+                oncommand="SelectSiteList();"/>
+              <hbox>
+                <button label="&newSiteButton.label;"
+                        accesskey="&newSiteButton.accesskey;"
+                        oncommand="AddNewSite();"/>
+                <spacer flex="1"/>
+              </hbox>
+            </row>
+            <spacer class="spacer"/>
+            <row align="center">
+              <label value="&pageTitle.label;" accesskey="&pageTitle.accesskey;"
+                     control="PageTitleInput"/>
+              <textbox id="PageTitleInput" 
+                tooltiptext="&pageTitle.tooltip;" class="minWidth15"/>
+              <label value="&pageTitleExample.label;"/>
+            </row>
+            <row align="center">
+              <label value="&filename.label;" accesskey="&filename.accesskey;"
+                     control="FilenameInput"/>
+              <textbox id="FilenameInput"
+                tooltiptext="&filename.tooltip;" class="minWidth15 uri-element"/>
+              <label value="&filenameExample.label;"/>
+            </row>
+          </rows>
+        </grid>
+        <spacer class="spacer"/>
+        <label value="&docDirList.label;"
+               accesskey="&docDirList.accesskey;"
+               control="DocDirList"/>
+        <hbox align="center">
+          <!-- Contents filled in at runtime -->
+          <menulist id="DocDirList" class="minWidth20 uri-element" editable="true"  flex="1"
+                    tooltiptext="&docDirList.tooltip;" oninput="onInputSettings();"/>
+        </hbox>
+        <spacer class="spacer"/>
+        <groupbox>
+          <caption>
+            <checkbox id="OtherDirCheckbox" label="&publishImgCheckbox.label;" 
+                      accesskey="&publishImgCheckbox.accesskey;"
+                      tooltiptext="&publishImgCheckbox.tooltip;"
+                      oncommand="doEnabling();"/>
+          </caption>
+          <vbox>
+          <radiogroup id="OtherDirRadiogroup">
+            <hbox>
+              <spacer class="checkbox-spacer"/>
+              <radio id="SameLocationRadio" label="&sameLocationRadio.label;"
+                     accesskey="&sameLocationRadio.accesskey;"
+                     tooltiptext="&sameLocationRadio.tooltip;"
+                     oncommand="doEnabling();"/>
+            </hbox>
+            <hbox>
+              <spacer class="checkbox-spacer"/>
+              <radio id="UseSubdirRadio" label="&useSubdirRadio.label;"
+                     accesskey="&useSubdirRadio.accesskey;"
+                     tooltiptext="&useSubdirRadio.tooltip;"
+                     oncommand="doEnabling();"/>
+            </hbox>
+          </radiogroup>
+          </vbox>
+          <hbox>
+            <spacer class="checkbox-spacer"/>
+            <spacer class="radio-spacer"/>
+            <!-- Contents filled in at runtime -->
+            <menulist id="OtherDirList" class="minWidth20 uri-element"
+                      editable="true" flex="1" tooltiptext="&otherDirList.tooltip;"
+                      oninput="onInputSettings();"/>
+          </hbox>
+        </groupbox>
+        <spacer flex="1"/>
+      </vbox><!-- Publish Panel -->
+
+      <!-- SETTINGS PANEL -->
+      <hbox id="SettingsPanel">
+        <!-- from EditorPublishOverlay.xul -->
+        <vbox id="PublishSettingsInputs" flex="1"/>
+      </hbox><!-- Settings Panel -->
+    </tabpanels> 
+  </tabbox>
+</dialog>

@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE bindings [
+  <!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+  %brandDTD;
+  <!ENTITY % applicationsDTD SYSTEM "chrome://communicator/locale/pref/pref-applications.dtd">
+  %applicationsDTD;
+]>
+
+<bindings id="handlerBindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <binding id="handler" extends="chrome://global/content/bindings/listbox.xml#listitem">
+    <implementation>
+      <constructor>
+        this.doCommand();
+      </constructor>
+      <property name="type" readonly="true">
+        <getter>
+          return this.getAttribute("type");
+        </getter>
+      </property>
+    </implementation>
+    <content>
+      <xul:listcell class="listcell-iconic handler-type" align="center" crop="end"
+                    xbl:inherits="tooltiptext=typeDescription,label=typeDescription,image=typeIcon,typeClass"/>
+      <xul:listcell anonid="action-cell" class="listcell-iconic handler-action" align="center" crop="end"
+                    xbl:inherits="tooltiptext=actionDescription,label=actionDescription,image=actionIcon,appHandlerIcon,selected"/>
+    </content>
+  </binding>
+
+  <binding id="handler-action-selected" extends="chrome://global/content/bindings/listbox.xml#listcell">
+    <content>
+      <xul:menulist anonid="action-menu" class="actionsMenu" flex="1" crop="end" selectedIndex="1">
+        <xul:menupopup/>
+      </xul:menulist>
+    </content>
+
+    <implementation>
+      <constructor>
+        this.doCommand();
+      </constructor>
+    </implementation>
+  </binding>
+
+  <binding id="offlineapp" extends="chrome://global/content/bindings/listbox.xml#listitem">
+    <content>
+      <xul:listcell xbl:inherits="label=host"/>
+      <xul:listcell xbl:inherits="label=usage"/>
+    </content>
+  </binding>
+
+</bindings>

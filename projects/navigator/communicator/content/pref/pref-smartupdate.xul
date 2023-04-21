@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay [
+<!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+%brandDTD;
+<!ENTITY % prefSmartUpdateDTD SYSTEM "chrome://communicator/locale/pref/pref-smartupdate.dtd">
+%prefSmartUpdateDTD;
+]>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <prefpane id="smartupdate_pane"
+            label="&pref.smartUpdate.title;"
+            script="chrome://communicator/content/pref/pref-smartupdate.js">
+
+    <preferences id="smartupdate_preferences">
+      <preference id="xpinstall.enabled"
+                  name="xpinstall.enabled"
+                  type="bool"
+                  onchange="UpdateAddonsItems();"/>
+      <preference id="extensions.update.enabled"
+                  name="extensions.update.enabled"
+                  type="bool"
+                  onchange="UpdateAddonsItems();"/>
+      <preference id="extensions.update.interval"
+                  name="extensions.update.interval"
+                  type="int"/>
+      <preference id="extensions.update.autoUpdateDefault"
+                  name="extensions.update.autoUpdateDefault"
+                  type="bool"/>
+      <preference id="extensions.getAddons.cache.enabled"
+                  name="extensions.getAddons.cache.enabled"
+                  type="bool"/>
+      <preference id="app.update.enabled"
+                  name="app.update.enabled"
+                  type="bool"
+                  onchange="UpdateAppItems();"/>
+      <preference id="app.update.auto"
+                  name="app.update.auto"
+                  type="bool"
+                  onchange="UpdateAppItems();"/>
+      <preference id="app.update.interval"
+                  name="app.update.interval"
+                  type="int"/>
+      <preference id="app.update.disable_button.showUpdateHistory"
+                  name="app.update.disable_button.showUpdateHistory"
+                  type="bool"/>
+    </preferences>
+
+    <groupbox id="appUpdatesGroupBox">
+      <caption label="&appUpdates.caption;"/>
+         <hbox>
+           <checkbox id="appUpdatesEnabled"
+                     label="&autoAppUpdates.label;"
+                     accesskey="&autoAppUpdates.accesskey;"
+                     preference="app.update.enabled"/>
+           <radiogroup id="appUpdateFrequency"
+                       orient="horizontal"
+                       preference="app.update.interval">
+             <radio id="appFreqDaily"
+                    label="&daily.label;"
+                    accesskey="&appDaily.accesskey;"
+                    value="86400"/>
+             <radio id="appFreqWeekly"
+                    label="&weekly.label;"
+                    accesskey="&appWeekly.accesskey;"
+                    value="604800"/>
+           </radiogroup>
+        </hbox>
+        <checkbox id="appModeAutoEnabled"
+                  class="indent"
+                  label="&appModeAutomatic.label;"
+                  flex="1"
+                  accesskey="&appModeAutomatic.accesskey;"
+                  preference="app.update.auto"/>
+        <hbox pack="end">
+          <button id="showUpdateHistory"
+                  label="&updateHistoryButton.label;"
+                  accesskey="&updateHistoryButton.accesskey;"
+                  preference="app.update.disable_button.showUpdateHistory"
+                  oncommand="ShowUpdateHistory();"/>
+        </hbox>
+    </groupbox>
+
+    <groupbox>
+      <caption label="&addOnsTitle.label;"/>
+        <hbox align="center">
+          <checkbox id="XPInstallEnabled"
+                    label="&addOnsAllow.label;"
+                    flex="1"
+                    accesskey="&addOnsAllow.accesskey;"
+                    preference="xpinstall.enabled"/>
+          <label id="allowedSitesLink"
+                 class="text-link"
+                 value="&allowedSitesLink.label;"
+                 onclick="toPermissionsManager('install');"/>
+        </hbox>
+        <hbox class="indent">
+           <checkbox id="addOnsUpdatesEnabled"
+                     label="&autoAddOnsUpdates.label;"
+                     accesskey="&autoAddOnsUpdates.accesskey;"
+                     preference="extensions.update.enabled"/>
+           <radiogroup id="addOnsUpdateFrequency"
+                       orient="horizontal"
+                       preference="extensions.update.interval">
+             <radio id="addOnsFreqDaily"
+                    label="&daily.label;"
+                    accesskey="&addOnsDaily.accesskey;"
+                    value="86400"/>
+             <radio id="addOnsFreqWeekly"
+                    label="&weekly.label;"
+                    accesskey="&addOnsWeekly.accesskey;"
+                    value="604800"/>
+           </radiogroup>
+        </hbox>
+        <hbox class="indent">
+          <checkbox id="addOnsModeAutoEnabled"
+                    class="indent"
+                    label="&addOnsModeAutomatic.label;"
+                    flex="1"
+                    accesskey="&addOnsModeAutomatic.accesskey;"
+                    preference="extensions.update.autoUpdateDefault"/>
+        </hbox>
+        <hbox align="center">
+          <checkbox id="enablePersonalized"
+                    flex="1"
+                    label="&enablePersonalized.label;"
+                    accesskey="&enablePersonalized.accesskey;"
+                    preference="extensions.getAddons.cache.enabled"/>
+          <label id="addonManagerLink"
+                 class="text-link"
+                 onclick="toEM('addons://list/extension');"
+                 value="&addonManagerLink.label;"/>
+        </hbox>
+    </groupbox>
+  </prefpane>
+</overlay>

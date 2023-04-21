@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay SYSTEM "chrome://communicator/locale/pref/pref-http.dtd">
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <prefpane id="http_pane"
+            label="&pref.http.title;"
+            script="chrome://communicator/content/pref/pref-http.js">
+
+    <preferences>
+      <preference id="network.http.version"
+                  name="network.http.version"
+                  type="string"
+                  onchange="CheckPipelining();"/>
+      <preference id="network.http.pipelining"
+                  name="network.http.pipelining"
+                  type="bool"/>
+      <preference id="network.http.proxy.version"
+                  name="network.http.proxy.version"
+                  type="string"
+                  onchange="CheckPipeliningProxy();"/>
+      <preference id="network.http.proxy.pipelining"
+                  name="network.http.proxy.pipelining"
+                  type="bool"/>
+      <preference id="general.useragent.compatMode.gecko"
+                  name="general.useragent.compatMode.gecko"
+                  type="bool"/>
+      <preference id="general.useragent.compatMode.firefox"
+                  name="general.useragent.compatMode.firefox"
+                  type="bool"/>
+      <preference id="calendar.useragent.extra"
+                  name="calendar.useragent.extra"
+                  type="string"/>
+    </preferences>
+
+    <description>&prefPara;</description>
+
+    <hbox align="start">
+      <groupbox flex="1">
+        <caption label="&prefDirect.label;"/>
+        <vbox class="indent" align="start">
+          <radiogroup id="httpVersion"
+                      preference="network.http.version">
+            <radio value="1.0"
+                   label="&prefEnableHTTP10.label;"
+                   accesskey="&prefEnableHTTP10.accesskey;"/>
+            <radio value="1.1"
+                   label="&prefEnableHTTP11.label;"
+                   accesskey="&prefEnableHTTP11.accesskey;"/>
+          </radiogroup>
+
+          <separator class="thin"/>
+
+          <checkbox id="enablePipelining"
+                    label="&prefEnablePipelining.label;"
+                    accesskey="&prefEnablePipelining.accesskey;"
+                    preference="network.http.pipelining"/>
+        </vbox>
+      </groupbox>
+
+      <groupbox flex="1">
+        <caption label="&prefProxy.label;"/>
+        <vbox class="indent" align="start">
+          <radiogroup id="httpVersionProxy"
+                      preference="network.http.proxy.version">
+            <radio value="1.0"
+                   label="&prefEnableHTTP10.label;"
+                   accesskey="&prefEnableHTTP10Proxy.accesskey;"/>
+            <radio value="1.1"
+                   label="&prefEnableHTTP11.label;"
+                   accesskey="&prefEnableHTTP11Proxy.accesskey;"/>
+          </radiogroup>
+
+          <separator class="thin"/>
+
+          <checkbox id="enablePipeliningProxy"
+                    label="&prefEnablePipelining.label;"
+                    accesskey="&prefEnablePipeliningProxy.accesskey;"
+                    preference="network.http.proxy.pipelining"/>
+        </vbox>
+      </groupbox>
+    </hbox>
+
+    <description>&prefPipeWarning;</description>
+
+    <separator class="thin"/>
+
+    <groupbox>
+      <caption label="&prefUseragent.label;"/>
+      <checkbox id="uaGeckoCompat"
+                label="&prefGeckoCompat.label;"
+                accesskey="&prefGeckoCompat.accesskey;"
+                preference="general.useragent.compatMode.gecko"/>
+      <checkbox id="uaFirefoxCompat"
+                label="&prefFirefoxCompat.label;"
+                accesskey="&prefFirefoxCompat.accesskey;"
+                preference="general.useragent.compatMode.firefox"/>
+    </groupbox>
+
+    <description>&prefCompatWarning;</description>
+  </prefpane>
+
+</overlay>

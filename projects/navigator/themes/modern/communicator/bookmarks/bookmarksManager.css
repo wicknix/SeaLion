@@ -1,0 +1,23 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+#placesToolbar {
+  /* match menubar background */
+  background-color: #DDE3EB;
+}
+
+/* Info box */
+#detailsDeck {
+  margin: 5px;
+}
+
+#infoBoxExpanderLabel {
+  padding-inline-start: 2px;
+}
+
+#organizerScopeBar {
+  padding: 2px 0;
+  padding-inline-end: 3px;
+}

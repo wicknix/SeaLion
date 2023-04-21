@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://global/skin/"?>
+
+<!DOCTYPE prefwindow [
+  <!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+  %brandDTD;
+  <!ENTITY % sanitizeDTD SYSTEM "chrome://communicator/locale/sanitize.dtd">
+  %sanitizeDTD;
+]>
+
+<dialog id="SanitizeDialog"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        dlgbuttons="accept,cancel"
+        title="&sanitizeDialog.title;"
+        onload="onLoad();"
+        ondialogcancel="Sanitizer.clearSettings();"
+        buttonlabelaccept="&sanitizeButton.label;">
+
+  <script type="application/javascript">
+  <![CDATA[
+    Components.utils.import("resource:///modules/Sanitizer.jsm");
+
+    function onLoad()
+    {
+      var sanitizePreferences = document.getElementById("sanitizePreferences");
+      for (var i = 0; i < sanitizePreferences.childNodes.length; ++i) {
+        var preference = sanitizePreferences.childNodes[i];
+        var name = preference.getAttribute("name");
+        preference.checked = Sanitizer.willClearItem(name);
+        if (!Sanitizer.canClearItem(name))
+          preference.disabled = true;
+      }
+    }
+
+    function onCommand(aEvent)
+    {
+      var item = aEvent.target.getAttribute("name");
+      Sanitizer.setClearItem(item, aEvent.target.checked);
+
+      var preferences = document.getElementById("sanitizePreferences");
+      var found = false;
+      for (var i = 0; i < preferences.childNodes.length; ++i) {
+        var preference = preferences.childNodes[i];
+        if (preference.checked && !preference.disabled) {
+          found = true;
+          break;
+        }
+      }
+      document.documentElement.getButton("accept").disabled = !found;
+    }
+  ]]>
+  </script>
+
+  <description>&sanitizeItems.label;</description>
+
+  <vbox id="sanitizePreferences" align="start" oncommand="onCommand(event);">
+    <checkbox label="&itemHistory.label;"
+              accesskey="&itemHistory.accesskey;"
+              name="history"/>
+    <checkbox label="&itemUrlBar.label;"
+              accesskey="&itemUrlBar.accesskey;"
+              name="urlbar"/>
+    <checkbox label="&itemDownloads.label;"
+              accesskey="&itemDownloads.accesskey;"
+              name="downloads"/>
+    <checkbox label="&itemFormSearchHistory.label;"
+              accesskey="&itemFormSearchHistory.accesskey;"
+              name="formdata"/>
+    <checkbox label="&itemCache.label;"
+              accesskey="&itemCache.accesskey;"
+              name="cache"/>
+    <checkbox label="&itemCookies.label;"
+              accesskey="&itemCookies.accesskey;"
+              name="cookies"/>
+    <checkbox label="&itemOfflineApps.label;"
+              accesskey="&itemOfflineApps.accesskey;"
+              name="offlineApps"/>
+    <checkbox label="&itemPasswords.label;"
+              accesskey="&itemPasswords.accesskey;"
+              name="passwords"/>
+    <checkbox label="&itemSessions.label;"
+              accesskey="&itemSessions.accesskey;"
+              name="sessions"/>
+
+  </vbox>
+</dialog>

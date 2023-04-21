@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://editor/skin/editor.css" type="text/css"?>
+<?xml-stylesheet href="chrome://editor/skin/EditorDialog.css" type="text/css"?>
+
+<?xul-overlay href="chrome://editor/content/EdDialogOverlay.xul"?> 
+
+<!DOCTYPE dialog SYSTEM "chrome://editor/locale/EditorButtonProperties.dtd">
+<dialog title="&windowTitle.label;"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        onload="Startup();"
+        buttons="accept,cancel"
+        ondialogaccept="return onAccept();"
+        ondialogcancel="return onCancel();">
+
+  <!-- Methods common to all editor dialogs -->
+  <script type="application/javascript" src="chrome://editor/content/editorUtilities.js"/>
+  <script type="application/javascript" src="chrome://editor/content/EdDialogCommon.js"/>
+  <script type="application/javascript" src="chrome://editor/content/EdButtonProps.js"/>
+
+  <broadcaster id="args" value=""/>
+  <spacer id="location" offsetY="50" persist="offsetX offsetY"/>
+
+  <groupbox><caption label="&Settings.label;"/>
+    <grid><columns><column/><column/></columns>
+      <rows>
+        <row align="center">
+          <label control="ButtonType" value="&ButtonType.label;" accesskey="&ButtonType.accesskey;"/>
+          <menulist id="ButtonType">
+            <menupopup>
+              <menuitem label="&submit.value;"/>
+              <menuitem label="&reset.value;"/>
+              <menuitem label="&button.value;"/>
+            </menupopup>
+          </menulist>
+        </row>
+        <row align="center">
+          <label control="ButtonName" value="&ButtonName.label;" accesskey="&ButtonName.accesskey;"/>
+          <textbox id="ButtonName"/>
+        </row>
+        <row align="center">
+          <label control="ButtonValue" value="&ButtonValue.label;" accesskey="&ButtonValue.accesskey;"/>
+          <textbox id="ButtonValue"/>
+        </row>
+      </rows>
+    </grid>
+    <hbox>
+      <button id="MoreFewerButton" oncommand="onMoreFewer();" persist="more"/>
+    </hbox>
+    <grid id="MoreSection"><columns><column/><column/></columns>
+      <rows>
+        <row>
+          <spacer/>
+          <checkbox id="ButtonDisabled" label="&ButtonDisabled.label;" accesskey="&ButtonDisabled.accesskey;"/>
+        </row>
+        <row align="center">
+          <label control="ButtonTabIndex" value="&tabIndex.label;" accesskey="&tabIndex.accesskey;"/>
+          <hbox>
+            <textbox id="ButtonTabIndex" class="narrow" oninput="forceInteger(this.id);"/>
+          </hbox>
+        </row>
+        <row align="center">
+          <label control="ButtonAccessKey" value="&AccessKey.label;" accesskey="&AccessKey.accesskey;"/>
+          <hbox>
+            <textbox id="ButtonAccessKey" class="narrow"/>
+          </hbox>
+        </row>
+      </rows>
+    </grid>
+  </groupbox>
+
+  <!-- from EdDialogOverlay -->
+  <hbox flex="1" style="margin-top: 0.2em">
+    <button id="RemoveButton" label="&RemoveButton.label;" accesskey="&RemoveButton.accesskey;" oncommand="RemoveButton();"/>
+    <!-- This will right-align the button -->
+    <spacer flex="1"/>
+    <button id="AdvancedEditButton"/>
+  </hbox>
+  <separator class="groove"/>
+
+</dialog>

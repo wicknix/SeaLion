@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://editor/skin/editor.css" type="text/css"?>
+<?xml-stylesheet href="chrome://editor/skin/EditorDialog.css" type="text/css"?>
+
+<?xul-overlay href="chrome://editor/content/EdDialogOverlay.xul"?> 
+
+<!DOCTYPE dialog SYSTEM "chrome://editor/locale/EdColorPicker.dtd">
+
+<dialog title="&windowTitle.label;"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    onload="Startup()"
+    ondialogaccept="return onAccept();"
+    ondialogcancel="return onCancelColor();">
+
+  <script type="application/javascript" src="chrome://editor/content/editorUtilities.js"/>
+  <script type="application/javascript" src="chrome://editor/content/EdDialogCommon.js"/>
+  <script type="application/javascript" src="chrome://editor/content/EdColorPicker.js"/>
+
+  <broadcaster id="args" value=""/>
+  <spacer id="location" offsetY="50" persist="offsetX offsetY"/>
+
+  <hbox id="TableOrCellGroup" align="center" collapsed="true">
+    <label control="CellOrTableGroup" value="&background.label;" accesskey="&background.accessKey;"/>
+    <radiogroup id="CellOrTableGroup" orient="horizontal">
+      <radio id="TableRadio" label="&table.label;" accesskey="&table.accessKey;"/>
+      <radio id="CellRadio"  label="&cell.label;"  accesskey="&cell.accessKey;"/>
+  </radiogroup>
+  </hbox>
+  <colorpicker id="ColorPicker" palettename="standard" 
+    persist="palettename"
+    onclick="SetDefaultToOk();"
+    ondblclick="if (onAccept()) window.close();"
+    onkeypress="SelectColorByKeypress(event);"
+    onselect="SelectColor();"/>
+<!-- Web palette is not implemented???
+  <hbox align="center">
+    <label value="&palette.label;"/>
+    <radio id="StandardPalette" label="&standardPalette.label;" oncommand="ChangePalette('standard')"/>
+    <radio id="WebPalette" label="&webPalette.label;" oncommand="ChangePalette('web')"/>
+  </hbox>
+-->
+  <spacer class="spacer"/>
+  <vbox flex="1">
+    <button id="LastPickedButton" crop="right" oncommand="SelectLastPickedColor();">
+      <spacer id="LastPickedColor"
+                  LastTextColor="" LastBackgroundColor=""
+                  persist="LastTextColor LastBackgroundColor"/>
+      <label value="&lastPickedColor.label;" accesskey="&lastPickedColor.accessKey;" flex="1" style="text-align: center;"/>
+    </button>
+    <label value="&setColor1.label;"/>
+    <label value="&setColor2.label;" accesskey="&setColor2.accessKey;" control="ColorInput"/>
+    <label value="&setColorExample.label;"/>
+    <hbox align="center" flex="1=">
+      <textbox id="ColorInput" style="width: 8em" oninput="SetColorSwatch(); SetDefaultToOk();"/>
+      <spacer flex="1"/>
+      <spacer id="ColorPickerSwatch"/>
+      <spacer flex="1"/>
+      <button id="DefaultColorButton" label="&default.label;" accesskey="&default.accessKey;"
+        style="margin-right:0px;" oncommand="RemoveColor()"/>
+    </hbox>
+  </vbox>
+  <separator class="groove"/>
+</dialog>

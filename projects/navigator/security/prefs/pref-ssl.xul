@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://communicator/skin/" type="text/css"?>
+
+<!DOCTYPE overlay [
+  <!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+  %brandDTD;
+  <!ENTITY % prefSslDTD SYSTEM "chrome://pippki/locale/pref-ssl.dtd">
+  %prefSslDTD;
+]>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <prefpane id="ssl_pane"
+            label="&pref.ssltls.title;"
+            script="chrome://pippki/content/pref-ssl.js">
+    <preferences id="ssl_preferences">
+      <preference id="security.tls.version.min"
+                  name="security.tls.version.min"
+                  type="int"/>
+      <preference id="security.tls.version.max"
+                  name="security.tls.version.max"
+                  type="int"/>
+      <preference id="security.warn_entering_secure"
+                  name="security.warn_entering_secure"
+                  type="bool"/>
+      <preference id="security.warn_leaving_secure"
+                  name="security.warn_leaving_secure"
+                  type="bool"/>
+      <preference id="security.warn_submit_insecure"
+                  name="security.warn_submit_insecure"
+                  type="bool"/>
+      <preference id="security.warn_mixed_active_content"
+                  name="security.warn_mixed_active_content"
+                  type="bool"/>
+      <preference id="security.mixed_content.block_active_content"
+                  name="security.mixed_content.block_active_content"
+                  type="bool"/>
+      <preference id="security.warn_mixed_display_content"
+                  name="security.warn_mixed_display_content"
+                  type="bool"/>
+      <preference id="security.mixed_content.block_display_content"
+                  name="security.mixed_content.block_display_content"
+                  type="bool"/>
+    </preferences>
+
+    <groupbox align="start">
+      <caption label="&SSLTLSProtocolVersions.caption;"/>
+      <description>&limit.description;</description>
+
+      <hbox align="center">
+        <label id="allowEnable"
+               value="&limit.enable.label;"/>
+        <checkbox id="allowTLS10"
+                  class="nogray-disabled"
+                  label="&limit.tls10.label;"
+                  accesskey="&limit.tls10.accesskey;"
+                  oncommand="UpdateSslPrefs();"/>
+        <checkbox id="allowTLS11"
+                  class="nogray-disabled"
+                  label="&limit.tls11.label;"
+                  accesskey="&limit.tls11.accesskey;"
+                  oncommand="UpdateSslPrefs();"/>
+        <checkbox id="allowTLS12"
+                  class="nogray-disabled"
+                  label="&limit.tls12.label;"
+                  accesskey="&limit.tls12.accesskey;"
+                  oncommand="UpdateSslPrefs();"/>
+        <checkbox id="allowTLS13"
+                  class="nogray-disabled"
+                  label="&limit.tls13.label;"
+                  accesskey="&limit.tls13.accesskey;"
+                  oncommand="UpdateSslPrefs();"/>
+      </hbox>
+
+    </groupbox>
+
+    <groupbox align="start">
+      <caption label="&SSLTLSWarnings.caption;"/>
+      <description>&warn.description2;</description>
+      <checkbox id="warnEnteringSecure"
+                label="&warn.enteringsecure;"
+                accesskey="&warn.enteringsecure.accesskey;"
+                preference="security.warn_entering_secure"/>
+      <checkbox id="warnLeavingSecure"
+                label="&warn.leavingsecure;"
+                accesskey="&warn.leavingsecure.accesskey;"
+                preference="security.warn_leaving_secure"/>
+      <checkbox id="warnInsecurePost"
+                label="&warn.insecurepost;"
+                accesskey="&warn.insecurepost.accesskey;"
+                preference="security.warn_submit_insecure"/>
+    </groupbox>
+
+    <groupbox align="start">
+      <caption label="&SSLMixedContent.caption;"/>
+      <description>&mixed.description;</description>
+      <checkbox id="warnMixedActiveContent"
+                label="&warn.mixedactivecontent;"
+                accesskey="&warn.mixedactivecontent.accesskey;"
+                preference="security.warn_mixed_active_content"/>
+      <checkbox id="blockActiveContent"
+                label="&block.activecontent;"
+                accesskey="&block.activecontent.accesskey;"
+                preference="security.mixed_content.block_active_content"/>
+      <checkbox id="warnMixedDisplayContent"
+                label="&warn.mixeddisplaycontent;"
+                accesskey="&warn.mixeddisplaycontent.accesskey;"
+                preference="security.warn_mixed_display_content"/>
+      <checkbox id="blockDisplayContent"
+                label="&block.displaycontent;"
+                accesskey="&block.displaycontent.accesskey;"
+                preference="security.mixed_content.block_display_content"/>
+    </groupbox>
+
+  </prefpane>
+</overlay>

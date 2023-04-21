@@ -1,0 +1,6 @@
+component {4e6c1112-57b6-44ba-adf9-99fb573b0a30} nsSessionStartup.js
+contract @mozilla.org/suite/sessionstartup;1 {4e6c1112-57b6-44ba-adf9-99fb573b0a30}
+category app-startup SessionStartup service,@mozilla.org/suite/sessionstartup;1
+
+component {d37ccdf1-496f-4135-9575-037180af010d} nsSessionStore.js
+contract @mozilla.org/suite/sessionstore;1 {d37ccdf1-496f-4135-9575-037180af010d}

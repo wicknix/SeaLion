@@ -1,0 +1,70 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ===== colorpicker.css ================================================
+  == Styles used by the XUL colorpicker element.
+  ======================================================================= */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* ::::: colorpicker button ::::: */
+ 
+colorpicker[type="button"] {
+  width: 38px;
+  height: 24px;
+  border: 4px solid;
+  -moz-border-top-colors: transparent transparent #97A4B2 #DFE5EF;
+  -moz-border-right-colors: transparent transparent #3B414F #AAB4BF;
+  -moz-border-bottom-colors: transparent transparent #3B414F #AAB4BF;
+  -moz-border-left-colors: transparent transparent #97A4B2 #DFE5EF;
+  background-color: #C7D0D9;
+  padding: 3px;
+}
+
+.colorpicker-button-colorbox {
+  border: 1px solid #000000;
+}
+
+colorpicker[type="button"][open="true"] {
+  -moz-border-top-colors: transparent transparent #3B414F #A6B3C0;
+  -moz-border-right-colors: transparent transparent #3B414F #A6B3C0;
+  -moz-border-bottom-colors: transparent transparent #3B414F #A6B3C0;
+  -moz-border-left-colors: transparent transparent #3B414F #A6B3C0;
+  background-color: #A6B3C0;
+}
+
+colorpicker[type="button"]:focus {
+  -moz-border-top-colors: #98A5B2 #98A5B2 #97A4B2 #DFE5EF;
+  -moz-border-right-colors: #98A5B2 #98A5B2 #3B414F #AAB4BF;
+  -moz-border-bottom-colors: #98A5B2 #98A5B2 #3B414F #AAB4BF;
+  -moz-border-left-colors: #98A5B2 #98A5B2 #97A4B2 #DFE5EF;
+}
+
+colorpicker[type="button"][open="true"]:focus {
+  -moz-border-top-colors: #98A5B2 #98A5B2 #3B414F #A6B3C0;
+  -moz-border-right-colors: #98A5B2 #98A5B2 #3B414F #A6B3C0;
+  -moz-border-bottom-colors: #98A5B2 #98A5B2 #3B414F #A6B3C0;
+  -moz-border-left-colors: #98A5B2 #98A5B2 #3B414F #A6B3C0;
+}
+
+/* ::::: colorpicker tiles ::::: */
+
+.colorpickertile {
+  width: 20px;
+  height: 20px;
+  margin: 1px;
+  border: 1px inset #C7D0D9;
+}
+
+.colorpickertile[selected="true"] {
+  border: 2px outset #C0C0C0;
+}
+
+.colorpickertile[hover="true"] {
+  border: 2px dotted #FFFFFF;
+}
+
+.cp-light[hover="true"] {
+  border : 2px dotted #909090;
+}

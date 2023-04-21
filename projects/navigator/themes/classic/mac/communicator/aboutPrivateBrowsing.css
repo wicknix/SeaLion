@@ -1,0 +1,85 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+#warningScreen {
+  background-color: -moz-Dialog;
+}
+
+#warningBox {
+  background-color: -moz-Field;
+  color: -moz-FieldText;
+  border: 1px solid ThreeDShadow;
+  border-radius: 10px;
+  padding: 3em;
+  padding-inline-start: 30px;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+#warningInnerBox {
+ max-width: 50em;
+}
+
+#warningTitle {
+  margin: 0 0 .6em 0;
+  font-size: 160%;
+  border-bottom: 1px solid ThreeDLightShadow
+}
+
+#warningText {
+  font-size: 110%;
+  margin-left: 0;
+}
+
+/* Pick the desired icons depending on the window's context */
+
+#warningBox.private > #warningBoxIcon {
+  list-style-image: url("chrome://global/skin/icons/information-large.png");
+  width: 48px;
+  height: 48px;
+  margin-inline-end: 1.5em;
+}
+
+#warningBox.normal > #warningBoxIcon {
+  list-style-image: url("chrome://global/skin/icons/question-large.png");
+  width: 48px;
+  height: 48px;
+  margin-inline-end: 1.5em;
+}
+
+#trackWarnBox {
+  margin-top: 0.6em;
+  margin-inline-end: 4em;
+  -moz-box-align: start;
+}
+
+#trackWarnIcon {
+  list-style-image: url("chrome://communicator/skin/icons/warning-24.png");
+  width: 24px;
+  height: 24px;
+  margin-inline-end: 1em;
+}
+
+/* Define additional styles to look similar to the netError/certError pages */
+
+#warningTitle {
+  font-weight: bold;
+}
+#warningStatus {
+  margin: 0.4em 0 1.2em 0;
+  padding-bottom: 1.2em;
+  border-bottom: 1px solid ThreeDLightShadow;
+  font-size: 135%;
+}
+
+#warningInnerBox > button {
+  margin: 0.8em 0 1em 0;
+}
+
+#warningOuterBox > vbox > label,
+#warningInnerBox > description {
+  margin-inline-start: 0;
+}

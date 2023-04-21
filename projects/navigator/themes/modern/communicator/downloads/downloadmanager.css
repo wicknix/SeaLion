@@ -1,0 +1,101 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* Note to themers:
+   On rows and all cells, those properties for download states are available:
+   active, inactive, resumable, paused, downloading, finished, failed, canceled, blocked
+*/
+
+treechildren::-moz-tree-image(Name) {
+  margin-inline-end: 2px;
+}
+
+#pauseButton,
+treechildren::-moz-tree-image(ActionPlay, downloading, resumable) {
+  /* pause */
+  list-style-image: url("chrome://communicator/skin/downloads/downloadButtons.png");
+  -moz-image-region: rect(0px, 48px, 16px, 32px);
+}
+
+#ActionPlay,
+#resumeButton,
+treechildren::-moz-tree-image(ActionPlay, paused, resumable) {
+  /* resume */
+  list-style-image: url("chrome://communicator/skin/downloads/downloadButtons.png");
+  -moz-image-region: rect(0px, 16px, 16px, 0px);
+}
+
+#retryButton,
+treechildren::-moz-tree-image(ActionPlay, failed),
+treechildren::-moz-tree-image(ActionPlay, canceled) {
+  /* retry */
+  list-style-image: url("chrome://communicator/skin/downloads/downloadButtons.png");
+  -moz-image-region: rect(0px, 64px, 16px, 48px);
+}
+
+#ActionStop,
+#cancelButton,
+treechildren::-moz-tree-image(ActionStop, active) {
+  /* cancel */
+  list-style-image: url("chrome://communicator/skin/downloads/downloadButtons.png");
+  -moz-image-region: rect(0px, 32px, 16px, 16px);
+}
+
+treechildren::-moz-tree-image(ActionStop, inactive) {
+  /* remove */
+  list-style-image: url("chrome://communicator/skin/downloads/dl-remove.png");
+  -moz-image-region: auto;
+}
+
+/* progress dialogs */
+#dlProgressWindow {
+  /* match dialog.css */
+  padding: 7px 5px 5px;
+}
+
+/* label with dropdown, actually done as a button type=menu */
+#fileName, #fileSource {
+  background-color: transparent;
+  border: none;
+}
+
+#fileName:focus,
+#fileSource:focus {
+  outline: 3px solid #98A5B2;
+  -moz-outline-radius: 4px 5px;
+}
+
+#fileName > .button-box > hbox > .button-text,
+#fileSource > .button-box > hbox > .button-text {
+  margin: 0 !important;
+}
+
+#fileName {
+  font-weight: bold;
+}
+
+.mini-button {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  min-height: 0;
+}
+
+.mini-button:focus {
+  outline: 3px solid #98A5B2;
+  outline-offset: -2px;
+  -moz-outline-radius: 50%;
+}
+
+.mini-button > .button-box > .button-text {
+  margin: 0 !important;
+}
+
+#downloadToolbar {
+  background-image: url("chrome://communicator/skin/toolbar/prtb-bg-noline.gif");
+}

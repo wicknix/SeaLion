@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay SYSTEM "chrome://communicator/locale/pref/pref-history.dtd" >
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <prefpane id="history_pane"
+            label="&pref.history.title;"
+            script="chrome://communicator/content/pref/pref-history.js">
+    <preferences id="history_preferences">
+      <preference id="places.history.enabled"
+                  name="places.history.enabled"
+                  type="bool"/>
+      <preference id="pref.browser.history.disable_button.clear_hist"
+                  name="pref.browser.history.disable_button.clear_hist"
+                  type="bool"/>
+      <preference id="pref.browser.history.disable_button.clear_urlbar"
+                  name="pref.browser.history.disable_button.clear_urlbar"
+                  type="bool"/>
+      <preference id="browser.urlbar.historyEnabled"
+                  name="browser.urlbar.historyEnabled"
+                  type="bool"/>
+      <preference id="general.open_location.last_url"
+                  name="general.open_location.last_url"
+                  type="string"/>
+      <preference id="browser.formfill.enable"
+                  name="browser.formfill.enable"
+                  type="bool"/>
+      <preference id="browser.formfill.expire_days"
+                  name="browser.formfill.expire_days"
+                  type="int"/>
+    </preferences>
+
+    <groupbox>
+      <caption label="&pref.history.caption;"/>
+      <hbox align="center">
+        <description flex="1">&historyPages.label;</description>
+        <hbox align="center"
+              pack="end">
+          <button label="&clearHistory.label;"
+                  accesskey="&clearHistory.accesskey;"
+                  oncommand="prefClearGlobalHistory();"
+                  id="browserClearHistory"
+                  preference="pref.browser.history.disable_button.clear_hist"/>
+        </hbox>
+      </hbox>
+      <checkbox id="histEnable"
+                label="&enableHistory.label;"
+                accesskey="&enableHistory.accesskey;"
+                preference="places.history.enabled"/>
+    </groupbox>
+
+    <!-- no honey, I haven't been viewing porn, honest! -->
+    <groupbox>
+      <caption label="&locationBarHistory.caption;"/>
+      <hbox align="center">
+        <vbox pack="end">
+        <checkbox id="urlbarHistoryEnabled"
+                  label="&urlBarHistoryEnabled.caption;"
+                  accesskey="&urlBarHistoryEnabled.accesskey;"
+                  preference="browser.urlbar.historyEnabled"
+                  oncommand="prefUrlBarHistoryToggle(this.checked);"/>
+          <hbox align="center"
+                pack="end">
+            <description flex="1">&clearLocationBar.label;</description>
+            <button id="ClearUrlBarHistoryButton"
+                    label="&clearLocationBarButton.label;"
+                    accesskey="&clearLocationBarButton.accesskey;"
+                    oncommand="prefClearUrlbarHistory(this); this.disabled = true;"
+                    preference="pref.browser.history.disable_button.clear_urlbar"/>
+          </hbox>
+        </vbox>
+      </hbox>
+    </groupbox>
+
+    <!-- form history -->
+    <groupbox>
+      <caption label="&formfillHistory.caption;"/>
+      <checkbox id="formfillEnable"
+                label="&enableFormfill.label;"
+                accesskey="&enableFormfill.accesskey;"
+                preference="browser.formfill.enable"/>
+      <hbox align="center">
+        <label value="&formfillExpire.label;"
+               accesskey="&formfillExpire.accesskey;"
+               control="formfillDay"/>
+        <textbox id="formfillDay"
+                 type="number"
+                 size="4"
+                 preference="browser.formfill.expire_days"/>
+        <label value="&formfillDays.label;"/>
+      </hbox>
+    </groupbox>
+  </prefpane>
+
+</overlay>

@@ -1,0 +1,113 @@
+/* -*- Mode: IDL; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+#include "nsISupports.idl"
+
+interface nsIDOMElement;
+interface nsIFile;
+
+[scriptable, uuid(4244d99e-0fbf-4cf3-903a-893634704e84)]
+interface nsIShellService : nsISupports
+{
+  /**
+   * app types we can be registered to handle
+   */
+  const unsigned short BROWSER = 0x0001;
+  const unsigned short MAIL    = 0x0002;
+  const unsigned short NEWS    = 0x0004;
+  const unsigned short RSS     = 0x0008;
+
+  /**
+   * Determines whether or not SeaMonkey is the "Default Client" for the
+   * passed in app type.
+   *
+   * This is simply whether or not SeaMonkey is registered to handle
+   * the url schemes associated with the app.
+   *
+   * @param aStartupCheck true if this is the check being performed
+   *                      by the first window at startup,
+   *                      false otherwise.
+   * @param aApps the application types being tested (Browser, Mail, News, RSS)
+   */
+  boolean isDefaultClient(in boolean aStartupCheck, in unsigned short aApps);
+
+  /**
+   * Registers SeaMonkey as the "Default Client" for the
+   * passed in app types.
+   *
+   * @param aForAllUsers   Whether or not SeaMonkey should attempt
+   *                       to become the default client for all
+   *                       users on a multi-user system.
+   * @param aClaimAllTypes Register SeaMonkey as the handler for
+   *                       additional protocols (ftp, chrome etc)
+   *                       and web documents (.html, .xhtml etc).
+   * @param aApps the application types being tested (Mail, News, Browser, RSS)
+   */
+  void setDefaultClient(in boolean aForAllUsers, in boolean aClaimAllTypes, in unsigned short aApps);
+
+  /**
+   * Used to determine whether or not to show a "Set Default Client"
+   * query dialog. This attribute is true if the application is starting
+   * up and "shell.checkDefaultClient" is true, otherwise it
+   * is false.
+   */
+  attribute boolean shouldCheckDefaultClient;
+
+
+  /**
+   * Returns the appTypes constants we should be the default client for.
+   * Saves/reads the default apps to/from the pref shell.checkDefaultApps
+   */
+  attribute unsigned short shouldBeDefaultClientFor;
+
+  /**
+   * Attempt to determine whether it is possible to change the wallpaper.
+   */
+  readonly attribute boolean canSetDesktopBackground;
+
+  /**
+   * Sets the desktop background image using either the HTML <IMG>
+   * element supplied or the background image of the element supplied.
+   *
+   * @param aImageElement Either a HTML <IMG> element or an element with
+   *                      a background image from which to source the
+   *                      background image.
+   * @param aPosition     How to place the image on the desktop
+   */
+
+  void setDesktopBackground(in nsIDOMElement aElement, in long aPosition);
+
+  /**
+   * Flags for positioning/sizing of the Desktop Background image.
+   */
+  const long BACKGROUND_TILE      = 1;
+  const long BACKGROUND_STRETCH   = 2;
+  const long BACKGROUND_CENTER    = 3;
+  const long BACKGROUND_FILL      = 4;
+  const long BACKGROUND_FIT       = 5;
+
+  /**
+   * The desktop background color, visible when no background image is
+   * used, or if the background image is centered and does not fill the
+   * entire screen. An RGB value (r << 16 | g << 8 | b)
+   */
+  attribute unsigned long desktopBackgroundColor;
+
+  /**
+   * Opens an application with a specific URI to load.
+   * @param   application
+   *          The application file (or bundle directory, on OS X)
+   * @param   uri
+   *          The uri to be loaded by the application
+   */
+  void openApplicationWithURI(in nsIFile aApplication, in ACString aURI);
+
+  /**
+   * The default system handler for web feeds
+   */
+  readonly attribute nsIFile defaultFeedReader;
+};
+

@@ -1,0 +1,78 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/** sidebarOverlay.css [CONTENT]
+ *   This file is for style rules essential for correct sidebar operation.
+ *   These rules will not change on a skin-by-skin basis. 
+ **/ 
+ 
+#sidebar-box {
+    width: 162px;
+    min-height: 10px;
+    min-width: 30px;
+    max-width: 400px;
+}
+
+#sidebar-panels {
+    min-width: 1px;
+    min-height: 10px;
+}
+
+.iframe-panel { 
+    min-width: 1px;
+    min-height: 1px;
+}
+
+#sidebar-iframe-no-panels {
+    min-width: 1px;
+    min-height: 1px;
+    overflow: auto;
+}
+
+.browser-sidebar {
+    min-width: 1px;  
+    min-height: 1px;
+}
+
+/*
+ *    Sidebar and Panel title buttons
+ */
+sidebarheader[type="box"] {
+    -moz-binding: url(chrome://communicator/content/sidebar/sidebarBindings.xml#sidebar-header-box);
+}
+sidebarheader[type="splitter"] {
+    -moz-binding: url(chrome://communicator/content/sidebar/sidebarBindings.xml#sidebar-header-splitter);
+    /* a vertical splitter */
+    cursor: n-resize;
+}
+
+.sidebarheader-main {
+    min-width: 1px;
+    min-height: 1px;
+}
+
+/**
+ * texttab folder lookalike e.g. for sidebar panel headers
+ */
+  .box-texttab
+    {
+      min-height          : 10px;
+      min-width           : 10px;
+    }
+
+  .box-texttab-right-space 
+    {
+      min-width           : 1px;
+    }
+
+/**
+ * prevent the notification in the sidebar from being too wide 
+ */
+.sidebar-notificationbox > notification {
+  -moz-binding: url(chrome://communicator/content/bindings/notification.xml#sidebar-notification);
+}
+
+.sidebar-notificationbox > notification[value="addon-progress"] {
+  -moz-binding: url(chrome://communicator/content/bindings/notification.xml#sidebar-addon-progress-notification);
+}
