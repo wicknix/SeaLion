@@ -1,4 +1,5 @@
 # SeaLion - A web browser for Mac OS X 10.7 - 12.6
+# and 32-bit PowerPC Linux (Void / Debian 11).
 Built upon the unified XUL platform (UXP).
 https://repo.palemoon.org/MoonchildProductions/UXP
 
