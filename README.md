@@ -27,3 +27,6 @@ What is not included
 * Language Packs
 
 ![SeaLion](https://user-images.githubusercontent.com/39230578/233512154-70590149-3d1a-49dc-aca2-ae0bd42b855a.png)
+
+![SeaLion-ppc32-Linux](https://user-images.githubusercontent.com/39230578/235285348-8500793c-58eb-4cbe-8e85-d4d4b78b8d0e.png)
+
