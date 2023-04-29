@@ -34,8 +34,8 @@ elif CONFIG['MOZ_WIDGET_TOOLKIT'] == 'cocoa':
     ]
 elif CONFIG['MOZ_WIDGET_TOOLKIT'] in ('gtk2', 'gtk3'):
     FINAL_TARGET_FILES.chrome.icons.default += [
-        'icons/gtk/default.png'
-        'icons/gtk/document.png'
-        'icons/gtk/main-window.png'
+        'icons/gtk/default.png',
+        'icons/gtk/document.png',
+        'icons/gtk/main-window.png',
         'icons/gtk/seamonkey.png'
     ]
