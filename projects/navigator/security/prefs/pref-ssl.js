@@ -7,8 +7,8 @@ function Startup()
   // map associating preference values with checkbox element IDs
   gSslPrefElements = new Map([[1, "allowTLS10"],
                               [2, "allowTLS11"],
-                              [3, "allowTLS12"]
-                              [4, "allowTKS13"]);
+                              [3, "allowTLS12"],
+                              [4, "allowTKS13"]]);
 
   // initial setting of checkboxes based on preference values
   UpdateSslBoxes();
