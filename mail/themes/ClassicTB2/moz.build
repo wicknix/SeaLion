@@ -1,0 +1,23 @@
+# vim: set filetype=python:
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+FINAL_TARGET_PP_FILES += ['install.rdf']
+
+#DIST_SUBDIR = 'extensions/xplatform@interlink.projects.binaryoutcast.com'
+
+FINAL_TARGET_FILES += [
+    'icon.png',
+    'preview.png',
+]
+
+USE_EXTENSION_MANIFEST = True
+
+DEFINES['MOZ_APP_VERSION'] = CONFIG['MOZ_APP_VERSION']
+DEFINES['MOZ_APP_ID'] = CONFIG['MOZ_APP_ID']
+
+if CONFIG['MOZ_MAIL_LEGACY']:
+    DEFINES['MOZ_MAIL_LEGACY'] = 1
+
+JAR_MANIFESTS += ['jar.mn']

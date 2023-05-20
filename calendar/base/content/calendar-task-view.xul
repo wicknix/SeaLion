@@ -1,0 +1,244 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet type="text/css" href="chrome://calendar/skin/calendar-task-view.css"?>
+<?xml-stylesheet type="text/css" href="chrome://calendar/content/calendar-bindings.css"?>
+
+<!DOCTYPE overlay [
+  <!ENTITY % dtd1 SYSTEM "chrome://calendar/locale/calendar.dtd" > %dtd1;
+  <!ENTITY % dtd2 SYSTEM "chrome://calendar/locale/calendar-event-dialog.dtd" > %dtd2;
+  <!ENTITY % dtd3 SYSTEM "chrome://calendar/locale/menuOverlay.dtd" > %dtd3;
+]>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script type="application/javascript" src="chrome://calendar/content/calendar-task-tree.js"/>
+  <script type="application/javascript" src="chrome://calendar/content/calendar-task-view.js"/>
+  <script type="application/javascript" src="chrome://calendar/content/calendar-dialog-utils.js"/>
+  <script type="application/javascript" src="chrome://calendar/content/calApplicationUtils.js"/>
+  <script type="application/javascript" src="chrome://calendar/content/calFilter.js"/>
+  <script type="application/javascript" src="chrome://global/content/globalOverlay.js"/>
+
+  <vbox id="calendarDisplayDeck">
+    <vbox id="calendar-task-box" flex="1"
+          onselect="taskDetailsView.onSelect(event);">
+      <hbox id="task-addition-box" align="center">
+        <box align="center" flex="1">
+          <toolbarbutton id="calendar-add-task-button"
+                         label="&calendar.newtask.button.label;"
+                         tooltiptext="&calendar.newtask.button.tooltip;"
+                         observes="calendar_new_todo_command"/>
+          <textbox id="view-task-edit-field"
+                   flex="1"
+                   class="task-edit-field"
+                   onfocus="taskEdit.onFocus(event)"
+                   onblur="taskEdit.onBlur(event)"
+                   onkeypress="taskEdit.onKeyPress(event)"/>
+        </box>
+        <box align="center" flex="1">
+          <textbox id="task-text-filter-field"
+                   class="searchBox"
+                   type="search"
+                   flex="1"
+                   placeholder=""
+                   emptytextbase="&calendar.task.text-filter.textbox.emptytext.base1;"
+                   keyLabelNonMac="&calendar.task.text-filter.textbox.emptytext.keylabel.nonmac;"
+                   keyLabelMac="&calendar.task.text-filter.textbox.emptytext.keylabel.mac;"
+                   oncommand="taskViewUpdate();"/>
+        </box>
+      </hbox>
+      <vbox flex="1">
+        <calendar-task-tree id="calendar-task-tree" flex="1"
+                            visible-columns="completed priority title startdate duedate"
+                            persist="visible-columns ordinals widths sort-active sort-direction height"
+                            context="taskitem-context-menu"/>
+        <splitter id="calendar-task-view-splitter" collapse="none" persist="state" class="calendar-splitter"/>
+        <vbox id="calendar-task-details-container"
+              class="main-header-area"
+              flex="1"
+              persist="height"
+              context="task-actions-toolbar-context-menu"
+              hidden="true">
+          <hbox id="calendar-task-details">
+            <grid id="calendar-task-details-grid" flex="1">
+              <columns id="calendar-task-details-columns">
+                <column id="calendar-header-name-column"/>
+                <column id="calendar-header-value-column" flex="1"/>
+              </columns>
+
+              <rows id="calendar-task-details-rows">
+                <row id="calendar-task-details-priority-row"
+                     align="end">
+                  <hbox pack="end">
+                    <label id="calendar-task-details-priority-label"
+                           value="&calendar.task-details.priority.label;"
+                           class="task-details-name"
+                           hidden="true"/>
+                  </hbox>
+                  <hbox flex="1" align="end" >
+                    <label id="calendar-task-details-priority-low"
+                           value="&calendar.task-details.priority.low.label;"
+                           class="task-details-value"
+                           crop="end"
+                           flex="1"
+                           hidden="true"/>
+                    <label id="calendar-task-details-priority-normal"
+                           value="&calendar.task-details.priority.normal.label;"
+                           class="task-details-value"
+                           crop="end"
+                           flex="1"
+                           hidden="true"/>
+                    <label id="calendar-task-details-priority-high"
+                           value="&calendar.task-details.priority.high.label;"
+                           class="task-details-value"
+                           crop="end"
+                           flex="1"
+                           hidden="true"/>
+                    <hbox id="other-actions-box" align="end" flex="1" pack="end">
+                      <menupopup id="task-actions-toolbar-context-menu">
+                        <menuitem id="CustomizeTaskActionsToolbar"
+                                  oncommand="CustomizeMailToolbar('task-actions-toolbox', 'CustomizeTaskActionsToolbar')"
+                                  label="&calendar.menu.customize.label;"
+                                  accesskey="&calendar.menu.customize.accesskey;"/>
+                      </menupopup>
+
+                      <toolbox id="task-actions-toolbox"
+                               minwidth="50px"
+                               mode="full"
+                               iconsize="small"
+                               labelalign="end"
+                               defaultmode="full"
+                               defaulticonsize="small"
+                               defaultlabelalign="end">
+                        <toolbarpalette id="task-actions-toolbar-palette">
+                          <toolbarbutton id="task-actions-category"
+                                         type="menu"
+                                         label="&calendar.unifinder.tree.categories.label;"
+                                         tooltiptext="&calendar.task.category.button.tooltip;"
+                                         command="calendar_task_category_command"
+                                         observes="calendar_task_category_command"
+                                         class="toolbarbutton-1 msgHeaderView-button">
+                              <panel id="task-actions-category-panel"
+                                     type="category-panel"
+                                     onpopupshowing="taskDetailsView.loadCategories(event)"
+                                     onpopuphiding="taskDetailsView.saveCategories(event)"/>
+                          </toolbarbutton>
+                          <toolbarbutton id="task-actions-markcompleted"
+                                         type="menu-button"
+                                         label="&calendar.context.markcompleted.label;"
+                                         tooltiptext="&calendar.task.complete.button.tooltip;"
+                                         command="calendar_toggle_completed_command"
+                                         observes="calendar_toggle_completed_command"
+                                         class="toolbarbutton-1 msgHeaderView-button">
+                            <menupopup id="task-actions-markcompleted-menupopup" type="task-progress"/>
+                          </toolbarbutton>
+                          <toolbarbutton id="task-actions-priority"
+                                         type="menu"
+                                         label="&calendar.context.priority.label;"
+                                         tooltiptext="&calendar.task.priority.button.tooltip;"
+                                         command="calendar_general-priority_command"
+                                         observes="calendar_general-priority_command"
+                                         class="toolbarbutton-1 msgHeaderView-button">
+                            <menupopup id="task-actions-priority-menupopup" type="task-priority"/>
+                          </toolbarbutton>
+                          <toolbarbutton id="calendar-delete-task-button"
+                                         class="toolbarbutton-1 msgHeaderView-button"
+                                         label="&calendar.taskview.delete.label;"
+                                         tooltiptext="&calendar.context.deletetask.label;"
+                                         observes="calendar_delete_todo_command"/>
+                        </toolbarpalette>
+
+                        <toolbar id="task-actions-toolbar" align="start"
+                                 class="inline-toolbar"
+                                 customizable="true"
+                                 mode="full"
+                                 iconsize="small"
+                                 labelalign="end"
+                                 defaultmode="full"
+                                 defaulticonsize="small"
+                                 context="task-actions-toolbar-context-menu"
+                                 defaultset="task-actions-category,task-actions-markcompleted,task-actions-priority,calendar-delete-task-button"/>
+                      </toolbox>
+                    </hbox>
+                  </hbox>
+                </row>
+                <row id="calendar-task-details-title-row"
+                     align="top"
+                     hidden="true">
+                  <label value="&calendar.task-details.title.label;"
+                         class="task-details-name"/>
+                  <label id="calendar-task-details-title"
+                         class="task-details-value"/>
+                </row>
+                <row id="calendar-task-details-organizer-row"
+                     align="top"
+                     hidden="true">
+                  <label value="&calendar.task-details.organizer.label;"
+                         class="task-details-name"/>
+                  <label id="calendar-task-details-organizer"
+                         class="task-details-value text-link"
+                         crop="end"
+                         onclick="sendMailToOrganizer()"/>
+                </row>
+                <row id="calendar-task-details-status-row"
+                     align="top"
+                     hidden="true">
+                  <label value="&calendar.task-details.status.label;"
+                         class="task-details-name"/>
+                  <label id="calendar-task-details-status"
+                         crop="end"
+                         class="task-details-value"/>
+                </row>
+                <row id="calendar-task-details-category-row"
+                     align="top"
+                     hidden="true">
+                  <label value="&calendar.task-details.category.label;"
+                         class="task-details-name"/>
+                  <label id="calendar-task-details-category"
+                         crop="end"
+                         class="task-details-value"/>
+                </row>
+                <row class="item-date-row"
+                     id="task-start-row"
+                     mode="start"
+                     taskStartLabel="&calendar.task-details.start.label;"
+                     align="end"/>
+                <row class="item-date-row"
+                     id="task-due-row"
+                     mode="end"
+                     taskDueLabel="&calendar.task-details.due.label;"
+                     align="end"/>
+                <row id="calendar-task-details-repeat-row"
+                     align="top"
+                     hidden="true">
+                  <label value="&calendar.task-details.repeat.label;"
+                         class="task-details-name"/>
+                  <label id="calendar-task-details-repeat"
+                         crop="end"
+                         class="task-details-value"/>
+                </row>
+              </rows>
+            </grid>
+          </hbox>
+          <textbox id="calendar-task-details-description" multiline="true" flex="1"/>
+          <hbox id="calendar-task-details-attachment-row"
+               align="top"
+               hidden="true">
+            <hbox pack="end">
+              <label value="&calendar.task-details.attachments.label;"
+                     class="task-details-name"/>
+            </hbox>
+            <vbox id="calendar-task-details-attachment-rows"
+                  align="top"
+                  flex="1"
+                  style="overflow: auto;"
+                  hidden="true">
+            </vbox>
+          </hbox>
+        </vbox>
+      </vbox>
+    </vbox>
+  </vbox>
+
+</overlay>

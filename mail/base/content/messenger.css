@@ -1,0 +1,331 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ===== messenger.css ==================================================
+  == Content specific styles for Messenger.
+  ======================================================================= */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* attachment list styles */
+
+attachmentlist {
+  -moz-appearance: listbox;
+  -moz-user-focus: normal;
+}
+
+attachmentlist[orient="horizontal"] {
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#attachmentlist-horizontal");
+}
+
+attachmentlist[orient="vertical"] {
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#attachmentlist-vertical");
+}
+
+.attachmentlist-wrapper {
+  display: block;
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+}
+
+attachmentitem {
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#attachmentitem");
+}
+
+.attachmentcell-content {
+  -moz-box-orient: horizontal;
+}
+
+.attachmentcell-text {
+  -moz-box-orient: horizontal;
+}
+
+attachmentlist[view="large"] .attachmentcell-content {
+  -moz-box-orient: horizontal;
+}
+
+attachmentlist[view="large"] .attachmentcell-text {
+  -moz-box-align: start;
+  -moz-box-orient: vertical;
+}
+
+attachmentlist[view="tile"] .attachmentcell-content {
+  -moz-box-align: center;
+  -moz-box-orient: vertical;
+}
+
+attachmentlist[view="tile"] .attachmentcell-text {
+  -moz-box-align: center;
+  -moz-box-orient: vertical;
+}
+
+attachmentlist[orient="horizontal"] > attachmentitem {
+  min-width: 10em;
+}
+
+attachmentlist[orient="horizontal"][view="tile"] > attachmentitem {
+  min-width: 5em;
+  max-width: 10em;
+}
+
+/* message header widgets */
+
+mail-messageid {
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#mail-messageid");
+}
+
+mail-messageids-headerfield {
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#mail-messageids-headerfield");
+}
+
+mail-emailaddress {
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#mail-emailaddress");
+}
+
+.emailDisplayButton {
+  -moz-user-focus: normal;
+}
+
+.emailStar {
+  -moz-user-focus: normal;
+}
+
+.emailPopup {
+  -moz-user-focus: normal;
+}
+
+mail-emailheaderfield {
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#mail-emailheaderfield");
+}
+
+mail-toggle-headerfield {
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#mail-toggle-headerfield");
+}
+
+mail-multi-emailHeaderField {
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#mail-multi-emailHeaderField");
+}
+
+mail-newsgroup {
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#mail-newsgroup");
+}
+
+mail-newsgroups-headerfield {
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#mail-newsgroups-headerfield");
+}
+
+mail-headerfield {
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#mail-headerfield");
+}
+
+mail-urlfield {
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#mail-urlfield");
+}
+
+mail-tagfield {
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#mail-headerfield-tags");
+}
+
+mail-tagfield[collapsed="true"] {
+  display: none;
+}
+
+#searchTermList > listitem {
+  -moz-binding: url("chrome://messenger/content/searchWidgets.xml#listitem");
+}
+
+searchattribute {
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#searchattribute");
+}
+
+searchoperator {
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#searchoperator");
+}
+
+searchvalue {
+  display: -moz-deck;
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#searchvalue");
+}
+
+searchterm {
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#searchterm");
+}
+
+.ruleaction {
+  -moz-binding: url("chrome://messenger/content/searchWidgets.xml#ruleaction");
+}
+
+.ruleactiontype {
+  -moz-binding: url("chrome://messenger/content/searchWidgets.xml#ruleactiontype-menulist");
+}
+
+.ruleactiontarget[type] {
+  -moz-binding: url("chrome://messenger/content/searchWidgets.xml#ruleactiontarget-base");
+}
+
+.ruleactiontarget[type="movemessage"], .ruleactiontarget[type="copymessage"] {
+  -moz-binding: url("chrome://messenger/content/searchWidgets.xml#ruleactiontarget-folder");
+}
+
+.ruleactiontarget[type="addtagtomessage"] {
+  -moz-binding: url("chrome://messenger/content/searchWidgets.xml#ruleactiontarget-tag");
+}
+
+.ruleactiontarget[type="setpriorityto"] {
+  -moz-binding: url("chrome://messenger/content/searchWidgets.xml#ruleactiontarget-priority");
+}
+
+.ruleactiontarget[type="setjunkscore"] {
+  -moz-binding: url("chrome://messenger/content/searchWidgets.xml#ruleactiontarget-junkscore");
+}
+
+.ruleactiontarget[type="forwardmessage"] {
+  -moz-binding: url("chrome://messenger/content/searchWidgets.xml#ruleactiontarget-forwardto");
+}
+
+.ruleactiontarget[type="replytomessage"] {
+  -moz-binding: url("chrome://messenger/content/searchWidgets.xml#ruleactiontarget-replyto");
+}
+
+dummy.usesMailWidgets {
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#dummy");
+}
+
+#searchInput {
+  -moz-binding: url("chrome://messenger/content/search.xml#glodaSearch");
+}
+
+.remote-gloda-search {
+  -moz-binding: url("chrome://messenger/content/search.xml#glodaSearch") !important;
+}
+
+.remote-gloda-search-container {
+  min-width: 10em;
+}
+
+.quick-search-button {
+  -moz-binding: url("chrome://messenger/content/search.xml#searchBarDropMarker");
+  cursor: default;
+  -moz-user-focus: none;
+}
+
+.quick-search-clearbutton{
+  cursor: default;
+  -moz-user-focus: none;
+}
+
+.folderSummaryPopup
+{
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#folderSummary-popup");
+}
+
+folderSummary
+{
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#folderSummary");
+}
+
+folderSummaryMessage
+{
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#folderSummary-message");
+}
+
+folderSummaryLocation
+{
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#folderSummary-location");
+}
+
+folderSummarySubfoldersSummary
+{
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#folderSummary-subfoldersSummary");
+}
+
+tabmail {
+  -moz-binding: url("chrome://messenger/content/tabmail.xml#tabmail");
+}
+
+menupopup[type="folder"] {
+  -moz-binding: url("chrome://messenger/content/folderWidgets.xml#folder-menupopup");
+}
+
+.addrbooksPopup {
+  -moz-binding: url("chrome://messenger/content/addressbook/addrbookWidgets.xml#addrbooks-menupopup");
+}
+
+.map-list {
+  -moz-binding: url("chrome://messenger/content/addressbook/addrbookWidgets.xml#map-list");
+}
+
+/**
+ * Toolboxes default to overflow: visible, and we need to override that to
+ * prevent the toolbox from causing its containing box (the entire content
+ * area) to become wider than the viewport, which has the bad side-effect of
+ * causing the _other_ children (i.e. tabmail, which contains important widgetry
+ * like the message scrollbar) to be rendered out of view.
+ *
+ * As it turns out, we only need to override the mail-bar3 (at least of
+ * the toolbars we create), and we only need to override the overflow-x to
+ * fix this problem, so let's do that.  This does open us up to extension
+ * toolbars causing the same problem, but we should be able to get the
+ * authors to change their extensions to prevent this problem.
+ */
+#mail-bar3 {
+  overflow-x: hidden;
+}
+
+/* Lightweight themes support */
+
+#messengerWindow:-moz-lwtheme {
+  background-repeat: no-repeat;
+  background-position: top right;
+}
+
+#status-bar[lwthemefooter="true"] {
+  background-repeat: no-repeat;
+  background-position: bottom left;
+}
+
+/* AppButton support */
+
+splitmenu {
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#splitmenu");
+}
+
+.splitmenu-menuitem {
+  -moz-binding: url("chrome://global/content/bindings/menu.xml#menuitem");
+  list-style-image: inherit;
+  -moz-image-region: inherit;
+}
+
+.splitmenu-menuitem[iconic="true"] {
+  -moz-binding: url("chrome://global/content/bindings/menu.xml#menuitem-iconic");
+}
+
+.splitmenu-menu > .menu-text,
+:-moz-any(.splitmenu-menu, .splitmenu-menuitem) > .menu-accel-container,
+#appmenu-editmenu > .menu-text,
+#appmenu-editmenu > .menu-accel-container {
+  display: none;
+}
+
+#titlebar {
+  -moz-binding: url("chrome://global/content/bindings/general.xml#windowdragbox");
+  -moz-window-dragging: drag;
+}
+
+#messengerWindow:not([chromemargin]) > #titlebar {
+  display: none;
+}
+
+.button-appmenu {
+  -moz-binding: url("chrome://messenger/content/mailWidgets.xml#appmenu-vertical") !important;
+}
+
+/* Preferences */
+
+preftab,
+preftab:root /* override :root */ {
+  -moz-binding: url("chrome://messenger/content/preferences/preferences.xml#preftab");
+  -moz-box-orient: vertical;
+}

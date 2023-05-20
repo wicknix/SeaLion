@@ -1,0 +1,26 @@
+/* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+#include <windows.h>
+#include "nsNativeAppSupportWin.h"
+
+1 24 "thunderbird.exe.manifest" 
+
+STRINGTABLE DISCARDABLE
+BEGIN
+    IDS_STARTMENU_APPNAME,              "@MOZ_APP_DISPLAYNAME@"
+END
+
+// Program icon.
+IDI_APPLICATION ICON THUNDERBIRD_ICO
+
+// For some reason IDI_MAILBIFF needs to be larger than the value of IDI_APPLICATION for static builds
+#define IDI_MAILBIFF 32576
+IDI_MAILBIFF  ICON  "../../../platform/mailnews/build/newmail.ico"
+
+// Windows taskbar icons
+#define IDI_WRITE_MESSAGE 32577
+#define IDI_ADDRESS_BOOK  32578
+IDI_WRITE_MESSAGE ICON "write-message.ico"
+IDI_ADDRESS_BOOK  ICON "address-book.ico"

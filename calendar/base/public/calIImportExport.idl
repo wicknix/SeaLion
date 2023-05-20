@@ -1,0 +1,64 @@
+/* -*- Mode: IDL; tab-width: 20; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+#include "nsISupports.idl"
+
+interface calIItemBase;
+interface nsIInputStream;
+interface nsIOutputStream;
+
+[scriptable, uuid(efef8333-e995-4f45-bdf7-bfcabbd9793e)]
+interface calIFileType : nsISupports
+{
+  /**
+   * The default extension that should be associated 
+   * with files of this type.
+   */
+  readonly attribute AString defaultExtension;
+
+  /**
+   * The extension filter to use in the filepicker's filter list.
+   * Separate multiple extensions with semicolon and space. 
+   * For example "*.html; *.htm".
+   */
+  readonly attribute AString extensionFilter;
+
+  /**
+   * The description to show to the user in the filter list.
+   */
+  readonly attribute AString description;
+};
+
+[scriptable, uuid(dbe262ca-d6c6-4691-8d46-e7f6bbe632ec)]
+interface calIImporter : nsISupports
+{
+  void getFileTypes(out unsigned long aCount,
+                    [retval, array, size_is(aCount)] out calIFileType aTypes);
+
+  void importFromStream(in nsIInputStream aStream, 
+                        out unsigned long aCount,
+                        [retval, array, size_is(aCount)] out calIItemBase aItems);
+};
+
+[scriptable, uuid(18c75bb3-6309-4c33-903f-6055fec39d07)]
+interface calIExporter : nsISupports
+{
+  void getFileTypes(out unsigned long aCount,
+                    [retval, array, size_is(aCount)] out calIFileType aTypes);
+
+  /**
+   * Export the items into the stream
+   * 
+   * @param aStream  the stream to put the data into
+   * @param aCount   the number of items being exported
+   * @param aItems   an array of items to be exported
+   * @param aTitle   a title the exporter can choose to use
+   */
+  void exportToStream(in nsIOutputStream aStream,
+                      in unsigned long aCount,
+                      [array, size_is(aCount)] in calIItemBase aItems,
+                      in AString aTitle);
+};

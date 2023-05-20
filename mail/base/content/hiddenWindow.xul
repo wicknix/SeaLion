@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+#ifdef XP_MACOSX
+
+<!-- Overlays from messenger.xul.  -->
+<?xul-overlay href="chrome://communicator/content/utilityOverlay.xul"?>
+<?xul-overlay href="chrome://messenger/content/mailWindowOverlay.xul"?>
+<?xul-overlay href="chrome://messenger/content/mailOverlay.xul"?>
+<?xul-overlay href="chrome://communicator/content/charsetOverlay.xul"?>
+
+<!DOCTYPE window [
+<!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd" >
+%brandDTD;
+<!ENTITY % messengerDTD SYSTEM "chrome://messenger/locale/messenger.dtd" >
+%messengerDTD;
+]>
+
+<window id="hidden-window"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+     onload="hiddenWindowStartup();">
+
+<script type="application/javascript" src="chrome://global/content/globalOverlay.js"/>
+<script type="application/javascript" src="chrome://messenger/content/commandglue.js"/>
+<script type="application/javascript" src="chrome://messenger/content/shareglue.js"/>
+<script type="application/javascript" src="chrome://messenger/content/mailWindow.js"/>
+<script type="application/javascript" src="chrome://messenger/content/msgMail3PaneWindow.js"/>
+<script type="application/javascript" src="chrome://messenger/content/mail3PaneWindowCommands.js"/>
+<script type="application/javascript" src="chrome://messenger/content/searchBar.js"/>
+<script type="application/javascript" src="chrome://messenger/content/hiddenWindow.js"/>
+
+
+<stringbundleset id="stringbundleset">
+  <stringbundle id="bundle_messenger" src="chrome://messenger/locale/messenger.properties"/>
+  <stringbundle id="bundle_brand" src="chrome://branding/locale/brand.properties"/>
+  <stringbundle id="bundle_search" src="chrome://messenger/locale/search.properties"/>
+</stringbundleset>
+
+  <!-- keys are appended from the overlay -->
+<keyset id="mailKeys">
+   <keyset id="tasksKeys"/>
+</keyset>
+
+<commandset id="mailCommands">
+  <commandset id="mailFileMenuItems"/>
+  <commandset id="mailViewMenuItems"/>
+  <commandset id="mailEditMenuItems"/>
+  <commandset id="mailEditContextMenuItems"/>
+  <commandset id="mailSearchMenuItems"/>
+  <commandset id="mailGoMenuItems"/>
+  <commandset id="mailMessageMenuItems"/>
+  <commandset id="mailToolbarItems"/>
+  <commandset id="mailGetMsgMenuItems"/>
+  <commandset id="mailTagMenuItems"/>
+  <commandset id="mailMarkMenuItems"/>
+  <commandset id="mailToolsMenuItems"/>
+  <commandset id="globalEditMenuItems"/>
+  <commandset id="selectEditMenuItems"/>
+  <commandset id="clipboardEditMenuItems"/>
+  <commandset id="tasksCommands"/>
+  <commandset id="macWindowMenuItems"/>
+</commandset>
+
+  <!-- it's the whole mailWindowOverlay.xul menubar! hidden windows need to
+       have a menubar for situations where they're the only window remaining
+       on a platform that wants to leave the app running, like the Mac.
+  -->
+
+<toolbox id="navigation-toolbox" class="toolbox-top"/>
+<toolbox id="mail-toolbox" class="toolbox-top"/>
+
+<browser id="hiddenBrowser" disablehistory="true"/>
+
+</window>
+
+#endif

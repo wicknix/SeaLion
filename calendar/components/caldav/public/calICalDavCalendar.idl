@@ -1,0 +1,21 @@
+/* -*- Mode: C++; tab-width: 20; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "calICalendar.idl"
+#include "calIOperation.idl"
+
+
+/** Adds CalDAV specific capabilities to calICalendar.
+ */
+[scriptable, uuid(88F6FB22-C172-11DC-A8D1-00197EA74E11)]
+interface calICalDavCalendar : calICalendar
+{
+    /**
+     * The calendar's RFC 2617 authentication realm
+     */
+    readonly attribute AUTF8String authRealm;
+
+};
+

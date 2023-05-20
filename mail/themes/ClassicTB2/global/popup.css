@@ -1,0 +1,185 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* ::::: menupopup ::::: */
+
+menupopup,
+panel {
+  border: 3px solid transparent;
+  -moz-border-top-colors   : ThreeDLightShadow ThreeDHighlight ThreeDFace;
+  -moz-border-left-colors  : ThreeDLightShadow ThreeDHighlight ThreeDFace;
+  -moz-border-right-colors : ThreeDDarkShadow  ThreeDShadow    ThreeDFace;
+  -moz-border-bottom-colors: ThreeDDarkShadow  ThreeDShadow    ThreeDFace;
+  padding: 0px;
+  min-width: 1px;
+  background: Menu;
+  color: MenuText;
+}
+
+menupopup {
+  -moz-appearance: menupopup;
+}
+
+menupopup > menu > menupopup {
+ /* align submenus */
+  -moz-margin-start: -3px;
+  margin-top: -3px;
+}
+
+panel[type="arrow"] {
+  -moz-appearance: none;
+  background: transparent;
+  border: none;
+  -moz-transition: opacity 300ms;
+}
+
+@media not all and (-moz-windows-default-theme) {
+  panel[type="arrow"][side="top"],
+  panel[type="arrow"][side="bottom"] {
+    margin-left: -23px;
+    margin-right: -23px;
+  }
+
+  panel[type="arrow"][side="left"],
+  panel[type="arrow"][side="right"] {
+    margin-top: -23px;
+    margin-bottom: -23px;
+  }
+
+  .panel-arrowcontent {
+    border-radius: 6px;
+    padding: 10px;
+    color: -moz-DialogText;
+    background: -moz-Dialog;
+    border: 1px solid ThreeDShadow;
+  }
+
+  .panel-arrow[side="top"],
+  .panel-arrow[side="bottom"] {
+    list-style-image: url("chrome://global/skin/arrow/panelarrow-vertical.svg");
+    position: relative;
+    margin-left: 6px;
+    margin-right: 6px;
+  }
+
+  .panel-arrow[side="top"] {
+    margin-bottom: -1px;
+  }
+
+  .panel-arrow[side="bottom"] {
+    -moz-transform: scaleY(-1);
+    margin-top: -1px;
+  }
+
+  .panel-arrow[side="left"],
+  .panel-arrow[side="right"] {
+    list-style-image: url("chrome://global/skin/arrow/panelarrow-horizontal.svg");
+    position: relative;
+    margin-top: 6px;
+    margin-bottom: 6px;
+  }
+
+  .panel-arrow[side="left"] {
+    margin-right: -1px;
+  }
+
+  .panel-arrow[side="right"] {
+    -moz-transform: scaleX(-1);
+    margin-left: -1px;
+  }
+}
+
+@media (-moz-windows-default-theme) {
+  panel[type="arrow"][side="top"],
+  panel[type="arrow"][side="bottom"] {
+    margin-left: -25px;
+    margin-right: -25px;
+  }
+
+  panel[type="arrow"][side="left"],
+  panel[type="arrow"][side="right"] {
+    margin-top: -25px;
+    margin-bottom: -25px;
+  }
+
+  .panel-arrowcontent {
+    border-radius: 6px;
+    background: rgb(250,251,253);
+    padding: 16px;
+    margin: 3px;
+    box-shadow: 0 0 5px 1px rgba(184,205,232,1) inset,
+                0 0 0 1px rgba(0,0,0,.25),
+                0 1px 5px rgba(0,0,0,.5);
+  }
+
+
+  .panel-arrow[side="top"] {
+    list-style-image: url("chrome://global/skin/arrow/panelarrow-up.png");
+    margin-left: 6px;
+    margin-right: 6px;
+    margin-bottom: -13px;
+    margin-top: -4px;
+  }
+
+  .panel-arrow[side="bottom"] {
+    list-style-image: url("chrome://global/skin/arrow/panelarrow-down.png");
+    margin-left: 6px;
+    margin-right: 6px;
+    margin-top: -12px;
+    margin-bottom: -4px;
+  }
+
+  .panel-arrow[side="left"] {
+    list-style-image: url("chrome://global/skin/arrow/panelarrow-horiz.png");
+    margin-top: 6px;
+    margin-bottom: 6px;
+    margin-right: -12px;
+    margin-left: -4px;
+  }
+
+  .panel-arrow[side="right"] {
+    list-style-image: url("chrome://global/skin/arrow/panelarrow-horiz.png");
+    -moz-transform: scaleX(-1);
+    margin-top: 6px;
+    margin-bottom: 6px;
+    margin-left: -12px;
+    margin-right: -4px;
+  }
+}
+
+/* ::::: tooltip ::::: */
+
+tooltip {
+  -moz-appearance: tooltip;
+  margin-top: 21px;
+  border: 1px solid InfoText;
+  padding: 2px 3px;
+  max-width: 40em;
+  background-color: InfoBackground;
+  color: InfoText;
+  font: message-box;
+}
+
+tooltip[titletip="true"] {
+ /* See bug 32157 comment 128
+  * margin: -2px 0px 0px -3px;
+  */
+  max-width: none;
+}
+
+/* rules for popups associated with menulists */
+
+menulist > menupopup {
+  -moz-appearance: none;
+  border-width: 1px;
+  -moz-border-top-colors: -moz-FieldText;
+  -moz-border-right-colors: -moz-FieldText;
+  -moz-border-bottom-colors: -moz-FieldText;
+  -moz-border-left-colors: -moz-FieldText;
+  padding: 0px;
+  min-width: 0px;
+  background-color: -moz-Field;
+}

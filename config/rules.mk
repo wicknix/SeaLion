@@ -10,4 +10,4 @@ $(error topsrcdir was not set))
 endif
 
 # Use mozilla-central's copy of rules.mk.
-include $(topsrcdir)/mozilla/config/rules.mk
+include $(topsrcdir)/platform/config/rules.mk

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+
+<!-- DTD File with all strings specific to the file -->
+<!DOCTYPE page
+[
+    <!ENTITY % dtd1 SYSTEM "chrome://calendar/locale/calendar.dtd" > %dtd1;
+]>
+
+<dialog id="chooseCalendar"
+        title="&calendar.select.dialog.title;"
+        windowtype="Calendar:CalendarPicker"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        buttons="accept,cancel"
+        onload="setTimeout('loadCalendars()',0);"
+        ondialogaccept="return doOK();"
+        persist="screenX screenY height width">
+
+    <script type="application/javascript" src="chrome://calendar/content/calendar-ui-utils.js"/>
+    <script type="application/javascript"><![CDATA[
+        function loadCalendars() {
+            const calendarManager = Components.classes["@mozilla.org/calendar/manager;1"]
+                                            .getService(Components.interfaces.calICalendarManager);
+            var listbox = document.getElementById("calendar-list");
+            var composite = window.opener.getCompositeCalendar();
+            var selectedIndex = 0;
+            var calendars;
+
+            if (window.arguments[0].calendars) {
+                calendars = window.arguments[0].calendars;
+            } else {
+                calendars = calendarManager.getCalendars({});
+            }
+            calendars = sortCalendarArray(calendars);
+
+            for (var i = 0; i < calendars.length; i++) {
+                var calendar = calendars[i];
+                var listItem = document.createElement("listitem");
+
+                var colorCell = document.createElement("listcell");
+                try {
+                    var calColor = calendar.getProperty('color');
+                    colorCell.style.background = calColor || "#a8c2e1";
+                } catch(e) {}
+                listItem.appendChild(colorCell);
+
+                var nameCell = document.createElement("listcell");
+                nameCell.setAttribute("label", calendar.name);
+                listItem.appendChild(nameCell);
+
+                listItem.calendar = calendar;
+                listbox.appendChild(listItem);
+                listItem.setAttribute("flex","1");
+
+                // Select the default calendar of the opening calendar window.
+                if (calendar.id == composite.defaultCalendar.id) {
+                    selectedIndex = i;
+                }
+            }
+            document.getElementById("prompt").textContent = window.arguments[0].promptText;
+
+            if (calendars.length) {
+                listbox.ensureIndexIsVisible(selectedIndex);
+                var selItem = listbox.getItemAtIndex(selectedIndex);
+                listbox.timedSelect(selItem, 0);
+            } else {
+                // If there are no calendars, then disable the accept button
+                document.documentElement.getButton("accept").setAttribute("disabled", "true");
+            }
+        }
+
+        function doOK() {
+            var listbox = document.getElementById("calendar-list");
+            window.arguments[0].onOk(listbox.selectedItem.calendar);
+        }
+    ]]></script>
+
+    <vbox id="dialog-box" flex="1">
+        <label id="prompt" control="calendar-list"/>
+        <listbox id="calendar-list" rows="5" flex="1" seltype="single">
+            <listcols>
+                <listcol/>
+                <listcol flex="1"/>
+            </listcols>
+        </listbox>
+    </vbox>
+</dialog>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay [
+  <!ENTITY % lightningDTD SYSTEM "chrome://lightning/locale/lightning.dtd">
+  <!ENTITY % globalDTD SYSTEM "chrome://global/locale/global.dtd">
+  %lightningDTD;
+  %globalDTD;
+]>
+
+<?xml-stylesheet href="chrome://lightning/skin/accountCentral.css" type="text/css"?>
+
+<overlay id="calendar-list-overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <rows id="acctCentralRows">
+    <spacer id="lightning-newCalendar-separator"
+            flex="1"
+            insertbefore="AccountsSection.spacer"/>
+    <row id="lightning-newCalendar-row"
+         class="acctCentralRow"
+         insertbefore="AccountsSection.spacer">
+      <hbox>
+        <label class="acctCentralText acctCentralLinkText"
+               value="&lightning.acctCentral.newCalendar.label;"
+               onclick="window.parent.openCalendarWizard();"/>
+      </hbox>
+    </row>
+  </rows>
+</overlay>

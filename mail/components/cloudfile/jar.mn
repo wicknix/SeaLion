@@ -1,0 +1,15 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+messenger.jar:
+*   content/messenger/cloudfile/addAccountDialog.xul (content/addAccountDialog.xul)
+    content/messenger/cloudfile/addAccountDialog.js  (content/addAccountDialog.js)
+    content/messenger/cloudfile/emptySettings.xhtml (content/emptySettings.xhtml)
+    content/messenger/cloudfile/NextCloud/about.xul (content/NextCloud/about.xul)
+    content/messenger/cloudfile/NextCloud/settings.xhtml (content/NextCloud/settings.xhtml)
+    content/messenger/cloudfile/NextCloud/settings.js (content/NextCloud/settings.js)
+    content/messenger/cloudfile/NextCloud/management.xhtml (content/NextCloud/management.xhtml)
+    content/messenger/cloudfile/NextCloud/management.js (content/NextCloud/management.js)
+    content/messenger/cloudfile/NextCloud/logo.png (content/NextCloud/logo.png)
+    content/messenger/cloudfile/NextCloud/aboutLogo.png (content/NextCloud/aboutLogo.png)

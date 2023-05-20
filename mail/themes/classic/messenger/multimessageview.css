@@ -1,0 +1,35 @@
+@import url("chrome://messenger/content/multimessageview.css");
+
+/* qute-specific overrides for multimessageview.css*/
+
+/* mostly it's about CSS colors not being reliable */
+
+body {
+  background-color: white;
+}
+
+.heading.info {
+  color: ButtonText;
+}
+
+
+.info,
+.count, .date,
+.message > .header > .snippet,
+.message > .header > .senders {
+  color: GrayText;
+}
+
+#header-view-toolbox {
+  font: message-box;
+}
+
+.star {
+  width: 12px;
+  height: 12px;
+  margin-right: 0.5em;
+}
+
+.starred .star {
+  background-image: url("chrome://messenger/skin/icons/flag-col.png");
+}

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!-- Style sheets -->
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE dialog
+[
+    <!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+    %brandDTD;
+    <!ENTITY % migrationDtd SYSTEM "chrome://calendar/locale/migration.dtd">
+    %migrationDtd;
+]>
+
+<wizard id="migration-wizard"
+        title="&migration.title;"
+        windowtype="Calendar:MigrationWizard"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        onload="gMigrateWizard.loadMigrators()"
+        branded="true"
+        persist="screenX screenY">
+
+    <script type="application/javascript" src="chrome://calendar/content/calendar-migration-dialog.js"/>
+    <script type="application/javascript" src="chrome://calendar/content/import-export.js"/>
+    <script type="application/javascript" src="chrome://calendar/content/calUtils.js"/>
+
+    <wizardpage id="wizardPage1"
+                pageid="initialPage"
+                next="progressPage"
+                label="&migration.welcome;">
+        <label id="wizard-desc" control="datasource-list">&migration.list.description;</label>
+        <listbox id="datasource-list" flex="1">
+        </listbox>
+    </wizardpage>
+
+    <wizardpage id="wizardPage2"
+                pageid="progressPage"
+                label="&migration.importing;"
+                onpageshow="gMigrateWizard.migrateChecked()">
+        <label control="migrate-progressmeter">&migration.progress.description;</label>
+        <vbox flex="1">
+            <progressmeter id="migrate-progressmeter" mode="determined" value="0" />
+            <label value="" flex="1" id="progress-label"/>
+        </vbox>
+    </wizardpage>
+</wizard>

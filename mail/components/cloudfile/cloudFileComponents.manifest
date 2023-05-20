@@ -1,0 +1,3 @@
+component {ad8c3b77-7dc8-41d1-8985-5be88b254ff3} nsNextcloud.js
+contract @mozilla.org/mail/nextcloud;1 {ad8c3b77-7dc8-41d1-8985-5be88b254ff3}
+category cloud-files Nextcloud @mozilla.org/mail/nextcloud;1

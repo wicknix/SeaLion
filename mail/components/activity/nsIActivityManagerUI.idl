@@ -1,0 +1,51 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsISupports.idl"
+
+interface nsIInterfaceRequestor;
+
+[scriptable, uuid(ae7853b0-2e1f-4dc1-89cd-f8bbfb745d4d)]
+interface nsIActivityManagerUI : nsISupports {
+  /**
+   * The reason that should be passed when the user requests to show the
+   * activity manager's UI.
+   */
+  const short REASON_USER_INTERACTED = 0;
+
+  /**
+   * The reason that should be passed to the show method when we are displaying
+   * the UI because a new activity is being added to it.
+   */
+  const short REASON_NEW_ACTIVITY = 1;
+
+ /**
+  * Shows the Activity Manager's UI to the user.
+  *
+  * @param [optional] aWindowContext
+  *        The parent window context to show the UI.
+  * @param [optional] aID
+  *        The id of the activity to be preselected upon opening.
+  * @param [optional] aReason
+  *        The reason to show the activity manager's UI.  This defaults to
+  *        REASON_USER_INTERACTED, and should be one of the previously listed
+  *        constants.
+  */
+  void show([optional] in nsIInterfaceRequestor aWindowContext,
+            [optional] in unsigned long aID,
+            [optional] in short aReason);
+
+ /**
+  * Indicates if the UI is visible or not.
+  */
+  readonly attribute boolean visible;
+
+ /**
+  * Brings attention to the UI if it is already visible
+  *
+  * @throws NS_ERROR_UNEXPECTED if the UI is not visible.
+  */
+  void getAttention();
+};
+

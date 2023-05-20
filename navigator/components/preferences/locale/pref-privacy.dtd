@@ -1,0 +1,24 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!--LOCALIZATION NOTE : FILE 'Privacy' prefs settings -->
+<!ENTITY pref.privacy.title              "Privacy">
+
+<!ENTITY tracking.label                   "User Tracking">
+<!ENTITY trackingIntro.label              "Websites may track how you use them, thus affecting your privacy.">
+
+<!ENTITY doNotTrack.label                 "Tell websites that I do not want to be tracked">
+<!ENTITY doNotTrack.accesskey             "T">
+<!ENTITY trackProtect.label               "Prevent tracking activities by known sites">
+<!ENTITY trackProtect.accesskey           "n">
+<!ENTITY warnTrackContent.label           "Warn me when known tracking activities were detected">
+<!ENTITY warnTrackContent.accesskey       "W">
+
+<!ENTITY geoLocation.label                "Location Aware Browsing">
+<!ENTITY geoIntro.label                   "Websites may request more information about your current location.">
+
+<!ENTITY geoEnabled.label                 "Prompt me for permission if a request is made">
+<!ENTITY geoEnabled.accesskey             "m">
+<!ENTITY geoDisabled.label                "Disable this feature and deny all requests">
+<!ENTITY geoDisabled.accesskey            "D">

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-->
+
+<!DOCTYPE overlay SYSTEM "chrome://lightning/locale/lightning.dtd">
+
+<overlay id="ltnCalendarPropertiesOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/javascript"
+          src="chrome://calendar/content/calendar-ui-utils.js"/>
+  <script type="application/javascript"
+          src="chrome://lightning/content/lightning-utils.js"/>
+  <script type="application/javascript"
+          src="chrome://lightning/content/lightning-calendar-properties.js"/>
+
+  <rows id="calendar-properties-rows">
+    <row id="calendar-email-identity-row"
+         align="center"
+         insertafter="calendar-uri-row">
+      <label value="&lightning.calendarproperties.email.label;"
+             control="email-identity-menulist"
+             disable-with-calendar="true"/>
+      <menulist id="email-identity-menulist"
+                disable-with-calendar="true">
+        <menupopup id="email-identity-menupopup"/>
+      </menulist>
+    </row>
+  </rows>
+</overlay>

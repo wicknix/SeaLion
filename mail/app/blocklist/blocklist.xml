@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+#filter substitution
+<blocklist lastupdate="@MOZ_EPOCH@" xmlns="http://www.mozilla.org/2006/addons-blocklist">
+#include addons.inc.xml
+
+#include plugins.inc.xml
+
+#include graphics.inc.xml
+
+</blocklist>

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay [
+  <!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd"> %brandDTD;
+  <!ENTITY % prefAdvancedDTD SYSTEM "chrome://communicator/locale/pref/pref-advanced.dtd"> %prefAdvancedDTD;
+]>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <prefpane id="advanced_pane"
+            label="&pref.advanced.title;"
+            style="padding: 0px !important;">
+    <iframe src="chrome://global/content/config.xul"
+            flex="1"
+            style="height: 100%;"/>
+  </prefpane>
+</overlay>

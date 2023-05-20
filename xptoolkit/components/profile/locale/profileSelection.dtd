@@ -1,0 +1,39 @@
+<!-- -*- Mode: SGML; indent-tabs-mode: nil; -*- -->
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+#ifdef BINOC_INTERLINK
+#define APP_SPECIFIC_PROFILE_OBJECT stored messages
+#else
+#define APP_SPECIFIC_PROFILE_OBJECT bookmarks
+#endif
+
+<!ENTITY            windowTitle.label    "Select User Profile">
+<!ENTITY            profileManager.title "&brandFullName; Profile Manager">
+
+<!ENTITY            manage.label     "Manage Profiles…">
+<!ENTITY            manage.accesskey "M">
+<!ENTITY            select.label     "Use Profile">
+
+<!ENTITY            availableProfiles.label "Available Profiles">
+
+#expand <!ENTITY            introStart.label         "To access your personal profile, which contains your preferences, __APP_SPECIFIC_PROFILE_OBJECT__, and other personalized information, please choose your profile from the list, and click &start.label; to begin your session.">
+#expand <!ENTITY            introSwitch.label        "To switch to another profile, which contains preferences, __APP_SPECIFIC_PROFILE_OBJECT__, and other personalized information, please choose that profile from the list, and click &select.label; to begin using that profile.">
+#expand <!ENTITY            profileManagerText.label "&brandShortName; stores information about your preferences, __APP_SPECIFIC_PROFILE_OBJECT__, and other user items in your user profile.">
+
+<!ENTITY            autoSelect.label         "Default to this profile">
+<!ENTITY            autoSelect.accesskey     "S">
+
+<!ENTITY            start.label              "Start &brandShortName;">
+<!ENTITY            exit.label               "Exit">
+
+<!ENTITY            newButton.label          "Create Profile…">
+<!ENTITY            newButton.accesskey      "C">
+<!ENTITY            renameButton.label       "Rename Profile…">
+<!ENTITY            renameButton.accesskey   "R">
+<!ENTITY            deleteButton.label       "Delete Profile…">
+<!ENTITY            deleteButton.accesskey   "D">
+
+<!ENTITY            offlineState.label       "Work offline">
+<!ENTITY            offlineState.accesskey   "o">

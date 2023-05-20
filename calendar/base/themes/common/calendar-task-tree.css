@@ -1,0 +1,136 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+.calendar-task-tree {
+    -moz-appearance: none;
+    background-color: -moz-Field;
+    color: -moz-FieldText;
+    border: 0;
+    margin: 0;
+}
+
+/* align the treechildren text */
+.calendar-task-tree > treechildren::-moz-tree-cell-text {
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.calendar-task-tree > treechildren::-moz-tree-row(selected, focus) {
+    background-color: Highlight;
+}
+
+.calendar-task-tree > treechildren::-moz-tree-cell-text(selected, focus) {
+    color: HighlightText;
+}
+
+.calendar-task-tree > treechildren::-moz-tree-cell-text(inprogress) {
+    color: green;
+}
+
+.calendar-task-tree > treechildren::-moz-tree-row(inprogress, selected, focus) {
+    background-color: green;
+}
+
+.calendar-task-tree > treechildren::-moz-tree-cell-text(inprogress, selected, focus) {
+    color: HighlightText;
+}
+
+.calendar-task-tree > treechildren::-moz-tree-cell-text(overdue) {
+    color: red;
+}
+
+.calendar-task-tree > treechildren::-moz-tree-row(overdue, selected, focus) {
+    background-color: red;
+}
+
+.calendar-task-tree > treechildren::-moz-tree-cell-text(overdue, selected, focus) {
+    color: HighlightText;
+}
+
+.calendar-task-tree > treechildren::-moz-tree-cell-text(duetoday) {
+    color: WindowText;
+    font-weight: bold;
+}
+
+.calendar-task-tree > treechildren::-moz-tree-row(duetoday, selected, focus) {
+    background-color: Highlight;
+}
+
+.calendar-task-tree > treechildren::-moz-tree-cell-text(duetoday, selected, focus) {
+    color: HighlightText;
+}
+
+.calendar-task-tree > treechildren::-moz-tree-cell-text(future) {
+    color: WindowText;
+}
+
+.calendar-task-tree > treechildren::-moz-tree-row(future, selected, focus) {
+    background-color: Highlight;
+}
+
+.calendar-task-tree > treechildren::-moz-tree-cell-text(future, selected, focus) {
+    color: HighlightText;
+}
+
+.calendar-task-tree > treechildren::-moz-tree-cell-text(completed) {
+    text-decoration: line-through;
+    font-style: italic;
+    color: WindowText;
+}
+
+.calendar-task-tree > treechildren::-moz-tree-row(completed, selected, focus) {
+    background-color: Highlight;
+}
+
+.calendar-task-tree > treechildren::-moz-tree-cell-text(completed, selected, focus) {
+    color: HighlightText;
+}
+
+.calendar-task-tree-col-priority {
+    list-style-image: url(chrome://calendar-common/skin/task-images.png);
+    -moz-image-region: rect(0 13px 13px 0);
+}
+
+.calendar-task-tree > treechildren::-moz-tree-image(calendar-task-tree-col-priority, normalpriority),
+.todo-due-image-class {
+    list-style-image: url(chrome://calendar-common/skin/task-images.png);
+    -moz-image-region: rect(0 13px 13px 0);
+}
+
+.calendar-task-tree > treechildren::-moz-tree-image(calendar-task-tree-col-priority, highpriority),
+.todo-due-image-class[highpriority="true"] {
+    list-style-image: url(chrome://calendar-common/skin/task-images.png);
+    -moz-image-region: rect(0 52px 13px 39px);
+}
+
+.calendar-task-tree > treechildren::-moz-tree-image(calendar-task-tree-col-priority, lowpriority),
+.todo-due-image-class[lowpriority="true"] {
+    list-style-image: url(chrome://calendar-common/skin/task-images.png);
+    -moz-image-region: rect(0 26px 13px 13px);
+}
+
+.calendar-task-tree > treechildren::-moz-tree-image(calendar-task-tree-col-priority, selected, highpriority) {
+    list-style-image: url(chrome://calendar-common/skin/task-images.png);
+    -moz-image-region: rect(0 65px 13px 52px);
+}
+
+.calendar-task-tree > treechildren::-moz-tree-image(calendar-task-tree-col-priority, selected, lowpriority) {
+    list-style-image: url(chrome://calendar-common/skin/task-images.png);
+    -moz-image-region: rect(0 39px 13px 26px);
+}
+
+/* ::::: tree progress meter ::::: */
+
+.calendar-task-tree > treechildren::-moz-tree-progressmeter {
+    border: 1px solid ThreeDShadow;
+    color: Highlight;
+    background-color: -moz-field;
+}
+
+@media all and (-moz-windows-default-theme) {
+  .calendar-task-tree > treechildren::-moz-tree-progressmeter(hover),
+  .calendar-task-tree > treechildren::-moz-tree-progressmeter(selected) {
+      margin: 1px 4px;
+  }
+}

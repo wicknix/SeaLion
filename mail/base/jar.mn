@@ -1,0 +1,135 @@
+messenger.jar:
+% content messagebody %content/messagebody/ contentaccessible=yes
+% content messenger %content/messenger/
+% override chrome://global/content/nsDragAndDrop.js chrome://messenger/content/nsDragAndDrop.js
+% override chrome://messagebody/skin/messageBody.css chrome://messenger/skin/messageBody.css
+% overlay chrome://global/content/viewSource.xul chrome://messenger/content/viewSourceOverlay.xul
+% overlay chrome://global/content/config.xul chrome://messenger/content/configEditorOverlay.xul
+% overlay chrome://editor/content/EdSpellCheck.xul chrome://messenger/content/EdSpellCheckOverlay.xul
+% style chrome://global/content/customizeToolbar.xul chrome://messenger/content/messenger.css
+% style chrome://global/content/customizeToolbar.xul chrome://messenger/skin/
+% style chrome://global/content/customizeToolbar.xul chrome://messenger/skin/addressbook/addressbook.css
+% style chrome://global/content/customizeToolbar.xul chrome://messenger/skin/messengercompose/messengercompose.css
+% style chrome://global/content/customizeToolbar.xul chrome://messenger/skin/smime/msgCompSMIMEOverlay.css
+% style chrome://global/content/customizeToolbar.xul chrome://messenger/skin/messageHeader.css
+% style chrome://global/content/customizeToolbar.xul chrome://messenger/skin/primaryToolbar.css
+    content/messenger/mailWindow.js                 (content/mailWindow.js)
+    content/messenger/messageDisplay.js             (content/messageDisplay.js)
+    content/messenger/folderDisplay.js              (content/folderDisplay.js)
+*   content/messenger/mailWindowOverlay.js          (content/mailWindowOverlay.js)
+*   content/messenger/mailWindowOverlay.xul         (content/mailWindowOverlay.xul)
+    content/messenger/extraCustomizeItems.xul       (content/extraCustomizeItems.xul)
+*   content/messenger/mailOverlay.xul               (content/mailOverlay.xul)
+*   content/messenger/messageWindow.xul             (content/messageWindow.xul)
+    content/messenger/messageWindow.js              (content/messageWindow.js)
+    content/messenger/mailContextMenus.js           (content/mailContextMenus.js)
+    content/messenger/nsContextMenu.js              (content/nsContextMenu.js)
+*   content/messenger/messenger.xul                 (content/messenger.xul)
+*   content/messenger/hiddenWindow.xul              (content/hiddenWindow.xul)
+    content/messenger/hiddenWindow.js               (content/hiddenWindow.js)
+    content/messenger/msgHdrViewOverlay.css          (content/msgHdrViewOverlay.css)
+    content/messenger/msgHdrViewOverlay.js          (content/msgHdrViewOverlay.js)
+*   content/messenger/msgHdrViewOverlay.xul         (content/msgHdrViewOverlay.xul)
+    content/messenger/msgViewNavigation.js          (content/msgViewNavigation.js)
+    content/messenger/mailWidgets.xml               (content/mailWidgets.xml)
+    content/messenger/nsDragAndDrop.js              (content/nsDragAndDrop.js)
+    content/messenger/editContactOverlay.js         (content/editContactOverlay.js)
+*   content/messenger/editContactOverlay.xul        (content/editContactOverlay.xul)
+*   content/messenger/msgMail3PaneWindow.js         (content/msgMail3PaneWindow.js)
+    content/messenger/mail3PaneWindowCommands.js    (content/mail3PaneWindowCommands.js)
+    content/messenger/mailCommands.js               (content/mailCommands.js)
+*   content/messenger/mailCore.js                   (content/mailCore.js)
+    content/messenger/customizeToolbarOverlay.xul   (content/customizeToolbarOverlay.xul)
+    content/messenger/mailTabs.js                   (content/mailTabs.js)
+    content/messenger/commandglue.js                (content/commandglue.js)
+*   content/messenger/SearchDialog.xul              (content/SearchDialog.xul)
+    content/messenger/SearchDialog.js               (content/SearchDialog.js)
+    content/messenger/ABSearchDialog.xul            (content/ABSearchDialog.xul)
+    content/messenger/ABSearchDialog.js             (content/ABSearchDialog.js)
+    content/messenger/FilterListDialog.xul          (content/FilterListDialog.xul)
+    content/messenger/FilterListDialog.js           (content/FilterListDialog.js)
+    content/messenger/plugins.js                    (content/plugins.js)
+    content/messenger/specialTabs.js                (content/specialTabs.js)
+    content/messenger/specialTabs.xul               (content/specialTabs.xul)
+    content/messenger/subscribe.xul                 (content/subscribe.xul)
+    content/messenger/subscribe.js                  (content/subscribe.js)
+*   content/messenger/aboutDialog.xul               (content/aboutDialog.xul)
+*   content/messenger/aboutDialog.js                (content/aboutDialog.js)
+*   content/messenger/aboutRights.xhtml             (content/aboutRights.xhtml)
+*   content/messenger/systemIntegrationDialog.xul   (content/systemIntegrationDialog.xul)
+    content/messenger/systemIntegrationDialog.js    (content/systemIntegrationDialog.js)
+    content/messenger/folderPane.js                 (content/folderPane.js)
+    content/messenger/msgSelectOffline.xul          (content/msgSelectOffline.xul)
+    content/messenger/msgPrintEngine.xul            (content/msgPrintEngine.xul)
+    content/messenger/searchBar.js                  (content/searchBar.js)
+    content/messenger/phishingDetector.js           (content/phishingDetector.js)
+    content/messenger/mail-offline.js               (content/mail-offline.js)
+    content/messenger/aboutDialog.css               (content/aboutDialog.css)
+    content/messenger/messenger.css                 (content/messenger.css)
+    content/messenger/search.xml                    (content/search.xml)
+    content/messenger/tabmail.xml                   (content/tabmail.xml)
+    content/messenger/tabmail.css                   (content/tabmail.css)
+    content/messenger/newTagDialog.xul              (content/newTagDialog.xul)
+    content/messenger/newTagDialog.js               (content/newTagDialog.js)
+*   content/messenger/viewSourceOverlay.xul         (content/viewSourceOverlay.xul)
+    content/messenger/configEditorOverlay.xul       (content/configEditorOverlay.xul)
+    content/messenger/EdSpellCheckOverlay.xul       (content/EdSpellCheckOverlay.xul)
+    content/messenger/EdSpellCheckOverlay.js        (content/EdSpellCheckOverlay.js)
+    content/messenger/extensionsOverlay.js          (content/extensionsOverlay.js)
+    content/messenger/extensionsOverlay.xul         (content/extensionsOverlay.xul)
+    content/messenger/composerOverlay.css           (content/composerOverlay.css)
+    content/messenger/threadPane.js                 (content/threadPane.js)
+    content/messenger/threadPaneColumnPicker.xml    (content/threadPaneColumnPicker.xml)
+    content/messenger/protovis-r2.6-modded.js       (content/protovis-r2.6-modded.js)
+#ifdef XP_MACOSX
+    content/messenger/macMenuOverlay.xul            (content/macMenuOverlay.xul)
+    content/messenger/macMessengerOverlay.xul       (content/macMessengerOverlay.xul)
+    content/messenger/macMessengerOverlay.js        (content/macMessengerOverlay.js)
+#endif
+*   content/messenger/baseMenuOverlay.xul           (content/baseMenuOverlay.xul)
+    content/messenger/selectionsummaries.js         (content/selectionsummaries.js)
+    content/messenger/multimessageview.css          (content/multimessageview.css)
+    content/messenger/multimessageview_print.css    (content/multimessageview_print.css)
+    content/messenger/sharedsummary.css             (content/sharedsummary.css)
+    content/messenger/multimessageview.xhtml        (content/multimessageview.xhtml)
+    content/messenger/multimessageview.js           (content/multimessageview.js)
+    content/messenger/glodaFacetTab.js              (content/glodaFacetTab.js)
+    content/messenger/glodaFacetViewWrapper.xul     (content/glodaFacetViewWrapper.xul)
+    content/messenger/glodaFacetView.xhtml          (content/glodaFacetView.xhtml)
+    content/messenger/glodaFacetView.js             (content/glodaFacetView.js)
+    content/messenger/glodaFacetView.css            (content/glodaFacetView.css)
+    content/messenger/glodaFacetBindings.css        (content/glodaFacetBindings.css)
+    content/messenger/glodaFacetBindings.xml        (content/glodaFacetBindings.xml)
+    content/messenger/glodaFacetVis.js              (content/glodaFacetVis.js)
+    content/messenger/quickFilterBar.xul            (content/quickFilterBar.xul)
+    content/messenger/quickFilterBar.js             (content/quickFilterBar.js)
+    content/messenger/quickFilterBar.css            (content/quickFilterBar.css)
+    content/messenger/downloadManagerOverlay.xul    (content/downloadManagerOverlay.xul)
+    content/messenger/downloadToolkitOverlay.xul    (content/downloadToolkitOverlay.xul)
+    content/messenger/browserRequest.js             (content/browserRequest.js)
+    content/messenger/browserRequest.xul            (content/browserRequest.xul)
+*   content/messenger/safeMode.xul                  (content/safeMode.xul)
+    content/messenger/safeMode.js                   (content/safeMode.js)
+    content/messenger/sanitize.xul                  (content/sanitize.xul)
+    content/messenger/sanitize.js                   (content/sanitize.js)
+    content/messenger/sanitizeDialog.css            (content/sanitizeDialog.css)
+    content/messenger/sanitizeDialog.js             (content/sanitizeDialog.js)
+*   content/messenger/toolbarIconColor.js           (content/toolbarIconColor.js)
+# the following files are mail-specific overrides
+*   content/messenger/license.html                  (/platform/toolkit/content/license.html)
+% override chrome://global/content/license.html chrome://messenger/content/license.html
+
+comm.jar:
+% content communicator %content/communicator/
+% overlay chrome://communicator/content/downloads/downloadmanager.xul chrome://messenger/content/downloadManagerOverlay.xul
+   content/communicator/charsetOverlay.xul          (content/charsetOverlay.xul)
+   content/communicator/contentAreaClick.js         (content/contentAreaClick.js)
+   content/communicator/labelsencodings.properties  (/platform/dom/encoding/labelsencodings.properties)
+*  content/communicator/utilityOverlay.xul          (content/utilityOverlay.xul)
+*  content/communicator/utilityOverlay.js           (content/utilityOverlay.js)
+
+toolkit.jar:
+% overlay chrome://global/content/customizeToolbar.xul chrome://messenger/content/customizeToolbarOverlay.xul
+% overlay chrome://mozapps/content/downloads/downloads.xul chrome://messenger/content/downloadToolkitOverlay.xul
+% overlay chrome://mozapps/content/extensions/extensions.xul chrome://messenger/content/extensionsOverlay.xul
+  content/global/logopage.xhtml                     (/platform/toolkit/content/logopage.xhtml)

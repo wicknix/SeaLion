@@ -1,0 +1,76 @@
+/* -*- Mode: idl; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsISupports.idl"
+
+interface calIIcalProperty;
+interface calIIcalComponent;
+interface calIItemBase;
+interface nsIOutputStream;
+interface nsIInputStream;
+
+/**
+ * An interface for serializing calendar items into an ICS string.
+ * Note that this is not a service. A new instance must be created for every new
+ * set of items to be serialized.
+ */
+[scriptable, uuid(4dcf6b4e-7322-4a61-a191-8d8cc1aea42e)]
+interface calIIcsSerializer : nsISupports
+{
+  /**
+   * Add some items to the items that are to be serialized. Can be called
+   * multiple times, and appends to the set on every call.
+   *
+   * @param aItems
+   *    The items to be added
+   * @param aCount
+   *    The number of items to add
+   */
+  void addItems([array, size_is(aCount)] in calIItemBase aItems,
+                in unsigned long aCount);
+
+  /**
+   * Add a property to the top-level properties to be added on serializing. Can
+   * be called multiple times, and appends to the set on every call.
+   *
+   * @param aProperty
+   *    The property to be added
+   */
+  void addProperty(in calIIcalProperty aProperty);
+
+  /**
+   * Add a component to the top-level components to be added on serializing. Can
+   * be called multiple times, and appends to the set on every call.
+   *
+   * @param aComponent
+   *    The component to be added
+   */
+  void addComponent(in calIIcalComponent aComponent);
+
+  /**
+   * Serialize the added items, properties and components into an ICS string
+   *
+   * @returns
+   *    A string containing the serialized items, properties and components.
+   */
+  AString serializeToString();
+
+  /**
+   * Serialize the added items, properties and components into an ICS stream
+   *
+   * @returns
+   *    A stream containing the serialized items, properties and components.
+   */
+  nsIInputStream serializeToInputStream();
+
+  /**
+   * Serialize the added items, properties and components into an ICS stream
+   *
+   * @param aStream
+   *    A stream into which the serialized items, properties and components
+   *    will be written.
+   */
+  void serializeToStream(in nsIOutputStream aStream);
+};

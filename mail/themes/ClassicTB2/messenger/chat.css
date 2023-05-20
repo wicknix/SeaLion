@@ -1,0 +1,718 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@import url("chrome://messenger/skin/imStatus.css");
+
+.im-placeholder-screen {
+  background-color: -moz-Dialog;
+  overflow: auto;
+}
+.im-placeholder-box {
+  background: url("chrome://global/skin/icons/information-64.png") 1.1em 1.1em/64px 64px no-repeat;
+  background-color: -moz-Field;
+  color: -moz-FieldText;
+  border: 1px solid ThreeDShadow;
+  border-radius: 10px;
+  padding: 1.1em;
+  -moz-padding-start: calc(1.1em + 64px + 1.1em);
+  margin-left: 1em;
+  margin-right: 1em;
+}
+.im-placeholder-innerbox {
+  min-height: 64px;
+}
+.im-placeholder-title {
+  margin: 0 1em 0.6em 0;
+  font-size: 160%;
+  border-bottom: 1px solid ThreeDLightShadow
+}
+.im-placeholder-desc {
+  font-size: 110%;
+}
+
+#contactlistbox {
+  margin: 0 0;
+}
+
+imgroup {
+  -moz-padding-start: 4px;
+}
+
+imgroup > label {
+  -moz-margin-start: 4px;
+}
+
+imcontact, imconv {
+  -moz-padding-start: 23px;
+}
+
+imgroup,
+imconv[unread] {
+  font-weight: bold;
+}
+
+imconv[attention] {
+  color: blue;
+}
+
+.conv-hbox {
+  -moz-box-align: center;
+}
+
+/* From instantbird/themes/blist.css */
+.contactStatusText,
+.convStatusText {
+  color: GrayText;
+}
+
+.contactDisplayName,
+.convDisplayName {
+  -moz-margin-end: 0;
+}
+
+imcontact[aliasing] .contactDisplayName {
+  -moz-binding: url("chrome://global/content/bindings/textbox.xml#textbox");
+}
+
+.contactStatusText,
+.convStatusText {
+  -moz-margin-start: 0;
+}
+
+/* Avoid a strange jumping bug when hovering and the startChatBubble appears */
+.contact-vbox {
+  min-height: 40px;
+}
+
+.startChatBubble,
+.closeConversationButton {
+  margin: 0 3px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  -moz-binding: url('chrome://global/content/bindings/button.xml#button-image');
+  -moz-appearance: none;
+  width: 16px;
+  height: 16px;
+  min-height: 16px;
+  min-width: 16px;
+}
+
+.startChatBubble {
+  list-style-image: url('chrome://chat/skin/prpl-generic/icon.png');
+}
+
+.closeConversationButton {
+  -moz-margin-end: 0;
+  -moz-stack-sizing: ignore;
+  list-style-image: url("chrome://global/skin/icons/close.png");
+  -moz-image-region: rect(0px, 56px, 14px, 42px);
+  padding: 2px 0px;
+}
+.closeConversationButton:hover {
+  -moz-image-region: rect(0px, 28px, 14px, 14px);
+}
+.closeConversationButton:hover:active {
+  -moz-image-region: rect(0px, 42px, 14px, 28px);
+}
+
+
+/* From im/themes/conversation.css */
+.browser {
+  margin: 0 0;
+}
+
+.conv-bottom, .conv-nicklist {
+  margin: 0 0;
+}
+
+.convBox {
+  min-height: 135px;
+}
+
+.conv-top {
+  min-height: 60px;
+}
+
+.conv-top-info {
+  margin: 0 0;
+  padding: 0 0;
+  border-style: none;
+  -moz-appearance: none;
+  background-color: -moz-Dialog;
+  background-image: -moz-linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,0));
+  border-bottom: none;
+}
+
+.userIconHolder {
+  border: 2px solid rgba(0,0,0,0.15);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.userIcon,
+.userIconHolder {
+  max-width: 48px;
+  max-height: 48px;
+  width: 48px;
+  height: 48px;
+}
+
+.userIcon:not([src]),
+.userIconHolder:not([userIcon]) {
+  display: none;
+}
+
+.userIcon[src=""] {
+  background-image: url("chrome://messenger/skin/userIcon.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.statusTypeIcon {
+  margin: 0 0;
+  width: 16px;
+  height: 16px;
+  min-height: 16px;
+  min-width: 16px;
+  -moz-appearance: none;
+  background-color: transparent;
+  border: none;
+}
+
+.statusTypeIcon[status="unknown"] {
+  list-style-image: url('chrome://chat/skin/unknown-16.png');
+}
+
+.statusTypeIcon[status="chat"] {
+  list-style-image: url('chrome://chat/skin/chat-16.png');
+}
+
+.statusTypeIcon[status="idle"] {
+  list-style-image: url('chrome://chat/skin/idle-16.png');
+}
+
+.statusTypeIcon[typing] {
+  list-style-image: url('chrome://chat/skin/typing-16.png');
+}
+
+.statusTypeIcon[typed] {
+  list-style-image: url('chrome://chat/skin/typed-16.png');
+}
+
+
+.statusMessage {
+  margin: 0 0 !important;
+}
+
+.statusMessage[noTopic]:not([editing]),
+.statusMessageWithDash[noTopic] {
+  font-style: italic;
+}
+
+.status-overlay-icon[status="away"],
+.status-overlay-icon[status="unavailable"] {
+  list-style-image: url('chrome://chat/skin/away.png');
+}
+
+.status-overlay-icon[status="idle"] {
+  list-style-image: url('chrome://chat/skin/idle.png');
+}
+
+.status-overlay-icon[status="mobile"] {
+  list-style-image: url('chrome://chat/skin/mobile.png');
+}
+
+.status-overlay-icon[status="offline"] {
+  list-style-image: url('chrome://chat/skin/offline.png');
+}
+
+.status-overlay-icon[status="unknown"] {
+  list-style-image: url('chrome://chat/skin/unknown.png');
+}
+
+/* corresponds to im/themes/conversation.css @media all and (min-height: 251px) */
+.statusImageStack,
+.displayNameAndstatusMessageStack {
+  margin: 2px 2px;
+}
+
+.statusMessage {
+  margin-top: 32px !important;
+}
+
+.statusMessage[editing] {
+  margin: 28px 0 -1px -2px !important;
+}
+
+.displayName {
+  font-size: large;
+  border-bottom: 1px solid rgba(0,0,0,0.25);
+  margin: 0 0 16px !important;
+  padding-right: 20px;
+}
+
+.prplIcon {
+  margin: 0 1px 16px -16px !important;
+}
+
+.statusTypeIcon {
+  margin: 32px 0 0;
+}
+
+.userIconHolder[userIcon] + .statusTypeIcon {
+  margin-left: 32px;
+}
+
+.conv-messages {
+  min-width: 150px;
+
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-left: none;
+  border-right: none !important;
+}
+
+.conv-messages[chat] {
+  border-right: solid 1px GrayText;
+}
+
+
+/* Animation copied from the find bar in Firefox - http://dxr.mozilla.org/mozilla-central/source/toolkit/themes/linux/global/findBar.css#7 */
+.conv-status-container {
+  display: block;
+  height: 20px;
+  padding: 3px;
+  border-bottom: 1px solid ThreeDShadow;
+  transition-property: margin-top, opacity, visibility;
+  transition-duration: 150ms, 150ms, 0s;
+  transition-timing-function: ease-in-out, ease-in-out, linear;
+}
+
+.conv-status-container[hidden] {
+  /* Override display:none to make the transition work. */
+  display: -moz-box;
+  visibility: collapse;
+  margin-top: -1em;
+  opacity: 0;
+  transition-delay: 0s, 0s, 150ms;
+}
+.conv-textbox {
+  padding: 2px;
+  box-sizing: content-box;
+  border: 1px solid transparent;
+}
+
+
+.conv-textbox[invalidInput="true"] {
+  border-color: red;
+}
+
+.conv-textbox > .textbox-input-box {
+  background: inherit;
+}
+
+.conv-counter {
+  color: #000;
+  background-color: rgba(246, 246, 246, 0.7);
+  -moz-border-start: 1px solid rgb(200, 200, 200);
+  border-top: 1px solid rgb(200, 200, 200);
+  /* Padding that gets flipped to margins in .conv-counter[value^="0"] to avoid the red border. */
+  font-size: 130%;
+  padding-top: 0;
+  padding-bottom: 1px;
+  -moz-padding-start: 5px;
+  -moz-padding-end: 6px;
+  margin: 0;
+}
+
+.conv-counter:-moz-locale-dir(ltr) {
+  border-top-left-radius: 3px;
+}
+
+.conv-counter:-moz-locale-dir(rtl) {
+  border-top-right-radius: 3px;
+}
+
+.conv-counter[value=""] {
+  display: none;
+}
+
+/* Negative counter values (user went over the character limit). */
+.conv-counter[value^="-"] {
+  color: red;
+}
+
+.conv-counter[value^="-"] {
+  margin-bottom: 1px;
+  /* The 6px padding-end from .conv-counter is split into a 1px margin-end (to avoid the border) and 5px padding-end (as regular padding). */
+  -moz-margin-end: 1px;
+  padding-top: 1px;
+  padding-bottom: 0;
+  -moz-padding-end: 5px;
+}
+
+
+.splitter {
+  margin: 0;
+  border-style: none;
+  height: 3px;
+  background: transparent;
+}
+
+#conv-toolbar {
+  border-style: none;
+}
+
+#logTree {
+  margin: 0 0;
+}
+
+.conv-nicklist > .listitem-iconic > .listcell-iconic > .listcell-label {
+  font-weight: bold;
+  -moz-padding-start: 1px;
+}
+
+.conv-nicklist > .listitem-iconic > .listcell-iconic > .listcell-icon {
+  min-width: 16px;
+  margin: 0 2px;
+}
+
+.conv-logs-header-label {
+  -moz-appearance: treeheadercell;
+  margin: 0 -1px 0 0;
+  padding-left: 3px;
+}
+
+.conv-nicklist-header-label {
+  font-weight: bold;
+  -moz-margin-start: 0 !important;
+  -moz-margin-end: 2px !important;
+}
+
+.splitter.conv-chat {
+  border-left: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+/* Splitter style change above somehow made it smaller, fix this here: */
+grippy {
+  margin: 0 1px;
+}
+
+.listitem-iconic[inactive] > .listcell-iconic > .listcell-icon {
+  opacity: 0.45;
+}
+
+.listitem-iconic[inactive][selected] > .listcell-iconic > .listcell-icon {
+  opacity: 0.7;
+}
+
+.listitem-iconic[inactive] > .listcell-iconic > .listcell-label {
+  color: GrayText !important;
+  font-weight: normal;
+}
+
+.listitem-iconic[inactive][selected] > .listcell-iconic > .listcell-label {
+  color: -moz-cellhighlighttext !important;
+}
+
+.conv-nicklist:focus > .listitem-iconic[inactive][selected] > .listcell-iconic > .listcell-label {
+  color: HighlightText !important;
+}
+
+
+/* from instantbird/themes/blist.css */
+imgroup .twisty {
+  padding-top: 1px;
+  width: 9px; /* The image's width is 9 pixels */
+  height: 9px;
+  -moz-margin-end: 3px;
+  -moz-margin-start: 3px;
+  background: url("chrome://global/skin/tree/twisty-open.png") no-repeat center;
+}
+
+imgroup[closed] .twisty {
+  background: url("chrome://global/skin/tree/twisty-clsd.png") no-repeat center;
+}
+
+
+#searchResultConv > .prplBuddyIcon > .protoIcon {
+  list-style-image: url(chrome://global/skin/icons/Search-glass.png);
+  -moz-image-region: rect(0, 16px, 16px, 0);
+}
+
+#statusTypeIcon {
+  min-width: 40px;
+}
+
+/* show the status icon also in text mode */
+toolbar[mode="text"] #statusTypeIcon > .toolbarbutton-icon {
+  display: -moz-box;
+}
+
+.statusMessageToolbarItem {
+  margin: 2px 4px;
+  -moz-margin-start: -1px;
+  padding: 3px 5px 4px;
+  border: 1px solid transparent;
+}
+
+#chat-status-selector:hover > .statusMessageToolbarItem,
+.statusMessageToolbarItem:focus {
+  border-color: ThreeDShadow;
+}
+
+.statusMessageToolbarItem[statusType="offline"],
+.statusMessageToolbarItem[disabled] {
+  border: none;
+}
+
+#chat-status-selector > .statusMessageToolbarItem[editing] {
+  -moz-appearance: none;
+  -moz-padding-start: 4px;
+  -moz-padding-end: 4px;
+  border-color: ThreeDShadow;
+  background-color: -moz-field;
+}
+
+.prplBuddyIcon {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+/* Make the listSplitter, contextSplitter and splitter appear unified */
+#listSplitter {
+  -moz-border-end: none;
+  min-width: 4px;
+}
+
+#noConvScreen {
+  -moz-border-start: 2px solid;
+  -moz-border-left-colors: ThreeDFace ThreeDDarkShadow;
+}
+
+.conv-top,
+.conv-bottom,
+#logDisplay {
+  -moz-border-start: 2px solid;
+  -moz-border-end: 2px solid;
+  -moz-border-right-colors: ThreeDHighlight ThreeDShadow;
+  -moz-border-left-colors: ThreeDFace ThreeDDarkShadow;
+}
+
+.conv-top {
+  border-bottom: 2px solid;
+  -moz-border-bottom-colors: ThreeDHighlight ThreeDShadow;
+}
+
+.conv-bottom {
+  border-top: 2px solid;
+  -moz-border-top-colors: ThreeDFace ThreeDDarkShadow;
+}
+
+#contextSplitter {
+  -moz-border-start: none;
+  min-width: 4px;
+}
+
+.splitter {
+  min-height: 2px;
+  background-color: ThreeDFace;
+}
+
+/* Adaptation from #folderTree */
+#listPaneBox {
+  -moz-appearance:  none;
+  background-color: -moz-Field;
+  color: -moz-FieldText;
+}
+
+#listPaneBox > * {
+  background: transparent !important;
+  -moz-appearance: none !important;
+  border: none;
+}
+
+#conversationsDeck {
+  background: -moz-field;
+}
+
+.conv-messages {
+  border-top: 0px;
+  border-bottom: 0px;
+}
+
+.conv-textbox {
+  -moz-appearance: none;
+  /* Right/left margins so the borders show up on all sides. */
+  margin: 0 1px 0 1px;
+}
+
+.conv-counter[value^="-"] {
+  -moz-margin-end: 2px;
+  -moz-padding-end: 4px;
+}
+
+#contextPane {
+  background-color: -moz-field;
+  color: -moz-fieldtext;
+}
+
+.conv-top-info {
+  background: transparent;
+}
+
+.userIcon {
+  border-width: 0px;
+}
+
+#logTree,
+.conv-nicklist {
+  -moz-appearance: none;
+  border: none;
+  margin: 0;
+}
+
+.conv-nicklist-header,
+.conv-logs-header-label {
+  -moz-appearance: none;
+  margin: 0;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid ThreeDShadow;
+  background-color: -moz-Dialog;
+}
+
+:-moz-any(imconv, imcontact, imgroup) {
+  border: 1px solid transparent;
+}
+
+:-moz-any(imconv, imcontact, imgroup)[selected] {
+  background-color: -moz-cellhighlight;
+}
+
+#contactlistbox:focus > :-moz-any(imconv, imcontact, imgroup)[selected] {
+  background-color: Highlight;
+  color: HighlightText;
+  border: 1px dotted #F3D982;
+}
+
+#button-add-buddy {
+  list-style-image: url("chrome://messenger/skin/icons/chat-toolbar.png");
+  -moz-image-region: rect(0px 24px 24px 0px);
+}
+
+#button-add-buddy[disabled] {
+  list-style-image: url("chrome://messenger/skin/icons/chat-toolbar.png");
+  -moz-image-region: rect(24px 24px 48px 0px);
+}
+
+#button-join-chat {
+  list-style-image: url("chrome://messenger/skin/icons/chat-toolbar.png");
+  -moz-image-region: rect(0px 48px 24px 24px);
+}
+
+#button-join-chat[disabled] {
+  list-style-image: url("chrome://messenger/skin/icons/chat-toolbar.png");
+  -moz-image-region: rect(24px 48px 48px 24px);
+}
+
+#button-chat-accounts {
+  list-style-image: url("chrome://messenger/skin/icons/chat-toolbar.png");
+  -moz-image-region: rect(0px 72px 24px 48px);
+}
+
+#button-chat-accounts[disabled] {
+  list-style-image: url("chrome://messenger/skin/icons/chat-toolbar.png");
+  -moz-image-region: rect(24px 72px 48px 48px);
+}
+
+/* Small toolbar icons */
+
+toolbar[iconsize="small"] #button-add-buddy {
+  list-style-image: url("chrome://messenger/skin/icons/chat-toolbar-small.png");
+  -moz-image-region: rect(0px 16px 16px 0px);
+}
+
+toolbar[iconsize="small"] #button-add-buddy[disabled] {
+  list-style-image: url("chrome://messenger/skin/icons/chat-toolbar-small.png");
+  -moz-image-region: rect(16px 16px 32px 0px);
+}
+
+toolbar[iconsize="small"] #button-join-chat {
+  list-style-image: url("chrome://messenger/skin/icons/chat-toolbar-small.png");
+  -moz-image-region: rect(0px 32px 16px 16px);
+}
+
+toolbar[iconsize="small"] #button-join-chat[disabled] {
+  list-style-image: url("chrome://messenger/skin/icons/chat-toolbar-small.png");
+  -moz-image-region: rect(16px 32px 32px 16px);
+}
+
+toolbar[iconsize="small"] #button-chat-accounts {
+  list-style-image: url("chrome://messenger/skin/icons/chat-toolbar-small.png");
+  -moz-image-region: rect(0px 48px 16px 32px);
+}
+
+toolbar[iconsize="small"] #button-chat-accounts[disabled] {
+  list-style-image: url("chrome://messenger/skin/icons/chat-toolbar-small.png");
+  -moz-image-region: rect(16px 48px 32px 32px);
+}
+
+#statusTypeIcon[status="available"],
+#statusTypeAvailable,
+.statusTypeIcon[status="available"],
+#imStatusAvailable,
+#appmenu_imStatusAvailable,
+richlistitem[state="connected"] .accountStateIcon {
+  list-style-image: url("chrome://messenger/skin/icons/status.png");
+  -moz-image-region: rect(0px 16px 16px 0px);
+}
+
+#statusTypeIcon[status="idle"],
+.statusTypeIcon[status="idle"] {
+  list-style-image: url("chrome://messenger/skin/icons/status.png");
+  -moz-image-region: rect(0px 32px 16px 16px);
+}
+
+#statusTypeIcon[status="offline"],
+#statusTypeIcon[status="invisible"],
+#statusTypeOffline,
+.statusTypeIcon[status="offline"],
+.statusTypeIcon[status="invisible"],
+#imStatusOffline,
+#appmenu_imStatusOffline,
+richlistitem[state="disconnected"] .accountStateIcon {
+  list-style-image: url("chrome://messenger/skin/icons/status.png");
+  -moz-image-region: rect(0px 48px 16px 32px);
+}
+
+#statusTypeIcon[status="unavailable"],
+#statusTypeIcon[status="away"],
+#statusTypeUnavailable,
+.statusTypeIcon[status="unavailable"],
+.statusTypeIcon[status="away"],
+#imStatusUnavailable,
+#appmenu_imStatusUnavailable {
+  list-style-image: url("chrome://messenger/skin/icons/status.png");
+  -moz-image-region: rect(0px 64px 16px 48px);
+}
+
+#displayNameAndstatusMessageStack #statusMessage {
+  margin: 32px 0 0;
+}
+
+#displayNameAndstatusMessageStack  #statusMessage[editing] {
+  margin: 30px 0 1px -2px;
+}
+
+#displayNameAndstatusMessageStack #displayName[editing] {
+  margin-left: -2px;
+  margin-bottom: 18px;
+}
+
+.tabmail-tab[type="chat"],
+.alltabs-item[type="chat"] {
+  list-style-image: url("chrome://messenger/skin/icons/mail-toolbar-small.png");
+  -moz-image-region: rect(0px 352px 16px 336px);
+}

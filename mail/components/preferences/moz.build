@@ -1,0 +1,14 @@
+# vim: set filetype=python:
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+JAR_MANIFESTS += ['jar.mn']
+
+DEFINES['MOZ_MACBUNDLE_NAME'] = CONFIG['MOZ_MACBUNDLE_NAME']
+
+if CONFIG['MOZ_WIDGET_TOOLKIT'] in ('windows', 'gtk2', 'gtk3', 'cocoa'):
+    DEFINES['HAVE_SHELL_SERVICE'] = 1
+
+if CONFIG['MOZ_UPDATER']:
+    DEFINES['MOZ_UPDATER'] = 1

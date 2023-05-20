@@ -1,0 +1,68 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/**
+ * Reminder icons (used from the event dialog, reminder dialog, views, ...)
+ */
+.reminder-icon {
+    /* Initially hide the image, overwrite by setting a correct image region */
+    list-style-image: url(chrome://calendar-common/skin/alarm-icons.png);
+    -moz-image-region: rect(0px 1px 1px 0px);
+}
+
+.reminder-icon[value="DISPLAY"] {
+    -moz-image-region: rect(0px 30px 11px 17px);
+}
+
+.alarm-icons-box[suppressed="true"] > .reminder-icon[value="DISPLAY"] {
+    -moz-image-region: rect(0px 44px 11px 31px);
+}
+
+.reminder-icon[value="EMAIL"] {
+    -moz-image-region: rect(0px 16px 11px 0px);
+}
+
+.alarm-icons-box[flashing="true"] > .reminder-icon[value="DISPLAY"] {
+    list-style-image: url(chrome://calendar-common/skin/alarm-flashing.png);
+    -moz-image-region: auto;
+}
+
+/**
+ * Reminder dialog (i.e "custom" alarm in the event dialog)
+ * Please make sure rules added here are very specific and won't hurt other
+ * dialogs.
+ */
+#reminder-relative-radio > .radio-label-center-box > .radio-label-box,
+#reminder-absolute-radio > .radio-label-center-box > .radio-label-box {
+    display: none;
+}
+
+#reminder-actions-menulist > menupopup > menuitem > .menu-iconic-left {
+    display: -moz-box;
+}
+
+#reminder-notifications {
+    overflow-y: visible;
+}
+
+#reminder-notifications > notification {
+    background-color: transparent;
+}
+#reminder-notifications > notification > .notification-inner {
+    border: 0;
+}
+#reminder-notifications > notification[type="warning"] {
+    list-style-image: url(chrome://global/skin/icons/Warning.png);
+}
+
+#reminder-actions-caption,
+#reminder-details-caption,
+#calendar-event-dialog-reminder > .dialog-button-box {
+    padding-top: 20px;
+}
+
+.reminder-icon > .menu-iconic-left > .menu-iconic-icon {
+    width: auto;
+    height: auto;
+}

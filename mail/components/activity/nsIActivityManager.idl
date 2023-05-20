@@ -1,0 +1,140 @@
+/* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsISupports.idl"
+
+interface mozIStorageConnection;
+interface nsIActivity;
+interface nsIActivityProcess;
+interface nsIVariant;
+
+/**
+ * See https://wiki.mozilla.org/Thunderbird:Activity_Manager/Developer for UML
+ * diagram and sample codes.
+ */
+
+/**
+ * An interface to get notified by the major Activity Manager events.
+ * Mostly used by UI glue code in activity.js.
+ */
+[scriptable, uuid(14cfad1c-3401-4c44-ab04-4a11b6662663)]
+interface nsIActivityMgrListener : nsISupports {
+  /**
+   * Called _after_ activity manager adds an activity into
+   * the managed list.
+   */
+  void onAddedActivity(in unsigned long aID, in nsIActivity aActivity);
+  
+  /**
+   * Called _after_ activity manager removes an activity from
+   * the managed list.
+   */
+  void onRemovedActivity(in unsigned long aID);
+};
+
+/**
+ * Activity Manager is a simple component that understands how do display a
+ * combination of user activity and history. The activity manager works in
+ * conjunction with the 'Interactive Status Bar' to give the user the right
+ * level of notifications concerning what Thunderbird is doing on it's own and
+ * how Thunderbird has handled user requests.
+ *
+ * There are 3 different classifications of activity items which can be
+ * displayed in the Activity Manager Window:
+ *  o Process: Processes are transient in the display. They are not written to
+ *    disk as they are always acting on some data that already exists
+ *    locally or remotely. If a process has finished and needs to keep
+ *    some state for the user (like last sync time) it can convert
+ *    itself into an event.
+ * o Event: Historical actions performed by the user and created by a process
+ *   for the Activity Manager Window. Events can show up in the
+ *   'Interactive Status Bar' and be displayed to users as they are
+ *   created.
+ * o Warning: Alerts sent by Thunderbird or servers (i.e. imap server) that need
+ *   attention by the user. For example a Quota Alert from the imap
+ *   server can be represented as a Warning to the user. They are not
+ *   written to disk.
+ */
+[scriptable, uuid(9BFCC031-50E1-4D30-A35F-23509ABCB8D1)]
+interface nsIActivityManager : nsISupports {
+    
+  /**
+   * Adds the given activity into the managed activities list.
+   *
+   * @param aActivity The activity that will be added.
+   *
+   * @return Unique activity identifier.
+   */
+  unsigned long addActivity(in nsIActivity aActivity);
+  
+  /**
+   * Removes the activity with the given id if it's not currently
+   * in-progress.
+   *
+   * @param aID The unique ID of the activity.
+   *
+   * @throws NS_ERROR_FAILURE if the activity is in-progress.
+   * @throws NS_ERROR_NOT_AVAILABLE if the activity is not in the list.
+   */
+  void removeActivity(in unsigned long aID);
+
+  /**
+   * Retrieves an activity managed by the activity manager. This can be one that
+   * is in progress, or one that has completed in the past and is stored in the
+   * persistent store.
+   *
+   * @param aID The unique ID of the activity.
+   *
+   * @return The activity with the specified ID.
+   * @throws NS_ERROR_NOT_AVAILABLE if the activity is not in the list.
+   */
+  nsIActivity getActivity(in unsigned long aID);
+  
+  /**
+   * Tests wether the activity in question in the activity list or not.
+   */
+  boolean containsActivity(in unsigned long aID);
+  
+  /**
+   * Retrieves all activities managed by the activity manager. This can be one
+   * that is in progress (process), one that is represented as a warning, or one
+   * that has completed (event) in the past and is stored in the persistent
+   * store.
+   *
+   * @return A read-only list of activities managed by the activity manager.
+   */
+  void getActivities(out unsigned long length,
+                  [retval, array, size_is(length)] out nsIActivity aActivities);
+  
+  /**
+   * Retrieves processes with given context type and object.
+   *
+   * @return A read-only list of processes matching to given criteria.
+   */
+  void getProcessesByContext(in AString aContextType,
+                             in nsIVariant aContextObject,
+                             out unsigned long length,
+                             [retval, array, size_is(length)] out nsIActivityProcess aProcesses);
+
+  /**
+   *  Call to remove all activities apart from those that are in progress.
+   */
+  void cleanUp();
+
+  /**
+   * The number of processes in the activity list.
+   */
+  readonly attribute long processCount;
+  
+  /**
+   * Adds a listener.
+   */
+  void addListener(in nsIActivityMgrListener aListener);
+
+  /**
+   * Removes the given listener.
+   */
+  void removeListener(in nsIActivityMgrListener aListener);
+};

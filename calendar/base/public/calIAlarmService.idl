@@ -1,0 +1,110 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsISupports.idl"
+
+interface calIItemBase;
+interface calICalendar;
+interface calIDuration;
+interface calITimezone;
+interface calIAlarm;
+interface calIOperation;
+
+[scriptable,uuid(dc96dd04-d2dd-448e-b307-8c8ff39c72af)]
+interface calIAlarmServiceObserver : nsISupports
+{
+  /**
+   * Gets called when an alarm has fired. Depending on type of alarm, an
+   * observer could bring up a dialog or play a sound.
+   */
+  void onAlarm(in calIItemBase item, in calIAlarm alarm);
+
+  /**
+   * Called if alarm(s) of a specific item are to be removed from
+   * the alarm window.
+   *
+   * @param aItem corresponding item, maybe master item of recurring
+   *              series (then all alarms belonging to this item are to
+   *              be removed)
+   */
+  void onRemoveAlarmsByItem(in calIItemBase item);
+
+  /**
+   * Called if all alarms of a specific calendar are to be removed.
+   */
+  void onRemoveAlarmsByCalendar(in calICalendar calendar);
+
+  /**
+   * Called when all alarms of a specific calendar are loaded.
+   */
+  void onAlarmsLoaded(in calICalendar calendar);
+};
+
+[scriptable,uuid(42cfa9ce-49d6-11e5-b88c-5b90eedc1c47)]
+interface calIAlarmService : nsISupports
+{
+  /**
+   * Upper limit for the snooze period for an alarm. To avoid performance issues, don't change this
+   * to a value larger then 1 at least until bug 861594 or a similar concept is implemented.
+   */
+  const unsigned long MAX_SNOOZE_MONTHS = 1;
+
+  /**
+   * This is the timezone that all-day events will be converted to in order to
+   * determine when their alarms should fire.
+   */
+  attribute calITimezone timezone;
+
+  /**
+   * Will return true while the alarm service is in the process of loading alarms
+   */
+  attribute boolean isLoading;
+
+  /**
+   * Cause the alarm service to start up, create a list of upcoming
+   * alarms in all registered calendars, add observers to watch for
+   * calendar registration and unregistration, and setup a timer to
+   * maintain that list and fire alarms.
+   *
+   * @note Will throw NS_ERROR_NOT_INITIALIZED if you have not previously set
+   *       the timezone attribute.
+   */
+  void startup();
+
+  /**
+   * Shuts down the alarm service, canceling all timers and removing all
+   * alarms.
+   */
+  void shutdown();
+
+  /* add and remove observers that will be notified when an
+     alarm has gone off.  It is up to the application to display
+     the alarm.
+  */
+  void addObserver(in calIAlarmServiceObserver observer);
+  void removeObserver(in calIAlarmServiceObserver observer);
+
+  /**
+   * Call to reschedule an alarm to be notified at a later point. The alarm will
+   * instead fire at "now + duration" This will cause an event to be scheduled
+   * even if it was not previously scheduled.
+   *
+   * @param item            The item the alarm belongs to.
+   * @param alarm           The alarm to snooze.
+   * @param duration        The duration in minutes to snooze for.
+   * @return                The operation that modifies the item to snooze the
+   *                        alarm.
+   */
+  calIOperation snoozeAlarm(in calIItemBase item, in calIAlarm alarm, in calIDuration duration);
+
+  /**
+   * Dismisses the given alarm for the passed occurrence.
+   *
+   * @param item            The item the alarm belongs to.
+   * @param alarm           The alarm to dismiss.
+   * @return                The operation that modifies the item to dismiss the
+   *                        alarm.
+   */
+  calIOperation dismissAlarm(in calIItemBase item, in calIAlarm alarm);
+};

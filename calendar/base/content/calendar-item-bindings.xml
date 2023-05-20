@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE bindings SYSTEM "chrome://calendar/locale/calendar.dtd">
+
+<bindings id="calendar-item-bindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <!-- Header with a line beside it, used i.e in the event dialog -->
+  <binding id="calendar-caption" extends="xul:hbox">
+    <content align="center">
+      <xul:label xbl:inherits="value=label,control" class="header"/>
+      <xul:separator class="groove" flex="1"/>
+    </content>
+  </binding>
+
+  <binding id="item-date-row" extends="xul:row">
+    <resources>
+      <stylesheet src="chrome://calendar/skin/calendar-event-dialog.css"/>
+    </resources>      
+    <content xbl:inherits="mode">
+      <xul:label anonid="item-datetime-label"
+                 class="headline"
+                 xbl:inherits="align"/>
+      <xul:label anonid="item-datetime-value"/>
+    </content>
+    <implementation>
+      <field name="mItem">null</field>
+      <property name="mode"
+                readonly="true">
+        <getter><![CDATA[
+          if (this.hasAttribute("mode")) {
+              return this.getAttribute("mode");
+          } else {
+              return "start";
+          }
+        ]]></getter>
+      </property>
+      <property name="Item">
+        <getter><![CDATA[
+          return mItem;
+        ]]></getter>
+        <setter><![CDATA[
+          this.mItem = val;
+          let headerLabel = document.getAnonymousElementByAttribute(this, "anonid", "item-datetime-label");
+          let itemDateTimeLabel = document.getAnonymousElementByAttribute(this, "anonid", "item-datetime-value");
+          let date;
+          if (this.mode == "start") {
+              date = this.mItem[calGetStartDateProp(this.mItem)];
+              if (date) {
+                  let label;
+                  if (isToDo(this.mItem)) {
+                      label = this.getAttribute("taskStartLabel");
+                  } else {
+                      label = this.getAttribute("eventStartLabel");
+                  }
+                  headerLabel.value = label;
+              }
+          } else {
+              date = this.mItem[calGetEndDateProp(this.mItem)];
+              if (date) {
+                  let label;
+                  if (isToDo(this.mItem)) {
+                      label = this.getAttribute("taskDueLabel");
+                  } else {
+                      label = this.getAttribute("eventEndLabel");
+                  }
+                  headerLabel.value = label;
+              }
+          }
+          let hideLabels = (date == null);
+          if (hideLabels) {
+              this.setAttribute("hidden", "true");
+          } else {
+              const kDefaultTimezone = cal.calendarDefaultTimezone();
+              let localTime = date.getInTimezone(kDefaultTimezone);
+              let formatter = getDateFormatter();
+              itemDateTimeLabel.value = formatter.formatDateTime(localTime);
+              if (!date.timezone.isFloating && date.timezone.tzid != kDefaultTimezone.tzid) {
+                  // we additionally display the original datetime with timezone
+                  let orgTime = cal.calGetString("calendar",
+                                                 "datetimeWithTimezone",
+                                                 [formatter.formatDateTime(date),
+                                                  date.timezone.tzid]);
+                  itemDateTimeLabel.value += " (" + orgTime + ")";
+              }
+              this.removeAttribute("hidden");
+          }
+        ]]></setter>
+      </property>
+    </implementation>
+  </binding>
+</bindings>

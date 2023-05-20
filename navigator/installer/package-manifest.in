@@ -1,0 +1,313 @@
+; Package file for the SeaMonkey build.
+;
+; Packaging manifest is used to copy files from dist/bin
+; to the staging directory.
+; Some other files are built in the staging directory directly,
+; so they will be implicitly packaged too.
+;
+; File format:
+;
+; [] designates a toplevel component. Example: [xpcom]
+; - in front of a file specifies it to be removed from the destination
+; * wildcard support to recursively copy the entire directory
+; ; file comment
+;
+
+; Due to Apple Mac OS X packaging requirements, files that are in the same
+; directory on other platforms must be located in different directories on
+; Mac OS X. The following defines allow specifying the Mac OS X bundle
+; location which also work on other platforms.
+;
+; @BINPATH@
+; Equals Contents/MacOS/ on Mac OS X and is the path to the main binary on other
+; platforms.
+;
+; @RESPATH@
+; Equals Contents/Resources/ on Mac OS X and is equivalent to @BINPATH@ on other
+; platforms.
+
+#filter substitution
+
+#ifdef XP_UNIX
+#ifndef XP_MACOSX
+#define UNIX_BUT_NOT_MAC
+#endif
+#endif
+
+#ifdef XP_MACOSX
+; Mac bundle stuff
+@APPNAME@/Contents/Info.plist
+@APPNAME@/Contents/PkgInfo
+@RESPATH@/seamonkey.icns
+@RESPATH@/@LPROJ_ROOT@.lproj/*
+#endif
+
+[@AB_CD@]
+@RESPATH@/chrome/@AB_CD@@JAREXT@
+@RESPATH@/chrome/@AB_CD@.manifest
+@RESPATH@/defaults/profile/bookmarks.html
+@RESPATH@/defaults/profile/chrome/*
+@RESPATH@/defaults/profile/mimeTypes.rdf
+@RESPATH@/defaults/profile/panels.rdf
+@RESPATH@/dictionaries/*
+@RESPATH@/hyphenation/*
+#ifdef MOZ_BUNDLED_FONTS
+@RESPATH@/fonts/*
+#endif
+@RESPATH@/searchplugins/*
+#ifdef HAVE_MAKENSISU
+@BINPATH@/uninstall/helper.exe
+#endif
+#ifdef MOZ_UPDATER
+@RESPATH@/updater.ini
+#endif
+
+[xpcom]
+@RESPATH@/dependentlibs.list
+#ifdef MOZ_SHARED_MOZGLUE
+@BINPATH@/@DLL_PREFIX@mozglue@DLL_SUFFIX@
+#endif
+#ifndef MOZ_STATIC_JS
+@BINPATH@/@DLL_PREFIX@mozjs@DLL_SUFFIX@
+#endif
+#ifdef GKMEDIAS_SHARED_LIBRARY
+@BINPATH@/@DLL_PREFIX@gkmedias@DLL_SUFFIX@
+#endif
+#ifdef MOZ_DMD
+@BINPATH@/@DLL_PREFIX@dmd@DLL_SUFFIX@
+#endif
+#ifndef MOZ_SYSTEM_HUNSPELL
+@BINPATH@/@DLL_PREFIX@hunspell@DLL_SUFFIX@
+#endif
+#ifndef MOZ_SYSTEM_NSPR
+#ifndef MOZ_FOLD_LIBS
+@BINPATH@/@DLL_PREFIX@nspr4@DLL_SUFFIX@
+@BINPATH@/@DLL_PREFIX@plc4@DLL_SUFFIX@
+@BINPATH@/@DLL_PREFIX@plds4@DLL_SUFFIX@
+#endif
+#endif
+#ifdef XP_MACOSX
+@BINPATH@/XUL
+#else
+@BINPATH@/@DLL_PREFIX@xul@DLL_SUFFIX@
+#endif
+#ifdef XP_MACOSX
+@BINPATH@/@MOZ_CHILD_PROCESS_NAME@.app/
+@BINPATH@/@DLL_PREFIX@plugin_child_interpose@DLL_SUFFIX@
+#else
+@BINPATH@/@MOZ_CHILD_PROCESS_NAME@
+#endif
+; ANGLE GLES-on-D3D rendering library
+#ifdef MOZ_ANGLE_RENDERER
+@BINPATH@/libEGL.dll
+@BINPATH@/libGLESv2.dll
+#ifdef MOZ_D3DCOMPILER_VISTA_DLL
+@BINPATH@/@MOZ_D3DCOMPILER_VISTA_DLL@
+#endif
+
+#ifdef MOZ_D3DCOMPILER_XP_DLL
+@BINPATH@/@MOZ_D3DCOMPILER_XP_DLL@
+#endif
+#endif # MOZ_ANGLE_RENDERER
+
+#ifdef XP_WIN
+@BINPATH@/plugin-hang-ui@BIN_SUFFIX@
+#if MOZ_PACKAGE_MSVC_DLLS
+@BINPATH@/@MSVC_C_RUNTIME_DLL@
+@BINPATH@/@MSVC_CXX_RUNTIME_DLL@
+@BINPATH@/api-ms-win-*.dll
+@BINPATH@/ucrtbase.dll
+#endif
+#endif
+
+#ifdef MOZ_ICU_DATA_ARCHIVE
+@RESPATH@/@ICU_DATA_FILE@
+#endif
+
+#ifdef MOZ_SHARED_ICU
+@BINPATH@/@DLL_PREFIX@icu@MOZ_ICU_VERSION@@DLL_SUFFIX@
+#endif
+
+[browser]
+; [Base Browser Files]
+#ifdef XP_WIN
+@BINPATH@/@MOZ_APP_NAME@.exe
+#else
+;@BINPATH@/@MOZ_APP_NAME@-bin
+@BINPATH@/@MOZ_APP_NAME@
+#endif
+@RESPATH@/application.ini
+@RESPATH@/platform.ini
+#ifdef MOZ_UPDATER
+@RESPATH@/update-settings.ini
+#endif
+#ifndef MOZ_SYSTEM_SQLITE
+@BINPATH@/@DLL_PREFIX@mozsqlite3@DLL_SUFFIX@
+#endif
+@BINPATH@/@DLL_PREFIX@lgpllibs@DLL_SUFFIX@
+#ifdef MOZ_FFVPX
+@BINPATH@/@DLL_PREFIX@mozavutil@DLL_SUFFIX@
+@BINPATH@/@DLL_PREFIX@mozavcodec@DLL_SUFFIX@
+#endif
+#ifdef MOZ_GTK3
+@BINPATH@/@DLL_PREFIX@mozgtk@DLL_SUFFIX@
+@BINPATH@/gtk2/@DLL_PREFIX@mozgtk@DLL_SUFFIX@
+#endif
+@RESPATH@/license.txt
+@RESPATH@/blocklist.xml
+#ifdef UNIX_BUT_NOT_MAC
+@RESPATH@/run-mozilla.sh
+#endif
+
+; [Components]
+; Although components.manifest ends up being shipped inside omni.jar
+; it still needs listing here as it is parsed for various binary
+; components before being packaged inside omni.jar.
+@RESPATH@/components/*
+#ifdef ACCESSIBILITY
+#ifdef XP_WIN32
+@BINPATH@/AccessibleMarshal.dll
+#endif
+#endif
+
+; Modules
+@RESPATH@/modules/*
+
+; [Browser Chrome Files]
+@RESPATH@/chrome/comm@JAREXT@
+@RESPATH@/chrome/comm.manifest
+@RESPATH@/chrome/navigator@JAREXT@
+@RESPATH@/chrome/navigator.manifest
+;@RESPATH@/chrome/recording.manifest
+;@RESPATH@/chrome/recording/*
+@RESPATH@/chrome/toolkit@JAREXT@
+@RESPATH@/chrome/toolkit.manifest
+
+; classic theme
+@RESPATH@/chrome/classic@JAREXT@
+@RESPATH@/chrome/classic.manifest
+#ifdef MOZ_OMNIJAR
+#ifdef XP_WIN
+@RESPATH@/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}/chrome.manifest
+#endif
+@RESPATH@/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}/icon.png
+@RESPATH@/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}/install.rdf
+@RESPATH@/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}/preview.png
+#else
+@RESPATH@/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}/chrome.manifest
+@RESPATH@/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}/icon.png
+@RESPATH@/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}/install.rdf
+@RESPATH@/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}/preview.png
+#endif
+
+#ifndef XP_WIN
+; modern theme
+#ifdef MOZ_OMNIJAR
+@RESPATH@/extensions/*.xpi
+#else
+@RESPATH@/extensions/modern@themes.mozilla.org/chrome/modern@JAREXT@
+@RESPATH@/extensions/modern@themes.mozilla.org/chrome.manifest
+@RESPATH@/extensions/modern@themes.mozilla.org/icon.png
+@RESPATH@/extensions/modern@themes.mozilla.org/install.rdf
+@RESPATH@/extensions/modern@themes.mozilla.org/preview.png
+#endif
+#endif
+
+; shell icons
+;@RESPATH@/chrome/icons/default/*
+
+; [Default Preferences]
+; All the browser/general pref files must be part of base to prevent migration bugs
+@RESPATH@/@PREF_DIR@/*
+@RESPATH@/goanna.js
+@RESPATH@/defaults/autoconfig/prefcalls.js
+@RESPATH@/defaults/permissions
+
+; [Layout Engine Resources]
+; Layout debug extension.
+#ifdef ENABLE_TESTS
+#ifdef MOZ_DEBUG
+@RESPATH@/chrome/layoutdebug@JAREXT@
+@RESPATH@/chrome/layoutdebug.manifest
+@RESPATH@/components/layout_debug.xpt
+#endif
+#endif
+; Style Sheets, Graphics and other Resources used by the layout engine.
+@RESPATH@/res/contenteditable.css
+@RESPATH@/res/designmode.css
+@RESPATH@/res/EditorOverride.css
+@RESPATH@/res/grabber.gif
+@RESPATH@/res/langGroups.properties
+@RESPATH@/res/language.properties
+@RESPATH@/res/svg.css
+@RESPATH@/res/table-add-column-after-active.gif
+@RESPATH@/res/table-add-column-after-hover.gif
+@RESPATH@/res/table-add-column-after.gif
+@RESPATH@/res/table-add-column-before-active.gif
+@RESPATH@/res/table-add-column-before-hover.gif
+@RESPATH@/res/table-add-column-before.gif
+@RESPATH@/res/table-add-row-after-active.gif
+@RESPATH@/res/table-add-row-after-hover.gif
+@RESPATH@/res/table-add-row-after.gif
+@RESPATH@/res/table-add-row-before-active.gif
+@RESPATH@/res/table-add-row-before-hover.gif
+@RESPATH@/res/table-add-row-before.gif
+@RESPATH@/res/table-remove-column-active.gif
+@RESPATH@/res/table-remove-column-hover.gif
+@RESPATH@/res/table-remove-column.gif
+@RESPATH@/res/table-remove-row-active.gif
+@RESPATH@/res/table-remove-row-hover.gif
+@RESPATH@/res/table-remove-row.gif
+@RESPATH@/res/ImageDocument.css
+@RESPATH@/res/TopLevelImageDocument.css
+@RESPATH@/res/TopLevelVideoDocument.css
+#ifdef XP_MACOSX
+@RESPATH@/res/cursors/*
+#endif
+@RESPATH@/res/fonts/*
+@RESPATH@/res/dtd/*
+@RESPATH@/res/html/*
+@RESPATH@/res/entityTables/*
+#ifdef XP_MACOSX
+@RESPATH@/res/MainMenu.nib/
+#endif
+
+; [Personal Security Manager]
+;
+; NSS libraries are signed in the staging directory,
+; meaning their .chk files are created there directly.
+;
+#ifndef MOZ_SYSTEM_NSS
+#if defined(XP_LINUX) && !defined(ANDROID)
+@BINPATH@/@DLL_PREFIX@freeblpriv3@DLL_SUFFIX@
+#else
+@BINPATH@/@DLL_PREFIX@freebl3@DLL_SUFFIX@
+#endif
+@BINPATH@/@DLL_PREFIX@nss3@DLL_SUFFIX@
+@BINPATH@/@DLL_PREFIX@nssckbi@DLL_SUFFIX@
+#ifndef NSS_DISABLE_DBM
+@BINPATH@/@DLL_PREFIX@nssdbm3@DLL_SUFFIX@
+#endif
+#ifndef MOZ_FOLD_LIBS
+@BINPATH@/@DLL_PREFIX@nssutil3@DLL_SUFFIX@
+@BINPATH@/@DLL_PREFIX@smime3@DLL_SUFFIX@
+@BINPATH@/@DLL_PREFIX@ssl3@DLL_SUFFIX@
+#endif
+@BINPATH@/@DLL_PREFIX@softokn3@DLL_SUFFIX@
+#endif
+@RESPATH@/chrome/pippki@JAREXT@
+@RESPATH@/chrome/pippki.manifest
+
+; [Updater]
+;
+#ifdef MOZ_UPDATER
+#ifdef XP_MACOSX
+@BINPATH@/updater.app/
+#else
+@BINPATH@/updater@BIN_SUFFIX@
+#endif
+#endif
+
+#if defined(MOZ_ASAN) && defined(CLANG_CL)
+@BINPATH@/clang_rt.asan_dynamic-i386.dll
+#endif

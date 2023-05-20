@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://messenger/skin/dialogs.css" type="text/css"?>
+
+<!DOCTYPE dialog [
+<!ENTITY % mailViewLisDTD SYSTEM "chrome://messenger/locale/mailViewList.dtd">
+%mailViewLisDTD;
+<!ENTITY % FilterListDialogDTD SYSTEM "chrome://messenger/locale/FilterListDialog.dtd">
+%FilterListDialogDTD;
+]>
+
+<dialog id="mailViewListDialog"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        onload="mailViewListOnLoad();"
+        windowtype="mailnews:mailviewlist"
+        title="&mailViewListTitle.label;"
+        width="400" height="340"
+        buttons="accept"
+        persist="screenX screenY width height">
+
+  <script type="application/javascript" src="chrome://messenger/content/mailViewList.js"/>
+
+  <vbox flex="1">
+    <hbox flex="1">
+      <listbox id="mailViewList" flex="1"  onselect="onMailViewSelect(event);">
+        <listcols>
+          <listcol flex="1" width="0"/>
+        </listcols>
+        <listhead>
+          <listheader label="&viewName.label;"/>
+        </listhead>
+      </listbox>
+
+      <vbox>
+       <button id="newButton" label="&newButton.label;" accesskey="&newButton.accesskey;" oncommand="onNewMailView();"/>
+       <button id="editButton" label="&editButton.label;" accesskey="&editButton.accesskey;" oncommand="onEditMailView();"/>
+       <button id="deleteButton" label="&deleteButton.label;" accesskey="&deleteButton.accesskey;" oncommand="onDeleteMailView();"/>
+      </vbox>
+    </hbox>
+  </vbox>
+</dialog>

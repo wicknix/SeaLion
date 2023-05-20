@@ -1,0 +1,211 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ===== accountCentral.css ==========================================
+  == Styles for the Messenger Account Central panel.
+  ======================================================================= */
+
+@import url("chrome://messenger/skin/");
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+#acctCentralGrid {
+  background-color: Window;
+}
+
+spacer {
+  max-height: .5em;
+}
+
+spacer.big {
+  max-height: 4em;
+}
+
+/* ::::: rows ::::: */
+
+#acctCentralHeaderRow {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  -moz-padding-start: 10px;
+  -moz-padding-end: 0px;
+  font-size: 180%;
+  font-weight: bold;
+  color: WindowText;
+}
+
+.acctCentralRow {
+  -moz-margin-start: 10px;
+  font-size: 125%;
+  color: #000000;
+}
+
+.row-iconic-icon {
+  list-style-image: inherit;
+  -moz-margin-end: 10px;
+}
+
+.acctCentralRowTitleBox {
+  background-color: ButtonFace;
+  border: 1px solid ThreeDDarkShadow;
+  margin: 15px 6px 0px;
+  border-radius: 3px;
+  color: -moz-DialogText;
+  padding-top: 2px;
+  padding-bottom: 0;
+  -moz-padding-start: 8px;
+  -moz-padding-end: 4px;
+  font-size: 150%;
+  font-weight: bold;
+}
+
+/* ::::: links ::::: */
+
+.acctCentralText {
+  color: WindowText;
+  -moz-padding-start: 45px;
+  margin-top: .55em;
+  margin-bottom: .55em;
+  min-height: 32px; /* icon height */
+}
+
+.acctCentralNewAcctText {
+  color: WindowText;
+  -moz-padding-start: 20px;
+  -moz-padding-end: 10px;
+}
+
+.acctCentralLinkText {
+  cursor: pointer;
+}
+
+.acctCentralLinkText:hover,
+.acctCentralLinkText:focus {
+  color: -moz-NativehyperlinkText;
+}
+
+.acctCentralLinkText:hover:active {
+  color: -moz-html-CellHighlight;
+}
+
+#CreateAccountsList {
+  display: block;
+  -moz-padding-start: 45px;
+  height: 50px;
+}
+
+#ReadMessages label {
+  background: url("chrome://messenger/skin/accountcentral/read-messages.png") no-repeat !important;
+}
+
+#ReadMessages label:-moz-locale-dir(rtl) {
+  background: url("chrome://messenger/skin/accountcentral/read-messages.png") right no-repeat !important;
+}
+
+#ComposeMessage label {
+  background: url("chrome://messenger/skin/accountcentral/write-message.png") no-repeat !important;
+}
+
+#ComposeMessage label:-moz-locale-dir(rtl) {
+  background: url("chrome://messenger/skin/accountcentral/write-message.png") right no-repeat !important;
+}
+
+#AccountSettings label {
+  background: url("chrome://messenger/skin/accountcentral/account-settings.png") no-repeat !important;
+}
+
+#AccountSettings label:-moz-locale-dir(rtl) {
+  background: url("chrome://messenger/skin/accountcentral/account-settings.png") right no-repeat !important;
+}
+
+#CreateAccount label {
+  background: url("chrome://messenger/skin/accountcentral/create-account.png") no-repeat !important;
+}
+
+#CreateAccount label:-moz-locale-dir(rtl) {
+  background: url("chrome://messenger/skin/accountcentral/create-account.png") right no-repeat !important;
+}
+
+#SearchMessages label {
+  background: url("chrome://messenger/skin/accountcentral/search-messages.png") no-repeat !important;
+}
+
+#SearchMessages label:-moz-locale-dir(rtl) {
+  background: url("chrome://messenger/skin/accountcentral/search-messages.png") right no-repeat !important;
+}
+
+#CreateFilters label {
+  background: url("chrome://messenger/skin/accountcentral/manage-filters.png") no-repeat !important;
+}
+
+#CreateFilters label:-moz-locale-dir(rtl) {
+  background: url("chrome://messenger/skin/accountcentral/manage-filters.png") right no-repeat !important;
+}
+
+#OfflineSettings label {
+  background: url("chrome://messenger/skin/accountcentral/offline-settings.png") no-repeat !important;
+}
+
+#OfflineSettings label:-moz-locale-dir(rtl) {
+  background: url("chrome://messenger/skin/accountcentral/offline-settings.png") right no-repeat !important;
+}
+
+#CreateAccountMail,
+#CreateAccountMovemail {
+  background-image: -moz-image-rect(url("chrome://messenger/skin/icons/server.png"), 0, 16, 16, 0);
+  background-repeat: no-repeat;
+}
+
+#CreateAccountChat {
+  background: url("chrome://chat/skin/chat-16.png") no-repeat;
+}
+
+#CreateAccountNewsgroups {
+  background-image: -moz-image-rect(url("chrome://messenger/skin/icons/server.png"), 0, 64, 16, 48);
+  background-repeat: no-repeat;
+}
+
+#CreateAccountRSS {
+  background-image: -moz-image-rect(url("chrome://messenger-newsblog/skin/icons/rss-feed.png"), 0, 16, 16, 0);
+  background-repeat: no-repeat;
+}
+
+#CreateAccountMail:-moz-locale-dir(rtl),
+#CreateAccountMovemail:-moz-locale-dir(rtl),
+#CreateAccountChat:-moz-locale-dir(rtl),
+#CreateAccountNewsgroups:-moz-locale-dir(rtl),
+#CreateAccountRSS:-moz-locale-dir(rtl) {
+  background-position: right center;
+}
+
+#SubscribeImapFolders label {
+  background: url("chrome://messenger/skin/accountcentral/manage-imap.png") no-repeat !important;
+}
+
+#SubscribeImapFolders label:-moz-locale-dir(rtl) {
+  background: url("chrome://messenger/skin/accountcentral/manage-imap.png") right no-repeat !important;
+}
+
+#SubscribeNewsgroups label {
+  background: url("chrome://messenger/skin/accountcentral/manage-newsgroups.png") no-repeat !important;
+}
+
+#SubscribeNewsgroups label:-moz-locale-dir(rtl) {
+  background: url("chrome://messenger/skin/accountcentral/manage-newsgroups.png") right no-repeat !important;
+}
+
+#SubscribeRSS label {
+  background: url("chrome://messenger/skin/accountcentral/manage-rss.png") no-repeat !important;
+}
+
+#SubscribeRSS label:-moz-locale-dir(rtl) {
+  background: url("chrome://messenger/skin/accountcentral/manage-rss.png") right no-repeat !important;
+}
+
+#JunkSettingsMail label {
+  background: url("chrome://messenger/skin/icons/junk.png") no-repeat !important;
+}
+
+#JunkSettingsMail label:-moz-locale-dir(rtl) {
+  background: url("chrome://messenger/skin/icons/junk.png") right no-repeat !important;
+}

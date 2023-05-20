@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+  - License, v. 2.0. If a copy of the MPL was not distributed with this
+  - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE html [
+  <!ENTITY % htmlDTD PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd"> %htmlDTD;
+  <!ENTITY % globalDTD SYSTEM "chrome://global/locale/global.dtd"> %globalDTD;
+  <!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd"> %brandDTD;
+  <!ENTITY % aboutSupportDTD SYSTEM "chrome://global/locale/aboutSupport.dtd"> %aboutSupportDTD;
+  <!ENTITY % aboutSupportMailDTD SYSTEM "chrome://messenger/locale/aboutSupportMail.dtd"> %aboutSupportMailDTD;
+]>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>&aboutSupport.pageTitle;</title>
+
+    <link rel="icon" type="image/png" id="favicon"
+          href="chrome://branding/content/icon48.png"/>
+    <link rel="stylesheet" href="chrome://global/skin/in-content/common.css"
+          type="text/css"/>
+    <link rel="stylesheet" href="chrome://global/skin/aboutSupport.css"
+          type="text/css"/>
+    <link rel="stylesheet" href="chrome://messenger/skin/aboutSupport.css"
+          type="text/css"/>
+    <link rel="stylesheet" href="chrome://messenger/content/about-support/show-private.css"
+          type="text/css"/>
+    <!-- Private data is hidden by default. -->
+    <link rel="stylesheet" href="chrome://messenger/content/about-support/hide-private.css"
+          type="text/css" id="about-support-private"/>
+
+    <script type="application/javascript;version=1.7"
+            src="chrome://messenger/content/about-support/init.js"/>
+    <script type="application/javascript;version=1.7"
+            src="chrome://messenger/content/about-support/accounts.js"/>
+#ifdef MOZ_CRASHREPORTER
+    <script type="application/javascript;version=1.7"
+            src="chrome://messenger/content/about-support/crashes.js"/>
+#endif
+    <script type="application/javascript;version=1.7"
+            src="chrome://messenger/content/about-support/extensions.js"/>
+    <script type="application/javascript;version=1.7"
+            src="chrome://messenger/content/about-support/prefs.js"/>
+    <script type="application/javascript;version=1.7"
+            src="chrome://messenger/content/about-support/gfx.js"/>
+    <script type="application/javascript;version=1.7"
+            src="chrome://messenger/content/about-support/js.js"/>
+    <script type="application/javascript;version=1.7"
+            src="chrome://messenger/content/about-support/a11y.js"/>
+    <script type="application/javascript;version=1.7"
+            src="chrome://messenger/content/about-support/libversions.js"/>
+    <script type="application/javascript;version=1.7"
+            src="chrome://messenger/content/about-support/export.js"/>
+  </head>
+
+  <body dir="&locale.dir;">
+
+    <h1>
+      &aboutSupport.pageTitle;
+    </h1>
+
+    <div class="page-subtitle">
+        &aboutSupport.pageSubtitle;
+    </div>
+
+    <div>
+      <button onclick="copyToClipboard()">
+        &aboutSupport.copyTextToClipboard.label;
+      </button>
+      <button id="button-send-via-email" onclick="sendViaEmail()">
+        &aboutSupport.sendViaEmail.label;
+      </button>
+      <input type="checkbox" id="check-show-private-data" class="data-uionly"
+             onchange="onShowPrivateDataChange(this);" />
+      <label for="check-show-private-data">&aboutSupport.showPrivateData.mainText;
+      <span class="gray-text">&aboutSupport.showPrivateData.explanationText;</span></label>
+    </div>
+
+    <div id="contents">
+
+      <!-- - - - - - - - - - - - - - - - - - - - - -->
+
+      <h2 class="major-section">
+        &aboutSupport.appBasicsTitle;
+      </h2>
+
+      <table>
+        <tbody>
+          <tr>
+            <th class="column">
+              &aboutSupport.appBasicsName;
+            </th>
+
+            <td id="application-box">
+            </td>
+          </tr>
+
+          <tr>
+            <th class="column">
+              &aboutSupport.appBasicsVersion;
+            </th>
+
+            <td id="version-box">
+            </td>
+          </tr>
+
+          <tr>
+            <th class="column">
+              &aboutSupport.appBasicsUserAgent;
+            </th>
+
+            <td id="useragent-box">
+            </td>
+          </tr>
+
+          <tr>
+            <th class="column">
+#ifdef XP_WIN
+              &aboutSupport.appBasicsProfileDirWinMac;
+#else
+#ifdef XP_MACOSX
+              &aboutSupport.appBasicsProfileDirWinMac;
+#else
+              &aboutSupport.appBasicsProfileDir;
+#endif
+#endif
+            </th>
+
+            <td>
+              <div id="profile-dir-button-box" class="data-public">
+                <button onclick="openProfileDirectory()">
+#ifdef XP_WIN
+                  &aboutSupport.showWin2.label;
+#else
+#ifdef XP_MACOSX
+                  &aboutSupport.showMac.label;
+#else
+                  &aboutSupport.showDir.label;
+#endif
+#endif
+                </button>
+              </div>
+              <span id="profile-dir-box" class="data-private"></span>
+              <span id="profile-fs-type-box"></span>
+            </td>
+          </tr>
+
+          <tr>
+            <th class="column">
+              &aboutSupport.appBasicsAppBuildID;
+            </th>
+
+            <td id="buildid-box">
+            </td>
+          </tr>
+
+          <tr>
+            <th class="column">
+              &aboutSupport.appBasicsEnabledPlugins;
+            </th>
+
+            <td>
+              <a href="about:plugins" target="_blank">about:plugins</a>
+            </td>
+          </tr>
+
+          <tr>
+            <th class="column">
+              &aboutSupport.appBasicsBuildConfig;
+            </th>
+
+            <td>
+              <a href="about:buildconfig" target="_blank">about:buildconfig</a>
+            </td>
+          </tr>
+
+          <tr>
+            <th class="column">
+              &aboutSupport.appBasicsMemoryUse;
+            </th>
+
+            <td>
+              <a href="about:memory" target="_blank">about:memory</a>
+            </td>
+          </tr>
+
+          <tr>
+            <th class="column">
+              &aboutSupport.appBasicsProfiles;
+            </th>
+
+            <td>
+              <a href="about:profiles" target="_blank">about:profiles</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- - - - - - - - - - - - - - - - - - - - - -->
+
+      <h2 class="major-section">
+        &aboutSupport.accountsTitle;
+      </h2>
+
+      <table id="accounts-table">
+        <thead>
+          <tr>
+            <th rowspan="2">
+              &aboutSupport.accountsID;
+            </th>
+
+            <th rowspan="2" class="data-private">
+              &aboutSupport.accountsName;
+            </th>
+
+            <th colspan="3">
+              &aboutSupport.accountsIncomingServer;
+            </th>
+
+            <th colspan="5">
+              &aboutSupport.accountsOutgoingServers;
+            </th>
+          </tr>
+          <tr class="thead-level2">
+            <!-- Incoming server -->
+            <th>
+              &aboutSupport.accountsServerName;
+            </th>
+
+            <th>
+              &aboutSupport.accountsConnSecurity;
+            </th>
+
+            <th>
+              &aboutSupport.accountsAuthMethod;
+            </th>
+
+            <!-- Outgoing servers -->
+            <th class="data-private">
+              &aboutSupport.identityName;
+            </th>
+
+            <th>
+              &aboutSupport.accountsServerName;
+            </th>
+
+            <th>
+              &aboutSupport.accountsConnSecurity;
+            </th>
+
+            <th>
+              &aboutSupport.accountsAuthMethod;
+            </th>
+
+            <th>
+              &aboutSupport.accountsDefault;
+            </th>
+          </tr>
+        </thead>
+
+        <tbody id="accounts-tbody">
+        </tbody>
+      </table>
+
+      <!-- - - - - - - - - - - - - - - - - - - - - -->
+#ifdef MOZ_CRASHREPORTER
+
+      <h2 class="major-section">
+        &aboutSupport.crashes.title;
+      </h2>
+
+      <table id="crashes-table">
+        <thead>
+          <tr>
+            <th>
+              &aboutSupport.crashes.id;
+            </th>
+            <th>
+              &aboutSupport.crashes.sendDate;
+            </th>
+          </tr>
+        </thead>
+        <tbody id="crashes-tbody">
+        </tbody>
+      </table>
+      <p id="crashes-allReports" class="data-uionly" style="display: none">
+        <a href="about:crashes" id="crashes-allReportsWithPending" style="display: block" target="_blank">&aboutSupport.crashes.allReports;</a>
+      </p>
+      <p id="crashes-noConfig" class="data-uionly" style="display: none">&aboutSupport.crashes.noConfig;</p>
+
+      <!-- - - - - - - - - - - - - - - - - - - - - -->
+#endif
+
+      <h2 class="major-section">
+        &aboutSupport.extensionsTitle;
+      </h2>
+
+      <table id="extensions-table">
+        <thead>
+          <tr>
+            <th>
+              &aboutSupport.extensionName;
+            </th>
+            <th>
+              &aboutSupport.extensionVersion;
+            </th>
+            <th>
+              &aboutSupport.extensionEnabled;
+            </th>
+            <th>
+              &aboutSupport.extensionId;
+            </th>
+          </tr>
+        </thead>
+        <tbody id="extensions-tbody">
+        </tbody>
+      </table>
+
+      <!-- - - - - - - - - - - - - - - - - - - - - -->
+
+      <h2 class="major-section">
+        &aboutSupport.modifiedKeyPrefsTitle;
+      </h2>
+
+      <table class="prefs-table">
+        <thead>
+          <tr>
+            <th class="name">
+              &aboutSupport.modifiedPrefsName;
+            </th>
+
+            <th class="value">
+              &aboutSupport.modifiedPrefsValue;
+            </th>
+          </tr>
+        </thead>
+
+        <tbody id="prefs-tbody">
+        </tbody>
+      </table>
+
+      <!-- - - - - - - - - - - - - - - - - - - - - -->
+      <h2 class="major-section">
+        &aboutSupport.graphicsTitle;
+      </h2>
+
+      <table>
+        <tbody id="graphics-tbody">
+        </tbody>
+
+        <tbody id="graphics-info-properties">
+        </tbody>
+
+        <tbody id="graphics-failures-tbody">
+        </tbody>
+      </table>
+
+      <!-- - - - - - - - - - - - - - - - - - - - - -->
+      <h2 class="major-section">
+        &aboutSupport.jsTitle;
+      </h2>
+
+      <table>
+        <tbody>
+          <tr>
+            <th class="column">
+              &aboutSupport.jsIncrementalGC;
+            </th>
+
+            <td id="javascript-incremental-gc">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- - - - - - - - - - - - - - - - - - - - - -->
+      <h2 class="major-section">
+        &aboutSupport.a11yTitle;
+      </h2>
+
+      <table>
+        <tbody>
+          <tr>
+            <th class="column">
+              &aboutSupport.a11yActivated;
+            </th>
+
+            <td id="a11y-activated">
+            </td>
+          </tr>
+          <tr>
+            <th class="column">
+              &aboutSupport.a11yForceDisabled;
+            </th>
+
+            <td id="a11y-force-disabled">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- - - - - - - - - - - - - - - - - - - - - -->
+      <h2 class="major-section">
+        &aboutSupport.libraryVersionsTitle;
+      </h2>
+
+      <table>
+        <tbody id="libversions-tbody">
+        </tbody>
+      </table>
+
+    </div>
+
+  </body>
+
+</html>

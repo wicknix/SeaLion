@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+# -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+<!DOCTYPE overlay [
+<!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd" >
+%brandDTD;
+<!ENTITY % generalDTD SYSTEM "chrome://messenger/locale/preferences/general.dtd" >
+%generalDTD;
+]>
+
+<overlay id="GeneralPaneOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <prefpane id="paneGeneral" onpaneload="gGeneralPane.init();">
+    <script type="application/javascript" src="chrome://communicator/content/utilityOverlay.js"/>
+    <script type="application/javascript" src="chrome://messenger/content/preferences/general.js"/>
+
+    <preferences id="generalPreferences">
+      <preference id="mail.pane_config.dynamic" name="mail.pane_config.dynamic" type="int"/>
+      <preference id="mailnews.reuse_message_window" name="mailnews.reuse_message_window" type="bool"/>
+      <preference id="mailnews.start_page.enabled" name="mailnews.start_page.enabled" type="bool"/>
+      <preference id="mailnews.start_page.url" name="mailnews.start_page.url" type="string"/>
+#ifndef XP_MACOSX
+      <preference id="mail.biff.show_alert" name="mail.biff.show_alert" type="bool"/>
+#endif
+      <preference id="mail.biff.show_tray_icon" name="mail.biff.show_tray_icon" type="bool" />
+      <preference id="mail.biff.play_sound" name="mail.biff.play_sound" type="bool"/>
+      <preference id="mail.biff.play_sound.type" name="mail.biff.play_sound.type" type="int"/>
+      <preference id="mail.biff.play_sound.url" name="mail.biff.play_sound.url" type="string"/>
+    </preferences>
+
+    <stringbundle id="bundlePreferences" src="chrome://messenger/locale/preferences/preferences.properties"/>
+
+    <groupbox>
+      <caption label="&messengerStartPage.label;"/>
+        <hbox align="start">
+          <checkbox id="mailnewsStartPageEnabled" label="&enableStartPage.label;"
+                    preference="mailnews.start_page.enabled"
+                    accesskey="&enableStartPage.accesskey;"
+                    oncommand="gGeneralPane.updateStartPage();"/>
+        </hbox>
+        <hbox align="center">
+          <label value="&location.label;" accesskey="&location1.accesskey;" control="mailnewsStartPageUrl"/>
+          <textbox id="mailnewsStartPageUrl" flex="1" class="uri-element"
+                   preference="mailnews.start_page.url"
+                   onsyncfrompreference="return gGeneralPane.readStartPageUrl();"
+                   onsynctopreference="return gGeneralPane.writeStartPageUrl();"/>
+          <button label="&useDefault.label;" accesskey="&useDefault.accesskey;"
+                  oncommand="gGeneralPane.restoreDefaultStartPage();">
+            <observes element="mailnewsStartPageUrl" attribute="disabled"/>
+          </button>
+        </hbox>
+    </groupbox>
+
+    <groupbox>
+      <caption label="&defaultSearchEngine.label;"/>
+      <hbox align="center">
+        <menulist id="defaultWebSearch">
+          <menupopup id="defaultWebSearchPopup"/>
+        </menulist>
+        <spacer flex="1"/>
+        <button id="addSearchEngine"
+                label="&addSearchEngine.label;"
+                accesskey="&addSearchEngine.accesskey;"
+                oncommand="gGeneralPane.addSearchEngine();"/>
+        <button id="removeSearchEngine"
+                label="&removeSearchEngine.label;"
+                accesskey="&removeSearchEngine.accesskey;"
+                oncommand="gGeneralPane.removeSearchEngine();"/>
+      </hbox>
+    </groupbox>
+
+    <groupbox>
+      <caption label="&newMessagesArrive.label;"/>
+#ifdef XP_MACOSX
+      <hbox align="center">
+        <description flex="1">&changeDockIconOptions.label;</description>
+        <button id="dockOptions" label="&dockOptions.label;"
+                accesskey="&dockOptions.accesskey;"
+                oncommand="gGeneralPane.configureDockOptions();"/>
+      </hbox>
+      <description class="bold">&notificationAlertSettings2.label;</description>
+#else
+      <hbox align="center">
+        <checkbox id="newMailNotificationAlert"
+                  label="&showAnimatedAlert.label;"
+                  accesskey="&showAnimatedAlert.accesskey;"
+                  preference="mail.biff.show_alert"
+                  oncommand="gGeneralPane.updateCustomizeAlert();"/>
+        <spacer flex="1"/>
+        <button id="customizeMailAlert" label="&customizeMailAlert.label;" accesskey="&customizeMailAlert.accesskey;"
+                oncommand="gGeneralPane.customizeMailAlert();"/>
+      </hbox>
+      <hbox>
+        <checkbox id="newMailNotificationTrayIcon" label="&showTrayIcon.label;"
+#ifndef XP_WIN
+                  hidden="true"
+#endif
+                  preference="mail.biff.show_tray_icon"
+                  accesskey="&showTrayIcon.accesskey;"/>
+      </hbox>
+#endif
+
+      <hbox align="center">
+#ifndef XP_MACOSX
+        <checkbox id="newMailNotification" accesskey="&playSound1.accesskey;"
+                  preference="mail.biff.play_sound" label="&playSound.label;"
+#else
+        <checkbox id="newMailNotification" accesskey="&playSoundMac.accesskey;"
+                  preference="mail.biff.play_sound" label="&playSoundMac.label;"
+#endif
+                  oncommand="gGeneralPane.updatePlaySound();"/>
+        <spacer flex="1"/>
+        <button id="playSound" label="&play.label;" accesskey="&play.accesskey;" oncommand="gGeneralPane.previewSound();"/>
+      </hbox>
+
+#ifndef XP_MACOSX
+      <radiogroup id="soundType"
+                  class="indent"
+                  preference="mail.biff.play_sound.type"
+                  orient="vertical"
+                  oncommand="gGeneralPane.updatePlaySound();"
+                  aria-labelledby="newMailNotification">
+        <hbox>
+          <radio id="system"
+                 value="0"
+                 label="&systemsound.label;"
+                 accesskey="&systemsound.accesskey;"/>
+          <spacer flex="1"/>
+        </hbox>
+        <hbox>
+          <radio id="custom"
+                 value="1"
+                 label="&customsound.label;"
+                 accesskey="&customsound.accesskey;"/>
+          <spacer flex="1"/>
+        </hbox>
+      </radiogroup>
+#endif
+      <hbox>
+        <filefield id="soundUrlLocation"
+                   class="indent"
+                   preference="mail.biff.play_sound.url"
+                   preference-editable="true"
+                   onsyncfrompreference="return gGeneralPane.readSoundLocation();"
+                   aria-labelledby="custom"
+                   flex="1"/>
+        <button id="browseForSound"
+                label="&browse.label;"
+                accesskey="&browse.accesskey;"
+                oncommand="gGeneralPane.browseForSoundFile();">
+          <observes element="soundUrlLocation" attribute="disabled"/>
+        </button>
+      </hbox>
+    </groupbox>
+  </prefpane>
+</overlay>

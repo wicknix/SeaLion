@@ -1,0 +1,67 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsISupports.idl"
+
+interface calIDateTime;
+interface calIDuration;
+
+[scriptable,uuid(ace2a74c-bd08-476f-be8b-6565abc50339)]
+interface calIPeriod : nsISupports
+{
+  attribute jsval icalPeriod;
+
+  /**
+   * isMutable is true if this instance is modifiable.
+   * If isMutable is false, any attempts to modify
+   * the object will throw NS_ERROR_OBJECT_IS_IMMUTABLE.
+   */
+  readonly attribute boolean isMutable;
+
+  /**
+   * Make this calIPeriod instance immutable.
+   */
+  void makeImmutable();
+
+  /**
+   * Clone this calIPeriod instance into a new
+   * mutable object.
+   */
+  calIPeriod clone();
+
+  /**
+   * The start datetime of this period
+   */
+  attribute calIDateTime start;
+
+  /**
+   * The end datetime of this period
+   */
+  attribute calIDateTime end;
+
+  /**
+   * The duration, equal to end-start
+   */
+  readonly attribute calIDuration duration;
+
+
+  /**
+   * Return a string representation of this instance.
+   */
+  AUTF8String toString();
+
+  /**
+   * This object as an iCalendar DURATION string
+   */
+  attribute ACString icalString;
+};
+
+/** Libical specific interfaces */
+
+[ptr] native icalperiodtypeptr(struct icalperiodtype);
+[scriptable,uuid(04ee525f-96db-4731-8d61-688e754df24f)]
+interface calIPeriodLibical : calIPeriod
+{
+  [noscript,notxpcom] void toIcalPeriod(in icalperiodtypeptr idt);
+};

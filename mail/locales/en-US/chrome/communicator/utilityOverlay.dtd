@@ -1,0 +1,58 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!-- LOCALIZATION NOTE : FILE This file contains the global menu items -->
+
+<!ENTITY fileMenu.label          "File">
+<!ENTITY fileMenu.accesskey        "F">
+<!ENTITY newMenu.label            "New">
+<!ENTITY newMenu.accesskey          "N">
+
+<!ENTITY editMenu.label          "Edit">
+<!ENTITY editMenu.accesskey        "E">
+<!ENTITY undoCmd.label            "Undo">
+<!ENTITY undoCmd.key            "Z">
+<!ENTITY undoCmd.accesskey          "U">
+<!ENTITY redoCmd.label            "Redo">
+<!ENTITY redoCmd.key            "Y">
+<!ENTITY redoCmd.accesskey          "R">
+<!ENTITY cutCmd.label            "Cut">
+<!ENTITY cutCmd.key              "X">
+<!ENTITY cutCmd.accesskey          "t">
+<!ENTITY copyCmd.label            "Copy">
+<!ENTITY copyCmd.key            "C">
+<!ENTITY copyCmd.accesskey          "C">
+<!ENTITY pasteCmd.label            "Paste">
+<!ENTITY pasteCmd.key            "V">
+<!ENTITY pasteCmd.accesskey          "P">
+<!ENTITY deleteCmd.label          "Delete">
+<!ENTITY deleteCmd.accesskey        "D">
+<!ENTITY selectAllCmd.label          "Select All">
+<!ENTITY selectAllCmd.key          "A">
+<!ENTITY selectAllCmd.accesskey        "A">
+<!ENTITY preferencesCmd2.label "Preferences">
+<!ENTITY preferencesCmd2.accesskey "n">
+<!ENTITY preferencesCmdUnix.label       "Preferences">
+<!ENTITY preferencesCmdUnix.accesskey     "n">
+
+<!ENTITY viewMenu.label          "View">
+<!ENTITY viewMenu.accesskey        "V">
+<!ENTITY viewToolbarsMenu.label        "Toolbars">
+<!ENTITY viewToolbarsMenu.accesskey      "T">
+<!ENTITY showTaskbarCmd.label          "Status Bar">
+<!ENTITY showTaskbarCmd.accesskey        "u">
+
+<!ENTITY closeCmd.label      "Close">
+<!ENTITY closeCmd.key      "W">
+<!ENTITY closeCmd.accesskey    "C">
+
+<!ENTITY quitApplicationCmd.label  "Exit">
+<!ENTITY quitApplicationCmd.key    "Q">
+<!ENTITY quitApplicationCmd.accesskey  "x">
+
+<!ENTITY quitApplicationCmdUnix.label  "Quit">
+<!ENTITY quitApplicationCmdUnix.accesskey  "Q">
+
+<!ENTITY quitApplicationCmdMac.label  "Quit &brandShortName;">
+<!ENTITY quitApplicationCmdMac.accesskey  "Q">

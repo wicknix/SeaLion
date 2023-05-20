@@ -1,0 +1,25 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* Mostly copied from the download manager */
+
+/* List Items */
+richlistitem {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  -moz-padding-start: 4px;
+  -moz-padding-end: 4px;
+  min-height: 25px;
+  border-bottom: 1px solid ThreeDLightShadow;
+}
+
+
+richlistitem[selected="true"] {
+  background-image: url(chrome://mozapps/skin/extensions/itemEnabledFader.png);
+}
+
+richlistitem[selected="true"]:not(:-moz-window-inactive) {
+  background-color: Highlight;
+  color: HighlightText;
+}

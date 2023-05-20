@@ -1,0 +1,281 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/*--------------------------------------------------------------------
+ *   Datepicker (text field with minimonth popup)
+ *-------------------------------------------------------------------*/
+ 
+/* flex box around menulist */
+.datepicker-box-class {
+}
+ 
+/* menulist */
+.datepicker-text-class {
+  width: 11em;
+}
+
+/* text input field */
+.datepicker-text-class input {
+}
+
+/*--------------------------------------------------------------------
+ *   Datepicker-forever (style for the "forever" option)
+ *-------------------------------------------------------------------*/
+
+.datepicker-text-menuItem-class {
+  margin: 2px 4px 4px;
+  color: #2E4E73;
+  background-color: transparent;
+  border: 1px solid transparent;
+}
+
+.datepicker-text-menuItem-class[highlight="true"] {
+  color: #2E4E73;
+  background-color: #FFFABC;
+  border: 1px solid #D9C585;
+}
+
+.datepicker-text-menuItem-class:hover {
+  cursor: pointer;
+  border: 1px solid Highlight;
+}
+
+.datepicker-text-menuItem-class:hover[highlight="true"] {
+  color: #2E4E73;
+  background-color: #FFFABC;
+}
+
+.datepicker-text-menuItem-class:active,
+.datepicker-text-menuItem-class:active[highlight="true"] {
+  color: HighlightText;
+  background-color: Highlight;
+}
+
+/*-------------------------------------------------------------------
+ *   Timepicker (text menulist with popup)
+ *-------------------------------------------------------------------*/
+
+.timepicker-box-class {
+}
+
+.timepicker-text-class {
+  width: 8em;
+}
+
+/*-------------------------------------------------------------------
+ *   popup (from timepicker/timepicker.css)
+ *-------------------------------------------------------------------*/
+
+/* Box that occupies whole window */
+
+vbox[anonid="time-picker-grids"] {
+  background-color : #ffffff;
+  font-size        : 8pt;
+  margin           : 1px 1px 2px 1px;
+}
+
+/* Grid for hours */
+
+grid[anonid="time-picker-hour-grid"] {
+  background-color : -moz-Dialog;
+  color            : -moz-DialogText;
+  border-top       : 1px solid ThreeDShadow;
+  border-right     : 1px solid ThreeDShadow;
+  border-bottom    : 1px solid ThreeDShadow;
+  margin           : 1px;
+}
+
+/* Boxes with AM/PM labels */
+
+.timepicker-amLabelBox-class,
+.timepicker-pmLabelBox-class {
+  border-left      : 1px solid ThreeDShadow;
+  border-left-style: double;
+  border-left-width: 3px;
+  background-color : Window;
+}
+
+/* Box in each cell of the grid for hours */
+
+.time-picker-hour-box-class {
+  min-width      : 24px;
+  -moz-box-align : center;
+  border-left    : 1px solid ThreeDShadow; 
+}
+
+.timepicker-topRow-hour-class {
+  border-bottom  : 1px solid ThreeDShadow;
+}
+grid[anonid="time-picker-hour-grid"][format12hours="true"] .timepicker-topRow-hour-class {
+  border-bottom  : 2px solid ThreeDShadow;
+}
+
+.time-picker-hour-box-class:hover {
+  background-color : InactiveCaption;
+  color            : InactiveCaptionText;
+  cursor           : pointer;
+}
+
+/* selected hour box */
+
+.time-picker-hour-box-class[selected="true"] {
+  background-color : Highlight;
+  color            : HighlightText;
+}
+
+.time-picker-hour-box-class[selected="true"]:hover {
+  background-color : Highlight;
+  color            : HighlightText;
+}
+
+/* label inside each minute/hour */
+
+.time-picker-minute-label {
+  text-align : center;
+}
+
+.time-picker-hour-label {
+  text-align : center;
+}
+
+.time-picker-minute-label:hover {
+  cursor : pointer !important;
+}
+
+.time-picker-hour-label:hover {
+  cursor : pointer !important;
+}
+
+
+.time-picker-minute-box-class {
+  -moz-box-align : center;
+  border-right   : 1px solid ThreeDShadow; 
+  border-bottom  : 1px solid ThreeDShadow; 
+}
+
+.time-picker-minute-box-class:hover {
+  cursor           : pointer;
+  background-color : -moz-Dialog;
+  color            : -moz-DialogText;
+}
+
+/* box around five minute grid */
+
+vbox[anonid="time-picker-five-minute-grid-box"] {
+  min-width   : 195px;
+  margin-inline-start : 1px;
+}
+
+/* five minute grid */
+
+grid[anonid="time-picker-five-minute-grid"] {
+  margin-top       : 2px;
+  margin-inline-end     : 1px;
+  border-top       : 1px solid ThreeDShadow; 
+  border-left      : 1px solid ThreeDShadow; 
+  border-right     : 1px solid ThreeDShadow; 
+  background-color : Window;
+  color            : WindowText;
+}
+
+
+/* box in five-minute grid elements */
+
+.time-picker-five-minute-class:hover {
+  background-color : InactiveCaption;
+  color            : InactiveCaptionText;
+  cursor           : pointer;
+}
+
+.time-picker-minute-label[selected="true"]:hover {
+  background-color : Highlight;
+  color            : HighlightText;
+  cursor           : pointer;
+}
+
+
+/* selected five-minute grid element box */
+
+.time-picker-five-minute-class[selected="true"] {
+  background-color : Highlight;
+  color            : HighlightText;
+}
+
+/* box around one minute grid */
+
+vbox[anonid="time-picker-one-minute-grid-box"] {
+  min-width   : 195px;
+  margin-inline-start : 1px;
+}
+
+/* one minute grid */
+
+grid[anonid="time-picker-one-minute-grid"] {
+  margin-top       : 2px;
+  margin-inline-end     : 1px;
+  border-top       : 1px solid ThreeDShadow;
+  border-left      : 1px solid ThreeDShadow;
+  border-right     : 1px solid ThreeDShadow;
+  background-color : Window;
+  color            : WindowText;
+}
+
+/* box in one-minute grid elements */
+
+.time-picker-one-minute-class {
+  -moz-box-align : center;
+}
+
+.time-picker-one-minute-class:hover {
+  background-color : InactiveCaption;
+  color            : InactiveCaptionText;
+  cursor           : pointer;
+}
+
+.time-picker-one-minute-class[selected="true"]>label:hover {
+  background-color : Highlight !important;
+  color            : HighlightText !important;
+  cursor           : pointer;
+}
+
+/* selected one-minute grid element box */
+
+.time-picker-one-minute-class[selected="true"]{
+  background-color : Highlight;
+  color            : HighlightText;
+}
+
+.time-picker-more-control-label {
+  background-color : Highlight;
+  color            : HighlightText;
+  font-size        : 12pt;
+  height           : 12px;
+  min-width        : 40px;
+  margin           : 0px;
+  border           : 1px solid -moz-Dialog; 
+  text-align       : center;
+}
+
+.time-picker-more-control-label:hover {
+  border-top: 1px solid ThreeDHighlight;
+  border-left: 1px solid ThreeDHighlight;
+  border-right: 1px solid ThreeDShadow;
+  border-bottom: 1px solid ThreeDShadow;
+}
+
+.time-picker-more-control-label:hover:active {
+  border-top: 1px solid ThreeDShadow;
+  border-left: 1px solid ThreeDShadow;
+  border-right: 1px solid ThreeDHighlight;
+  border-bottom: 1px solid ThreeDHighlight;
+}
+
+/* line across the bottom of the minute boxes, made to line up with more & less tabs */
+
+.time-picker-minutes-bottom {
+  background-color : -moz-Dialog;
+  color            : -moz-DialogText;
+  border           : 1px solid ThreeDShadow;
+  margin-inline-end     : 1px;
+}

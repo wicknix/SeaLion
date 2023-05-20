@@ -1,0 +1,26 @@
+# vim: set filetype=python:
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+EXTRA_COMPONENTS += [
+    'calImportExportModule.js',
+    'calImportExportModule.manifest',
+]
+
+JAR_MANIFESTS += ['jar.mn']
+
+FINAL_TARGET_FILES['calendar-js'] += [
+    'calHtmlExport.js',
+    'calIcsImportExport.js',
+    'calListFormatter.js',
+    'calMonthGridPrinter.js',
+    'calOutlookCSVImportExport.js',
+    'calWeekPrinter.js',
+]
+
+with Files('**'):
+    BUG_COMPONENT = ('Calendar', 'Import and Export')
+
+with Files('*Print*'):
+    BUG_COMPONENT = ('Calendar', 'Printing')

@@ -1,0 +1,219 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* large parts copied from the addon manager */
+
+#accountManager {
+  background-color: ThreeDFace;
+  padding: 0 0;
+  margin: 0 0;
+}
+
+notification > hbox {
+  border: none !important;
+  border-bottom: 1px solid ThreeDShadow !important;
+}
+
+#accountsNotificationBox {
+  margin: 0 0;
+  -moz-appearance: none;
+}
+
+#noAccountScreen {
+  background-color: -moz-Dialog;
+  overflow: auto;
+}
+#noAccountBox {
+  background-color: -moz-Field;
+  color: -moz-FieldText;
+  border: 1px solid ThreeDShadow;
+  border-radius: 10px;
+  padding: 1.1em;
+  -moz-padding-start: 20px;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+#noAccountImage {
+  list-style-image: url("chrome://global/skin/icons/information-64.png");
+  -moz-margin-end: 1.2em;
+}
+#noAccountInnerBox {
+  max-width: 25em;
+}
+#noAccountTitle {
+  margin: 0 1em 0.6em 0;
+  font-size: 160%;
+  border-bottom: 1px solid ThreeDLightShadow
+}
+#noAccountDesc {
+  font-size: 110%;
+}
+
+#accountlist {
+  margin: 0 0;
+  -moz-appearance: none;
+  border-bottom: 2px solid;
+  -moz-border-bottom-colors: ThreeDHighlight ThreeDLightShadow;
+}
+
+#bottombuttons {
+  margin: 0 0;
+}
+
+#newaccount,
+#close {
+  margin: 3px;
+}
+
+/* List Items */
+richlistitem[state="disconnected"] .accountIcon {
+  opacity: 0.3;
+}
+richlistitem[state="connecting"] .accountIcon,
+richlistitem[state="disconnected"][selected="true"] .accountIcon {
+  opacity: 0.7;
+}
+richlistitem[state="disconnected"]:not([selected="true"]) {
+  color: GrayText;
+}
+
+richlistitem[error="true"] .accountName {
+  color: rgb(150, 0, 0);
+}
+
+/* When the error message was too long, the buttons were too small */
+richlistitem .account-buttons button {
+  min-height: 2em;
+}
+
+richlistitem .account-buttons {
+  margin-top: 2px;
+  margin-left: 32px;
+}
+
+richlistitem[dragover="down"] {
+  border-bottom: 3px solid HighLight;
+}
+richlistitem[dragover="up"] {
+  border-top: 3px solid HighLight;
+}
+
+.error {
+  color: rgb(200, 0, 0);
+  margin-left: 6px;
+}
+.accountName {
+  font-weight: bold;
+}
+
+.accountIcon {
+  width: 32px;
+  max-width: 32px;
+  height: 32px;
+  max-height: 32px;
+}
+
+.accountStateIcon {
+  -moz-margin-start: 16px;
+  margin-top: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+richlistitem[state="connected"] .accountStateIcon {
+  list-style-image: url("chrome://chat/skin/available-16.png");
+}
+richlistitem[state="disconnected"] .accountStateIcon {
+  list-style-image: url("chrome://chat/skin/offline-16.png");
+}
+richlistitem[state="connecting"] .accountStateIcon {
+  list-style-image: url("chrome://global/skin/icons/loading_16.png");
+}
+richlistitem[error="true"] .accountStateIcon {
+  list-style-image: url("chrome://global/skin/icons/warning-16.png");
+}
+
+
+#statusArea {
+  margin: 0 0;
+  padding: 0 0;
+}
+
+#displayName {
+  font-size: large;
+  border-bottom: 1px solid rgba(0,0,0,0.25);
+  margin: 0 0 16px;
+}
+
+#displayName[usingDefault]:not([editing]) {
+  color: GrayText;
+}
+
+#userIcon {
+  border: 2px solid rgba(0,0,0,0.15);
+  border-radius: 5px;
+  max-width: 48px;
+  max-height: 48px;
+  width: 48px;
+  height: 48px;
+}
+
+#userIcon[src=""] {
+  background-image: url("chrome://messenger/skin/userIcon.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+#userIcon:hover {
+  border-color: rgba(0,0,0,0.35);
+  background-color: rgba(0,0,0,0.35);
+  opacity: .4;
+}
+
+#statusImageStack #statusTypeIcon {
+  margin: 32px 0 0 32px;
+  width: 16px;
+  height: 16px;
+  min-height: 16px;
+  min-width: 16px;
+  -moz-appearance: none;
+  background: transparent;
+  box-shadow: none;
+  border: none;
+}
+
+#statusImageStack,
+#displayNameAndstatusMessageStack {
+  margin: 3px 2px;
+}
+
+#statusTypeIcon dropmarker {
+  display: none;
+}
+
+#statusTypeIcon .button-box {
+  padding: 0 0;
+  border: none;
+}
+
+#statusTypeIcon[status="available"],
+#statusTypeAvailable {
+  list-style-image: url('chrome://chat/skin/available-16.png');
+}
+
+#statusTypeIcon[status="unavailable"],
+#statusTypeIcon[status="away"],
+#statusTypeUnavailable {
+  list-style-image: url('chrome://chat/skin/away-16.png');
+}
+
+#statusTypeIcon[status="offline"],
+#statusTypeIcon[status="invisible"],
+#statusTypeOffline {
+  list-style-image: url('chrome://chat/skin/offline-16.png');
+}
+
+#statusTypeIcon[status="idle"] {
+  list-style-image: url('chrome://chat/skin/idle-16.png');
+}

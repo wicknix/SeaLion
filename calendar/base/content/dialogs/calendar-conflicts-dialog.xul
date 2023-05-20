@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet type="text/css" href="chrome://global/skin/global.css"?>
+<?xml-stylesheet type="text/css" href="chrome://calendar/skin/calendar-views.css"?>
+
+<dialog id="calendar-conflicts-dialog"
+        windowtype="Calendar:Conflicts"
+        onload="onLoad()"
+        ondialogaccept="return onAccept();"
+        ondialogcancel="return onCancel();"
+        persist="screenX screenY"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script type="application/javascript" src="chrome://calendar/content/mouseoverPreviews.js"/>
+  <script type="application/javascript" src="chrome://calendar/content/calUtils.js"/>
+  <script type="application/javascript"><![CDATA[
+    Components.utils.import("resource://calendar/modules/calUtils.jsm");
+    function onLoad() {
+        let docEl = document.documentElement;
+        let item = window.arguments[0].item;
+        let vbox = getPreviewForEvent(item);
+        let descr = document.getElementById("conflicts-description");
+        descr.parentNode.insertBefore(vbox, descr);
+
+        // TODO These strings should move to DTD files, but we don't want to
+        // disrupt string freeze right now. For that matter, this dialog
+        // should be reworked!
+        docEl.title =  cal.calGetString("calendar", "itemModifiedOnServerTitle");
+        descr.textContent = cal.calGetString("calendar", "itemModifiedOnServer");
+
+        if (window.arguments[0].mode == "modify") {
+            descr.textContent += cal.calGetString("calendar", "modifyWillLoseData");
+            docEl.getButton("accept").setAttribute("label", cal.calGetString("calendar", "proceedModify"));
+        } else {
+            descr.textContent += cal.calGetString("calendar", "deleteWillLoseData");
+            docEl.getButton("accept").setAttribute("label", cal.calGetString("calendar", "proceedDelete"));
+        }
+
+        docEl.getButton("cancel").setAttribute("label", cal.calGetString("calendar", "updateFromServer"));
+
+        window.sizeToContent();
+    }
+
+    function onAccept() {
+        window.arguments[0].overwrite = true;
+    }
+
+    function onCancel() {
+        window.arguments[0].overwrite = false;
+    }
+  ]]></script>
+
+  <vbox id="conflicts-vbox">
+    <description id="conflicts-description"
+                 style="max-width: 40em; margin-top: 1ex"/>
+  </vbox>
+</dialog>

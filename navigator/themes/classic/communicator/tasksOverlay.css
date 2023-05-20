@@ -1,0 +1,98 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ==== tasksOverlay.css ================================================
+   == Styles used by the the overlay which contains tasks related
+   == content, such as the taskbar and product launcher icons.
+   ====================================================================== */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* ::::: communicator product icons ::::: */
+
+#mini-nav {
+  list-style-image: url("chrome://communicator/skin/taskbar/taskbar.png");
+  -moz-image-region: rect(0 17px 13px 0);
+}
+
+#mini-nav:hover {
+  -moz-image-region: rect(13px 17px 26px 0);
+}
+
+#mini-nav:hover:active {
+  -moz-image-region: rect(26px 17px 39px 0);
+}
+
+.icon-navigator16 {
+  list-style-image: url("chrome://communicator/skin/taskbar/taskmenu-browser.png");
+}
+
+#mini-mail {
+  list-style-image: url("chrome://communicator/skin/taskbar/taskbar.png");
+  -moz-image-region: rect(0 40px 13px 17px);
+}
+
+#mini-mail:hover {
+  -moz-image-region: rect(13px 40px 26px 17px);
+}
+
+#mini-mail:hover:active {
+  -moz-image-region: rect(26px 40px 39px 17px);
+}
+
+#mini-mail[BiffState="NewMail"] {
+  -moz-image-region: rect(0 63px 13px 40px);
+}
+
+#mini-mail[BiffState="NewMail"]:hover {
+  -moz-image-region: rect(13px 63px 26px 40px);
+}
+
+#mini-mail[BiffState="NewMail"]:hover:active {
+  -moz-image-region: rect(26px 63px 39px 40px);
+}
+
+.icon-mail16 {
+  list-style-image: url("chrome://communicator/skin/taskbar/taskmenu-mailnews.png");
+}
+
+#mini-addr {
+  list-style-image: url("chrome://communicator/skin/taskbar/taskbar.png");
+  -moz-image-region: rect(0 100px 13px 81px);
+}
+
+#mini-addr:hover {
+  -moz-image-region: rect(13px 100px 26px 81px);
+}
+
+#mini-addr:hover:active {
+  -moz-image-region: rect(26px 100px 39px 81px);
+}
+
+.icon-addressbook16 {
+  list-style-image: url("chrome://communicator/skin/taskbar/taskmenu-abook.png");
+}
+
+#mini-comp {
+  list-style-image: url("chrome://communicator/skin/taskbar/taskbar.png");
+  -moz-image-region: rect(0 81px 13px 63px);
+}
+
+#mini-comp:hover {
+  -moz-image-region: rect(13px 81px 26px 63px);
+}
+
+#mini-comp:hover:active {
+  -moz-image-region: rect(26px 81px 39px 63px);
+}
+
+.icon-composer16 {
+  list-style-image: url("chrome://communicator/skin/taskbar/taskmenu-composer.png");
+}
+
+/* ::::: component bar ::::: */
+
+#component-bar {
+  -moz-box-align: stretch;
+}

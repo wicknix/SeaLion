@@ -1,0 +1,264 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* this is for attendee and organizer decoration in summary and event dialog */
+
+#item-attendees-box {
+    -moz-appearance: listbox;
+    margin: 2px 4px 0;
+    overflow-y: auto;
+    min-height: 54px; /*at least two rows - otherwise a scrollbar (if required) wouldn't appear*/
+}
+
+#calendar-summary-dialog #item-attendees,
+#calendar-event-summary-dialog #item-attendees,
+#calendar-task-summary-dialog #item-attendees {
+    max-height: 135px; /* displays up to four rows of attendees*/
+}
+
+.item-attendees-cell {
+    padding: 2px;
+}
+
+#calendar-event-dialog-inner .item-attendees-cell {
+    -moz-user-focus: normal;
+    margin-bottom: 1px;
+    margin-inline-end: 1px;
+}
+
+#calendar-event-dialog-inner .item-attendees-cell:focus {
+    background-color: Highlight;
+    color: Highlighttext;
+}
+
+.item-attendees-cell-label {
+    border: 0px;
+    margin: 0px 3px;
+    padding: 0px;
+}
+
+.item-organizer-cell {
+    padding: 0px;
+    margin-left: 6px;
+}
+
+/* this is for the itip icon setup in calendar */
+
+.itip-icon {
+    --itip-icon-partstat: -16px -16px; /* default: NEEDS-ACTION */
+    --itip-icon-role: 0px; /* default: REQ-PARTICIPANT */
+    --itip-icon-usertype: -32px; /* default: INDIVIDUAL */
+    width: 16px;
+    height: 16px;
+    max-height: 16px;
+    background-image: url(chrome://calendar-common/skin/calendar-itip-icons.svg),
+                      url(chrome://calendar-common/skin/calendar-itip-icons.svg);
+    background-position: var(--itip-icon-partstat), var(--itip-icon-usertype) var(--itip-icon-role);
+}
+.itip-icon[partstat="ACCEPTED"] {
+    --itip-icon-partstat: 0px 0px;
+}
+.itip-icon[partstat="DECLINED"] {
+    --itip-icon-partstat: 0px -16px;
+}
+.itip-icon[partstat="DELEGATED"] {
+    --itip-icon-partstat: 0px -32px;
+}
+.itip-icon[partstat="TENTATIVE"] {
+    --itip-icon-partstat: -16px 0px;
+}
+.itip-icon[usertype="INDIVIDUAL"] {
+    --itip-icon-usertype: -32px;
+}
+.itip-icon[usertype="GROUP"] {
+    --itip-icon-usertype: -48px;
+}
+.itip-icon[usertype="RESOURCE"] {
+    --itip-icon-usertype: -64px;
+}
+.itip-icon[usertype="ROOM"] {
+    --itip-icon-usertype: -80px;
+}
+.itip-icon[usertype="UNKNOWN"] {
+    --itip-icon-usertype: -96px;
+}
+.itip-icon[role="REQ-PARTICIPANT"] {
+    --itip-icon-role: 0px;
+}
+.itip-icon[role="OPT-PARTICIPANT"] {
+    --itip-icon-role: -16px;
+}
+.itip-icon[role="NON-PARTICIPANT"] {
+    --itip-icon-role: -32px;
+}
+.itip-icon[role="CHAIR"] {
+    --itip-icon-role: -32px;
+    --itip-icon-usertype: -16px;
+}
+
+/* the following will get obsolete once porting to new itip icons is complete */
+
+.status-icon > .menu-iconic-left,
+.role-icon > .menu-iconic-left,
+.usertype-icon > .menu-iconic-left {
+    visibility: inherit;
+}
+
+.status-icon {
+    margin: 0 3px;
+    list-style-image: url(chrome://calendar-common/skin/calendar-event-dialog-attendees.png);
+    -moz-image-region: rect(0px 48px 14px 36px);
+}
+
+.status-icon[disabled="true"] {
+    -moz-image-region: rect(14px 48px 28px 36px);
+}
+
+.status-icon[status="ACCEPTED"] {
+    -moz-image-region: rect(0px 12px 14px 0px);
+}
+.status-icon[status="ACCEPTED"][disabled="true"] {
+    -moz-image-region: rect(14px 12px 28px 0px);
+}
+
+.status-icon[status="DECLINED"] {
+    -moz-image-region: rect(0px 24px 14px 12px);
+}
+.status-icon[status="DECLINED"][disabled="true"] {
+    -moz-image-region: rect(14px 24px 28px 12px);
+}
+
+.status-icon[status="NEEDS-ACTION"] {
+    -moz-image-region: rect(0px 36px 14px 24px);
+}
+.status-icon[status="NEEDS-ACTION"][disabled="true"] {
+    -moz-image-region: rect(14px 36px 28px 24px);
+}
+
+.status-icon[status="TENTATIVE"] {
+    -moz-image-region: rect(0px 48px 14px 36px);
+}
+.status-icon[status="TENTATIVE"][disabled="true"] {
+    -moz-image-region: rect(14px 48px 28px 36px);
+}
+
+.role-icon {
+    margin: 0 3px;
+    list-style-image: url(chrome://calendar-common/skin/calendar-event-dialog-attendees.png);
+    -moz-image-region: rect(0px 159px 16px 138px);
+}
+
+.role-icon[disabled="true"] {
+    -moz-image-region: rect(0px 159px 16px 138px);
+}
+
+.role-icon[role="REQ-PARTICIPANT"] {
+    -moz-image-region: rect(0px 159px 16px 138px);
+}
+.role-icon[role="REQ-PARTICIPANT"][disabled="true"] {
+    -moz-image-region: rect(0px 159px 16px 138px);
+}
+
+.role-icon[role="OPT-PARTICIPANT"] {
+    -moz-image-region: rect(0px 180px 16px 159px);
+}
+.role-icon[role="OPT-PARTICIPANT"][disabled="true"] {
+    -moz-image-region: rect(0px 180px 16px 159px);
+}
+
+.role-icon[role="CHAIR"] {
+    -moz-image-region: rect(0px 201px 16px 180px);
+}
+.role-icon[role="CHAIR"][disabled="true"] {
+    -moz-image-region: rect(0px 201px 16px 180px);
+}
+
+.role-icon[role="NON-PARTICIPANT"] {
+    -moz-image-region: rect(0px 222px 16px 201px);
+}
+.role-icon[role="NON-PARTICIPANT"][disabled="true"] {
+    -moz-image-region: rect(0px 222px 16px 201px);
+}
+
+.usertype-icon,
+.usertype-icon[cutype="INDIVIDUAL"] {
+    margin: 0 3px;
+    list-style-image: url(chrome://calendar-common/skin/attendee-icons.png);
+    -moz-image-region: rect(0px 16px 16px 0px);
+}
+.usertype-icon[disabled="true"],
+.usertype-icon[cutype="INDIVIDUAL"][disabled="true"] {
+    -moz-image-region: rect(16px 16px 32px 0px);
+}
+
+.usertype-icon[cutype="GROUP"] {
+    -moz-image-region: rect(0px 32px 16px 16px);
+}
+.usertype-icon[cutype="GROUP"][disabled="true"] {
+    -moz-image-region: rect(16px 32px 32px 16px);
+}
+
+.usertype-icon[cutype="RESOURCE"] {
+    -moz-image-region: rect(0px 48px 16px 32px);
+}
+.usertype-icon[cutype="RESOURCE"][disabled="true"] {
+    -moz-image-region: rect(16px 48px 32px 32px);
+}
+
+.usertype-icon[cutype="ROOM"] {
+    -moz-image-region: rect(0px 64px 16px 48px);
+}
+.usertype-icon[cutype="ROOM"][disabled="true"] {
+    -moz-image-region: rect(16px 64px 32px 48px);
+}
+
+@media (-moz-windows-default-theme) and (-moz-os-version: windows-vista),
+       (-moz-windows-default-theme) and (-moz-os-version: windows-win7),
+       (-moz-windows-default-theme) and (-moz-os-version: windows-win8),
+       (-moz-windows-default-theme) and (-moz-os-version: windows-win10) {
+    #calendar-event-dialog-inner .item-attendees-cell {
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        --attendees-currentColor: rgb(125, 162, 206);
+    }
+
+    #calendar-event-dialog-inner .item-attendees-cell:focus {
+        color: -moz-FieldText;
+        background-color: transparent;
+        -moz-border-top-colors: var(--attendees-focusBorder);
+        -moz-border-right-colors: var(--attendees-focusBorder);
+        -moz-border-left-colors: var(--attendees-focusBorder);
+        -moz-border-bottom-colors: var(--attendees-focusBottomBorder);
+        background-image: var(--attendees-focusImage);
+    }
+}
+
+@media (-moz-windows-default-theme) and (-moz-os-version: windows-vista),
+       (-moz-windows-default-theme) and (-moz-os-version: windows-win7) {
+    .item-attendees-cell {
+        border: 2px solid transparent;
+        border-radius: 3px;
+        --attendees-2ndBorderColor: rgba(255, 255, 255, .4);
+        --attendees-2ndBottomBorderColor: rgba(255, 255, 255, .6);
+        --attendees-focusBorder: var(--attendees-currentColor)
+                                 var(--attendees-2ndBorderColor);
+        --attendees-focusBottomBorder: var(--attendees-currentColor)
+                                       var(--attendees-2ndBottomBorderColor);
+        --attendees-focusImage: linear-gradient(rgba(131, 183, 249, .28),
+                                                rgba(131, 183, 249, .5));
+    }
+}
+
+@media (-moz-windows-default-theme) and (-moz-os-version: windows-win8),
+       (-moz-windows-default-theme) and (-moz-os-version: windows-win10) {
+    #calendar-event-dialog-inner .item-attendees-cell {
+        padding: 1px;
+        border: 1px solid transparent;
+        --attendees-focusColor: rgb(123, 195, 255);
+        --attendees-focusBorder: var(--attendees-focusColor);
+        --attendees-focusBottomBorder: var(--attendees-focusColor);
+        --attendees-focusImage: linear-gradient(rgb(205, 232, 255),
+                                                rgb(205, 232, 255));
+    }
+}

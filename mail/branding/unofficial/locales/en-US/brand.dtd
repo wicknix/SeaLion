@@ -1,0 +1,9 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!ENTITY  brandShortName        "SeaMail">
+<!ENTITY  brandShorterName      "SeaMail">
+<!ENTITY  brandFullName         "SeaMail">
+<!ENTITY  vendorShortName       "The Open Source Community">
+<!ENTITY  trademarkInfo.part1   " SeaMail is a mail and news client for your crusty old Mac">

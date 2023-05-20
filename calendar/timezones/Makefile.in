@@ -1,0 +1,22 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+XPI_PKGNAME = calendar-timezones-$(TIMEZONES_VERSION)
+
+THUNDERBIRD_VERSION := $(shell cat $(topsrcdir)/mail/config/version.txt)
+SEAMONKEY_VERSION := "2.49"
+CALENDAR_VERSION := $(shell $(PYTHON) $(topsrcdir)/calendar/lightning/build/makeversion.py $(word 1,$(MOZ_PKG_VERSION) $(THUNDERBIRD_VERSION)))
+TIMEZONES_VERSION := $(shell $(PYTHON) $(srcdir)/version.py)
+
+relativesrcdir = calendar/locales
+
+DEFINES += -DTHUNDERBIRD_VERSION=$(THUNDERBIRD_VERSION) \
+           -DSEAMONKEY_VERSION=$(SEAMONKEY_VERSION) \
+           -DCALENDAR_VERSION=$(CALENDAR_VERSION) \
+           -DTIMEZONES_VERSION=$(TIMEZONES_VERSION) \
+           $(NULL)
+
+libs-%:
+	$(MAKE) -C locales libs AB_CD=$* XPI_NAME=calendar-timezones USE_EXTENSION_MANIFEST=1
+

@@ -1,0 +1,39 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#query-explanation {
+  -moz-binding: url('chrome://messenger/content/glodaFacetBindings.xml#query-explanation');
+}
+
+.facets {
+  -moz-binding: url('chrome://messenger/content/glodaFacetBindings.xml#facets');
+}
+
+.facetious[type="discrete"] {
+  -moz-binding: url('chrome://messenger/content/glodaFacetBindings.xml#facet-discrete');
+}
+
+.facetious[type="boolean"] {
+  -moz-binding: url('chrome://messenger/content/glodaFacetBindings.xml#facet-boolean');
+}
+
+.facetious[type="boolean-filtered"] {
+  -moz-binding: url('chrome://messenger/content/glodaFacetBindings.xml#facet-boolean-filtered');
+}
+
+.facetious[type="date"] {
+  -moz-binding: url('chrome://messenger/content/glodaFacetBindings.xml#facet-date');
+}
+
+.results[type="message"] {
+  -moz-binding: url('chrome://messenger/content/glodaFacetBindings.xml#results-message');
+}
+
+.message {
+  -moz-binding: url('chrome://messenger/content/glodaFacetBindings.xml#result-message');
+}
+
+.popup-menu {
+  -moz-binding: url('chrome://messenger/content/glodaFacetBindings.xml#popup-menu');
+}

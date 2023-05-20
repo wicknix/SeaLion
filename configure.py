@@ -10,12 +10,12 @@ import sys
 
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
-sys.path.append(os.path.join(base_dir, 'mozilla', 'python', 'mozbuild'))
+sys.path.append(os.path.join(base_dir, 'platform', 'python', 'mozbuild'))
 from mozbuild.configure import ConfigureSandbox
 
 # We can't just import config_status since configure is shadowed by this file!
 f, pathname, desc = imp.find_module('configure',
-                                    [os.path.join(base_dir, 'mozilla')])
+                                    [os.path.join(base_dir, 'platform')])
 config_status = imp.load_module('configure', f, pathname, desc).config_status
 
 def main(argv):

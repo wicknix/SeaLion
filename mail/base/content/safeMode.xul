@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+  - License, v. 2.0. If a copy of the MPL was not distributed with this
+  - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay [
+<!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+%brandDTD;
+<!ENTITY % safeModeDTD SYSTEM "chrome://messenger/locale/safeMode.dtd">
+%safeModeDTD;
+<!ENTITY % utilityDTD SYSTEM "chrome://communicator/locale/utilityOverlay.dtd">
+%utilityDTD;
+]>
+
+<?xml-stylesheet href="chrome://global/skin/"?>
+
+<dialog id="safeModeDialog"
+            xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+            title="&safeModeDialog.title;"
+            buttons="accept,cancel,extra1"
+            buttonlabelaccept="&changeAndRestartButton.label;"
+            buttonaccesskeyaccept="&changeAndRestartButton.accesskey;"
+#ifdef XP_WIN
+            buttonlabelcancel="&quitApplicationCmd.label;"
+            buttonaccesskeycancel="&quitApplicationCmd.accesskey;"
+#else
+            buttonlabelcancel="&quitApplicationCmdUnix.label;"
+            buttonaccesskeycancel="&quitApplicationCmdUnix.accesskey;"
+#endif
+            buttonlabelextra1="&continueButton.label;"
+            buttonaccesskeyextra1="&continueButton.accesskey;"
+            width="&window.width;"
+            ondialogaccept="return onOK()"
+            ondialogcancel="onCancel()"
+            ondialogextra1="window.close()"
+            onload="onLoad();"
+            buttondisabledaccept="true">
+
+  <script type="application/javascript" src="chrome://messenger/content/safeMode.js"/>
+
+  <stringbundle id="preferencesBundle" src="chrome://messenger/locale/preferences/preferences.properties"/>
+
+  <description>&safeModeDescription.label;</description>
+
+  <separator class="thin"/>
+
+  <label value="&safeModeDescription2.label;"/>
+  <vbox id="tasks">
+    <checkbox id="disableAddons" label="&disableAddons.label;" accesskey="&disableAddons.accesskey;"/>
+    <checkbox id="resetToolbars" label="&resetToolbars.label;" accesskey="&resetToolbars.accesskey;"/>
+  </vbox>
+
+  <separator class="thin"/>
+</dialog>

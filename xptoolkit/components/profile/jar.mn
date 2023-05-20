@@ -1,0 +1,20 @@
+#filter substitution
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+comm.jar:
+% override chrome://mozapps/content/profile/profileSelection.xul chrome://communicator/content/profile/profileSelection.xul
+
+  content/communicator/profile/profileSelection.js                      (content/profileSelection.js)
+  content/communicator/profile/profileSelection.xul                     (content/profileSelection.xul)
+
+en-US.jar:
+* locale/en-US/communicator/profile/profileSelection.dtd                (locale/profileSelection.dtd)
+  locale/en-US/communicator/profile/profileSelection.properties         (locale/profileSelection.properties)
+
+classic.jar:
+  skin/classic/communicator/profile/migrate.gif                         (skin/migrate.gif)
+  skin/classic/communicator/profile/profile.css                         (skin/profile.css)
+  skin/classic/communicator/profile/profileManager.css                  (skin/profileManager.css)
+  skin/classic/communicator/profile/profileicon-large.gif               (skin/profileicon-large.gif)

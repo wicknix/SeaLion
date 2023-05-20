@@ -1,0 +1,56 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!-- extracted from content/pref-media.xul -->
+
+<!ENTITY imageBlocking.label            "Image Acceptance Policy">
+
+<!--LOCALIZATION NOTE (onStartLegend.label): Don't translate "&brandShortName;".
+    Place "&brandShortName;" in the phrase where the name of the application should
+	 appear
+-->
+
+<!-- LOCALIZATION NOTE : FILE Media management prefs -->
+<!ENTITY pref.media.title                  "Multimedia">
+
+<!ENTITY loadAllImagesRadio.label           "Load all images">
+<!ENTITY loadAllImagesRadio.accesskey       "L">
+<!ENTITY loadOrgImagesRadio.label           "Only load images that come from the originating server">
+<!ENTITY loadOrgImagesRadio.accesskey       "n">
+<!ENTITY loadNoImagesRadio.label            "Do not load any images">
+<!ENTITY loadNoImagesRadio.accesskey        "D">
+<!ENTITY viewPermissions.label              "Manage Permissions">
+<!ENTITY viewPermissions.accesskey          "P">
+<!ENTITY animLoopingTitle.label             "Animated images should loop">
+<!ENTITY animLoopAsSpecified.label          "As many times as the image specifies">
+<!ENTITY animLoopAsSpecified.accesskey      "m">
+<!ENTITY animLoopOnce.label                 "Once">
+<!ENTITY animLoopOnce.accesskey             "O">
+<!ENTITY animLoopNever.label                "Never">
+<!ENTITY animLoopNever.accesskey            "v">
+
+<!ENTITY mediaSettings.label                "Audio and Video Settings">
+<!ENTITY enableAutoPlay.label               "Autoplay HTML5 audio and video content">
+<!ENTITY enableAutoPlay.accesskey           "A">
+
+<!ENTITY enableMediaSource.label            "Enable Media Source Extensions (MSE)">
+<!ENTITY enableMediaSource.accesskey        "S">
+<!ENTITY enableMediaSourceMP4.label         "Enable MSE for MP4 video">
+<!ENTITY enableMediaSourceMP4.accesskey     "4">
+<!ENTITY enableMediaSourceWebM.label        "Enable MSE for WebM video">
+<!ENTITY enableMediaSourceWebM.accesskey    "W">
+
+<!ENTITY mediaSupport.label                 "Multimedia Formats">
+<!ENTITY allowEnable.label                  "Enable:">
+
+#ifdef MOZ_FMP4
+<!ENTITY enableMP4.label                    "MP4">
+#endif
+<!ENTITY enableWebM.label                   "WebM">
+#ifdef MOZ_AV1
+<!ENTITY enableAV1.label                    "AV1">
+#endif
+<!ENTITY enableOGG.label                    "Vorbis">
+<!ENTITY enableOPUS.label                   "Opus">
+<!ENTITY enableFLAC.label                   "Flac">

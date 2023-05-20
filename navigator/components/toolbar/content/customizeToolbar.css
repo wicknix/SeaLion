@@ -1,0 +1,58 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"); /* set default namespace to XUL */
+@namespace html url("http://www.w3.org/1999/xhtml"); /* namespace for HTML elements */
+
+#main-box > box {
+  overflow: hidden;
+  margin-top: 9px;
+  margin-right: 8px;
+  margin-bottom: 5px;
+  margin-left: 8px;
+}
+
+#palette-box {
+  -moz-appearance: listbox;
+  overflow: auto;
+  display: block;
+  min-height: 3em;
+  margin-top: 8px;
+  margin-right: 8px;
+  margin-left: 8px;
+}
+
+#palette-box > toolbarpaletteitem {
+  width: 110px;
+  height: 94px;
+  overflow: hidden;
+  display: inline-block;
+  padding: 8px 2px;
+  margin: 0 8px;
+}
+
+#palette-box > toolbarpaletteitem > label {
+  text-align: center;
+}
+
+.toolbarpaletteitem-box {
+  -moz-box-pack: center;
+  -moz-box-flex: 1;
+  width: 110px;
+  max-width: 110px;
+}
+
+/* Hide the toolbarbutton label because we replicate it on the wrapper */
+.toolbarbutton-text {
+  display: none;
+}
+
+separator {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.actionButtons {
+  margin: 0 3px 6px !important;
+}

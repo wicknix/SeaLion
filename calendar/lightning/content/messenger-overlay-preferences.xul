@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay [
+    <!ENTITY % lightningDTD SYSTEM "chrome://lightning/locale/lightning.dtd">
+    <!ENTITY % preferencesDTD SYSTEM "chrome://calendar/locale/preferences/preferences.dtd">
+    %lightningDTD;
+    %preferencesDTD;
+]>
+
+<?xml-stylesheet href="chrome://lightning/skin/lightning.css"?>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <prefwindow id="MailPreferences">
+        <prefpane id="paneLightning"
+                  insertbefore="paneAdvanced"
+                  label="&lightning.preferencesLabel;"
+                  onpaneload="gCalendarGeneralPane.init(); gAlarmsPane.init();
+                              gCategoriesPane.init(); gViewsPane.init();
+                              gLightningPane.init();">
+            <preferences>
+                <preference id="calendar.preferences.lightning.selectedTabIndex"
+                            name="calendar.preferences.lightning.selectedTabIndex"
+                            type="int"/>
+            </preferences>
+            <tabbox id="calPreferencesTabbox"
+                    flex="1"
+                    onselect="gLightningPane.tabSelectionChanged();">
+                <tabs>
+                    <tab id="calPreferencesTabGeneral"
+                         label="&paneGeneral.title;"/>
+                    <tab id="calPreferencesTabAlarms"
+                         label="&paneAlarms.title;"/>
+                    <tab id="calPreferencesTabCategories"
+                         label="&paneCategories.title;"/>
+                    <tab id="calPreferencesTabViews"
+                         label="&paneViews.title;"/>
+                </tabs>
+                <tabpanels flex="1">
+                    <tabpanel orient="vertical">
+                        <vbox id="calPreferencesBoxGeneral"/>
+                    </tabpanel>
+                    <tabpanel orient="vertical">
+                        <vbox id="calPreferencesBoxAlarms"/>
+                    </tabpanel>
+                    <tabpanel orient="vertical">
+                        <vbox id="calPreferencesBoxCategories"/>
+                    </tabpanel>
+                    <tabpanel orient="vertical">
+                        <vbox id="calPreferencesBoxViews"/>
+                    </tabpanel>
+                </tabpanels>
+            </tabbox>
+        </prefpane>
+
+        <script type="application/javascript"
+                src="chrome://calendar/content/calUtils.js"/>
+        <script type="application/javascript"
+                src="chrome://lightning/content/messenger-overlay-preferences.js"/>
+
+    </prefwindow>
+
+</overlay>

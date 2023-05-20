@@ -1,0 +1,233 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+#include "nsISupports.idl"
+
+interface calICalendar;
+interface calIDateTime;
+interface calICalendarViewController;
+interface calIItemBase;
+
+/**
+ * An interface for view widgets containing calendaring data.
+ *
+ * @note Code that implements this interface is intended to be pure
+ * widgetry and thus not have any preference dependencies.
+ */
+
+[scriptable, uuid(0e392744-4b2e-4b64-8862-2fb707d900a7)]
+interface calICalendarView : nsISupports
+{
+
+  /**
+   * Oftentimes other elements in the DOM in which a calIDecoratedView is
+   * used want to be aware of whether or not the view is selected.  An element
+   * whose ID is observerID can be included in that DOM, and will be set to be
+   * enabled or disabled depending on whether the view is selected.
+   */
+  readonly attribute AUTF8String observerID;
+
+  /**
+   * Generally corresponds to whether or not the view has been previously shown.
+   * Strictly speaking, it reports whether displayCalendar, startDay and endDay
+   * are all non-null.
+   */
+  readonly attribute boolean initialized;
+
+  /**
+   * the calendar that this view is displaying
+   */
+  attribute calICalendar displayCalendar;
+
+  /**
+   * the controller for this view
+   */
+  attribute calICalendarViewController controller;
+
+  /**
+   * If true, the view supports workdays only
+   */
+  readonly attribute boolean supportsWorkdaysOnly;
+
+  /**
+   * If this is set to 'true', the view should not display days specified to be
+   * non-workdays.  The implementor is responsible for obtaining what those
+   * days are on its own.
+   */
+  attribute boolean workdaysOnly;
+
+  /**
+   * Whether or not tasks are to be displayed in the calICalendarView
+   */
+  attribute boolean tasksInView;
+
+  /**
+   * If true, the view is rotatable
+   */
+  readonly attribute boolean supportsRotation;
+
+  /**
+   * If set, the view will be rotated (i.e time on top, date at left)
+   */
+  attribute boolean rotated;
+
+  /**
+   * If true, the view is zoomable
+   */
+  readonly attribute boolean supportsZoom;
+
+  /**
+   * Zoom view in one level. Defaults to one level.
+   */
+  void zoomIn([optional] in uint32_t level);
+
+  /**
+   * Zoom view out one level. Defaults to one level.
+   */
+  void zoomOut([optional] in uint32_t level);
+
+  /**
+   * Reset view zoom.
+   */
+  void zoomReset();
+
+  /**
+   * Whether or not completed tasks are shown in the calICalendarView
+   */
+  attribute boolean showCompleted;
+
+  /**
+   * Ensure that the given date is visible; the view is free
+   * to show more dates than the given date (e.g. week view
+   * would show the entire week).
+   */
+  void showDate(in calIDateTime aDate);
+
+  /**
+   * Set a date range for the view to display, from aStartDate
+   * to aEndDate, inclusive.
+   *
+   * Some views may decide to utilize the time portion of these
+   * calIDateTimes; pass in calIDateTimes that are dates if you
+   * want to make sure this doesn't happen.
+   */
+  void setDateRange(in calIDateTime aStartDate, in calIDateTime aEndDate);
+
+  /**
+   * The start date of the view's display.  If the view is displaying
+   * disjoint dates, this will be the earliest date that's displayed.
+   */
+  readonly attribute calIDateTime startDate;
+
+  /**
+   * The end date of the view's display.  If the view is displaying
+   * disjoint dates, this will be the latest date that's displayed.
+   *
+   * Note that this won't be equivalent to the aEndDate passed to
+   * setDateRange, because that date isn't actually displayed!
+   */
+  readonly attribute calIDateTime endDate;
+
+  /**
+   * The first day shown in the embedded view
+   */
+  readonly attribute calIDateTime startDay;
+
+  /**
+   * The last day shown in the embedded view
+   */
+  readonly attribute calIDateTime endDay;
+
+  /**
+   * True if this view supports disjoint dates
+   */
+  readonly attribute boolean supportsDisjointDates;
+
+  /**
+   * True if this view currently has a disjoint date set.
+   */
+  readonly attribute boolean hasDisjointDates;
+
+  /**
+   * Returns the list of dates being shown by this calendar.
+   * If a date range is set, it will expand out the date range by
+   * day and return the full set.
+   */
+  void getDateList(out unsigned long aCount, [array,size_is(aCount),retval] out calIDateTime aDates);
+
+  /**
+   * Get the items currently selected in this view.
+   * 
+   * @param aCount a variable to hold the number of items in this array
+   *
+   * @return the array of items currently selected in this.
+   */
+  void getSelectedItems(out unsigned long aCount,
+                        [array,size_is(aCount),retval] out calIItemBase aItems);
+
+   /**
+    * Select an array of items in the view.  Items outside the view's current
+    * display range will be ignored.
+    *
+    * @param aCount the number of items to select
+    * @param aItems an array of items to select
+    * @param aSuppressEvent if true, the 'itemselect' event will not be fired.
+    */
+  void setSelectedItems(in unsigned long aCount,
+                        [array,size_is(aCount)] in calIItemBase aItems,
+                        in boolean aSuppressEvent);
+
+  /**
+   * Make as many of the selected items as possible are visible in the view.
+   */
+  void centerSelectedItems();
+
+  /**
+   * Get or set the selected day.
+   */
+  attribute calIDateTime selectedDay;
+
+  /**
+   * Get or set the timezone that the view's elements should be displayed in.
+   * Setting this does not refresh the view.
+   */
+  attribute AUTF8String timezone;
+
+  /**
+   * Ensures that the given date is visible, and that the view is centered
+   * around this date.  aDate becomes the selectedDay of the view.  Calling
+   * this function with the current selectedDay effectively refreshes the view
+   *
+   * @param aDate       the date that must be shown in the view and becomes
+   *                    the selected day
+   */
+  void goToDay(in calIDateTime aDate);
+
+  /**
+   * Moves the view a specific number of pages.  Negative numbers correspond to
+   * moving the view backwards.  Note that it is up to the view to determine
+   * how the selected day ought to move as well.
+   *
+   * @param aNumber       the number of pages to move the view
+   */
+  void moveView(in long aNumber);
+
+  /**
+   * gets the description of the range displayed by the view
+   */
+  AString getRangeDescription();
+
+  /**
+   * The type of the view e.g "day", "week", "multiweek" or "month" that refers
+   * to the displayed time period.
+   */
+  readonly attribute string type;
+  /**
+   * removes the dropshadows that are inserted into childelements during a
+   * drag and drop session
+   */
+
+  void removeDropShadows();
+};

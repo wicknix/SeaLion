@@ -1,0 +1,61 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+.searchbar-textbox {
+  width: 6em;
+  min-width: 6em;
+}
+
+/* ::::: searchbar-engine-button ::::: */
+
+.toolbarbutton-icon {
+  margin: 3px;
+  height: 16px;
+  width: 16px;
+  list-style-image: url("chrome://global/skin/icons/folder-item.png");
+  -moz-image-region: rect(0px, 16px, 16px, 0px);
+}
+
+.toolbarbutton-menu-dropmarker {
+  -moz-appearance: none !important;
+  list-style-image: url("chrome://communicator/skin/search/mainwindow-dropdown-arrow.png");
+  -moz-image-region: rect(0, 13px, 11px, 0);
+}
+
+.searchbar-engine-button[open="true"] > .toolbarbutton-menu-dropmarker {
+  -moz-image-region: rect(0, 26px, 11px, 13px);
+}
+
+
+/* ::::: search-go-button ::::: */
+
+.search-go-container {
+  -moz-box-align: center;
+}
+
+.search-go-button {
+  padding: 3px;
+  list-style-image: url("chrome://global/skin/icons/Search-glass.png");
+  -moz-image-region: rect(0px 16px 16px 0px);
+}
+
+.search-go-button:-moz-system-metric(touch-enabled) {
+  padding: 3px 5px;
+}
+
+.search-go-button:-moz-locale-dir(rtl) {
+  transform: scaleX(-1);
+}
+
+.search-go-button:hover {
+  -moz-image-region: rect(0px 32px 16px 16px);
+}
+
+.search-go-button:hover:active {
+  -moz-image-region: rect(0px, 48px, 16px, 32px);
+}
+
+.searchbar-engine-menuitem[selected="true"] > .menu-iconic-text {
+  font-weight: bold;
+}

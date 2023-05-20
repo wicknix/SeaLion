@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay SYSTEM "chrome://gdata-provider/locale/gdata.dtd">
+
+<overlay id="gdata-calendar-event-dialog"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script type="application/javascript" src="chrome://gdata-provider/content/gdata-calendar-event-dialog.js"/>
+
+  <!-- Privacy items -->
+  <menupopup id="options-privacy-menupopup">
+    <menuitem id="gdata-options-privacy-default-menuitem"
+              insertbefore="options-privacy-public-menuitem,options-privacy-private-menuitem"
+              label="&gdata.privacy.default.label;"
+              accesskey="&gdata.privacy.default.accesskey;"
+              type="radio"
+              privacy="DEFAULT"
+              provider="gdata"
+              oncommand="editPrivacy(this)"/>
+  </menupopup>
+
+  <menupopup id="event-privacy-menupopup">
+    <menuitem id="gdata-event-privacy-default-menuitem"
+              name="event-privacy-group"
+              insertbefore="event-privacy-public-menuitem,event-privacy-private-menuitem"
+              label="&gdata.privacy.default.label;"
+              type="radio"
+              provider="gdata"
+              privacy="DEFAULT"
+              oncommand="editPrivacy(this)"/>
+  </menupopup>
+
+  <statusbarpanel id="status-privacy">
+    <hbox id="gdata-status-privacy-default-box"
+          insertbefore="status-privacy-public-box,status-privacy-private-box"
+          privacy="DEFAULT"
+          provider="gdata"/>
+  </statusbarpanel>
+
+  <menupopup id="item-alarm-menupopup">
+    <menuitem id="gdata-reminder-default-menuitem"
+              insertbefore="reminder-none-separator"
+              label="&gdata.reminder.default;"
+              provider="gdata"
+              value="default"/>
+  </menupopup>
+</overlay>

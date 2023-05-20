@@ -1,0 +1,101 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+#filter substitution
+
+comm.jar:
+% content help %content/communicator/helpviewer/
+
+% overlay chrome://global/content/console.xul chrome://communicator/content/consoleOverlay.xul
+% overlay chrome://global/content/viewSource.xul chrome://communicator/content/viewSourceOverlay.xul
+% overlay chrome://global/content/viewPartialSource.xul chrome://communicator/content/viewSourceOverlay.xul
+
+  content/communicator/aboutPrivateBrowsing.css                    (content/aboutPrivateBrowsing.css)
+  content/communicator/aboutPrivateBrowsing.js                     (content/aboutPrivateBrowsing.js)
+  content/communicator/aboutPrivateBrowsing.xul                    (content/aboutPrivateBrowsing.xul)
+  content/communicator/askViewZoom.xul                             (content/askViewZoom.xul)
+  content/communicator/askViewZoom.js                              (content/askViewZoom.js)
+  content/communicator/blockedSite.js                              (content/blockedSite.js)
+  content/communicator/blockedSite.xhtml                           (content/blockedSite.xhtml)
+  content/communicator/certError.css                               (content/certError.css)
+  content/communicator/certError.js                                (content/certError.js)
+  content/communicator/certError.xhtml                             (content/certError.xhtml)  
+  content/communicator/certError.xml                               (content/certError.xml)
+  content/communicator/charsetOverlay.xul                          (content/charsetOverlay.xul)
+  content/communicator/consoleOverlay.xul                          (content/consoleOverlay.xul)
+  content/communicator/contentAreaClick.js                         (content/contentAreaClick.js)
+  content/communicator/contentAreaContextOverlay.xul               (content/contentAreaContextOverlay.xul)
+  content/communicator/findUtils.js                                (content/findUtils.js)
+  content/communicator/fullscreen-video.xhtml                      (content/fullscreen-video.xhtml)
+  content/communicator/gopherAddon.xhtml                           (content/gopherAddon.xhtml)
+* content/communicator/nsContextMenu.js                            (content/nsContextMenu.js)
+  content/communicator/openLocation.js                             (content/openLocation.js)
+  content/communicator/openLocation.xul                            (content/openLocation.xul)
+  content/communicator/safeMode.js                                 (content/safeMode.js)
+  content/communicator/safeMode.xul                                (content/safeMode.xul)
+  content/communicator/sanitize.xul                                (content/sanitize.xul)  
+  content/communicator/tasksOverlay.js                             (content/tasksOverlay.js)
+  content/communicator/tasksOverlay.xul                            (content/tasksOverlay.xul)
+* content/communicator/utilityOverlay.js                           (content/utilityOverlay.js)
+  content/communicator/utilityOverlay.xul                          (content/utilityOverlay.xul)
+  content/communicator/viewSourceOverlay.js                        (content/viewSourceOverlay.js)
+  content/communicator/viewSourceOverlay.xul                       (content/viewSourceOverlay.xul)
+  content/communicator/viewZoomOverlay.xul                         (content/viewZoomOverlay.xul)
+  content/communicator/viewZoomOverlay.js                          (content/viewZoomOverlay.js)
+
+  content/communicator/bindings/findbar.xml                        (content/bindings/findbar.xml)
+  content/communicator/bindings/general.xml                        (content/bindings/general.xml)
+* content/communicator/bindings/notification.xml                   (content/bindings/notification.xml)
+  content/communicator/bindings/toolbar.xml                        (content/bindings/toolbar.xml)
+
+  content/communicator/labelsencodings.properties                  (/platform/dom/encoding/labelsencodings.properties)
+
+#ifdef XP_MACOSX
+  content/communicator/platformCommunicatorOverlay.xul             (content/platform/mac/platformCommunicatorOverlay.xul)
+#else
+#ifdef XP_WIN
+  content/communicator/platformCommunicatorOverlay.xul             (content/platform/win/platformCommunicatorOverlay.xul)
+#else
+  content/communicator/platformCommunicatorOverlay.xul             (content/platform/unix/platformCommunicatorOverlay.xul)
+#endif
+#endif
+
+en-US.jar:
+% override chrome://global/locale/notification.dtd chrome://communicator/locale/notification.dtd
+
+  locale/en-US/communicator/askViewZoom.dtd                               (locale/askViewZoom.dtd)
+  locale/en-US/communicator/certError.dtd                                 (locale/certError.dtd)
+  locale/en-US/communicator/consoleOverlay.dtd                            (locale/consoleOverlay.dtd)
+  locale/en-US/communicator/contentAreaCommands.dtd                       (locale/contentAreaCommands.dtd)
+  locale/en-US/communicator/contentAreaCommands.properties                (locale/contentAreaCommands.properties)
+
+  locale/en-US/communicator/gopherAddon.dtd                               (locale/gopherAddon.dtd)
+  locale/en-US/communicator/notification.dtd                              (locale/notification.dtd)
+* locale/en-US/communicator/notification.properties                       (locale/notification.properties)
+  locale/en-US/communicator/openLocation.dtd                              (locale/openLocation.dtd)
+  locale/en-US/communicator/openLocation.properties                       (locale/openLocation.properties)
+  locale/en-US/communicator/passwordManager.dtd                           (locale/passwordManager.dtd)
+  locale/en-US/communicator/printPreview.dtd                              (locale/printPreview.dtd)
+  locale/en-US/communicator/quitDialog.properties                         (locale/quitDialog.properties)
+  locale/en-US/communicator/sanitize.dtd                                  (locale/sanitize.dtd)
+
+  locale/en-US/communicator/tasksOverlay.dtd                              (locale/tasksOverlay.dtd)
+  locale/en-US/communicator/typeaheadfind.properties                      (locale/typeaheadfind.properties)
+  locale/en-US/communicator/utilityOverlay.dtd                            (locale/utilityOverlay.dtd)
+  locale/en-US/communicator/utilityOverlay.properties                     (locale/utilityOverlay.properties)
+  locale/en-US/communicator/viewApplyThemeOverlay.dtd                     (locale/viewApplyThemeOverlay.dtd)
+  locale/en-US/communicator/viewApplyThemeOverlay.properties              (locale/viewApplyThemeOverlay.properties)
+  locale/en-US/communicator/viewZoomOverlay.dtd                           (locale/viewZoomOverlay.dtd)
+  locale/en-US/communicator/viewZoomOverlay.properties                    (locale/viewZoomOverlay.properties)
+  locale/en-US/communicator/about.dtd                                     (locale/about.dtd)
+
+  locale/en-US/communicator/aboutPrivateBrowsing.dtd                      (locale/aboutPrivateBrowsing.dtd)
+
+  locale/en-US/communicator/safeMode.dtd                                  (locale/safeMode.dtd)
+
+  locale/en-US/communicator-platform/win/platformCommunicatorOverlay.dtd  (locale/win/platformCommunicatorOverlay.dtd)
+  locale/en-US/communicator-platform/unix/platformCommunicatorOverlay.dtd (locale/unix/platformCommunicatorOverlay.dtd)
+  locale/en-US/communicator-platform/mac/platformCommunicatorOverlay.dtd  (locale/mac/platformCommunicatorOverlay.dtd)
+* locale/en-US/communicator-region/region.properties                      (locale/region.properties)
+

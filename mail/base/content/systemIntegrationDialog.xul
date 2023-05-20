@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+# -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+<?xml-stylesheet href="chrome://global/skin/"?>
+
+<!DOCTYPE window [
+  <!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+  %brandDTD;
+  <!ENTITY % systemIntegrationDTD SYSTEM
+    "chrome://messenger/locale/systemIntegrationDialog.dtd">
+  %systemIntegrationDTD;
+]>
+
+<dialog xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        id="systemIntegrationDialog"
+        buttons="accept,cancel"
+        buttonlabelaccept="&acceptIntegration.label;"
+        buttonlabelcancel="&cancelIntegration.label;"
+        buttonlabelcancel2="&cancelIntegration2.label;"
+        onload="gSystemIntegrationDialog.onLoad();"
+        ondialogaccept="return gSystemIntegrationDialog.onDialogClose(true);"
+        ondialogcancel="return gSystemIntegrationDialog.onDialogClose(false);"
+        title="&systemIntegration.title;">
+
+  <script type="application/javascript"
+          src="chrome://messenger/content/systemIntegrationDialog.js"/>
+
+  <label control="defaultClientList">&defaultClient.intro;</label>
+  <listbox rows="4" seltype="single" id="defaultClientList">
+    <listitem id="checkMail" type="checkbox" label="&email.label;" tooltiptext="&unsetDefault.tooltip;"/>
+    <listitem id="checkNews" type="checkbox" label="&newsgroups.label;" tooltiptext="&unsetDefault.tooltip;"/>
+    <listitem id="checkRSS"  type="checkbox" label="&feeds.label;" tooltiptext="&unsetDefault.tooltip;"/>
+  </listbox>
+
+  <separator class="thin"/>
+
+  <checkbox id="checkOnStartup"
+            label="&checkOnStartup.label;"
+            accesskey="&checkOnStartup.accesskey;"/>
+
+</dialog>

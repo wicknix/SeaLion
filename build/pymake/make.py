@@ -15,7 +15,7 @@ def getpath(relpath):
     thisdir = os.path.dirname(__file__)
     return os.path.abspath(os.path.join(thisdir, *relpath))
 
-PYMAKE = getpath(["..", "..", "mozilla", "build", "pymake", "make.py"])
+PYMAKE = getpath(["..", "..", "platform", "build", "pymake", "make.py"])
 
 def main(args):
     if 'TINDERBOX_OUTPUT' in os.environ:

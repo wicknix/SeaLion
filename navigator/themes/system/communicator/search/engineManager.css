@@ -1,0 +1,14 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#engineChildren::-moz-tree-image(engineName) {
+  margin-inline-end: 4px;
+  margin-inline-start: 1px;
+  width: 16px;
+  height: 16px;
+}
+
+#engineChildren::-moz-tree-row {
+  height: 20px;
+}

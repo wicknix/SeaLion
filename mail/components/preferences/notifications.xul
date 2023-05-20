@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<!-- -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+   - This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://global/skin/"?>
+<?xml-stylesheet href="chrome://messenger/skin/preferences/preferences.css"?>
+
+<!DOCTYPE prefwindow [
+  <!ENTITY % notificationsDTD SYSTEM "chrome://messenger/locale/preferences/notifications.dtd">
+  %notificationsDTD;
+]>
+
+<prefwindow id="NotificationsDialog" type="child"
+            xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+            dlgbuttons="accept,cancel"
+            title="&notificationsDialog2.title;">
+
+  <prefpane id="NotificationsDialogPane">
+    <preferences id="NotificationsPreferences">
+      <preference id="mail.biff.alert.show_preview" name="mail.biff.alert.show_preview" type="bool"/>
+      <preference id="mail.biff.alert.show_subject" name="mail.biff.alert.show_subject" type="bool"/>
+      <preference id="mail.biff.alert.show_sender" name="mail.biff.alert.show_sender" type="bool"/>
+      <preference id="alerts.totalOpenTime" name="alerts.totalOpenTime" type="int"/>
+    </preferences>
+
+    <description>&alertCustomization.intro;</description>
+    <checkbox id="previewText" class="indent" label="&previewText.label;" accesskey="&previewText.accesskey;" preference="mail.biff.alert.show_preview"/>
+    <checkbox id="subject" class="indent" label="&subject.label;" accesskey="&subject.accesskey;" preference="mail.biff.alert.show_subject"/>
+    <checkbox id="sender"  class="indent" label="&sender.label;" accesskey="&sender.accesskey;" preference="mail.biff.alert.show_sender"/>
+
+    <separator/>
+    <hbox align="center">
+      <label id="totalOpenTimeBefore"
+             control="totalOpenTime"
+             value="&totalOpenTimeBefore.label;"
+             accesskey="&totalOpenTimeBefore.accesskey;"/>
+      <textbox id="totalOpenTime" type="number" decimalplaces="1" size="3" min="1" max="3600" increment="0.5"
+               preference="alerts.totalOpenTime"
+               onsyncfrompreference="return document.getElementById(this.getAttribute('preference')).value / 1000;"
+               onsynctopreference="return this.value * 1000;"/>
+      <label id="totalOpenTimeEnd" value="&totalOpenTimeEnd.label;"/>
+    </hbox>
+    <separator/>
+
+  </prefpane>
+</prefwindow>

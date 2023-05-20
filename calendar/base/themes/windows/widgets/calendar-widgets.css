@@ -1,0 +1,60 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@import url(chrome://calendar-common/skin/widgets/calendar-widgets.css);
+
+treenode-checkbox > .checkbox-check {
+  -moz-appearance: none;
+  -moz-box-align: center;
+  border: none;
+  width: 9px; /* The image's width is 9 pixels */
+  height: 9px;
+  background-image: url(chrome://global/skin/tree/twisty.svg#clsd);
+}
+
+treenode-checkbox[checked="true"] > .checkbox-check {
+  background-image: url(chrome://global/skin/tree/twisty.svg#open);
+}
+
+@media not all and (-moz-os-version: windows-xp) {
+  treenode-checkbox:hover > .checkbox-check {
+    background-image: url(chrome://global/skin/tree/twisty.svg#clsd-hover);
+  }
+
+  treenode-checkbox[checked="true"]:hover > .checkbox-check {
+    background-image: url(chrome://global/skin/tree/twisty.svg#open-hover);
+  }
+
+  treenode-checkbox:-moz-locale-dir(rtl) > .checkbox-check {
+    background-image: url(chrome://global/skin/tree/twisty.svg#clsd-rtl);
+  }
+
+  treenode-checkbox[checked="true"]:-moz-locale-dir(rtl) > .checkbox-check {
+    background-image: url(chrome://global/skin/tree/twisty.svg#open-rtl);
+  }
+
+  treenode-checkbox:-moz-locale-dir(rtl):hover > .checkbox-check {
+    background-image: url(chrome://global/skin/tree/twisty.svg#clsd-hover-rtl);
+  }
+
+  treenode-checkbox[checked="true"]:-moz-locale-dir(rtl):hover > .checkbox-check {
+    background-image: url(chrome://global/skin/tree/twisty.svg#open-hover-rtl);
+  }
+}
+
+#task-tree-filtergroup {
+  padding-inline-start: 12px;
+}
+
+calendar-list-tree .tree-scrollable-columns {
+  padding-inline-start: 18px;
+}
+
+.toolbarbutton-icon-begin {
+  margin-inline-end: 5px;
+}
+
+.toolbarbutton-icon-end {
+  margin-inline-start: 5px;
+}

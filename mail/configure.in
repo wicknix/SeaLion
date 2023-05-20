@@ -1,0 +1,34 @@
+dnl -*- Mode: Autoconf; tab-width: 2; indent-tabs-mode: nil; -*-
+dnl vi: set tabstop=2 shiftwidth=2 expandtab:
+dnl This Source Code Form is subject to the terms of the Mozilla Public
+dnl License, v. 2.0. If a copy of the MPL was not distributed with this
+dnl file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+dnl =========================================================
+dnl Things we need to carry from confvars.sh
+dnl =========================================================
+
+dnl Application defines
+AC_SUBST(MOZ_THUNDERBIRD)
+AC_DEFINE(MOZ_THUNDERBIRD)
+
+AC_SUBST(BINOC_INTERLINK)
+AC_DEFINE(BINOC_INTERLINK)
+
+AC_DEFINE(MOZ_SEPARATE_MANIFEST_FOR_THEME_OVERRIDES)
+
+AC_SUBST(MOZ_COMPOSER)
+
+SEAMONKEY_VERSION=2.49
+AC_SUBST(SEAMONKEY_VERSION)
+AC_SUBST(THUNDERBIRD_VERSION)
+
+dnl =========================================================
+dnl = Lightning extension
+dnl =========================================================
+MOZ_ARG_DISABLE_BOOL(calendar,
+[  --disable-calendar      Disable building of the Lightning calendar extension],
+    MOZ_CALENDAR=,
+    MOZ_CALENDAR=1)
+
+AC_SUBST(MOZ_CALENDAR)

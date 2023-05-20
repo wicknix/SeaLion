@@ -1,0 +1,14 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+comm.jar:
+  content/communicator/devtools/devtoolsOverlay.js                        (content/devtoolsOverlay.js)
+  content/communicator/devtools/devtoolsOverlay.xul                       (content/devtoolsOverlay.xul)
+  content/communicator/devtools/scratchpad.js                             (content/scratchpad/scratchpad.js)
+  content/communicator/devtools/scratchpad.xul                            (content/scratchpad/scratchpad.xul)
+
+en-US.jar:
+  locale/en-US/communicator/devtools/devtoolsOverlay.dtd                  (locale/devtoolsOverlay.dtd)
+  locale/en-US/communicator/devtools/scratchpad.dtd                       (locale/scratchpad.dtd)
+  locale/en-US/communicator/devtools/scratchpad.properties                (locale/scratchpad.properties)

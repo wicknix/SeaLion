@@ -1,0 +1,115 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsISupports.idl"
+
+interface calICalendar;
+interface calIObserver;
+interface nsIURI;
+interface nsIVariant;
+
+interface calICalendarManagerObserver;
+
+[scriptable, uuid(fd8a2565-cb0f-4ecc-945d-760d75ab16d8)]
+interface calICalendarManager : nsISupports
+{
+  /**
+   * Gives the number of registered calendars that require network access.
+   */
+  readonly attribute uint32_t networkCalendarCount;
+
+  /***
+   * Gives the number of registered readonly calendars.
+   */
+  readonly attribute uint32_t readOnlyCalendarCount;
+
+  /**
+   * Gives the number of registered calendars
+   */
+  readonly attribute uint32_t calendarCount;
+  /* 
+   * create a new calendar
+   * aType is the type ("caldav", "storage", etc)
+   */
+  calICalendar createCalendar(in AUTF8String aType, in nsIURI aURL);
+
+  /* register a newly created calendar with the calendar service */
+  void registerCalendar(in calICalendar aCalendar);
+
+  /* unregister a calendar */
+  void unregisterCalendar(in calICalendar aCalendar);
+
+  /** @deprecated This method has been replaced by ::removeCalendar */
+  void deleteCalendar(in calICalendar aCalendar);
+
+  /** Remove the calendar following the calendar's capabilities.removeModes. */
+  const unsigned short REMOVE_AUTO = 0;
+
+  /** Just unsubscribe from the calendar, do not delete it. */
+  const unsigned short REMOVE_NO_DELETE = 1;
+
+  /** Passing this flag will cause the call to fail if the calendar is registered */
+  const unsigned short REMOVE_NO_UNREGISTER = 2;
+
+  /**
+   * Unregister and delete the calendar from the calendar manager. By default
+   * the calendar will be removed based on the capabilities.removeModes
+   * property of the calendar.
+   *
+   * WARNING: If the calendar supports deletion, the calendar will be
+   * permanently deleted. You can prevent this with the REMOVE_NO_DELETE flag.
+   *
+   * @param aCalendar       The calendar to remove.
+   * @param aMode           A combination of the above mode flags.
+   */
+  void removeCalendar(in calICalendar aCalendar, [optional] in uint8_t aMode);
+
+  /* get a calendar by its id */
+  calICalendar getCalendarById(in AUTF8String aId);
+
+  /* return a list of all calendars currently registered */
+  void getCalendars(out uint32_t count,
+                    [array, size_is(count), retval] out calICalendar aCalendars);
+
+  /** Add an observer for the calendar manager, i.e when calendars are registered */
+  void addObserver(in calICalendarManagerObserver aObserver);
+  /** Remove an observer for the calendar manager */
+  void removeObserver(in calICalendarManagerObserver aObserver);
+
+  /** Add an observer to handle changes to all calendars (even disabled or unchecked ones) */
+  void addCalendarObserver(in calIObserver aObserver);
+  /** Remove an observer to handle changes to all calendars */
+  void removeCalendarObserver(in calIObserver aObserver);
+
+  /* XXX private, don't use:
+         will vanish as soon as providers will directly read/write from moz prefs
+  */
+  nsIVariant getCalendarPref_(in calICalendar aCalendar,
+                              in AUTF8String aName);
+  void setCalendarPref_(in calICalendar aCalendar,
+                        in nsIVariant aName,
+                        in nsIVariant aValue);
+  void deleteCalendarPref_(in calICalendar aCalendar,
+                           in AUTF8String aName);
+  
+};
+
+/**
+ * Observer to handle actions done by the calendar manager
+ *
+ * NOTE: When adding methods here, please also add them in calUtils.jsm's
+ * createAdapter() method.
+ */
+[scriptable, uuid(383f36f1-e669-4ca4-be7f-06b43910f44a)]
+interface calICalendarManagerObserver : nsISupports
+{
+  /** Called after the calendar is registered */
+  void onCalendarRegistered(in calICalendar aCalendar);
+
+  /** Called before the unregister actually takes place */
+  void onCalendarUnregistering(in calICalendar aCalendar);
+
+  /** Called before the delete actually takes place */
+  void onCalendarDeleting(in calICalendar aCalendar);
+};

@@ -1,0 +1,57 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsISupports.idl"
+
+interface nsIURI;
+interface calIIcalProperty;
+interface calIItemBase;
+
+[scriptable,uuid(7a17d45d-1c0e-4877-baa3-0eb67e770498)]
+interface calIAttachment : nsISupports
+{
+    /**
+     * The hash id is used to identify this attachment and compare it to others.
+     */
+    readonly attribute AUTF8String hashId;
+
+    /**
+     * An nsIURI object that points to the file (local or remote)
+     */
+    attribute nsIURI uri;
+
+    /**
+     * Raw attachment data, in case its not an uri
+     */
+    attribute AUTF8String rawData;
+
+    /**
+     * The type of file that this attachment refers to
+     */
+    attribute AString formatType;
+
+    /**
+     * The encoding the (local) file should be encoded with.
+     */
+    attribute AUTF8String encoding;
+
+    /**
+     * The calIIcalProperty corresponding to this object.  Can be used for
+     * serializing/unserializing from ics files.
+     */
+    attribute calIIcalProperty icalProperty;
+    attribute AUTF8String icalString;
+
+    /**
+     * For accessing additional parameters, such as x-params.
+     */
+    AUTF8String getParameter(in AString name);
+    void setParameter(in AString name, in AUTF8String value);
+    void deleteParameter(in AString name);
+
+    /**
+     * Clone this calIAttachment instance into a new object.
+     */
+    calIAttachment clone();
+};

@@ -1,0 +1,159 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsISupports.idl"
+
+interface nsIVariant;
+interface nsISimpleEnumerator;
+
+interface calIAttachment;
+interface calIAttendee;
+interface calIDateTime;
+interface calIDuration;
+interface calIItemBase;
+interface calIIcalComponent;
+
+[scriptable, uuid(b8db7c7f-c168-4e11-becb-f26c1c4f5f8f)]
+interface calIAlarm : nsISupports
+{
+    /**
+     * Returns true if this alarm is able to be modified
+     */
+    readonly attribute boolean isMutable;
+
+    /**
+     * Makes this alarm immutable.
+     */
+    void makeImmutable();
+
+    /**
+     * Make a copy of this alarm. The returned alarm will be mutable.
+     */
+    calIAlarm clone();
+
+    /**
+     * How this alarm is shown. Special values as described in rfc2445 are
+     * AUDIO, DISPLAY, EMAIL
+     * In addition, custom actions may be defined as an X-Prop, i.e
+     * X-SMS.
+     *
+     * Note that aside from setting this action, the frontend must be able to
+     * handle the specified action. Unknown actions WILL NOT be notified for.
+     */
+    attribute AUTF8String action;
+
+    /**
+     * The offset between the item's date and the alarm time.
+     * This will be null for absolute alarms.
+     */
+    attribute calIDuration offset;
+
+    /**
+     * The absolute date and time the alarm should fire.
+     * This will be null for relative alarms.
+     */
+    attribute calIDateTime alarmDate;
+
+    /**
+     * One of the ALARM_RELATED constants below.
+     */
+    attribute unsigned long related;
+
+    /**
+     * The alarm is absolute and is therefore not related to either.
+     */
+    const unsigned long ALARM_RELATED_ABSOLUTE = 0;
+
+    /**
+     * The alarm's offset should be based off of the startDate or
+     * entryDate (for events and tasks, respectively)
+     */
+    const unsigned long ALARM_RELATED_START = 1;
+
+    /**
+     * the alarm's offset should be based off of the endDate or
+     * dueDate (for events and tasks, respectively)
+     */
+    const unsigned long ALARM_RELATED_END = 2;
+
+    /**
+     * Times the alarm should be repeated. This value is the number of
+     * ADDITIONAL alarms, aside from the actual alarm.
+     *
+     * For the alarm to be valid, if repeat is specified, the repeatOffset
+     * attribute MUST also be specified.
+     */
+    attribute unsigned long repeat;
+
+    /**
+     * The duration between the alarm and each subsequent repeat
+     *
+     * For the alarm to be valid, if repeatOffset is specified, the repeat
+     * attribute MUST also be specified.
+     */
+    attribute calIDuration repeatOffset;
+
+    /**
+     * If repeat is specified, this helper returns the first DATETIME the alarm
+     * should be repeated on.
+     * This will be null for relative alarms.
+     */
+    readonly attribute calIDateTime repeatDate;
+
+    /**
+     * The description of the alarm. Not valid for AUDIO alarms.
+     */
+    attribute AUTF8String description;
+
+    /**
+     * The summary of the alarm. Not valid for AUDIO and DISPLAY alarms.
+     */
+    attribute AUTF8String summary;
+
+    /**
+     * Manage Attendee for this alarm. Not valid for AUDIO and DISPLAY alarms.
+     */
+     void addAttendee(in calIAttendee aAttendee);
+     void deleteAttendee(in calIAttendee aAttendee);
+     void clearAttendees();
+     void getAttendees(out uint32_t count,
+                       [array,size_is(count),retval] out calIAttendee attendees);
+
+    /**
+     * Manage Attachments for this alarm.
+     * For EMAIL alarms, more than one attachment can be specified.
+     * For AUDIO alarms, one Attachment can be specified.
+     * For DISPLAY alarms, attachments are invalid.
+     */
+     void addAttachment(in calIAttachment aAttachment);
+     void deleteAttachment(in calIAttachment aAttachment);
+     void clearAttachments();
+     void getAttachments(out uint32_t count,
+                         [array,size_is(count),retval] out calIAttachment attachments);
+
+    /**
+     * The human readable representation of this alarm. Uses locale strings.
+     * 
+     * @param aItem     The item to base the string on. Defaults to an event.
+     */
+    AUTF8String toString([optional] in calIItemBase aItem);
+
+    /**
+     * The ical representation of this VALARM
+     */
+    attribute AUTF8String icalString;
+
+    /**
+     * The ical component of this VALARM
+     */
+    attribute calIIcalComponent icalComponent;
+
+    // Property bag
+    boolean hasProperty(in AUTF8String name);
+    nsIVariant getProperty(in AUTF8String name);
+    void setProperty(in AUTF8String name, in nsIVariant value);
+    void deleteProperty(in AUTF8String name);
+
+    readonly attribute nsISimpleEnumerator propertyEnumerator;
+};

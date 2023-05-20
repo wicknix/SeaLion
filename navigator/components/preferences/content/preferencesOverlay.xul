@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://communicator/skin/" type="text/css"?>
+
+<!DOCTYPE overlay [
+  <!ENTITY % dtdPrefsOverlay    SYSTEM "chrome://communicator/locale/pref/preferencesOverlay.dtd"> %dtdPrefsOverlay;
+]>
+
+<overlay id="preferencesOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <treechildren id="prefsPanelChildren">
+    <!-- Browser items -->
+    <treeitem id="mainItem"
+              open="true"
+              container="true"
+              label="&navigator.label;"
+              prefpane="navigator_pane"
+              url="chrome://communicator/content/pref/pref-navigator.xul">
+      <treechildren id="mainChildren">
+        <treeitem id="locationBarItem"
+                  label="&locationBar.label;"
+                  prefpane="locationBar_pane"
+                  insertbefore="downloadItem"
+                  url="chrome://communicator/content/pref/pref-locationbar.xul"/>
+        <treeitem id="searchItem"
+                  label="&search.label;"
+                  prefpane="search_pane"
+                  insertbefore="downloadItem"
+                  url="chrome://communicator/content/pref/pref-search.xul"/>
+        <treeitem id="tabsItem"
+                  label="&tabWindows.label;"
+                  prefpane="tabs_pane"
+                  insertbefore="downloadItem"
+                  url="chrome://communicator/content/pref/pref-tabs.xul"/>
+        <treeitem id="linksItem"
+                  label="&links.label;"
+                  prefpane="links_pane"
+                  insertbefore="downloadItem"
+                  url="chrome://communicator/content/pref/pref-links.xul"/>
+      </treechildren>
+    </treeitem>
+
+    <!-- Content items (formerly Appearance) -->
+    <treeitem id="contentItem">
+      <treechildren id="contentChildren">
+        <treeitem id="mediaItem"
+                  label="&media.label;"
+                  prefpane="media_pane"
+                  insertafter="languagesItem"
+                  url="chrome://communicator/content/pref/pref-media.xul"/>
+        <treeitem id="popupsItem"
+                  label="&popups.label;"
+                  prefpane="popups_pane"
+                  insertafter="scriptsItem"
+                  url="chrome://communicator/content/pref/pref-popups.xul"/>
+        <treeitem id="findasyoutypeItem"
+                  label="&findAsYouType.label;"
+                  prefpane="findasyoutype_pane"
+                  url="chrome://communicator/content/pref/pref-findasyoutype.xul"/>
+        <treeitem id="keynavItem"
+                  label="&keynav.label;"
+                  prefpane="keynav_pane"
+                  url="chrome://communicator/content/pref/pref-keynav.xul"/>
+      </treechildren>
+    </treeitem>
+  </treechildren>
+
+</overlay>

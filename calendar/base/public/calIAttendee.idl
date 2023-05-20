@@ -1,0 +1,80 @@
+/* -*- Mode: idl; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsISupports.idl"
+
+interface calIIcalProperty;
+interface nsISimpleEnumerator;
+
+[scriptable,uuid(73a074ad-8812-4055-af75-14b509b8c5fe)]
+interface calIAttendee : nsISupports
+{
+  readonly attribute boolean isMutable;
+
+  // makes this item immutable
+  void makeImmutable();
+
+  // clone always returns a mutable event
+  calIAttendee clone();
+
+  attribute AUTF8String id;
+  attribute AUTF8String commonName;
+  attribute AUTF8String rsvp;
+
+  /** 
+   * If true, indicates that this is not a standard attendee, but rather this
+   * icalProperty corresponds to the organizer of the event (rfc2445 Sec 4.8.4.3)
+   */
+  attribute boolean isOrganizer;
+
+  /**
+   * CHAIR
+   * REQ-PARTICIPANT
+   * OPT-PARTICIPANT
+   * NON-PARTICIPANT
+   */
+  attribute AUTF8String    role;
+
+  /**
+   * NEEDS-ACTION
+   * ACCEPTED
+   * DECLINED
+   * TENTATIVE
+   * DELEGATED
+   * COMPLETED
+   * IN-PROCESS
+   */
+  attribute AUTF8String    participationStatus;
+
+  /**
+   * INDIVIDUAL
+   * GROUP
+   * RESOURCE
+   * ROOM
+   * UNKNOWN
+   */
+  attribute AUTF8String    userType;
+
+  readonly attribute nsISimpleEnumerator propertyEnumerator;
+  
+  // If you use the has/get/set/deleteProperty
+  // methods, property names are case-insensitive.
+  // 
+  // For purposes of ICS serialization, all property names in
+  // the hashbag are in uppercase.
+  AUTF8String getProperty(in AString name);
+  void setProperty(in AString name, in AUTF8String value);
+  void deleteProperty(in AString name);
+
+  attribute calIIcalProperty icalProperty;
+  attribute AUTF8String icalString;
+
+  /**
+   * The display name of the attendee. If the attendee has a common name, this
+   * is used. Otherwise, the attendee id is displayed (often an email), with the
+   * mailto: prefix dropped.
+   */
+  AUTF8String toString();
+};

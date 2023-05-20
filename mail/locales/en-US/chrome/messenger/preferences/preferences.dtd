@@ -1,0 +1,19 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!ENTITY  prefWindow.title        "Preferences">
+<!ENTITY  prefWindow.style        "width: 48em; min-height: 38.5em;">
+
+<!ENTITY paneGeneral.title        "General">
+<!ENTITY paneDisplay.title        "Display">
+<!ENTITY paneComposition.title    "Composition">
+<!ENTITY paneChat.title           "Chat">
+<!ENTITY paneAttachments.title    "Attachments">
+<!ENTITY panePrivacy.title        "Privacy">
+<!ENTITY paneSecurity.title       "Security">
+<!ENTITY paneAdvanced.title       "Advanced">
+<!ENTITY paneAccount.title        "Accounts">
+
+<!ENTITY okButton.title           "OK">
+<!ENTITY okButton.accesskey       "O">

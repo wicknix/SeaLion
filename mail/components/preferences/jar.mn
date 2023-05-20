@@ -1,0 +1,55 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+messenger.jar:
+*   content/messenger/preferences/preferences.xul
+*   content/messenger/preferences/aboutPreferences.xul
+    content/messenger/preferences/preferences.xml
+    content/messenger/preferences/preferences.js
+    content/messenger/preferences/preferencesTab.xul
+    content/messenger/preferences/preferencesTab.js
+*   content/messenger/preferences/general.xul
+    content/messenger/preferences/general.js
+#ifdef XP_MACOSX
+    content/messenger/preferences/dockoptions.xul
+#endif
+    content/messenger/preferences/display.xul
+    content/messenger/preferences/display.js
+*   content/messenger/preferences/colors.xul
+    content/messenger/preferences/compose.xul
+    content/messenger/preferences/compose.js
+    content/messenger/preferences/privacy.xul
+    content/messenger/preferences/privacy.js
+*   content/messenger/preferences/sendoptions.xul
+    content/messenger/preferences/sendoptions.js
+    content/messenger/preferences/security.xul
+    content/messenger/preferences/security.js
+*   content/messenger/preferences/advanced.js
+*   content/messenger/preferences/advanced.xul
+    content/messenger/preferences/receipts.js
+*   content/messenger/preferences/receipts.xul
+    content/messenger/preferences/connection.js
+    content/messenger/preferences/connection.xul
+    content/messenger/preferences/downloads.js
+    content/messenger/preferences/attachmentReminder.js
+    content/messenger/preferences/attachmentReminder.xul
+*   content/messenger/preferences/applications.xul
+    content/messenger/preferences/applications.js
+    content/messenger/preferences/applicationManager.xul
+    content/messenger/preferences/applicationManager.js
+    content/messenger/preferences/handlers.xml
+    content/messenger/preferences/handlers.css
+    content/messenger/preferences/actionsshared.js
+    content/messenger/preferences/fonts.js
+*   content/messenger/preferences/fonts.xul
+#ifndef XP_MACOSX
+    content/messenger/preferences/notifications.xul
+#endif
+    content/messenger/preferences/offline.js
+    content/messenger/preferences/offline.xul
+    content/messenger/preferences/cookies.js
+*   content/messenger/preferences/cookies.xul
+    content/messenger/preferences/permissions.js
+    content/messenger/preferences/permissions.xul
+    content/messenger/preferences/subdialogs.js

@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://messenger/skin/searchDialog.css" type="text/css"?>
+
+<?xul-overlay href="chrome://messenger/content/searchTermOverlay.xul"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://messenger/locale/mailViewSetup.dtd" >
+
+<dialog id="mailViewSetupDialog"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        onload="mailViewOnLoad();"
+        onunload="mailViewOnUnLoad();"
+        ondialogaccept="return onOK();"
+        buttons="accept,cancel"
+        buttonalign="right"
+        windowtype="mailnews:mailview"
+        title="&mailViewSetupTitle.label;"
+        style="width: 52em; height: 22em;"
+        persist="screenX screenY width height">
+
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="bundle_search" src="chrome://messenger/locale/search.properties"/>
+  </stringbundleset>
+
+  <script type="application/javascript" src="chrome://global/content/globalOverlay.js"/>
+  <script type="application/javascript" src="chrome://messenger/content/mailViewSetup.js"/>
+
+  <dummy class="usesMailWidgets"/>
+
+  <vbox flex="1">
+    <separator class="thin"/>
+    <vbox>
+       <hbox align="center">
+         <label value="&mailViewHeading.label;" accesskey="&mailViewHeading.accesskey;" control="name"/>
+         <textbox tabindex="0" id="name" oninput="doEnabling();"/>
+      </hbox>
+    </vbox>
+
+    <separator/>
+    <label value="&searchTermCaption.label;"/>
+    <hbox flex="1">
+      <vbox id="searchTermListBox" flex="1"/>
+    </hbox>
+  </vbox>
+
+</dialog>

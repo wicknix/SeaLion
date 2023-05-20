@@ -1,0 +1,565 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+dialog {
+    --eventBorderColor: #8d8e90;
+    --eventWidgetBorderColor: #cacaff;
+    --eventGridStartBorderColor: #bdbec0;
+}
+
+dialog[systemcolors] {
+    --eventBorderColor: ThreeDShadow;
+    --eventWidgetBorderColor: ThreeDShadow;
+    --eventGridStartBorderColor: ThreeDShadow;
+}
+
+#calendar-event-dialog,
+#calendar-task-dialog {
+    min-width: 444px;
+    min-height: 476px;
+}
+
+#calendar-event-dialog,
+#calendar-task-dialog,
+#calendar-event-dialog-inner,
+#calendar-task-dialog-inner {
+    padding: 0px;
+}
+
+#calendar-event-dialog .todo-only,
+#calendar-task-dialog .event-only,
+#calendar-event-dialog-inner .todo-only,
+#calendar-task-dialog-inner .event-only {
+    display: none;
+}
+
+/*--------------------------------------------------------------------
+ *   Event dialog counter box section
+ *-------------------------------------------------------------------*/
+
+#counter-proposal-box {
+    background-color: rgb(186, 238, 255);
+    border-bottom: 1px solid #444444;
+}
+
+#counter-proposal-property-values > description {
+    margin-bottom: 2px;
+}
+
+#counter-proposal-summary {
+    font-weight: bold;
+}
+
+.counter-buttons {
+    max-height: 25px;
+}
+
+#yearly-period-of-label,
+label.label {
+    text-align: right;
+}
+
+#item-calendar,
+#item-categories,
+#item-repeat,
+#item-alarm,
+.datepicker-text-class {
+    min-width: 12em;
+}
+
+@media not all and (-moz-os-version: windows-xp) {
+  .cal-event-toolbarbutton .toolbarbutton-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.icon-holder[type="calendarEvent"],
+.tabmail-tab[type="calendarEvent"] {
+    list-style-image: url(chrome://calendar-common/skin/calendar-event-tab.png);
+    -moz-image-region: auto;
+}
+
+.icon-holder[type="calendarTask"],
+.tabmail-tab[type="calendarTask"] {
+    list-style-image: url(chrome://calendar-common/skin/calendar-task-tab.png);
+    -moz-image-region: auto;
+}
+
+/*--------------------------------------------------------------------
+ *   Event dialog tabbox section
+ *-------------------------------------------------------------------*/
+
+#event-grid-tabbox {
+    margin: 5px 0px;
+}
+
+/*--------------------------------------------------------------------
+ *   Event dialog keep duration button
+ *-------------------------------------------------------------------*/
+
+#keepduration-button {
+    list-style-image: url(chrome://calendar-common/skin/calendar-event-dialog.png);
+    -moz-image-region: rect(0px 147px 24px 140px);
+    padding-top: 3px;
+    padding-bottom: 3px;
+    margin-inline-start: -3px;
+    margin-bottom: -15px;
+    position: relative;
+    -moz-user-focus: normal;
+}
+
+#keepduration-button[keep="true"] {
+    -moz-image-region: rect(0px 139px 24px 132px);
+}
+
+#keepduration-button[disabled="true"] {
+    -moz-image-region: rect(0px 163px 24px 156px);
+}
+
+#keepduration-button[keep="true"][disabled="true"] {
+    -moz-image-region: rect(0px 155px 24px 148px);
+}
+
+#keepduration-button > label {
+    display: none;
+}
+
+.keepduration-link-image {
+    list-style-image: url(chrome://calendar-common/skin/calendar-event-dialog.png);
+    margin-inline-start: -1px;
+}
+
+#link-image-top {
+    -moz-image-region: rect(7px 174px 14px 164px);
+    margin-top: 0.6em;
+}
+
+#link-image-top[keep="true"]{
+    -moz-image-region: rect(0px 174px 7px 164px);
+}
+
+#link-image-bottom {
+    -moz-image-region: rect(0px 184px 7px 174px);
+    margin-bottom: 0.6em;
+}
+
+/*--------------------------------------------------------------------
+ *   Event dialog statusbar images
+ *-------------------------------------------------------------------*/
+
+.cal-statusbar-1 {
+    -moz-box-orient: vertical;
+    min-width: 0px;
+    list-style-image: url("chrome://calendar-common/skin/calendar-event-dialog.png");
+}
+
+/*--------------------------------------------------------------------
+ *   Event dialog statusbarpanels
+ *-------------------------------------------------------------------*/
+
+#status-privacy,
+#status-priority,
+#status-status,
+#status-freebusy {
+    overflow: hidden;
+}
+
+/*--------------------------------------------------------------------
+ *   priority "low" image
+ *-------------------------------------------------------------------*/
+
+#image-priority-low {
+    -moz-image-region: rect(0px 100px 16px 84px);
+}
+
+/*--------------------------------------------------------------------
+ *   priority "normal" image
+ *-------------------------------------------------------------------*/
+
+#image-priority-normal {
+    -moz-image-region: rect(0px 116px 16px 100px);
+}
+
+/*--------------------------------------------------------------------
+ *   priority "high" image
+ *-------------------------------------------------------------------*/
+
+#image-priority-high {
+    -moz-image-region: rect(0px 132px 16px 116px);
+}
+
+/*--------------------------------------------------------------------
+ *   Recurrence dialog preview border
+ *-------------------------------------------------------------------*/
+#preview-border {
+    border: none;
+    padding: 0px;
+}
+
+/*--------------------------------------------------------------------
+ *   freebusy
+ *-------------------------------------------------------------------*/
+#freebusy-container {
+    overflow: hidden;
+    min-width: 100px;
+}
+
+#freebusy-grid {
+    min-width: 1px;
+}
+
+#calendar-summary-dialog {
+    min-width: 35em;
+}
+
+listbox[disabled="true"] {
+    color: -moz-FieldText;
+}
+
+daypicker-weekday {
+    margin-top: 2px;
+}
+
+daypicker-monthday {
+    margin-top: 2px;
+}
+
+.headline {
+    font-weight: bold;
+}
+
+.headline[align=end],
+.headline[align=right]{
+    text-align: right;
+}
+
+.default-spacer {
+    width: 1em;
+    height: 1em;
+}
+
+.default-indent {
+    margin-inline-start: 1.5em;
+}
+
+/*--------------------------------------------------------------------
+ *   Attendees Dialog
+ *-------------------------------------------------------------------*/
+
+.listbox-noborder {
+    -moz-appearance: none;
+    margin: 0px 0px;
+    border: 1px solid var(--eventBorderColor);
+}
+
+#timebar > .listbox-noborder {
+    border-bottom-style: none;
+}
+
+#freebusy-grid > .listbox-noborder {
+    border-top-color: transparent;
+}
+
+/* remove on Windows the double border with the splitter */
+@media (-moz-windows-theme) {
+    #attendees-list > .listbox-noborder {
+        border-inline-end-style: none;
+    }
+    #timebar > .listbox-noborder,
+    #freebusy-grid > .listbox-noborder {
+        border-inline-start-style: none;
+    }
+}
+
+.selection-bar {
+    background-color: rgba(0, 128, 128, .2);
+    border: 1px solid #008080;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.freebusy-container {
+    overflow: hidden;
+    clip: rect(0px 0px 0px 0px);
+}
+
+.freebusy-listitem {
+    border-width: 0px;
+}
+
+freebusy-day {
+    margin-inline-end: 2px;
+    border-inline-start: 1px solid var(--eventBorderColor);
+    border-inline-end: 1px solid var(--eventBorderColor);
+    border-bottom: 1px solid var(--eventBorderColor);
+}
+
+freebusy-day:first-child {
+    border-inline-start: 1px solid transparent;
+}
+
+freebusy-day:last-child {
+    border-inline-end: 1px solid transparent;
+}
+
+/* negative margins to clear freebusy-day's border and margin */
+freebusy-day > box {
+    margin-inline-start: -1px;
+    margin-inline-end: -3px;
+}
+
+.freebusy-content {
+    overflow: hidden;
+    clip: rect(0px 0px 0px 0px);
+}
+
+/* margin-inline-end 2px is needed to take border-right from the grid elements into account */
+.freebusy-timebar-title {
+    margin-inline-end: 2px;
+    padding-inline-start: 2px;
+}
+
+.freebusy-timebar-hour {
+    padding-inline-start: 2px;
+    padding-inline-end: 3px;
+    margin-top: 2px;
+    margin-bottom: 3px;
+}
+
+.freebusy-timebar-hour[scheduled="true"] {
+    /* the 'sechuled'-attribute is used in the timebar to indicate
+     which hours are affected of the currently schedued event.
+     since we added the selection-bar this is no longer necessary
+     but we keep the possibity to decorate those hours if it should
+     become beneficial.
+     text-decoration: underline;
+   */
+}
+
+.freebusy-grid {
+    border-inline-start: 1px solid var(--eventGridStartBorderColor);
+    background-color: #E09EBD;
+    color: #E09EBD;
+    min-height: 16px;
+    padding-inline-start: 1px;
+}
+
+.freebusy-grid[state="busy"] {
+    background-color: #153E7E;
+    color: #153E7E;
+}
+
+.freebusy-grid[state="busy_tentative"] {
+    background-color: #1589FF;
+    color: #1589FF;
+}
+
+.freebusy-grid[state="busy_unavailable"] {
+    background-color: #4E387E;
+    color: #4E387E;
+}
+
+.freebusy-grid[state="free"] {
+    background-color: #EBEBE4;
+    color: #EBEBE4;
+}
+
+.freebusy-grid:first-child {
+    border-inline-start: 1px solid transparent;
+}
+
+.freebusy-grid.last-in-day {
+    border-inline-end: 1px solid var(--eventBorderColor);
+    margin-inline-end: 2px;
+}
+
+#dialog-box {
+    padding-top: 8px;
+    padding-bottom: 10px;
+    padding-inline-start: 8px;
+    padding-inline-end: 10px;
+}
+
+#addressingWidget {
+    -moz-user-focus: none;
+}
+
+#typecol-addressingWidget {
+    min-width: 9em;
+    border-right: 1px solid var(--eventWidgetBorderColor);
+}
+
+/* This applies to rows of the attendee-list and the freebusy-grid */
+.addressingWidgetItem,
+.dummy-row {
+    border: none !important;
+    background-color: inherit !important;
+    color: inherit !important;
+
+    /* we set the minimal height to the height of the
+     largest icon [the usertype-icon in this case] to
+     ensure that the rows of the freebusy-grid and
+     the attendee-list always have the same height,
+     regardless of the font size. */
+    min-height: 16px;
+}
+
+.addressingWidgetCell {
+    border-bottom: 1px solid var(--eventWidgetBorderColor);
+    padding: 0px;
+}
+
+.addressingWidgetCell:first-child {
+    border-top: none;
+}
+
+.dummy-row-cell:first-child {
+    border-top: none;
+}
+
+.zoom-in-icon {
+    margin: 3px 3px;
+    list-style-image: url(chrome://calendar-common/skin/calendar-event-dialog-attendees.png);
+    -moz-image-region: rect(0px 97px 14px 84px);
+}
+.zoom-in-icon[disabled="true"] {
+    -moz-image-region: rect(14px 97px 28px 84px);
+}
+
+.zoom-out-icon {
+    margin: 3px 3px;
+    list-style-image: url(chrome://calendar-common/skin/calendar-event-dialog-attendees.png);
+    -moz-image-region: rect(0px 110px 14px 97px);
+}
+.zoom-out-icon[disabled="true"] {
+    -moz-image-region: rect(14px 110px 28px 97px);
+}
+
+.left-icon {
+    margin: 3px 3px;
+    list-style-image: url(chrome://calendar-common/skin/calendar-event-dialog-attendees.png);
+    -moz-image-region: rect(0px 124px 14px 110px);
+}
+.left-icon[disabled="true"] {
+    -moz-image-region: rect(14px 124px 28px 110px);
+}
+
+.right-icon {
+    margin: 3px 3px;
+    list-style-image: url(chrome://calendar-common/skin/calendar-event-dialog-attendees.png);
+    -moz-image-region: rect(0px 138px 14px 124px);
+}
+.right-icon[disabled="true"] {
+    -moz-image-region: rect(14px 138px 28px 124px);
+}
+
+.left-icon .button-icon {
+    margin-inline-end: 3px;
+}
+
+.right-icon .button-icon {
+    margin-inline-start: 3px;
+}
+
+.legend {
+    width: 3em;
+    height: 1em;
+    border-top: 1px solid #A1A1A1;
+    border-right: 1px solid #C3C3C3;
+    border-bottom: 1px solid #DDDDDD;
+    border-left: 1px solid #C3C3C3;
+}
+
+.legend[status="FREE"] {
+    background-color: #EBEBE4;
+    color: #EBEBE4;
+}
+
+.legend[status="BUSY"] {
+    background-color: #153E7E;
+    color: #153E7E;
+}
+
+.legend[status="BUSY_TENTATIVE"] {
+    background-color: #1589FF;
+    color: #1589FF;
+}
+
+.legend[status="BUSY_UNAVAILABLE"] {
+    background-color: #4E387E;
+    color: #4E387E;
+}
+
+.legend[status="UNKNOWN"] {
+    background-color: #E09EBD;
+    color: #E09EBD;
+}
+
+#content-frame {
+    border-left: 1px solid ThreeDDarkShadow;
+    border-right: 1px solid ThreeDLightShadow;
+    min-width: 10px;
+    min-height: 10px;
+    height: 400px;
+}
+
+.attendees-list-listbox > listboxbody {
+    overflow-y: hidden !important;
+}
+
+.selection-bar-left {
+    width: 3px;
+    cursor: w-resize;
+}
+
+.selection-bar-right {
+    width: 3px;
+    cursor: e-resize;
+}
+
+.selection-bar-spacer {
+    cursor: grab;
+}
+
+.checkbox-no-label > .checkbox-label-box {
+    display: none;
+}
+
+/*--------------------------------------------------------------------
+ *   Event summary dialog
+ *-------------------------------------------------------------------*/
+
+#calendar-summary-dialog,
+#calendar-event-summary-dialog,
+#calendar-task-summary-dialog {
+    min-width: 35em;
+}
+
+#calendar-summary-dialog #item-attachment-cell,
+#calendar-event-summary-dialog #item-attachment-cell,
+#calendar-task-summary-dialog #item-attachment-cell {
+    margin-left: 6px;
+}
+
+#calendar-summary-dialog .item-attachment-cell-label,
+#calendar-event-summary-dialog .item-attachment-cell-label,
+#calendar-task-summary-dialog .item-attachment-cell-label {
+    margin-left: 3px;
+}
+
+#calendar-summary-dialog #item-description,
+#calendar-event-summary-dialog #item-description,
+#calendar-task-summary-dialog #item-description {
+    min-height: 54px;
+}
+
+#calendar-summary-dialog #item-start-row .headline,
+#calendar-event-summary-dialog #item-start-row .headline,
+#calendar-task-summary-dialog #item-start-row .headline,
+#calendar-summary-dialog #item-end-row .headline,
+#calendar-event-summary-dialog #item-end-row .headline,
+#calendar-task-summary-dialog #item-end-row .headline {
+    font-weight: normal;
+}

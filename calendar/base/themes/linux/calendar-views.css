@@ -1,0 +1,60 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@import url(chrome://calendar-common/skin/calendar-views.css);
+
+/* Navigation controls for the views */
+#calendar-nav-control {
+    background-color: AppWorkspace;
+    border-inline-start: 1px solid ThreeDShadow;
+    padding-top: 1px;
+}
+
+#view-deck {
+    background-color: -moz-Field;
+    border-width: 0 0 1px 1px;
+}
+
+tab[calview] {
+    background-color: rgba(0, 0, 0, .1);
+    color: ButtonText;
+    border: 1px solid ThreeDShadow;
+    font-size: 14px;
+}
+
+tab[calview][selected="true"],
+tab[calview][selected="true"]:hover {
+    background-color: -moz-Field;
+}
+
+tab[calview]:hover {
+    background-color: ButtonHighlight;    
+}
+
+#calendarWeek {
+    margin-top: 4px;
+    margin-bottom: 0px;
+}
+
+.navigation-inner-box {
+    border-bottom: 1px solid ThreeDShadow;
+}
+
+.navigation-bottombox {
+    background-color: -moz-Field;
+}
+
+.navigation-spacer-box {
+    min-width: 4px;
+    border-bottom: 1px solid ThreeDShadow;
+}
+
+.view-navigation-button {
+    margin-inline-start: 2px;
+    margin-inline-end: 2px;
+}
+
+.today-navigation-button {
+    padding-top: 0px !important; /* a workaround to center the label vertically on Windows */
+}

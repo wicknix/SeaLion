@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay [
+<!ENTITY % overlayDTD SYSTEM "chrome://communicator/locale/devtools/devtoolsOverlay.dtd">
+%overlayDTD;
+]>
+
+<overlay id="devtools-overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    
+    <script type="application/javascript" src="chrome://communicator/content/devtools/devtoolsOverlay.js" />
+     
+    <menupopup id="devtoolsPopup">
+      <menuitem id="cmd_scratchpad"
+                insertafter="menu_inspector,javascriptConsole"
+                oncommand="toScratchpad();"
+                label="&scratchpad.label;"/>
+    </menupopup>
+
+    <menupopup id="toolsPopup">
+      <menuitem id="cmd_scratchpad"
+                insertafter="menu_inspector,javascriptConsolemenu_inspector"
+                oncommand="toScratchpad();"
+                label="&scratchpad.label;"/>
+    </menupopup>
+</overlay>
+

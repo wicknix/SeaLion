@@ -1,0 +1,80 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!-- for SearchDialog.xul -->
+<!ENTITY searchHeading.label         "Search for messages in:">
+<!ENTITY searchHeading.accesskey     "h">
+<!ENTITY searchSubfolders.label      "Search subfolders">
+<!ENTITY searchSubfolders.accesskey  "e">
+<!ENTITY searchOnServer.label        "Run search on server">
+<!ENTITY searchOnServer.accesskey    "u">
+<!ENTITY resetButton.label           "Clear">
+<!ENTITY resetButton.accesskey       "C">
+<!ENTITY openButton.label            "Open">
+<!ENTITY openButton.accesskey        "n">
+<!ENTITY deleteButton.label          "Delete">
+<!ENTITY deleteButton.accesskey      "D">
+<!ENTITY searchDialogTitle.label     "Search Messages">
+<!ENTITY results.label               "Results">
+<!ENTITY moveButton.label            "Move To">
+<!ENTITY moveButton.accesskey        "T">
+<!ENTITY closeCmd.key                "W"> 
+<!ENTITY openInFolder.label          "Open in Folder">
+<!ENTITY openInFolder.accesskey      "r">
+<!ENTITY saveAsVFButton.label        "Save as Search Folder">
+<!ENTITY saveAsVFButton.accesskey    "v">
+
+<!-- for ABSearchDialog.xul -->
+<!ENTITY abSearchHeading.label       "Search in:">
+<!ENTITY abSearchHeading.accesskey   "h">
+<!ENTITY propertiesButton.label      "Properties">
+<!ENTITY propertiesButton.accesskey  "P">
+<!ENTITY composeButton.label         "Write">
+<!ENTITY composeButton.accesskey     "W">
+<!ENTITY deleteCardButton.label      "Delete">
+<!ENTITY deleteCardButton.accesskey  "D">
+<!ENTITY abSearchDialogTitle.label   "Advanced Address Book Search">
+
+<!-- Thread Pane -->
+<!ENTITY threadColumn.label "Thread">
+<!ENTITY fromColumn.label "From">
+<!ENTITY recipientColumn.label "Recipient">
+<!ENTITY correspondentColumn.label "Correspondents">
+<!ENTITY subjectColumn.label "Subject">
+<!ENTITY dateColumn.label "Date">
+<!ENTITY priorityColumn.label "Priority">
+<!ENTITY tagsColumn.label "Tags">
+<!ENTITY accountColumn.label "Account">
+<!ENTITY statusColumn.label "Status">
+<!ENTITY sizeColumn.label "Size">
+<!ENTITY junkStatusColumn.label "Junk Status">
+<!ENTITY unreadColumn.label "Unread">
+<!ENTITY totalColumn.label "Total">
+<!ENTITY readColumn.label "Read">
+<!ENTITY receivedColumn.label "Received">
+<!ENTITY starredColumn.label "Starred">
+<!ENTITY locationColumn.label "Location">
+<!ENTITY idColumn.label "Order Received">
+
+<!-- Thread Pane Tooltips -->
+<!ENTITY columnChooser2.tooltip "Select columns to display">
+<!ENTITY threadColumn2.tooltip "Display message threads">
+<!ENTITY fromColumn2.tooltip "Sort by from">
+<!ENTITY recipientColumn2.tooltip "Sort by recipient">
+<!ENTITY correspondentColumn2.tooltip "Sort by correspondents">
+<!ENTITY subjectColumn2.tooltip "Sort by subject">
+<!ENTITY dateColumn2.tooltip "Sort by date">
+<!ENTITY priorityColumn2.tooltip "Sort by priority">
+<!ENTITY tagsColumn2.tooltip "Sort by tags">
+<!ENTITY accountColumn2.tooltip "Sort by account">
+<!ENTITY statusColumn2.tooltip "Sort by status">
+<!ENTITY sizeColumn2.tooltip "Sort by size">
+<!ENTITY junkStatusColumn2.tooltip "Sort by junk status">
+<!ENTITY unreadColumn2.tooltip "Number of unread messages in thread">
+<!ENTITY totalColumn2.tooltip "Total number of messages in thread">
+<!ENTITY readColumn2.tooltip "Sort by read">
+<!ENTITY receivedColumn2.tooltip "Sort by date received">
+<!ENTITY starredColumn2.tooltip "Sort by star">
+<!ENTITY locationColumn2.tooltip "Sort by location">
+<!ENTITY idColumn2.tooltip "Sort by order received">

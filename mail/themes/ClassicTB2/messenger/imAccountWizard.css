@@ -1,0 +1,58 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@namespace html url("http://www.w3.org/1999/xhtml");
+
+#accountprotocol,
+#accountsummary {
+  overflow: visible;
+}
+
+#summarygrid {
+  overflow: auto;
+}
+
+.collapsable {
+  -moz-user-focus: normal;
+}
+
+.caption-text {
+  border: 1px solid transparent;
+}
+
+.collapsable:focus .caption-text {
+  border: 1px dotted ThreeDDarkShadow;
+}
+
+.collapsable[closed="true"] {
+  border: none;
+  -moz-appearance: none;
+}
+
+.collapsable[closed="true"] > .groupbox-body {
+  display: none;
+}
+
+.caption-icon {
+  width: 9px;
+  height: 9px;
+  background-repeat: no-repeat;
+  background-position: center;
+  -moz-margin-start: 1px;
+  -moz-margin-end: 3px;
+  background-image: url("chrome://global/skin/tree/twisty-open.png");
+}
+
+
+.collapsable[closed="true"] .caption-icon {
+  background-image: url("chrome://global/skin/tree/twisty-clsd.png");
+}
+
+#value-column {
+  min-width: 15em;
+}
+
+textbox html|*.textbox-input:-moz-placeholder {
+  font-style: normal;
+}

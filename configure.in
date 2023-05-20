@@ -13,7 +13,7 @@ divert(0)dnl
 #!/bin/sh
 SRCDIR=$(dirname $0)
 TOPSRCDIR="$SRCDIR"
-MOZILLA_SRCDIR="${SRCDIR}/mozilla"
+MOZILLA_SRCDIR="${SRCDIR}/platform"
 export OLD_CONFIGURE="${MOZILLA_SRCDIR}"/old-configure
 
 # Ensure the comm-* values are used.

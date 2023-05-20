@@ -8,7 +8,7 @@ import os, sys
 
 def bootstrap(topsrcdir, mozilla_dir=None):
     if mozilla_dir is None:
-        mozilla_dir = os.path.join(topsrcdir, 'mozilla')
+        mozilla_dir = os.path.join(topsrcdir, 'platform')
     sys.path[0:0] = [mozilla_dir]
     import build.mach_bootstrap
     return build.mach_bootstrap.bootstrap(topsrcdir, mozilla_dir)

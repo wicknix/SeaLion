@@ -1,0 +1,46 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsIVariant.idl"
+
+[scriptable, uuid(B96C2997-7AAA-4619-AD48-B7EBD9236C93)]
+interface calIOperation : nsISupports
+{
+    /**
+     * Id for easy management of pending requests.
+     */
+    readonly attribute AUTF8String id;
+
+    /**
+     * Determines whether the request is pending, i.e. has not been completed.
+     */
+    readonly attribute boolean isPending;
+
+    /**
+     * Status of the request, e.g. NS_OK while pending or after successful
+     * completion, or NS_ERROR_FAILED when failed.
+     */
+    readonly attribute nsIVariant status;
+
+    /**
+     * Cancels a pending request and changes status.
+     * @param aStatus operation status to be set;
+     *                defaults to calIErrors.OPERATION_CANCELLED if null
+     */
+    void cancel([optional] in nsIVariant aStatus);
+};
+
+[scriptable, uuid(1FA39726-63D2-440c-A464-296D2822B9DA)]
+interface calIGenericOperationListener : nsISupports
+{
+    /**
+     * Generic callback receiving result.
+     * Results may appear in multiple calls, i.e. callees have to collect
+     * until isPending is false.
+     *
+     * @param aOperation operation object
+     * @param aResult    result or null in case of an error
+     */
+    void onResult(in calIOperation aOperation, in nsIVariant aResult);
+};

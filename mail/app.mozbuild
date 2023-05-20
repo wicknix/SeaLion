@@ -1,0 +1,18 @@
+# vim: set filetype=python:
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+if not CONFIG['MOZ_INCOMPLETE_EXTERNAL_LINKAGE']:
+    DIRS += ['/mail/components']
+
+include('/xptoolkit/xptoolkit.mozbuild')
+
+if CONFIG['MOZ_EXTENSIONS']:
+    DIRS += ['/extensions']
+
+DIRS += ['/%s' % CONFIG['MOZ_BRANDING_DIRECTORY']]
+
+# Never add tier dirs after mail because they apparently won't get
+# packaged properly on Mac.
+DIRS += ['/mail']

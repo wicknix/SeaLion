@@ -1,0 +1,13 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+navigator.jar:
+% override chrome://global/content/customizeToolbar.xul chrome://navigator/content/toolbar/customizeToolbar.xul
+  content/navigator/toolbar/customizeToolbar.css                            (content/customizeToolbar.css)
+* content/navigator/toolbar/customizeToolbar.js                             (content/customizeToolbar.js)
+  content/navigator/toolbar/customizeToolbar.xul                            (content/customizeToolbar.xul)
+
+en-US.jar:
+  locale/en-US/navigator/toolbar/customizeToolbar.dtd                       (locale/customizeToolbar.dtd)
+  locale/en-US/navigator/toolbar/customizeToolbar.properties                (locale/customizeToolbar.properties)

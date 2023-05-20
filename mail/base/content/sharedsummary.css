@@ -1,0 +1,49 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* Generic (cross-platform) multimessage view CSS.  Some bits will be overriden
+  by theme specific files */
+
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: -moz-Field;
+  color: -moz-FieldText;
+}
+
+#heading_wrapper {
+  position: fixed;
+  top: 0;
+  width: -moz-available;
+  color: HighlightText;
+  background-color: Highlight;
+}
+
+#heading {
+  padding: 1ex 0 1ex 1ex;
+  margin: 0;
+  font-size: large;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+.hidden {
+  visibility: hidden;
+  display: none !important; /* need to override the display property that sets inline-block */
+}
+
+a {
+  color: -moz-nativehyperlinktext;
+  font-weight: bold;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.link:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}

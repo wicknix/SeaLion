@@ -1,0 +1,2668 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+  - License, v. 2.0. If a copy of the MPL was not distributed with this
+  - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE bindings [
+<!ENTITY % messengerDTD SYSTEM "chrome://messenger/locale/messenger.dtd" >
+%messengerDTD;
+<!ENTITY % tabMailDTD SYSTEM "chrome://messenger/locale/tabmail.dtd" >
+ %tabMailDTD;
+]>
+
+<bindings id="tabmailBindings"
+   xmlns="http://www.mozilla.org/xbl"
+   xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+   xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <!-- Thunderbird's tab UI mechanism.
+    -
+    - We expect to be instantiated with the following children:
+    - * One "tabpanels" child element whose id must be placed in the
+    -   "panelcontainer" attribute on the element we are being bound to. We do
+    -   this because it is important to allow overlays to contribute panels.
+    -   When we attempted to have the immediate children of the bound element
+    -   be propagated through use of the "children" tag, we found that children
+    -   contributed by overlays did not propagate.
+    - * Any children you want added to the right side of the tab bar.  This is
+    -   primarily intended to allow for "open a BLANK tab" buttons, namely
+    -   calendar and tasks.  For reasons similar to the tabpanels case, we
+    -   expect the instantiating element to provide a child hbox for overlays
+    -   to contribute buttons to.
+    -
+    - From a javascript perspective, there are three types of code that we
+    -  expect to interact with:
+    - 1) Code that wants to open new tabs.
+    - 2) Code that wants to contribute one or more varieties of tabs.
+    - 3) Code that wants to monitor to know when the active tab changes.
+    -
+    - Consumer code should use the following methods:
+    - * openTab(aTabModeName, aArgs)
+    -     Open a tab of the given "mode", passing the provided arguments as an
+    -     object. The tab type author should tell you the modes they implement
+    -     and the required/optional arguments.
+    -
+    -     Each tab type can define the set of arguments that it expects, but
+    -     there are also a few common ones that all should obey, including:
+    -
+    -     * "background": if this is true, the tab will be loaded in the
+    -       background.
+    -     * "disregardOpener": if this is true, then the tab opener will not
+    -       be switched to automatically by tabmail if the new tab is immediately
+    -       closed.
+    -
+    - * closeTab(aOptionalTabIndexInfoOrTabNode,aNoUndo):
+    -     If no argument is provided, the current tab is closed. The first
+    -     argument specifies a specific tab to be closed. It can be a tab index,
+    -     a tab info object, or a tab's DOM element. In case the second
+    -     argument is true, the closed tab can't be restored by calling
+    -     undoCloseTab().
+    -     Please note, some tabs cannot be closed. Trying to close such tab,
+    -     will fail silently.
+    - * undoCloseTab():
+    -     Restores the most recent tab closed by the user.
+    - * switchToTab(aTabIndexInfoOrTabNode):
+    -     Switch to the tab by providing a tab index, tab info object, or tab
+    -     node (tabmail-tab bound element.) Instead of calling this method,
+    -     you can also just poke at tabmail.tabContainer and its selectedIndex
+    -     and selectedItem properties.
+    - * setTabIcon(aTabNodeorInfo, aIcon): Sets the tab icon to the specified
+    -     url or removes the icon if no url is specified. Note that this may
+    -     override css-provided images.
+    - * replaceTabWithWindow(aTab):
+    -     Detaches a tab from this tabbar to new window. The argument "aTab" is
+    -     required and can be a tab index, a tab info object or a tabs's
+    -     DOM element. Calling this method works only for tabs implementing
+    -     session restore.
+    - * moveTabTo(aTab,aIndex):
+    -     moves the given tab to the given Index. The first argument can be
+    -     a tab index, a tab info object or a tab's DOM element. The second
+    -     argument specifies the tabs new absolute position within the tabbar.
+    -
+    - Less-friendly consumer methods:
+    - * persistTab(tab):
+    -     serializes a tab into an object, by passing  a tab info object as
+    -     argument. It is used for session restore and moving tabs between
+    -     windows. Returns null in case persist fails.
+    - * removeCurrentTab():
+    -     Close the current tab.
+    - * removeTabByNode(aTabElement):
+    -     Close the tab whose tabmail-tab bound element is passed in.
+    - Changing the currently displayed tab is accomplished by changing
+    -  tabmail.tabContainer's selectedIndex or selectedItem property.
+    -
+    - Code that lives in a tab should use the following methods:
+    - * setTabTitle([aOptionalTabInfo]): Tells us that the title of the current
+    -   tab (if no argument is provided) or provided tab needs to be updated.
+    -   This will result in a call to the tab mode's logic to update the title.
+    -   In the event this is not for the current tab, the caller is responsible
+    -   for ensuring that the underlying tab mode is capable of providing a tab
+    -   title when it is in the background.  (The is currently not the case for
+    -   "folder" and "mail" modes because of their implementation.)
+    - * setTabBusy(aTabNode, aBusyState): Tells us that the tab in question
+    -   is now busy or not busy.  "Busy" means that it is occupied and
+    -   will not be able to respond to you until it is no longer busy.
+    -   This impacts the cursor display, as well as potentially
+    -   providing tab display hints.
+    - * setTabThinking(aTabNode, aThinkingState): Tells us that the
+    -   tab in question is now thinking or not thinking.  "Thinking" means
+    -   that the tab is involved in some ongoing process but you can still
+    -   interact with the tab while it is thinking.  A search would be an
+    -   example of thinking.  This impacts spinny-thing feedback as well as
+    -   potential providing tab display hints.  aThinkingState may be a
+    -   boolean or a localized string explaining what you are thinking about.
+    -
+    - Tab contributing code should define a tab type object and register it
+    -  with us by calling registerTabType. You can remove a registered tab
+    -  type (eg when unloading a restartless addon) by calling unregisterTabType.
+    -  Each tab type can provide multiple tab modes. The rationale behind this
+    -  organization is that Thunderbird historically/currently uses a single
+    -  3-pane view to display both three-pane folder browsing and single message
+    -  browsing across multiple tabs. Each tab type has the ability to use a
+    -  single tab panel for all of its display needs. So Thunderbird's "mail"
+    -  tab type covers both the "folder" (3-pane folder-based browsing) and
+    -  "message" (just a single message) tab modes. Likewise, calendar/lightning
+    -  currently displays both its calendar and tasks in the same panel. A tab
+    -  type can also create a new tabpanel for each tab as it is created. In
+    -  that case, the tab type should probably only have a single mode unless
+    -  there are a number of similar modes that can gain from code sharing.
+    -
+    - The tab type definition should include the following attributes:
+    - * name: The name of the tab-type, mainly to aid in debugging.
+    - * panelId or perTabPanel: If using a single tab panel, the id of the
+    -     panel must be provided in panelId.  If using one tab panel per tab,
+    -     perTabPanel should be either the XUL element name that should be
+    -     created for each tab, or a helper function to create and return the
+    -     element.
+    - * modes: An object whose attributes are mode names (which are
+    -     automatically propagated to a 'name' attribute for debugging) and
+    -     values are objects with the following attributes...
+    - * any of the openTab/closeTab/saveTabState/showTab/onTitleChanged
+    -     functions as described on the mode definitions.  These will only be
+    -     called if the mode does not provide the functions.  Note that because
+    -     the 'this' variable passed to the functions will always reference the
+    -     tab type definition (rather than the mode definition), the mode
+    -     functions can defer to the tab type functions by calling
+    -     this.functionName().  (This should prove convenient.)
+    - Mode definition attributes:
+    - * type: The "type" attribute to set on the displayed tab for CSS purposes.
+    -     Generally, this would be the same as the mode name, but you can do as
+    -     you please.
+    - * isDefault: This should only be present and should be true for the tab
+    -     mode that is the tab displayed automatically on startup.
+    - * maxTabs: The maximum number of this mode that can be opened at a time.
+    -     If this limit is reached, any additional calls to openTab for this
+    -     mode will simply result in the first existing tab of this mode being
+    -     displayed.
+    - * shouldSwitchTo(aArgs): Optional function. Called when openTab is called
+    -     on the top-level tabmail binding. It is used to decide if the openTab
+    -     function should switch to an existing tab or actually open a new tab.
+    -     If the openTab function should switch to an existing tab, return the
+    -     index of that tab; otherwise return -1.
+    -     aArgs is a set of named parameters (the ones that are later passed to
+    -     openTab).
+    - * openTab(aTab, aArgs): Called when a tab of the given mode is in the
+    -     process of being opened.  aTab will have its "mode" attribute
+    -     set to the mode definition of the tab mode being opened.  You should
+    -     set the "title" attribute on it, and may set any other attributes
+    -     you wish for your own use in subsequent functions.  Note that 'this'
+    -     points to the tab type definition, not the mode definition as you
+    -     might expect.  This allows you to place common logic code on the
+    -     tab type for use by multiple modes and to defer to it.  Any arguments
+    -     provided to the caller of tabmail.openTab will be passed to your
+    -     function as well, including background.
+    - * closeTab(aTab): Called when aTab is being closed.  The tab need not be
+    -     currently displayed.  You are responsible for properly cleaning up
+    -     any state you preserved in aTab.
+    - * saveTabState(aTab): Called when aTab is being switched away from so that
+    -     you can preserve its state on aTab.  This is primarily for single
+    -     tab panel implementations; you may not have much state to save if your
+    -     tab has its own tab panel.
+    - * showTab(aTab): Called when aTab is being displayed and you should
+    -     restore its state (if required).
+    - * persistTab(aTab): Called when we want to persist the tab because we are
+    -     saving the session state.  You should return an object suitable for
+    -     JSON serialization.  The object will be provided to your restoreTab
+    -     method when we attempt to restore the session.  If your code is
+    -     unable or unwilling to persist the tab (some of the time), you should
+    -     return null in that case.  If your code never wants to persist the tab
+    -     you should not implement this method.  You must implement restoreTab
+    -     if you implement this method.
+    - * restoreTab(aTabmail, aPersistedState): Called when we are restoring a
+    -     tab session and a tab with your mode was previously persisted via a
+    -     call to your persistTab implementation.  You are provided with a
+    -     reference to this tabmail instance and the (deserialized) state object
+    -     you returned from your persistTab implementation.  It is your
+    -     function's job to determine if you can restore the tab, and if so,
+    -     you should invoke aTabmail.openTab to actually cause your tab to be
+    -     opened.  This may seem odd, but it should help keep your code simple
+    -     while letting you do whatever you want.  Since openTab is synchronous
+    -     and returns the tabInfo structure built for the tab, you can perform
+    -     any additional work you need after the call to openTab.
+    - * onTitleChanged(aTab): Called when someone calls tabmail.setTabTitle() to
+    -     hint that the tab's title needs to be updated.  This function should
+    -     update aTab.title if it can.
+    - Mode definition functions to do with menu/toolbar commands:
+    - * supportsCommand(aCommand, aTab): Called when a menu or toolbar needs to
+    -     be updated. Return true if you support that command in
+    -     isCommandEnabled and doCommand, return false otherwise.
+    - * isCommandEnabled(aCommand, aTab): Called when a menu or toolbar needs
+    -     to be updated. Return true if the command can be executed at the
+    -     current time, false otherwise.
+    - * doCommand(aCommand, aTab): Called when a menu or toolbar command is to
+    -     be executed. Perform the action appropriate to the command.
+    - * onEvent(aEvent, aTab): This can be used to handle different events on
+    -     the window.
+    - * getBrowser(aTab): This function should return the browser element for
+    -     your tab if there is one (return null or don't define this function
+    -     otherwise). It is used for some toolkit functions that require a
+    -     global "getBrowser" function, e.g. ZoomManager.
+    -
+    - Tab monitoring code is expected to be used for widgets on the screen
+    -  outside of the tab box that need to update themselves as the active tab
+    -  changes.
+    - Tab monitoring code (un)registers itself via (un)registerTabMonitor.
+    -  The following attributes should be provided on the monitor object:
+    - * monitorName: A string value naming the tab monitor/extension.  This is
+    -     the canonical name for the tab monitor for all persistence purposes.
+    -     If the tab monitor wants to store data in the tab info object and its
+    -     name is FOO it should store it in 'tabInfo._ext.FOO'.  This is the
+    -     only place the tab monitor should store information on the tab info
+    -     object.  The FOO attribute will not be automatically created; it is
+    -     up to the code.  The _ext attribute will be there, reliably, however.
+    -     The name is also used when persisting state, but the tab monitor
+    -     does not need to do anything in that case; the name is automatically
+    -     used in the course of wrapping the object.
+    -  The following functions should be provided on the monitor object:
+    - * onTabTitleChanged(aTab): Called when the tab's title changes.
+    - * onTabSwitched(aTab, aOldTab): Called when a new tab is made active.  If
+    -     this is the first tab ever, aOldTab will be null, otherwise aOldTab
+    -     will be the previously active tab.
+    - * onTabOpened(aTab, aIsFirstTab, aWasCurrentTab): Called when a new tab is
+    -     opened.  This method is invoked after the tab mode's openTab method
+    -     is invoked.  This method is invoked before the tab monitor
+    -     onTabSwitched method in the case where it will be invoked.  (It is
+    -     not invoked if the tab is opened in the background.)
+    - * onTabClosing(aTab): Called when a tab is being closed.  This method is
+    -     is invoked before the call to the tab mode's closeTab function.
+    - * onTabPersist(aTab): Return a JSON-representable object to persist for
+    -     the tab.  Return null if you do not have anything to persist.
+    - * onTabRestored(aTab, aState, aIsFirstTab): Called when a tab is being
+    -     restored and there is data previously persisted by the tab monitor.
+    -     This method is called instead of invoking onTabOpened.  This is done
+    -     because the restoreTab method (potentially) uses the tabmail openTab
+    -     API to effect restoration.  (Note: the first opened tab is special;
+    -     it will produce an onTabOpened notification potentially followed by
+    -     an onTabRestored notification.)
+    - Tab monitor code is also allowed to hook into the command processing
+    -  logic.  We support the standard supportsCommand/isCommandEnabled/
+    -  doCommand functions but with a twist to indicate when other tab monitors
+    -  and the actual tab itself should get a chance to process: supportsCommand
+    -  and isCommandEnabled should return null when they are not handling the
+    -  case.  doCommand should return true if it handled the case, null
+    -  otherwise.
+    -->
+  <binding id="tabmail">
+    <resources>
+      <stylesheet src="chrome://messenger/content/tabmail.css"/>
+      <stylesheet src="chrome://messenger/skin/tabmail.css"/>
+    </resources>
+    <content>
+      <xul:tabbox anonid="tabbox" class="tabmail-tabbox" flex="1" eventnode="document" xbl:inherits="handleCtrlPageUpDown">
+        <!-- Remember, user of this binding, you need to provide tabpanels!  -->
+        <children includes="tabpanels"/>
+      </xul:tabbox>
+    </content>
+
+    <implementation implements="nsIController">
+      <constructor>
+        window.controllers.insertControllerAt(0, this);
+        this._restoringTabState = null;
+        Components.utils.import("resource://gre/modules/AppConstants.jsm");
+      </constructor>
+      <destructor>
+        window.controllers.removeController(this);
+      </destructor>
+      <field name="currentTabInfo">
+        null
+      </field>
+      <!-- Temporary field that only has a non-null value during a call to
+           openTab, and whose value is the currentTabInfo of the tab that was
+           open when we received the call to openTab. -->
+      <field name="_mostRecentTabInfo">
+        null
+      </field>
+      <field name="tabTypes" readonly="true">
+        new Object()
+      </field>
+      <field name="tabModes" readonly="true">
+        new Object()
+      </field>
+      <field name="defaultTabMode">
+        null
+      </field>
+      <field name="tabInfo" readonly="true">
+        new Array()
+      </field>
+      <field name="tabContainer" readonly="true">
+        document.getElementById(this.getAttribute("tabcontainer"));
+      </field>
+      <field name="panelContainer" readonly="true">
+        document.getElementById(this.getAttribute("panelcontainer"));
+      </field>
+      <field name="tabMonitors" readonly="true">
+        new Array()
+      </field>
+      <field name="recentlyClosedTabs" readonly="true">
+        new Array();
+      </field>
+      <field name="mLastTabOpener">
+        null
+      </field>
+      <method name="createTooltip">
+        <parameter name="event"/>
+        <body><![CDATA[
+          event.stopPropagation();
+          var tab = document.tooltipNode;
+          if (tab.localName != "tab" || this.tabContainer.draggedTab) {
+            event.preventDefault();
+            return;
+          }
+          event.target.setAttribute("label", tab.mOverCloseButton ?
+                                             tab.getAttribute("closetabtext") :
+                                             tab.getAttribute("label"));
+
+          ]]>
+        </body>
+      </method>
+      <method name="registerTabType">
+        <parameter name="aTabType"/>
+        <body><![CDATA[
+          if (aTabType.name in this.tabTypes)
+            return;
+
+          this.tabTypes[aTabType.name] = aTabType;
+          for (let [modeName, modeDetails] of Object.entries(aTabType.modes)) {
+            modeDetails.name = modeName;
+            modeDetails.tabType = aTabType;
+            modeDetails.tabs = [];
+            this.tabModes[modeName] = modeDetails;
+            if (modeDetails.isDefault)
+              this.defaultTabMode = modeDetails;
+          }
+          if (aTabType.panelId)
+            aTabType.panel = document.getElementById(aTabType.panelId);
+          else if (!aTabType.perTabPanel) {
+            throw("Trying to register a tab type with neither panelId " +
+                  "nor perTabPanel attributes.")
+          }
+        ]]></body>
+      </method>
+      <method name="unregisterTabType">
+        <parameter name="aTabType"/>
+        <body><![CDATA[
+          // we can skip if the tab type was never registered...
+          if (!(aTabType.name in this.tabTypes))
+             return;
+
+          // ... if the tab type is still in use, we can not remove it without
+          // breaking the UI. So we throw an exception.
+          for (let modeName of Object.keys(aTabType.modes))
+            if (this.tabModes[modeName].tabs.length)
+              throw new Error("Tab mode " + modeName + " still in use. Close tabs");
+
+          // ... finally get rid of the tab type
+          for (let modeName of Object.keys(aTabType.modes))
+            delete this.tabModes[modeName];
+
+          delete this.tabTypes[aTabType.name];
+        ]]></body>
+      </method>
+      <method name="registerTabMonitor">
+        <parameter name="aTabMonitor"/>
+        <body><![CDATA[
+          if (!this.tabMonitors.includes(aTabMonitor))
+            this.tabMonitors.push(aTabMonitor);
+        ]]></body>
+      </method>
+      <method name="unregisterTabMonitor">
+        <parameter name="aTabMonitor"/>
+        <body><![CDATA[
+          if (this.tabMonitors.includes(aTabMonitor))
+            this.tabMonitors.splice(this.tabMonitors.indexOf(aTabMonitor), 1);
+        ]]></body>
+      </method>
+      <!-- Given an index, tab node or tab info object, return a tuple of
+           [iTab, tab info dictionary, tab DOM node].  If
+           aTabIndexNodeOrInfo is not specified and aDefaultToCurrent is
+           true, the current tab will be returned.  Otherwise, an
+           exception will be thrown.
+        -->
+      <method name="_getTabContextForTabbyThing">
+        <parameter name="aTabIndexNodeOrInfo"/>
+        <parameter name="aDefaultToCurrent"/>
+        <body><![CDATA[
+          let iTab, tab, tabNode;
+          if (aTabIndexNodeOrInfo == null) {
+            if (!aDefaultToCurrent)
+              throw Error("You need to specify a tab!");
+            iTab = this.tabContainer.selectedIndex;
+            return [iTab, this.tabInfo[iTab],
+                    this.tabContainer.childNodes[iTab]];
+          }
+
+          if (typeof(aTabIndexNodeOrInfo) == "number") {
+            iTab = aTabIndexNodeOrInfo;
+            tabNode = this.tabContainer.childNodes[iTab];
+            tab = this.tabInfo[iTab];
+          }
+          else if (aTabIndexNodeOrInfo.tagName && aTabIndexNodeOrInfo.tagName == "tab") {
+            tabNode = aTabIndexNodeOrInfo;
+            iTab = this.tabContainer.getIndexOfItem(tabNode);
+            tab = this.tabInfo[iTab];
+          }
+          else {
+            tab = aTabIndexNodeOrInfo;
+            iTab = this.tabInfo.indexOf(tab);
+            tabNode = (iTab >= 0) ? this.tabContainer.childNodes[iTab] : null;
+          }
+
+          return [iTab, tab, tabNode];
+        ]]></body>
+      </method>
+      <method name="openFirstTab">
+        <body><![CDATA[
+          // From the moment of creation, our XBL binding already has a visible
+          //  tab.  We need to create a tab information structure for this tab.
+          //  In the process we also generate a synthetic tab title changed
+          //  event to ensure we have an accurate title.  We assume the tab
+          //  contents will set themselves up correctly.
+          if (this.tabInfo.length == 0) {
+            let firstTab = {mode: this.defaultTabMode, busy: false,
+                            canClose: false, thinking: false, _ext: {}};
+            firstTab.mode.tabs.push(firstTab);
+
+            this.tabInfo[0] = this.currentTabInfo = firstTab;
+
+            let tabOpenFirstFunc = firstTab.mode.openFirstTab ||
+                                   firstTab.mode.tabType.openFirstTab;
+            tabOpenFirstFunc.call(firstTab.mode.tabType, firstTab);
+            this.setTabTitle(null);
+
+            for (let tabMonitor of this.tabMonitors) {
+              if ("onTabOpened" in tabMonitor)
+                tabMonitor.onTabOpened(firstTab, true);
+              tabMonitor.onTabSwitched(firstTab, null);
+            }
+          }
+        ]]></body>
+      </method>
+      <method name="openTab">
+        <parameter name="aTabModeName"/>
+        <parameter name="aArgs"/>
+        <body><![CDATA[
+        try {
+          if (!(aTabModeName in this.tabModes))
+            throw new Error("No such tab mode: " + aTabModeName);
+          let tabMode = this.tabModes[aTabModeName];
+          // if we are already at our limit for this mode, show an existing one
+          if (tabMode.tabs.length == tabMode.maxTabs) {
+            let desiredTab = tabMode.tabs[0];
+            this.tabContainer.selectedIndex = this.tabInfo.indexOf(desiredTab);
+            return null;
+          }
+
+          // Do this so that we don't generate strict warnings
+          let background = ("background" in aArgs) && aArgs.background;
+
+          // If the mode wants us to, we should switch to an existing tab
+          // rather than open a new one. We shouldn't switch to the tab if
+          // we're opening it in the background, though.
+          let shouldSwitchToFunc = tabMode.shouldSwitchTo ||
+                                   tabMode.tabType.shouldSwitchTo;
+
+          if (shouldSwitchToFunc) {
+            let tabIndex = shouldSwitchToFunc.apply(tabMode.tabType, [aArgs]);
+            if (tabIndex >= 0) {
+              if (!background)
+                this.selectTabByIndex(null, tabIndex);
+              return null;
+            }
+          }
+
+          if (!background)
+            // we need to save the state before it gets corrupted
+            this.saveCurrentTabState();
+
+          let tab = {mode: tabMode, busy: false, canClose: true,
+                     thinking: false, _ext: {}};
+          tabMode.tabs.push(tab);
+
+          var t = document.createElementNS(
+            "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul",
+            "tab");
+          tab.tabNode = t;
+          t.setAttribute("crop", "end");
+          t.maxWidth = this.tabContainer.mTabMaxWidth;
+          t.minWidth = this.tabContainer.mTabMinWidth;
+          t.width = 0;
+          t.setAttribute("flex", "100");
+          t.setAttribute("validate", "never");
+          t.className = "tabmail-tab";
+          this.tabContainer.appendChild(t);
+          if (this.tabContainer.mCollapseToolbar.collapsed) {
+            this.tabContainer.mCollapseToolbar.collapsed = false;
+            this.tabContainer.adjustTabstrip();
+          }
+
+          let oldTab = this._mostRecentTabInfo = this.currentTabInfo;
+          let oldPanel = this.panelContainer.selectedPanel;
+
+          let disregardOpener = ("disregardOpener" in aArgs)
+                                && aArgs.disregardOpener;
+
+          // If we're not disregarding the opening, hold a reference to opener
+          // so that if the new tab is closed without switching, we can switch
+          // back to the opener tab.
+          if (disregardOpener)
+            this.mLastTabOpener = null;
+          else
+            this.mLastTabOpener = oldTab;
+
+          // the order of the following statements is important
+          this.tabInfo[this.tabContainer.childNodes.length - 1] = tab;
+          if (!background) {
+            this.currentTabInfo = tab;
+            // this has a side effect of calling updateCurrentTab, but our
+            //  setting currentTabInfo above will cause it to take no action.
+            this.tabContainer.selectedIndex =
+              this.tabContainer.childNodes.length - 1;
+          }
+
+          // make sure we are on the right panel
+          if (tab.mode.tabType.perTabPanel) {
+            // should we create the element for them, or will they do it?
+            if (typeof(tab.mode.tabType.perTabPanel) == "string") {
+              tab.panel = document.createElementNS(
+                "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul",
+                tab.mode.tabType.perTabPanel);
+            }
+            else {
+              tab.panel = tab.mode.tabType.perTabPanel(tab);
+            }
+            this.panelContainer.appendChild(tab.panel);
+            if (!background)
+              this.panelContainer.selectedPanel = tab.panel;
+          }
+          else if (!background)
+            this.panelContainer.selectedPanel = tab.mode.tabType.panel;
+
+          // Make sure the new panel is marked selected.
+          oldPanel.removeAttribute("selected");
+          this.panelContainer.selectedPanel.setAttribute("selected", "true");
+
+          let tabOpenFunc = tab.mode.openTab || tab.mode.tabType.openTab;
+          tabOpenFunc.apply(tab.mode.tabType, [tab, aArgs]);
+
+          let restoreState = this._restoringTabState;
+          for (let tabMonitor of this.tabMonitors) {
+            if (("onTabRestored" in tabMonitor) && restoreState &&
+                (tabMonitor.monitorName in restoreState.ext))
+              tabMonitor.onTabRestored(tab,
+                                       restoreState.ext[tabMonitor.monitorName],
+                                       false);
+            else if ("onTabOpened" in tabMonitor)
+              tabMonitor.onTabOpened(tab, false, oldTab);
+            if (!background)
+              tabMonitor.onTabSwitched(tab, oldTab);
+          }
+
+          // clear _mostRecentTabInfo; we only needed it during the call to
+          //  openTab.
+          this._mostRecentTabInfo = null;
+
+          t.setAttribute("label", tab.title);
+
+          if (!background)
+            this.setDocumentTitle(tab);
+
+          // for styling purposes, apply the type to the tab...
+          t.setAttribute('type', tab.mode.type);
+
+          if (!background)
+            // Update the toolbar status - we don't need to do menus as they
+            // do themselves when we open them.
+            UpdateMailToolbar("tabmail");
+
+          return tab;
+        } catch (e) {
+          logException(e);
+          return null;
+        }
+        ]]></body>
+      </method>
+      <method name="selectTabByMode">
+        <parameter name="aTabModeName"/>
+        <body><![CDATA[
+          let tabMode = this.tabModes[aTabModeName];
+          if (tabMode.tabs.length) {
+            let desiredTab = tabMode.tabs[0];
+            this.tabContainer.selectedIndex = this.tabInfo.indexOf(desiredTab);
+          }
+        ]]></body>
+      </method>
+      <method name="selectTabByIndex">
+        <parameter name="aEvent"/>
+        <parameter name="aIndex"/>
+        <body><![CDATA[
+          // count backwards for aIndex < 0
+          if (aIndex < 0)
+            aIndex += this.tabInfo.length;
+
+          if (aIndex >= 0 &&
+              aIndex < this.tabInfo.length &&
+              aIndex != this.tabContainer.selectedIndex) {
+            this.tabContainer.selectedIndex = aIndex;
+          }
+
+          if (aEvent) {
+            aEvent.preventDefault();
+            aEvent.stopPropagation();
+          }
+        ]]></body>
+      </method>
+      <method name="getTabInfoForCurrentOrFirstModeInstance">
+        <parameter name="aTabMode"/>
+        <body><![CDATA[
+        /**
+         * If the current/most recent tab is of mode aTabModeName, return its
+         *  tab info, otherwise return the tab info for the first tab of the
+         *  given mode.
+         * You would want to use this method when you would like to mimic the
+         *  settings of an existing instance of your mode.  In such a case,
+         *  it is reasonable to assume that if the 'current' tab was of the
+         *  same mode that its settings should be used.  Otherwise, we must
+         *  fall back to another tab.  We currently choose the first tab of
+         *  the instance, because for the "folder" tab, it is the canonical tab.
+         *  In other cases, having an MRU order and choosing the MRU tab might
+         *  be more appropriate.
+         *
+         * @return the tab info object for the tab meeting the above criteria,
+         *     or null if no such tab exists.
+         */
+          // If we're in the middle of opening a new tab
+          // (this._mostRecentTabInfo is non-null), we shouldn't consider the
+          // current tab
+          let tabToConsider = this._mostRecentTabInfo || this.currentTabInfo;
+          if (tabToConsider && tabToConsider.mode == aTabMode)
+            return tabToConsider;
+          else if (aTabMode.tabs.length)
+            return aTabMode.tabs[0];
+          else
+            return null;
+        ]]></body>
+      </method>
+      <method name="undoCloseTab">
+        <parameter name="aIdx"/>
+        <body><![CDATA[
+
+          if (!this.recentlyClosedTabs.length)
+            return;
+
+          if (aIdx >= this.recentlyClosedTabs.length)
+            aIdx = this.recentlyClosedTabs.length-1;
+
+          // splice always returns an array
+          let history = (this.recentlyClosedTabs.splice(aIdx,1))[0];
+
+          if (!history.tab)
+            return;
+
+          if (!this.restoreTab(JSON.parse(history.tab)))
+            return;
+
+          let idx = Math.min(history.idx,this.tabInfo.length);
+          let tab = this.tabContainer.childNodes[this.tabInfo.length - 1];
+          this.moveTabTo(tab, idx);
+
+          this.switchToTab(tab);
+
+        ]]></body>
+      </method>
+      <method name="closeTab">
+        <parameter name="aOptTabIndexNodeOrInfo"/>
+        <parameter name="aNoUndo" />
+        <body><![CDATA[
+
+            let [iTab, tab, tabNode] =
+              this._getTabContextForTabbyThing(aOptTabIndexNodeOrInfo, true);
+
+            if (!tab.canClose)
+              return;
+
+            // Give the tab type a chance to make its own decisions about
+            // whether its tabs can be closed or not. For instance, contentTabs
+            // and chromeTabs run onbeforeunload event handlers that may
+            // exercise their right to prompt the user for confirmation before
+            // closing.
+            let tryCloseFunc = tab.mode.tryCloseTab || tab.mode.tabType.tryCloseTab;
+            if (tryCloseFunc && !tryCloseFunc.call(tab.mode.tabType, tab))
+              return;
+
+            for (let tabMonitor of this.tabMonitors) {
+              if ("onTabClosing" in tabMonitor)
+                tabMonitor.onTabClosing(tab);
+            }
+
+            if (!aNoUndo) {
+              // Allow user to undo accidentially closed tabs
+              let session = this.persistTab(tab);
+
+              if (session) {
+                this.recentlyClosedTabs.unshift(
+                  { tab: JSON.stringify(session), idx: iTab, title: tab.title });
+
+                if (this.recentlyClosedTabs.length > 10)
+                  this.recentlyClosedTabs.pop();
+              }
+            }
+
+            let closeFunc = tab.mode.closeTab || tab.mode.tabType.closeTab;
+            closeFunc.call(tab.mode.tabType, tab);
+
+            this.tabInfo.splice(iTab, 1);
+            tab.mode.tabs.splice(tab.mode.tabs.indexOf(tab), 1);
+            tabNode.remove();
+
+            if (this.tabContainer.selectedIndex == -1) {
+              if (this.mLastTabOpener && this.tabInfo.includes(this.mLastTabOpener)) {
+                this.tabContainer.selectedIndex = this.tabInfo.indexOf(this.mLastTabOpener);
+              } else {
+                this.tabContainer.selectedIndex =
+                  (iTab == this.tabContainer.childNodes.length) ? iTab - 1 : iTab;
+              }
+            }
+
+            // Clear the last tab opener - we don't need this anymore.
+            this.mLastTabOpener = null;
+
+            if (this.currentTabInfo == tab)
+              this.updateCurrentTab();
+
+            if (tab.panel) {
+              tab.panel.remove();
+              delete tab.panel;
+
+              // Ensure current tab is still selecte and displayed in the
+              // panelContainer.
+              this.panelContainer.selectedPanel =
+                this.currentTabInfo.panel || this.currentTabInfo.mode.tabType.panel;
+            }
+            if (this.tabContainer.childNodes.length == 1 &&
+                this.tabContainer.mAutoHide)
+              this.tabContainer.mCollapseToolbar.collapsed = true;
+          ]]>
+        </body>
+      </method>
+      <method name="removeTabByNode">
+        <parameter name="aTabNode"/>
+        <body>
+          <![CDATA[
+            this.closeTab(aTabNode);
+          ]]>
+        </body>
+      </method>
+      <method name="closeOtherTabs">
+        <parameter name="aTabNode"/>
+        <parameter name="aNoUndo"/>
+        <body>
+          <![CDATA[
+            /**
+             * Given a tabNode (or tabby thing), close all of the other tabs
+             *  that are closeable.
+             */
+            let [iTab, thisTab, tabNode] = this._getTabContextForTabbyThing(
+                                           aTabNode, false);
+
+            // closeTab mutates the tabInfo array, so start from the end.
+            for (let i = this.tabInfo.length - 1; i >= 0; i--) {
+              let tab = this.tabInfo[i];
+              if ((tab != thisTab) && tab.canClose)
+                this.closeTab(tab, aNoUndo);
+            }
+          ]]>
+        </body>
+      </method>
+      <method name="replaceTabWithWindow">
+        <parameter name="aTab"/>
+        <body>
+          <![CDATA[
+            if (this.tabInfo.length <= 1)
+              return null;
+
+            let tab = this._getTabContextForTabbyThing(aTab, false)[1];
+
+            if (!tab.canClose)
+              return null;
+
+            // We use Json and session restore transfer the tab to the new window.
+            tab = this.persistTab(tab);
+            if (!tab)
+              return null;
+
+            // Converting to JSON and back again creates clean javascript
+            // object with absolutely no references to our current window.
+            tab = JSON.parse(JSON.stringify(tab));
+
+            this.closeTab(aTab,true);
+
+            return window.openDialog("chrome://messenger/content/", "_blank",
+               "chrome,dialog=no,all", null,
+               { action : "restore", tabs: [tab] } ).focus();
+          ]]>
+        </body>
+      </method>
+      <method name="moveTabTo">
+        <parameter name="aTab"/>
+        <parameter name="aIndex"/>
+        <body><![CDATA[
+
+          if ((!aTab) || (aTab.tagName != "tab"))
+            return -1;
+
+          let oldIdx = this.tabContainer.getIndexOfItem(aTab);
+          if (oldIdx < 0)
+            return -1;
+
+          if (oldIdx == aIndex)
+            return -1;
+
+          // Cache the old tabInfo
+          let tab = this.tabInfo[oldIdx]
+
+          if (!tab)
+            return -1;
+
+          // remove the entries form tabInfo, tabMode and the tabContainer
+          this.tabInfo.splice(oldIdx, 1);
+          tab.mode.tabs.splice(tab.mode.tabs.indexOf(tab), 1);
+          aTab.remove();
+
+
+          // as we removed items, we might need to update indices
+          if (oldIdx < aIndex)
+            aIndex --;
+
+          // Read it into tabInfo and the tabContainer
+          this.tabInfo.splice(aIndex, 0, tab);
+          this.tabContainer.insertBefore(aTab, this.tabContainer.childNodes[aIndex]);
+
+          // Now it's getting a bit ugly, as tabModes stores redundant
+          // information we need to get it in sync with tabInfo.
+          //
+          // As tabModes.tabs is a subset of tabInfo, every tab can be mapped
+          // to a tabInfo index. So we check for each tab in tabModes if it is
+          // directly in front of our moved tab. We do this by looking up the
+          // index in tabInfo and compare it with the moved tab's index. If we
+          // found our tab, we insert the moved tab directly behind into tabModes
+
+          // In case find no tab we simply append it
+          let modeIdx = tab.mode.tabs.length+1;
+
+          for (let i = 0; i < tab.mode.tabs.length; i++) {
+
+            if (this.tabInfo.indexOf(tab.mode.tabs[i]) < aIndex)
+              continue;
+
+            modeIdx = i;
+            break;
+          }
+
+          tab.mode.tabs.splice(modeIdx, 0, tab);
+
+          return aIndex;
+         ]]>
+         </body>
+       </method>
+       <method name="persistTab">
+         <parameter name="tab"/>
+         <body><![CDATA[
+           /* Returns null in case persist fails */
+
+           let persistFunc = tab.mode.persistTab || tab.mode.tabType.persistTab;
+
+           // if we can't restore the tab we can't move it
+           if (!persistFunc)
+             return null;
+
+           //  If there is a non-null tab-state, then persisting succeeded and
+           //  we should store it.  We store the tab's persisted state in its
+           //  own distinct object rather than mixing things up in a dictionary
+           //  to avoid bugs and because we may eventually let extensions store
+           //  per-tab information in the persisted state.
+
+           let tabState;
+           // Wrap this in an exception handler so that if the persistence
+           // logic fails, things like tab closure still run to completion.
+           try {
+             tabState = persistFunc.call(tab.mode.tabType, tab);
+           }
+           catch(ex) {
+             // Report this so that our unit testing framework sees this
+             // error and (extension) developers likewise can see when their
+             // extensions are ill-behaved.
+             Components.utils.reportError(ex);
+           }
+
+           if (!tabState)
+             return null;
+
+           let ext = {};
+
+           for (let tabMonitor of this.tabMonitors) {
+             if ("onTabPersist" in tabMonitor) {
+               let monState = tabMonitor.onTabPersist(tab);
+               if (monState !== null)
+                 ext[tabMonitor.monitorName] = monState;
+             }
+           }
+
+           return {mode: tab.mode.name, state: tabState, ext: ext}
+        ]]></body>
+      </method>
+
+      <method name="persistTabs">
+        <body><![CDATA[
+          /**
+           * Persist the state of all tab modes implementing persistTab methods
+           *  to a JSON-serializable object representation and return it.  Call
+           *  restoreTabs with the result to restore the tab state.
+           * Calling this method should have no side effects; tabs will not be
+           *  closed, displays will not change, etc.  This means the method is
+           *  safe to use in an auto-save style so that if we crash we can
+           *  restore the (approximate) state at the time of the crash.
+           *
+           * @return {Object} The persisted tab states.
+           */
+          let state = {
+            // Explicitly specify a revision so we don't wish we had later.
+            rev: 0,
+            // If our currently selected tab gets persisted, we will update this
+            selectedIndex: null,
+          };
+
+          let tabs = state.tabs = [];
+
+          for (let [iTab, tab] of this.tabInfo.entries()) {
+
+            let persistTab = this.persistTab(tab);
+
+            if (!persistTab)
+              continue;
+
+            tabs.push(persistTab);
+
+            // Mark this persisted tab as selected
+            if (iTab == this.tabContainer.selectedIndex)
+              state.selectedIndex = tabs.length - 1;
+          }
+
+          return state;
+        ]]></body>
+      </method>
+      <method name="restoreTab">
+        <parameter name="aState"/>
+        <body><![CDATA[
+
+          // if we no longer know about the mode, we can't restore the tab
+          let mode = this.tabModes[aState.mode];
+          if (!mode)
+            return false;
+
+          let restoreFunc = mode.restoreTab || mode.tabType.restoreTab;
+
+          if (!restoreFunc)
+            return false;
+
+          // normalize the state to have an ext attribute if it does not.
+          if (!("ext" in aState))
+            aState.ext = {};
+
+          this._restoringTabState = aState;
+          restoreFunc.call(mode.tabType, this, aState.state);
+          this._restoringTabState = null;
+
+          return true;
+
+        ]]></body>
+      </method>
+      <method name="restoreTabs">
+        <parameter name="aPersistedState"/>
+        <parameter name="aDontRestoreFirstTab"/>
+        <body><![CDATA[
+          /**
+           * Attempts to restore tabs persisted from a prior call to
+           *  |persistTabs|.  This is currently a synchronous operation, but in
+           *  the future this may kick off an asynchronous mechanism to restore
+           *  the tabs one-by-one.
+           */
+          let tabs = aPersistedState.tabs;
+          let indexToSelect = null;
+          for (let [iTab, tabState] of tabs.entries()) {
+
+            if (tabState.state.firstTab && aDontRestoreFirstTab)
+              tabState.state.dontRestoreFirstTab = aDontRestoreFirstTab;
+
+            if (!this.restoreTab(tabState))
+              continue;
+
+            // If this persisted tab was the selected one, then mark the newest
+            //  tab as the guy to select.
+            if (iTab == aPersistedState.selectedIndex)
+              indexToSelect = this.tabInfo.length - 1;
+          }
+
+          if (indexToSelect != null && !aDontRestoreFirstTab)
+            this.tabContainer.selectedIndex = indexToSelect;
+          else
+            this.tabContainer.selectedIndex = 0;
+        ]]></body>
+      </method>
+      <method name="clearRecentlyClosedTabs">
+        <body><![CDATA[
+          this.recentlyClosedTabs.length = 0;
+        ]]></body>
+      </method>
+
+      <!-- Called when the window is being unloaded, this calls the close
+           function for every tab. -->
+      <method name="_teardown">
+        <body>
+          <![CDATA[
+            for (var i = 0; i < this.tabInfo.length; i++) {
+              let tab = this.tabInfo[i];
+
+              let tabCloseFunc = tab.mode.closeTab || tab.mode.tabType.closeTab;
+              tabCloseFunc.call(tab.mode.tabType, tab);
+            }
+          ]]>
+        </body>
+      </method>
+
+      <property name="selectedTab" readonly="true">
+        <getter><![CDATA[
+          if (!this.currentTabInfo)
+            this.currentTabInfo = this.tabInfo[0];
+
+          return this.currentTabInfo;
+        ]]></getter>
+      </property>
+
+      <!-- getBrowserForSelectedTab is required as some toolkit functions
+           require a getBrowser() function. -->
+      <method name="getBrowserForSelectedTab">
+        <body><![CDATA[
+          if (!this.currentTabInfo)
+            this.currentTabInfo = this.tabInfo[0];
+
+          let tab = this.currentTabInfo;
+
+          let browserFunc = tab.mode.getBrowser || tab.mode.tabType.getBrowser;
+          if (browserFunc)
+            return browserFunc.call(tab.mode.tabType, tab);
+
+          return null;
+        ]]></body>
+      </method>
+      <!-- getBrowserForDocument is used to find the browser for a specific
+           document that's been loaded -->
+      <method name="getBrowserForDocument">
+        <parameter name="aDocument"/>
+        <body><![CDATA[
+          for (let i = 0; i < this.tabInfo.length; ++i) {
+            let browserFunc = this.tabInfo[i].mode.getBrowser ||
+                              this.tabInfo[i].mode.tabType.getBrowser;
+            if (browserFunc) {
+              let possBrowser = browserFunc.call(this.tabInfo[i].mode.tabType,
+                                                 this.tabInfo[i]);
+              if (possBrowser &&
+                  possBrowser.contentWindow == aDocument)
+                return this.tabInfo[i];
+            }
+          }
+          return null;
+        ]]></body>
+      </method>
+      <!-- getBrowserForDocumentId is used to find the browser for a specific
+           document via its id attribute -->
+      <method name="getBrowserForDocumentId">
+        <parameter name="aDocumentId"/>
+        <body><![CDATA[
+          for (let i = 0; i < this.tabInfo.length; ++i) {
+            let browserFunc = this.tabInfo[i].mode.getBrowser ||
+                              this.tabInfo[i].mode.tabType.getBrowser;
+            if (browserFunc) {
+              let possBrowser = browserFunc.call(this.tabInfo[i].mode.tabType,
+                                                 this.tabInfo[i]);
+              if (possBrowser &&
+                  possBrowser.contentDocument.documentElement.id == aDocumentId)
+                return this.tabInfo[i];
+            }
+          }
+          return null;
+        ]]></body>
+      </method>
+      <method name="removeCurrentTab">
+        <body><![CDATA[
+          this.removeTabByNode(
+            this.tabContainer.childNodes[this.tabContainer.selectedIndex]);
+        ]]></body>
+      </method>
+      <method name="switchToTab">
+        <parameter name="aTabIndexNodeOrInfo"/>
+        <body>
+          <![CDATA[
+            let [iTab, tab, tabNode] =
+              this._getTabContextForTabbyThing(aTabIndexNodeOrInfo, false);
+
+            this.tabContainer.selectedIndex = iTab;
+          ]]>
+        </body>
+      </method>
+      <!--  UpdateCurrentTab - called in response to changing the current tab -->
+      <method name="updateCurrentTab">
+        <body>
+          <![CDATA[
+            if (this.currentTabInfo != this.tabInfo[this.tabContainer.selectedIndex])
+            {
+              if (this.currentTabInfo)
+                this.saveCurrentTabState();
+
+              let oldTab = this.currentTabInfo;
+              let oldPanel = this.panelContainer.selectedPanel;
+              let tab = this.currentTabInfo =
+                this.tabInfo[this.tabContainer.selectedIndex];
+
+              this.panelContainer.selectedPanel = tab.panel ||
+                                                  tab.mode.tabType.panel;
+
+              // Update the selected attribute on the current and old tab panel.
+              oldPanel.removeAttribute("selected");
+              this.panelContainer.selectedPanel.setAttribute("selected", "true");
+
+              let showTabFunc = tab.mode.showTab || tab.mode.tabType.showTab;
+              showTabFunc.call(tab.mode.tabType, tab);
+
+              for (let tabMonitor of this.tabMonitors) {
+                tabMonitor.onTabSwitched(tab, oldTab);
+              }
+
+              // always update the cursor status when we switch tabs
+              SetBusyCursor(window, tab.busy);
+              // active tabs should not have the wasBusy attribute
+              this.tabContainer.selectedItem.removeAttribute("wasBusy");
+
+              // update the thinking status when we switch tabs
+              this._setActiveThinkingState(tab.thinking);
+              // active tabs should not have the wasThinking attribute
+              this.tabContainer.selectedItem.removeAttribute("wasThinking");
+
+              this.setDocumentTitle(tab);
+
+              // Update the toolbar status - we don't need to do menus as they
+              // do themselves when we open them.
+              UpdateMailToolbar("tabmail");
+
+              // We switched tabs, so we don't need to know the last tab
+              // opener anymore.
+              this.mLastTabOpener = null;
+            }
+          ]]>
+        </body>
+      </method>
+      <method name="saveCurrentTabState">
+        <body>
+          <![CDATA[
+            if (!this.currentTabInfo)
+              this.currentTabInfo = this.tabInfo[0];
+            let tab = this.currentTabInfo;
+
+            // save the old tab state before we change the current tab
+            let saveTabFunc = tab.mode.saveTabState ||
+                              tab.mode.tabType.saveTabState;
+            saveTabFunc.call(tab.mode.tabType, tab);
+          ]]>
+        </body>
+      </method>
+      <method name="onTabClick">
+        <parameter name="event"/>
+        <body>
+          <![CDATA[
+            // a middle mouse button click on a tab is a short cut for closing a tab
+            if (event.button != 1 || event.target.localName != 'tab')
+              return;
+            this.removeTabByNode(event.target);
+            event.stopPropagation();
+          ]]>
+        </body>
+      </method>
+      <method name="setTabTitle">
+        <parameter name="aTabNodeOrInfo"/>
+        <body>
+          <![CDATA[
+            let [iTab, tab, tabNode] =
+              this._getTabContextForTabbyThing(aTabNodeOrInfo, true);
+
+            if (tab)
+            {
+              let tabNode =
+                this.tabContainer.childNodes[iTab];
+
+              let titleChangeFunc = tab.mode.onTitleChanged ||
+                                    tab.mode.tabType.onTitleChanged;
+              if (titleChangeFunc)
+                titleChangeFunc.call(tab.mode.tabType, tab, tabNode);
+
+              for (let tabMonitor of this.tabMonitors) {
+                tabMonitor.onTabTitleChanged(tab);
+              }
+
+              // If the displayed tab is the one at the moment of creation
+              // (aTabNodeOrInfo is null), set the default title as its title.
+              tabNode.setAttribute("label", aTabNodeOrInfo ?
+                                            tab.title :
+                                            document.documentElement.getAttribute("defaultTabTitle"));
+
+              // Update the window title if we're the displayed tab.
+              if (iTab == this.tabContainer.selectedIndex)
+                this.setDocumentTitle(tab);
+            }
+          ]]>
+        </body>
+      </method>
+      <!--
+        - Sets the tab icon to the specified url, or removes the icon if no
+        - url is specified. Note that this may override css provided images.
+        -->
+      <method name="setTabIcon">
+        <parameter name="aTabNodeOrInfo"/>
+        <parameter name="aIcon"/>
+        <body>
+          <![CDATA[
+            let [iTab, tab, tabNode] =
+              this._getTabContextForTabbyThing(aTabNodeOrInfo, true);
+
+            if (tab) {
+              let tabNode = this.tabContainer.childNodes[iTab];
+
+              if (aIcon)
+                tabNode.setAttribute("image", aIcon);
+              else
+                tabNode.removeAttribute("image");
+            }
+          ]]>
+        </body>
+      </method>
+      <!--
+        - Updates the global state to reflect the active tab's thinking
+        -   state (which the caller provides).
+        -->
+      <method name="_setActiveThinkingState">
+        <parameter name="aThinkingState"/>
+        <body><![CDATA[
+          if (aThinkingState) {
+            statusFeedback.showProgress(0);
+            if (typeof(aThinkingState) == "string")
+              statusFeedback.showStatusString(aThinkingState);
+            gStatusBar.setAttribute("mode","undetermined");
+          }
+          else {
+            statusFeedback.showProgress(0);
+            gStatusBar.setAttribute("mode", "normal");
+          }
+        ]]></body>
+      </method>
+      <method name="setTabThinking">
+        <parameter name="aTabNodeOrInfo"/>
+        <parameter name="aThinking"/>
+        <body>
+          <![CDATA[
+            let [iTab, tab, tabNode] = this._getTabContextForTabbyThing(
+                                         aTabNodeOrInfo, false);
+            let isSelected = (iTab == this.tabContainer.selectedIndex);
+
+            // if we are the current tab, update the cursor
+            if (isSelected)
+              this._setActiveThinkingState(aThinking);
+
+            // if we are busy, hint our tab
+            if (aThinking) {
+              tabNode.setAttribute("thinking", "true");
+            }
+            else {
+              // if we were thinking and are not selected, set the
+              //  "wasThinking" attribute.
+              if (tab.thinking && !isSelected)
+                tabNode.setAttribute("wasThinking", "true");
+              tabNode.removeAttribute("thinking");
+            }
+
+            // update the tab info to store the busy state.
+            tab.thinking = aThinking;
+          ]]>
+        </body>
+      </method>
+      <method name="setTabBusy">
+        <parameter name="aTabNodeOrInfo"/>
+        <parameter name="aBusy"/>
+        <body>
+          <![CDATA[
+            let [iTab, tab, tabNode] = this._getTabContextForTabbyThing(
+                                         aTabNodeOrInfo, false);
+            let isSelected = (iTab == this.tabContainer.selectedIndex);
+
+            // if we are the current tab, update the cursor
+            if (isSelected)
+              SetBusyCursor(window, aBusy);
+
+            // if we are busy, hint our tab
+            if (aBusy) {
+              tabNode.setAttribute("busy", "true");
+            }
+            else {
+              // if we were busy and are not selected, set the
+              //  "wasBusy" attribute.
+              if (tab.busy && !isSelected)
+                tabNode.setAttribute("wasBusy", "true");
+              tabNode.removeAttribute("busy");
+            }
+
+            // update the tab info to store the busy state.
+            tab.busy = aBusy;
+          ]]>
+        </body>
+      </method>
+      <method name="onTabContextMenuShowing">
+        <parameter name="aTabNode"/>
+        <body>
+          <![CDATA[
+            // this happens when the user did not actually-click on a tab but
+            // instead on the strip behind it.
+            if (aTabNode.localName != "tab")
+              return false;
+
+            let tabContextMenu = document.getElementById("tabContextMenu");
+
+            let tab = this._getTabContextForTabbyThing(aTabNode, true) [1];
+
+            // by default "close other tabs" is disabled...
+            tabContextMenu
+              .querySelector('[anonid="closeOtherTabs"]')
+              .setAttribute("disabled","true");
+
+            // ... except if we find at least one other tab that can be closed.
+            for (let i = 0; i < this.tabInfo.length; i++) {
+              if (this.tabInfo[i].canClose && this.tabInfo[i] != tab) {
+                tabContextMenu
+                  .querySelector('[anonid="closeOtherTabs"]')
+                  .setAttribute("disabled", "false");
+                break;
+              }
+            }
+
+
+            tabContextMenu
+              .querySelector('[anonid="closeTab"]')
+              .setAttribute("disabled", tab.canClose ? "false" : "true");
+
+            // enable "Open in new Window" iff tab is closable and...
+            // ... it can persist its state. Other wise it would get destroyed...
+            // ... while moving it to a new window.
+            tabContextMenu
+              .querySelector('[anonid="openTabInWindow"]')
+              .setAttribute("disabled",
+                            (tab.canClose && this.persistTab(tab)) ? "false" : "true");
+
+            // If the tab history is empty, disable "Undo Close Tab"
+            tabContextMenu
+              .querySelector('[anonid="recentlyClosedTabs"]')
+              .setAttribute("disabled",
+                            (this.recentlyClosedTabs.length) ? "false" : "true");
+
+            return true;
+          ]]>
+        </body>
+      </method>
+      <method name="supportsCommand">
+        <parameter name="aCommand"/>
+        <body>
+          <![CDATA[
+            let tab = this.currentTabInfo;
+
+            // This can happen if we're starting up and haven't got a tab
+            // loaded yet.
+            if (!tab)
+              return false;
+
+            for (let tabMonitor of this.tabMonitors) {
+              if ("supportsCommand" in tabMonitor) {
+                let result = tabMonitor.supportsCommand(aCommand, tab);
+                if (result !== null)
+                  return result;
+              }
+            }
+
+            let supportsCommandFunc = tab.mode.supportsCommand ||
+                                      tab.mode.tabType.supportsCommand;
+            if (supportsCommandFunc)
+              return supportsCommandFunc.call(tab.mode.tabType, aCommand, tab);
+
+            return false;
+          ]]>
+        </body>
+      </method>
+      <method name="isCommandEnabled">
+        <parameter name="aCommand"/>
+        <body>
+          <![CDATA[
+            let tab = this.currentTabInfo;
+
+            // This can happen if we're starting up and haven't got a tab
+            // loaded yet.
+            if (!tab)
+              return false;
+
+            for (let tabMonitor of this.tabMonitors) {
+              if ("isCommandEnabled" in tabMonitor) {
+                let result = tabMonitor.isCommandEnabled(aCommand, tab);
+                if (result !== null)
+                  return result;
+              }
+            }
+
+            let isCommandEnabledFunc = tab.mode.isCommandEnabled ||
+                                       tab.mode.tabType.isCommandEnabled;
+            if (isCommandEnabledFunc)
+              return isCommandEnabledFunc.call(tab.mode.tabType, aCommand, tab);
+
+            return false;
+          ]]>
+        </body>
+      </method>
+      <method name="doCommand">
+        <parameter name="aCommand"/>
+        <body>
+          <![CDATA[
+            let tab = this.currentTabInfo;
+
+            // This can happen if we're starting up and haven't got a tab
+            // loaded yet.
+            if (!tab)
+              return;
+
+            for (let tabMonitor of this.tabMonitors) {
+              if ("doCommand" in tabMonitor) {
+                let result = tabMonitor.doCommand(aCommand, tab);
+                if (result === true)
+                  return;
+              }
+            }
+
+            let doCommandFunc = tab.mode.doCommand ||
+                                tab.mode.tabType.doCommand;
+            if (doCommandFunc)
+              doCommandFunc.call(tab.mode.tabType, aCommand, tab);
+          ]]>
+        </body>
+      </method>
+      <method name="onEvent">
+        <parameter name="aEvent"/>
+        <body>
+           <![CDATA[
+             let tab = this.currentTabInfo;
+
+             // This can happen if we're starting up and haven't got a tab
+             // loaded yet.
+             if (!tab)
+               return null;
+
+             let onEventFunc = tab.mode.onEvent ||
+                               tab.mode.tabType.onEvent;
+             if (onEventFunc)
+               return onEventFunc.call(tab.mode.tabType, aEvent, tab);
+
+             return false;
+           ]]>
+        </body>
+      </method>
+      <!-- Set the document title based on the tab title -->
+      <method name="setDocumentTitle">
+        <parameter name="aTab"/>
+        <body>
+          <![CDATA[
+            let docTitle = aTab.title ? aTab.title.trim() : "";
+            let docElement = document.documentElement;
+            // If the document title is blank, add the default title.
+            if (!docTitle)
+              docTitle = docElement.getAttribute("defaultTabTitle");
+
+            // If we're on Mac, don't display the separator and the modifier.
+            if (AppConstants.platform != "macosx") {
+              docTitle += docElement.getAttribute("titlemenuseparator") +
+                          docElement.getAttribute("titlemodifier");
+            }
+
+            document.title = docTitle;
+          ]]>
+        </body>
+      </method>
+    </implementation>
+  </binding>
+
+  <binding id="tabmail-tab" display="xul:box"
+           extends="chrome://global/content/bindings/tabbox.xml#tab">
+    <content closetabtext="&closeTab.label;" context="tabContextMenu">
+      <xul:stack class="tab-stack" flex="1">
+        <xul:hbox xbl:inherits="pinned,selected,titlechanged"
+                  class="tab-background">
+          <xul:hbox xbl:inherits="pinned,selected,titlechanged"
+                    class="tab-background-start"/>
+          <xul:hbox xbl:inherits="pinned,selected,titlechanged"
+                    class="tab-background-middle"/>
+          <xul:hbox xbl:inherits="pinned,selected,titlechanged"
+                    class="tab-background-end"/>
+        </xul:hbox>
+        <xul:hbox xbl:inherits="pinned,selected,titlechanged"
+                  class="tab-content" align="center">
+          <xul:image xbl:inherits="fadein,pinned,busy,progress,selected"
+                     class="tab-throbber"
+                     role="presentation"/>
+          <xul:image xbl:inherits="validate,src=image,src,fadein,pinned,selected"
+                     class="tab-icon-image"
+                     role="presentation"/>
+          <xul:label flex="1"
+                     xbl:inherits="value=label,crop,accesskey,fadein,pinned,selected"
+                     class="tab-text tab-label"
+                     role="presentation"/>
+          <xul:toolbarbutton anonid="close-button"
+                             xbl:inherits="fadein,pinned,selected"
+                             tabindex="-1"
+                             clickthrough="never"
+                             class="tab-close-button close-icon"/>
+        </xul:hbox>
+      </xul:stack>
+    </content>
+
+    <implementation>
+      <field name="mOverCloseButton">false</field>
+      <field name="mCorrespondingMenuitem">null</field>
+    </implementation>
+
+    <handlers>
+      <handler event="mouseover">
+        var anonid = event.originalTarget.getAttribute("anonid");
+        if (anonid == "close-button")
+          this.mOverCloseButton = true;
+      </handler>
+      <handler event="mouseout">
+        var anonid = event.originalTarget.getAttribute("anonid");
+        if (anonid == "close-button")
+          this.mOverCloseButton = false;
+      </handler>
+      <handler event="mousedown" button="0" phase="capturing">
+      <![CDATA[
+        if (this.mOverCloseButton)
+          event.stopPropagation();
+      ]]>
+      </handler>
+    </handlers>
+  </binding>
+
+  <binding id="tabmail-tabbox"
+           extends="chrome://global/content/bindings/tabbox.xml#tabbox">
+    <implementation>
+      <property name="tabs" readonly="true"
+                onget="return document.getBindingParent(this).tabContainer;"/>
+    </implementation>
+  </binding>
+
+  <binding id="tabmail-arrowscrollbox" extends="chrome://global/content/bindings/scrollbox.xml#arrowscrollbox-clicktoscroll">
+    <content>
+      <xul:toolbarbutton class="scrollbutton-up"
+                         xbl:inherits="orient,collapsed=notoverflowing,disabled=scrolledtostart"
+                         anonid="scrollbutton-up"
+                         onmousedown="_startScroll(-1);"
+                         onmouseup="_stopScroll();"
+                         onmouseout="_stopScroll();"/>
+      <xul:spacer class="arrowscrollbox-overflow-start-indicator"
+                  xbl:inherits="collapsed=scrolledtostart"/>
+      <xul:scrollbox xbl:inherits="orient,align,pack,dir"
+                     flex="1"
+                     anonid="scrollbox">
+        <children/>
+      </xul:scrollbox>
+      <xul:spacer class="arrowscrollbox-overflow-end-indicator"
+                  xbl:inherits="collapsed=scrolledtoend"/>
+      <xul:stack align="center"
+                 pack="end"
+                 class="scrollbutton-down-stack">
+        <xul:hbox flex="1"
+                  class="scrollbutton-down-box"
+                  collapsed="true"
+                  anonid="down-box"/>
+        <xul:hbox flex="1"
+                  class="scrollbutton-down-box-animate"
+                  collapsed="true"
+                  anonid="down-box-animate"/>
+        <xul:toolbarbutton class="scrollbutton-down"
+                           xbl:inherits="orient,collapsed=notoverflowing,disabled=scrolledtoend"
+                           anonid="scrollbutton-down"
+                           onmousedown="_startScroll(1);"
+                           onmouseup="_stopScroll();"
+                           onmouseout="_stopScroll();"/>
+      </xul:stack>
+    </content>
+    <implementation>
+      <field name="_scrollButtonDownBox">
+        document.getAnonymousElementByAttribute(this, "anonid", "down-box");
+      </field>
+      <field name="_scrollButtonDownBoxAnimate">
+        document.getAnonymousElementByAttribute(this, "anonid", "down-box-animate");
+      </field>
+    </implementation>
+    <handlers>
+      <handler event="underflow"><![CDATA[
+        // filter underflow events which were dispatched on nested scrollboxes
+        if (event.target != this)
+          return;
+
+        // Ignore vertical events.
+        if (event.detail == 0) {
+          return;
+        }
+
+        this.setAttribute("notoverflowing", "true");
+      ]]></handler>
+
+      <handler event="overflow"><![CDATA[
+        // filter underflow events which were dispatched on nested scrollboxes
+        if (event.target != this)
+          return;
+
+        // Ignore vertical events.
+        if (event.detail == 0) {
+          return;
+        }
+
+        this.removeAttribute("notoverflowing");
+      ]]></handler>
+
+      <handler event="UpdatedScrollButtonsDisabledState"><![CDATA[
+        // filter underflow events which were dispatched on nested scrollboxes
+        if (event.target != this)
+          return;
+
+        // fix for bug #352353
+        // unlike the scrollup button on the tab strip (which is a
+        // simple toolbarbutton) the scrolldown button is
+        // a more complicated stack of boxes and a toolbarbutton
+        // so that we can animate when a tab is opened offscreen.
+        // in order to style the box with the actual background image
+        // we need to manually set the disable state to match the
+        // disable state of the toolbarbutton.
+        this._scrollButtonDownBox
+            .setAttribute("disabled", this._scrollButtonDown.disabled);
+      ]]></handler>
+
+    </handlers>
+  </binding>
+  <binding id="tabmail-tabs"
+           extends="chrome://global/content/bindings/tabbox.xml#tabs">
+    <content context="toolbar-context-menu">
+      <xul:stack flex="1" class="tabs-stack">
+        <xul:vbox>
+          <xul:spacer flex="1"/>
+          <xul:hbox class="tabs-bottom" align="center"/>
+        </xul:vbox>
+        <xul:vbox>
+          <xul:hbox>
+            <xul:hbox align="end">
+              <xul:image class="tab-drop-indicator" anonid="tab-drop-indicator" collapsed="true"/>
+            </xul:hbox>
+            <xul:stack>
+              <xul:spacer class="tabs-left"/>
+            </xul:stack>
+            <xul:arrowscrollbox class="tabmail-arrowscrollbox"
+                                anonid="arrowscrollbox"
+                                orient="horizontal"
+                                flex="1"
+                                style="min-width: 1px;">
+              <children includes="tab"/>
+            </xul:arrowscrollbox>
+            <children/>
+            <xul:hbox class="tabs-closebutton-box"
+                      anonid="tabstrip-closebutton"
+                      align="center" pack="end">
+              <xul:toolbarbutton class="close-icon tabs-closebutton"/>
+            </xul:hbox>
+          </xul:hbox>
+          <xul:spacer class="tabs-bottom-spacer"/>
+        </xul:vbox>
+      </xul:stack>
+    </content>
+
+    <implementation implements="nsITimerCallback, nsIDOMEventListener">
+      <constructor>
+        <![CDATA[
+          Components.utils.import("resource://gre/modules/Services.jsm");
+
+          try {
+            this.mTabMinWidth = Services.prefs.getIntPref("mail.tabs.tabMinWidth");
+          } catch (e) {
+          }
+          try {
+            this.mTabMaxWidth = Services.prefs.getIntPref("mail.tabs.tabMaxWidth");
+          } catch (e) {
+          }
+          try {
+            this.mTabClipWidth = Services.prefs.getIntPref("mail.tabs.tabClipWidth");
+          } catch (e) {
+          }
+          try {
+            this.mCloseButtons = Services.prefs.getIntPref("mail.tabs.closeButtons");
+          } catch (e) {
+          }
+          try {
+            this.mAutoHide = Services.prefs.getBoolPref("mail.tabs.autoHide");
+          } catch (e) {
+          }
+
+          if (this.mAutoHide)
+            this.mCollapseToolbar.collapsed = true;
+
+          this.firstChild.minWidth = this.mTabMinWidth;
+          this.firstChild.maxWidth = this.mTabMaxWidth;
+          this.adjustTabstrip();
+
+          Services.prefs.addObserver("mail.tabs.", this._prefObserver, false);
+
+          window.addEventListener("resize", this, false);
+
+          // Listen to overflow/underflow events on the tabstrip,
+          // we cannot put these as xbl handlers on the entire binding because
+          // they would also get called for the all-tabs popup scrollbox.
+          // Also, we can't rely on event.target becuase these are all
+          // anonymous nodes.
+          this.mTabstrip.addEventListener("overflow", this, false);
+          this.mTabstrip.addEventListener("underflow", this, false);
+        ]]>
+      </constructor>
+
+      <destructor>
+        <![CDATA[
+          Components.utils.import("resource://gre/modules/Services.jsm");
+
+          Services.prefs.removeObserver("mail.tabs.", this._prefObserver);
+
+          // Release timer to avoid reference cycles.
+          if (this._animateTimer) {
+            this._animateTimer.cancel();
+            this._animateTimer = null;
+          }
+
+          this.mTabstrip.removeEventListener("overflow", this, false);
+          this.mTabstrip.removeEventListener("underflow", this, false);
+        ]]>
+      </destructor>
+
+      <field name="tabmail" readonly="true">
+        document.getElementById("tabmail");
+      </field>
+
+      <field name="tabbox" readonly="true">
+        document.getAnonymousElementByAttribute(this, "anonid", "tabbox");
+      </field>
+
+      <field name="mTabstripWidth">0</field>
+
+      <field name="mTabstrip">
+        document.getAnonymousElementByAttribute(this, "anonid", "arrowscrollbox");
+      </field>
+
+      <field name="mTabstripClosebutton">
+        document.getAnonymousElementByAttribute(this, "anonid", "tabstrip-closebutton");
+      </field>
+
+      <field name="mToolbar">
+        document.getElementById(this.getAttribute("tabtoolbar"));
+      </field>
+
+      <field name="mCollapseToolbar">
+        document.getElementById(this.getAttribute("collapsetoolbar"));
+      </field>
+
+     <field name="_prefObserver">({
+        tabbox: this,
+
+        observe: function(subject, topic, data)
+        {
+          if (topic == "nsPref:changed") {
+            subject.QueryInterface(Components.interfaces.nsIPrefBranch);
+            switch (data) {
+            case "mail.tabs.closeButtons":
+              this.tabbox.mCloseButtons = subject.getIntPref("mail.tabs.closeButtons");
+              this.tabbox.adjustTabstrip();
+              break;
+            case "mail.tabs.autoHide":
+              this.tabbox.mAutoHide = subject.getBoolPref("mail.tabs.autoHide");
+              break;
+            }
+          }
+        },
+
+        QueryInterface: function(aIID)
+        {
+          if (aIID.equals(Components.interfaces.nsIObserver) ||
+              aIID.equals(Components.interfaces.nsISupports))
+            return this;
+          throw Components.results.NS_NOINTERFACE;
+        }
+        });
+      </field>
+
+      <field name="_tabDropIndicator">
+        document.getAnonymousElementByAttribute(
+            this,
+            "anonid", "tab-drop-indicator");
+      </field>
+
+      <field name="_dragOverDelay">350</field>
+      <field name="_dragTime">0</field>
+
+      <field name="mTabMinWidth">100</field>
+      <field name="mTabMaxWidth">250</field>
+      <field name="mTabClipWidth">140</field>
+      <field name="mCloseButtons">1</field>
+      <field name="_mAutoHide">false</field>
+
+      <property name="mAutoHide" onget="return this._mAutoHide;">
+        <setter><![CDATA[
+          if (val != this._mAutoHide) {
+            if (this.childNodes.length == 1)
+              this.mCollapseToolbar.collapsed = val;
+            this._mAutoHide = val;
+          }
+          return val;
+        ]]></setter>
+      </property>
+
+      <method name="adjustTabstrip">
+        <body><![CDATA[
+          // modes for tabstrip
+          // 0 - activetab  = close button on active tab only
+          // 1 - alltabs    = close buttons on all tabs
+          // 2 - noclose    = no close buttons at all
+          // 3 - closeatend = close button at the end of the tabstrip
+          switch (this.mCloseButtons) {
+          case 0:
+            this.setAttribute("closebuttons", "activetab");
+            break;
+          case 1:
+            var width = this.firstChild.boxObject.width;
+            // 0 width is an invalid value and indicates
+            // an item without display, so ignore.
+            if (width > this.mTabClipWidth || width == 0)
+              this.setAttribute("closebuttons", "alltabs");
+            else
+              this.setAttribute("closebuttons", "activetab");
+            break;
+          case 2:
+          case 3:
+            this.setAttribute("closebuttons", "noclose");
+            break;
+          }
+          this.mTabstripClosebutton.collapsed = this.mCloseButtons != 3;
+        ]]></body>
+      </method>
+
+      <method name="_handleTabSelect">
+        <body><![CDATA[
+          this.mTabstrip.ensureElementIsVisible(this.selectedItem);
+        ]]></body>
+      </method>
+
+      <method name="handleEvent">
+        <parameter name="aEvent"/>
+        <body><![CDATA[
+          switch (aEvent.type) {
+            case "overflow":
+              this.setAttribute("overflow", "true");
+              this.mTabstrip.scrollBoxObject
+                            .ensureElementIsVisible(this.selectedItem);
+              break;
+            case "underflow":
+              this.removeAttribute("overflow");
+              break;
+            case "resize":
+              var width = this.mTabstrip.boxObject.width;
+              if (width != this.mTabstripWidth) {
+                this.adjustTabstrip();
+                // XXX without this line the tab bar won't budge
+                this.mTabstrip.scrollByPixels(1);
+                this._handleTabSelect();
+                this.mTabstripWidth = width;
+              }
+              break;
+          }
+        ]]></body>
+      </method>
+
+      <field name="mAllTabsPopup">
+        this.mAllTabsButton.menu;
+      </field>
+
+      <field name="mAllTabsBoxAnimate">
+        document.getAnonymousElementByAttribute(this,
+                                                "anonid",
+                                                "alltabs-box-animate");
+      </field>
+
+      <field name="mDownBoxAnimate">
+        this.mTabstrip._scrollButtonDownBoxAnimate;
+      </field>
+
+      <field name="mAllTabsButton">
+        document.getElementById(this.getAttribute("alltabsbutton"));
+      </field>
+
+      <field name="_animateTimer">null</field>
+      <field name="_animateStep">-1</field>
+      <field name="_animateDelay">25</field>
+      <field name="_animatePercents">
+       [1.00, 0.85, 0.80, 0.75, 0.71, 0.68, 0.65, 0.62, 0.59, 0.57,
+        0.54, 0.52, 0.50, 0.47, 0.45, 0.44, 0.42, 0.40, 0.38, 0.37,
+        0.35, 0.34, 0.32, 0.31, 0.30, 0.29, 0.28, 0.27, 0.26, 0.25,
+        0.24, 0.23, 0.23, 0.22, 0.22, 0.21, 0.21, 0.21, 0.20, 0.20,
+        0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.19, 0.19, 0.19, 0.18,
+        0.18, 0.17, 0.17, 0.16, 0.15, 0.14, 0.13, 0.11, 0.09, 0.06]
+      </field>
+
+      <method name="_stopAnimation">
+        <body><![CDATA[
+          if (this._animateStep != -1) {
+            if (this._animateTimer)
+              this._animateTimer.cancel();
+
+            this._animateStep = -1;
+            this.mAllTabsBoxAnimate.style.opacity = 0.0;
+            this.mDownBoxAnimate.style.opacity = 0.0;
+          }
+        ]]></body>
+      </method>
+
+      <method name="_notifyBackgroundTab">
+        <parameter name="aTab"/>
+        <body><![CDATA[
+          var tsbo = this.mTabstrip.scrollBoxObject;
+          var tsboStart = tsbo.screenX;
+          var tsboEnd = tsboStart + tsbo.width;
+
+          var ctbo = aTab.boxObject;
+          var ctboStart = ctbo.screenX;
+          var ctboEnd = ctboStart + ctbo.width;
+
+          // only start the flash timer if the new tab (which was loaded in
+          // the background) is not completely visible
+          if (tsboStart > ctboStart || ctboEnd > tsboEnd) {
+            this._animateStep = 0;
+
+            if (!this._animateTimer)
+              this._animateTimer =
+                Components.classes["@mozilla.org/timer;1"]
+                          .createInstance(Components.interfaces.nsITimer);
+            else
+               this._animateTimer.cancel();
+
+            this._animateTimer.initWithCallback(this,
+                         this._animateDelay,
+                         Components.interfaces.nsITimer.TYPE_REPEATING_SLACK);
+          }
+        ]]></body>
+      </method>
+
+      <method name="notify">
+        <parameter name="aTimer"/>
+        <body><![CDATA[
+          if (!document)
+            aTimer.cancel();
+
+          var percent = this._animatePercents[this._animateStep];
+          this.mAllTabsBoxAnimate.style.opacity = percent;
+          this.mDownBoxAnimate.style.opacity = percent;
+
+          if (this._animateStep < (this._animatePercents.length - 1))
+            this._animateStep++;
+          else
+            this._stopAnimation();
+        ]]></body>
+      </method>
+
+      <method name="_getDragTargetTab">
+        <parameter name="event"/>
+        <body><![CDATA[
+
+          if (event.target.localName != "tab")
+            return null;
+
+          let tab = event.target;
+
+          if ((event.type != "drop") && (event.type != "dragover"))
+            return tab;
+
+          let boxObject = tab.boxObject;
+
+          if (event.screenX < boxObject.screenX + boxObject.width * .25)
+            return null
+
+          if (event.screenX > boxObject.screenX + boxObject.width * .75)
+            return null;
+
+          return tab;
+        ]]></body>
+      </method>
+
+
+      <method name="_getDropIndex">
+        <parameter name="event"/>
+        <body><![CDATA[
+          let tabs = this.childNodes;
+
+          if (window.getComputedStyle(this, null).direction == "ltr") {
+            for (let i = 0; i < tabs.length; i++)
+              if (event.screenX < (tabs[i].boxObject.screenX + (tabs[i].boxObject.width / 2)))
+                return i;
+          }
+          else  {
+            for (let i = 0; i < tabs.length; i++)
+              if (event.screenX > (tabs[i].boxObject.screenX + (tabs[i].boxObject.width / 2)))
+                return i;
+          }
+
+           return tabs.length;
+        ]]></body>
+      </method>
+    </implementation>
+    <handlers>
+      <handler event="select"><![CDATA[
+          this._handleTabSelect();
+
+          if (!('updateCurrentTab' in this.tabmail) ||
+              event.target.localName != 'tabs')
+            return;
+
+          this.tabmail.updateCurrentTab();
+      ]]></handler>
+      <handler event="TabSelect" action="this._handleTabSelect();"/>
+      <handler event="dragstart"><![CDATA[
+        let draggedTab = this._getDragTargetTab(event);
+
+        if (!draggedTab)
+          return;
+
+        let tab = this.tabmail.selectedTab;
+
+        if (!tab || !tab.canClose)
+          return;
+
+
+        let dt = event.dataTransfer;
+
+        // If we drag within the same window, we use the tab directly
+        dt.mozSetDataAt("application/x-moz-tabmail-tab", draggedTab, 0);
+
+        // otherwise we use session restore & JSON to migrate the tab.
+        let uri = this.tabmail.persistTab(tab);
+
+        // In case the tab implements session restore, we use JSON to convert
+        // it into a string
+        //
+        // If a tab does not support session restore it retuns null. We can't
+        // moved such tabs to a new window. However moving them within the same
+        // window works perfectly fine
+
+        if (uri)
+          uri = JSON.stringify(uri);
+
+        dt.mozSetDataAt("application/x-moz-tabmail-json", uri, 0);
+
+        dt.mozCursor = "default";
+
+        // Create Drag Image
+        let panel = document.getElementById("tabpanelcontainer");
+
+        let thumbnail = document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
+        thumbnail.width = Math.ceil(screen.availWidth / 5.75);
+        thumbnail.height = Math.round(width * 0.5625);
+
+        let snippetWidth = panel.boxObject.width * .6;
+        let scale = thumbnail.width / snippetWidth;
+
+        let ctx = thumbnail.getContext("2d");
+
+        ctx.scale(scale, scale);
+
+        ctx.drawWindow(window,
+                panel.boxObject.screenX - window.mozInnerScreenX,
+                panel.boxObject.screenY - window.mozInnerScreenY,
+                snippetWidth,
+                snippetWidth * 0.5625,
+                "rgb(255,255,255)");
+
+        dt = event.dataTransfer;
+        dt.setDragImage(thumbnail, 0, 0);
+
+        event.stopPropagation();
+      ]]></handler>
+      <handler event="dragover"><![CDATA[
+        let dt = event.dataTransfer;
+
+        if (dt.mozItemCount == 0)
+          return;
+
+        if (dt.mozGetDataAt("text/toolbarwrapper-id/messengerWindow", 0)
+            != null) {
+          event.preventDefault();
+          event.stopPropagation();
+
+          // Dispatch event to the toolbar
+          let evt = document.createEvent("DragEvents");
+          evt.initDragEvent("dragover", true, true, window, 0, 0, 0, 0, 0,
+                            false, false, false, false, 0, null,
+                            event.dataTransfer);
+
+          if (this.mToolbar.firstChild)
+            this.mToolbar.firstChild.dispatchEvent(evt);
+          else
+            this.mToolbar.dispatchEvent(evt);
+
+          return;
+        }
+
+        // Bug 516247:
+        // incase the user is dragging something else than a tab, and
+        // keeps hovering over a tab, we assume he wants to switch to this tab.
+        if ((dt.mozTypesAt(0)[0] != "application/x-moz-tabmail-tab")
+            && (dt.mozTypesAt(0)[1] != "application/x-moz-tabmail-json"))  {
+
+          let tab = this._getDragTargetTab(event);
+
+          if (!tab)
+            return;
+
+          event.preventDefault();
+          event.stopPropagation();
+
+          if (!this._dragTime) {
+            this._dragTime = Date.now();
+            return;
+          }
+
+          if (Date.now() <= this._dragTime + this._dragOverDelay)
+            return;
+
+          if (this.tabmail.tabContainer.selectedItem == tab)
+            return;
+
+          this.tabmail.tabContainer.selectedItem = tab;
+
+          return;
+        }
+
+        // as some tabs do not support session restore they can't be
+        // moved to a different or new window. We should not show
+        // a dropmarker in such a case
+        if (!dt.mozGetDataAt("application/x-moz-tabmail-json", 0)) {
+
+          let draggedTab = dt.mozGetDataAt("application/x-moz-tabmail-tab", 0);
+
+          if (!draggedTab)
+            return;
+
+          if (this.tabmail.tabContainer.getIndexOfItem(draggedTab) == -1)
+            return;
+        }
+
+        dt.effectAllowed = "copyMove";
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        let ltr = (window.getComputedStyle(this, null).direction == "ltr");
+        let ind = this._tabDropIndicator;
+
+        // Let's scroll
+        if (this.hasAttribute("overflow")) {
+
+          let target = event.originalTarget.getAttribute("anonid");
+
+          let pixelsToScroll = 0;
+
+          if (target == "scrollbutton-up")
+            pixelsToScroll = this.mTabstrip.scrollIncrement;
+
+          if (target == "scrollbutton-down")
+            pixelsToScroll = this.mTabstrip.scrollIncrement * -1;
+
+          if (ltr)
+            pixelsToScroll = pixelsToScroll * -1;
+
+          if (pixelsToScroll) {
+            // Hide Indicator while Scrolling
+            ind.collapsed = true;
+            this.mTabstrip.scrollByPixels(pixelsToScroll);
+            return;
+          }
+        }
+
+        let newIndex = this._getDropIndex(event);
+
+        // fix the DropIndex in case it points to tab that can't be closed
+        let tabInfo = this.tabmail.tabInfo;
+
+        while ((newIndex < tabInfo.length) && !(tabInfo[newIndex].canClose))
+          newIndex++;
+
+
+        var scrollRect = this.mTabstrip.scrollClientRect;
+        var rect = this.getBoundingClientRect();
+        var minMargin = scrollRect.left - rect.left;
+        var maxMargin = Math.min(minMargin + scrollRect.width,scrollRect.right);
+
+        if (!ltr)
+          [minMargin, maxMargin] = [this.clientWidth - maxMargin, this.clientWidth - minMargin];
+
+        var newMargin;
+
+        if (newIndex == this.childNodes.length) {
+
+          let tabRect = this.childNodes[newIndex-1].getBoundingClientRect();
+
+          if (ltr)
+            newMargin = tabRect.right - rect.left;
+          else
+            newMargin = rect.right - tabRect.left;
+        }
+        else  {
+
+          let tabRect = this.childNodes[newIndex].getBoundingClientRect();
+
+          if (ltr)
+            newMargin = tabRect.left - rect.left;
+          else
+            newMargin = rect.right - tabRect.right;
+        }
+
+        ind.collapsed = false;
+
+        newMargin += ind.clientWidth / 2;
+        if (!ltr)
+          newMargin *= -1;
+
+        ind.style.transform = "translate(" + Math.round(newMargin) + "px)";
+        ind.style.marginInlineStart = (-ind.clientWidth) + "px";
+      ]]></handler>
+      <handler event="drop"><![CDATA[
+        let dt = event.dataTransfer;
+
+        if (dt.mozItemCount != 1)
+          return;
+
+
+        /* If we're dragging a toolbar button, let's prepend the tabs toolbar
+         * with that button, and then bail out.
+         */
+        let buttonId = dt.mozGetDataAt("text/toolbarwrapper-id/messengerWindow", 0);
+
+        if (buttonId != null) {
+          event.preventDefault();
+          event.stopPropagation();
+
+          let evt = document.createEvent("DragEvents");
+          evt.initDragEvent("drop", true, true, window, 0, 0, 0, 0, 0,
+                            false, false, false, false, 0, null,
+                            event.dataTransfer);
+
+          if (this.mToolbar.firstChild)
+            this.mToolbar.firstChild.dispatchEvent(evt);
+          else
+            this.mToolbar.dispatchEvent(evt);
+
+          return;
+        }
+
+
+        let draggedTab = dt.mozGetDataAt("application/x-moz-tabmail-tab",0);
+
+        if (!draggedTab)
+          return;
+
+        event.stopPropagation();
+        this._tabDropIndicator.collapsed = true;
+
+        // Is the tab one of our children?
+        if (this.tabmail.tabContainer.getIndexOfItem(draggedTab) == -1) {
+
+          // It's a tab from an other window, so we have to trigger session
+          // restore to get our tab
+
+          let tabmail2 = draggedTab.ownerDocument.getElementById("tabmail");
+          if (!tabmail2)
+            return;
+
+          let draggedJson = dt.mozGetDataAt("application/x-moz-tabmail-json", 0);
+          if (!draggedJson)
+            return;
+
+          draggedJson = JSON.parse(draggedJson);
+
+          // Some tab exist only once, so we have to gamble a bit. We close
+          // the tab and try to reopen it. If something fails the tab is gone.
+
+          tabmail2.closeTab(draggedTab,true);
+
+          if (!this.tabmail.restoreTab(draggedJson))
+            return;
+
+          draggedTab = this.tabmail.tabContainer.childNodes[
+            this.tabmail.tabContainer.childNodes.length - 1];
+        }
+
+        let idx = this._getDropIndex(event);
+
+        // fix the DropIndex in case it points to tab that can't be closed
+        let tabInfo = this.tabmail.tabInfo;
+        while ((idx < tabInfo.length) && !(tabInfo[idx].canClose))
+          idx++;
+
+        this.tabmail.moveTabTo(draggedTab, idx);
+
+        this.tabmail.switchToTab(draggedTab);
+        this.tabmail.updateCurrentTab();
+      ]]></handler>
+
+      <handler event="dragend"><![CDATA[
+
+        // Note: while this case is correctly handled here, this event
+        // isn't dispatched when the tab is moved within the tabstrip,
+        // see bug 460801.
+
+        // the user pressed ESC to cancel the drag, or the drag succeded
+        var dt = event.dataTransfer;
+        if ((dt.mozUserCancelled) || (dt.dropEffect != "none"))
+          return;
+
+        // Disable detach within the browser toolbox
+        var eX = event.screenX;
+        var wX = window.screenX;
+
+        // check if the drop point is horizontally within the window
+        if (eX > wX && eX < (wX + window.outerWidth)) {
+
+          let bo = this.mTabstrip.boxObject;
+          // also avoid detaching if the the tab was dropped too close to
+          // the tabbar (half a tab)
+          let endScreenY = bo.screenY + 1.5 * bo.height;
+          let eY = event.screenY;
+
+          if (eY < endScreenY && eY > window.screenY)
+            return;
+        }
+
+        // user wants to deatach tab from window...
+        if (dt.mozItemCount != 1)
+          return;
+
+        let draggedTab = dt.mozGetDataAt("application/x-moz-tabmail-tab",0);
+
+        if (!draggedTab)
+          return;
+
+        this.tabmail.replaceTabWithWindow(draggedTab);
+
+      ]]></handler>
+
+      <handler event="dragexit"><![CDATA[
+        this._dragTime = 0;
+
+        this._tabDropIndicator.collapsed = true;
+        event.stopPropagation();
+
+      ]]></handler>
+    </handlers>
+  </binding>
+
+  <binding id="tabmail-alltabs-popup"
+           extends="chrome://global/content/bindings/popup.xml#popup">
+    <implementation implements="nsIDOMEventListener">
+      <field name="_xulWindow">
+        null
+      </field>
+      <field name="_mutationObserver">
+        null
+      </field>
+
+      <constructor><![CDATA[
+        // We cannot cache the XULBrowserWindow object itself since it might
+        // be set after this binding is constructed.
+        try {
+          this._xulWindow =
+            window.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+                  .getInterface(Components.interfaces.nsIWebNavigation)
+                  .QueryInterface(Components.interfaces.nsIDocShellTreeItem)
+                  .treeOwner
+                  .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+                  .getInterface(Components.interfaces.nsIXULWindow);
+        }
+        catch(ex) { }
+
+        let tabmailalltabspopup = this;
+        this._mutationObserver = new MutationObserver(function handleMutations(aRecords, aObserver) {
+          aRecords.forEach(function(mutation) {
+            let menuItem = mutation.target.mCorrespondingMenuitem;
+            if (menuItem)
+              tabmailalltabspopup._setMenuitemAttributes(menuItem, mutation.target);
+          });
+        });
+
+      ]]></constructor>
+
+      <method name="_menuItemOnCommand">
+        <parameter name="aEvent"/>
+        <body><![CDATA[
+          var tabcontainer = document.getElementById('tabmail')
+                                     .tabContainer;
+          tabcontainer.selectedItem = aEvent.target.tab;
+        ]]></body>
+      </method>
+
+      <method name="_tabOnTabClose">
+        <parameter name="aEvent"/>
+        <body><![CDATA[
+          var menuItem = aEvent.target.mCorrespondingMenuitem;
+          if (menuItem)
+            menuItem.remove();
+        ]]></body>
+      </method>
+
+      <method name="handleEvent">
+        <parameter name="aEvent"/>
+        <body><![CDATA[
+          if (!aEvent.isTrusted)
+            return;
+
+          switch (aEvent.type) {
+            case "command":
+              this._menuItemOnCommand(aEvent);
+              break;
+            case "TabClose":
+              this._tabOnTabClose(aEvent);
+              break;
+            case "TabOpen":
+              this._createTabMenuItem(aEvent.originalTarget);
+              break;
+            case "scroll":
+              this._updateTabsVisibilityStatus();
+              break;
+          }
+        ]]></body>
+      </method>
+
+      <method name="_updateTabsVisibilityStatus">
+        <body><![CDATA[
+          var tabContainer = document.getElementById('tabmail').tabContainer;
+          // We don't want menu item decoration unless there is overflow.
+          if (tabContainer.getAttribute("overflow") != "true")
+            return;
+
+          var tabstripBO = tabContainer.mTabstrip.scrollBoxObject;
+          for (var i = 0; i < this.childNodes.length; i++) {
+            var curTabBO = this.childNodes[i].tab.boxObject;
+            if (curTabBO.screenX >= tabstripBO.screenX &&
+                curTabBO.screenX + curTabBO.width <= tabstripBO.screenX + tabstripBO.width)
+              this.childNodes[i].setAttribute("tabIsVisible", "true");
+            else
+              this.childNodes[i].removeAttribute("tabIsVisible");
+          }
+        ]]></body>
+      </method>
+
+      <method name="_createTabMenuItem">
+        <parameter name="aTab"/>
+        <body><![CDATA[
+          var menuItem = document.createElementNS(
+            "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul",
+            "menuitem");
+
+          menuItem.setAttribute("class", "menuitem-iconic alltabs-item menuitem-with-favicon");
+
+          this._setMenuitemAttributes(menuItem, aTab);
+
+          // Keep some attributes of the menuitem in sync with its
+          // corresponding tab (e.g. the tab label)
+          aTab.mCorrespondingMenuitem = menuItem;
+          aTab.addEventListener("TabClose", this, false);
+          menuItem.tab = aTab;
+          menuItem.addEventListener("command", this, false);
+
+          this.appendChild(menuItem);
+          return menuItem;
+        ]]></body>
+      </method>
+
+      <method name="_setMenuitemAttributes">
+        <parameter name="aMenuitem"/>
+        <parameter name="aTab"/>
+        <body><![CDATA[
+          aMenuitem.setAttribute("label", aTab.label);
+          aMenuitem.setAttribute("crop", aTab.getAttribute("crop"));
+
+          if (aTab.hasAttribute("busy")) {
+            aMenuitem.setAttribute("busy", aTab.getAttribute("busy"));
+            aMenuitem.removeAttribute("image");
+          } else {
+            aMenuitem.setAttribute("image", aTab.getAttribute("image"));
+            aMenuitem.removeAttribute("busy");
+          }
+
+          // Change the tab icon accordingly.
+          let style = window.getComputedStyle(aTab, null);
+          aMenuitem.style.listStyleImage = style.listStyleImage;
+          aMenuitem.style.MozImageRegion = style.MozImageRegion;
+
+          if (aTab.hasAttribute("pending"))
+            aMenuitem.setAttribute("pending", aTab.getAttribute("pending"));
+          else
+            aMenuitem.removeAttribute("pending");
+
+          if (aTab.selected)
+            aMenuitem.setAttribute("selected", "true");
+          else
+            aMenuitem.removeAttribute("selected");
+        ]]></body>
+      </method>
+    </implementation>
+
+    <handlers>
+      <handler event="popupshowing">
+      <![CDATA[
+        // set up the menu popup
+        let tabmail = document.getElementById('tabmail');
+        var tabcontainer = tabmail.tabContainer;
+        var tabs = tabcontainer.childNodes;
+
+        // Listen for changes in the tab bar.
+        this._mutationObserver.observe(tabcontainer, {
+          attributes: true,
+          subtree: true,
+          attributeFilter: ["label", "crop", "busy", "image", "selected"]
+        });
+
+        tabmail.addEventListener("TabOpen", this, false);
+        tabcontainer.mTabstrip.addEventListener("scroll", this, false);
+
+        // if an animation is in progress and the user
+        // clicks on the "all tabs" button, stop the animation
+        tabcontainer._stopAnimation();
+
+        for (var i = 0; i < tabs.length; i++) {
+          this._createTabMenuItem(tabs[i]);
+        }
+        this._updateTabsVisibilityStatus();
+      ]]></handler>
+
+      <handler event="popuphiding">
+      <![CDATA[
+        // clear out the menu popup and remove the listeners
+        while (this.hasChildNodes()) {
+          var menuItem = this.lastChild;
+          menuItem.removeEventListener("command", this, false);
+          menuItem.tab.removeEventListener("TabClose", this, false);
+          menuItem.tab.mCorrespondingMenuitem = null;
+          menuItem.remove();
+        }
+        this._mutationObserver.disconnect();
+
+        var tabcontainer = document.getElementById('tabmail').tabContainer;
+        tabcontainer.mTabstrip.removeEventListener("scroll", this, false);
+        tabcontainer.tabmail.removeEventListener("TabOpen", this, false);
+      ]]></handler>
+    </handlers>
+  </binding>
+  <!-- close-tab-button binding
+       This binding relies on the structure of the tabmail-tabs binding.
+       Therefore it should only be used as a child of the tab or the tabs
+       element.  This binding is exposed as a pseudo-public-API so themes
+       can customize the tabbar appearance without having to be scriptable
+       (see globalBindings.xml in osx for example).
+  -->
+  <binding id="tabmail-close-tab-button"
+           extends="chrome://global/content/bindings/toolbarbutton.xml#toolbarbutton-image">
+    <handlers>
+      <handler event="click" button="0"><![CDATA[
+        let bindingParent = document.getBindingParent(this);
+        if (!bindingParent)
+          return;
+
+        let tabbedBrowser = document.getElementById("tabmail");
+        if (bindingParent.localName == "tab") {
+          /* The only sequence in which a second click event (i.e. dblclik)
+           * can be dispatched on an in-tab close button is when it is shown
+           * after the first click (i.e. the first click event was dispatched
+           * on the tab). This happens when we show the close button only on
+           * the active tab. (bug 352021)
+           * The only sequence in which a third click event can be dispatched
+           * on an in-tab close button is when the tab was opened with a
+           * double click on the tabbar. (bug 378344)
+           * In both cases, it is most likely that the close button area has
+           * been accidentally clicked, therefore we do not close the tab.
+           */
+          if (event.detail > 1)
+            return;
+
+          tabbedBrowser.removeTabByNode(bindingParent);
+          tabbedBrowser._blockDblClick = true;
+          let tabContainer = tabbedBrowser.tabContainer;
+
+          /* XXXmano hack (see bug 343628):
+           * Since we're removing the event target, if the user
+           * double-clicks this button, the dblclick event will be dispatched
+           * with the tabbar as its event target (and explicit/originalTarget),
+           * which treats that as a mouse gesture for opening a new tab.
+           * In this context, we're manually blocking the dblclick event
+           * (see onTabBarDblClick).
+           */
+          let clickedOnce = false;
+          let enableDblClick = function enableDblClick(event) {
+            let target = event.originalTarget;
+            if (target.className == "tab-close-button")
+              target._ignoredClick = true;
+            if (!clickedOnce) {
+              clickedOnce = true;
+              return;
+            }
+            tabContainer._blockDblClick = false;
+            tabContainer.removeEventListener("click", enableDblClick, true);
+          }
+          tabContainer.addEventListener("click", enableDblClick, true);
+        }
+        else // "tabs"
+          tabbedBrowser.removeCurrentTab();
+      ]]></handler>
+      <handler event="dblclick" button="0" phase="capturing">
+        // for the one-close-button case
+        event.stopPropagation();
+      </handler>
+    </handlers>
+  </binding>
+
+</bindings>

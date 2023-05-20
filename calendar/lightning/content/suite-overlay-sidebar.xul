@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+
+<overlay id="suiteSidebarOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/javascript" src="chrome://lightning/content/suite-overlay-sidebar.js"/>
+
+  <key id="openLightningKey" removeelement="true"/>
+  <key id="openTasksKey" removeelement="true"/>
+  <key id="calendar-new-event-key" removeelement="true"/>
+  <key id="calendar-new-todo-key" removeelement="true"/>
+
+  <menuitem id="CustomizeTaskActionsToolbar"
+            oncommand="goCustomizeToolbar(document.getElementById('task-actions-toolbox'))"/>
+
+  <toolbox id="calendar-toolbox"
+           defaultlabelalign="end"
+           xpfe="false"/>
+  <toolbox id="task-toolbox"
+           defaultlabelalign="end"
+           xpfe="false"/>
+  <toolbox id="task-actions-toolbox"
+           defaultlabelalign="end"
+           xpfe="false"/>
+
+  <toolbar id="calendar-toolbar2"
+           defaultlabelalign="end"
+           context="toolbar-context-menu"/>
+  <toolbar id="task-toolbar2"
+           defaultlabelalign="end"
+           context="toolbar-context-menu"/>
+  <toolbar id="task-actions-toolbar"
+           context="toolbar-context-menu"/>
+
+  <toolbarset id="calendarToolbars" context="toolbar-context-menu"/>
+  <toolbarset id="taskToolbars" context="toolbar-context-menu"/>
+
+</overlay>

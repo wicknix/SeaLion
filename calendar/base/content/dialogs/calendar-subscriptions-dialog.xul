@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-->
+
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+<?xml-stylesheet href="chrome://calendar/content/calendar-subscriptions-dialog.css" type="text/css"?>
+<?xml-stylesheet href="chrome://calendar-common/skin/calendar-subscriptions-dialog.css" type="text/css"?>
+
+<!DOCTYPE dialog
+[
+    <!ENTITY % dtd1 SYSTEM "chrome://calendar/locale/calendar-subscriptions-dialog.dtd" >  %dtd1;
+]>
+
+<dialog
+  id="calendar-subscriptions-dialog"
+  title="&calendar.subscriptions.dialog.title;"
+  windowtype="Calendar:SubscriptionsDialog"
+  buttons="accept,cancel"
+  ondialogaccept="return onAccept();"
+  ondialogcancel="return onCancel();"
+  onload="return onLoad();"
+  onunload="return onUnload();"
+  onkeypress="onKeyPress(event);"
+  persist="screenX screenY width height"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <!-- Javascript includes -->
+  <script type="application/javascript" src="chrome://calendar/content/calendar-subscriptions-dialog.js"/>
+  <script type="application/javascript" src="chrome://calendar/content/calUtils.js"/>
+  <script type="application/javascript" src="chrome://calendar/content/calendar-ui-utils.js"/>
+
+  <vbox flex="1">
+    <grid flex="1">
+      <columns>
+        <column flex="1"/>
+        <column/>
+      </columns>
+      <rows>
+        <row>
+          <label value="&calendar.subscriptions.dialog.search.label.value;"
+                 crop="end"/>
+        </row>
+        <row>
+          <textbox id="search-textbox" onkeypress="onTextBoxKeyPress(event);"/>
+          <button label="&calendar.subscriptions.dialog.search.button.label;"
+                  oncommand="onSearch();"/>
+        </row>
+        <row>
+          <label class="calendar-subscriptions-select-label"
+                 value="&calendar.subscriptions.dialog.select.label.value;"
+                 crop="end"/>
+        </row>
+        <row flex="1">
+          <calendar-subscriptions-richlistbox id="subscriptions-listbox" flex="1"/>
+          <vbox>
+            <button id="subscribe-button"
+                    label="&calendar.subscriptions.dialog.subscribe.button.label;"
+                    oncommand="onSubscribe();"/>
+            <button id="unsubscribe-button"
+                    label="&calendar.subscriptions.dialog.unsubscribe.button.label;"
+                    oncommand="onUnsubscribe();"/>
+          </vbox>
+        </row>
+      </rows>
+    </grid>
+    <deck id="status-deck" selectedIndex="0">
+      <hbox class="calendar-subscriptions-status-box">
+        <image class="calendar-subscriptions-status-icon"/>
+      </hbox>
+      <hbox class="calendar-subscriptions-status-box">
+        <image class="calendar-subscriptions-status-icon" busy="true"/>
+        <label value="&calendar.subscriptions.dialog.statusmessage.busy.label;"
+               crop="end"/>
+      </hbox>
+      <hbox class="calendar-subscriptions-status-box">
+        <image class="calendar-subscriptions-status-icon"/>
+        <label value="&calendar.subscriptions.dialog.statusmessage.nomatches.label;"
+               crop="end"/>
+      </hbox>
+    </deck>
+    <separator class="groove"/>
+  </vbox>
+</dialog>

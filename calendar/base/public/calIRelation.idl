@@ -1,0 +1,45 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsISupports.idl"
+
+interface calIIcalProperty;
+interface calIItemBase;
+
+[scriptable,uuid(77f0820a-2b49-4c8e-86bf-2b6bda46e391)]
+interface calIRelation : nsISupports
+{
+    /**
+     * The type of the relation between the items:
+     * PARENT
+     * CHILD
+     * SIBLING
+     */
+    attribute AUTF8String relType;
+
+    /**
+     * The id of the related item
+     **/
+
+    attribute AUTF8String relId;
+
+    /**
+     * The calIIcalProperty corresponding to this object.  Can be used for
+     * serializing/unserializing from ics files.
+     */
+    attribute calIIcalProperty icalProperty;
+    attribute AUTF8String icalString;
+
+    /**
+     * For accessing additional parameters, such as x-params.
+     */
+    AUTF8String getParameter(in AString name);
+    void setParameter(in AString name, in AUTF8String value);
+    void deleteParameter(in AString name);
+
+    /**
+     * Clone this calIRelation instance into a new object.
+     */
+    calIRelation clone();
+};

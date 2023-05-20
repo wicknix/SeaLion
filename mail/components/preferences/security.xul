@@ -1,0 +1,188 @@
+<?xml version="1.0"?>
+<!-- -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+   - This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay [
+<!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+<!ENTITY % securityDTD SYSTEM "chrome://messenger/locale/preferences/security.dtd">
+%brandDTD;
+%securityDTD;
+]>
+
+<overlay id="SecurityPaneOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <prefpane id="paneSecurity" onpaneload="gSecurityPane.init();">
+    <script type="application/javascript" src="chrome://messenger/content/preferences/security.js"/>
+
+    <stringbundle id="bundlePreferences" src="chrome://messenger/locale/preferences/preferences.properties"/>
+    <stringbundle id="bundleMasterPwPreferences" src="chrome://mozapps/locale/preferences/preferences.properties"/>
+
+    <preferences id="securityPreferences">
+      <preference id="network.http.upgrade-insecure-requests"
+                  name="network.http.upgrade-insecure-requests"
+                  type="bool"/>
+      <preference id="network.http.altsvc.oe"
+                  name="network.http.altsvc.oe"
+                  type="bool"/>
+      <preference id="mail.preferences.security.selectedTabIndex"
+                  name="mail.preferences.security.selectedTabIndex" type="int"/>
+      <preference id="mail.spam.manualMark"
+                  name="mail.spam.manualMark"
+                  type="bool"/>
+      <preference id="mail.spam.manualMarkMode"
+                  name="mail.spam.manualMarkMode"
+                  type="int"/>
+      <preference id="mail.spam.markAsReadOnSpam"
+                  name="mail.spam.markAsReadOnSpam"
+                  type="bool"/>
+      <preference id="mail.spam.logging.enabled"
+                  name="mail.spam.logging.enabled"
+                  type="bool"/>
+      <preference id="mail.phishing.detection.enabled"
+                  name="mail.phishing.detection.enabled"
+                  type="bool"
+                  onchange="gSecurityPane.reloadMessageInOpener();"/>
+      <preference id="browser.safebrowsing.enabled"
+                  name="browser.safebrowsing.enabled"
+                  type="bool"/>
+      <preference id="mailnews.downloadToTempFile"
+                  name="mailnews.downloadToTempFile"
+                  type="bool"/>
+      <preference id="pref.privacy.disable_button.view_passwords"
+                  name="pref.privacy.disable_button.view_passwords"
+                  type="bool"/>
+    </preferences>
+
+    <tabbox id="securityPrefs" flex="1" onselect="gSecurityPane.tabSelectionChanged();">
+      <tabs id="securityPrefsTabs">
+        <tab id="generalTab" label="&itemGeneral.label;"/>
+        <tab id="emailTab" label="&itemEmail.label;"/>
+      </tabs>
+
+      <tabpanels id="securityPrefsPanels" flex="1">
+        <!-- General -->
+        <tabpanel orient="vertical">
+          <groupbox>
+            <caption label="&itemPasswords.caption;" />
+            <description>&savedPasswords.intro;</description>
+            <hbox>
+              <spacer flex="1"/>
+              <button label="&savedPasswords.label;"
+                      accesskey="&savedPasswords.accesskey;"
+                      oncommand="gSecurityPane.showPasswords();"
+                      preference="pref.privacy.disable_button.view_passwords"/>
+            </hbox>
+            <!-- XXX button to do a showExceptions()? -->
+            <separator class="thin"/>
+            <description>&masterPassword.intro;</description>
+            <hbox>
+              <checkbox id="useMasterPassword"
+                        label="&useMasterPassword.label;"
+                        accesskey="&useMasterPassword.accesskey;"
+                        oncommand="gSecurityPane.updateMasterPasswordButton();"/>
+              <spacer flex="1"/>
+              <button id="changeMasterPassword"
+                      label="&changeMasterPassword.label;"
+                      accesskey="&changeMasterPassword.accesskey;"
+                      oncommand="gSecurityPane.changeMasterPassword();"/>
+            </hbox>
+            <separator flex="1"/>
+          </groupbox>
+          <groupbox id="OpportunisticEncryption">
+            <caption label="&OpEnc.label;"/>
+            <checkbox id="enableUIROpEnc"
+                      label="&enableUIROpEnc.label;"
+                      preference="network.http.upgrade-insecure-requests" />
+            <checkbox id="enableAltSvcOpEnc"
+                      label="&enableAltSvcOpEnc.label;"
+                      preference="network.http.altsvc.oe" />
+          </groupbox>
+        </tabpanel>
+
+        <!-- E-mail -->
+        <tabpanel orient="vertical">
+          <groupbox>
+            <caption label="&itemJunk.caption;" />
+            <hbox>
+              <checkbox id="manualMark"
+                        label="&manualMark.label;"
+                        preference="mail.spam.manualMark"
+                        oncommand="gSecurityPane.updateManualMarkMode(this.checked);"
+                        accesskey="&manualMark.accesskey;"/>
+              <spacer flex="1"/>
+            </hbox>
+            <radiogroup id="manualMarkMode"
+                        class="indent"
+                        preference="mail.spam.manualMarkMode"
+                        aria-labelledby="manualMark">
+              <hbox>
+                <radio id="manualMarkMode0"
+                       value="0"
+                       label="&manualMarkModeMove.label;"
+                       accesskey="&manualMarkModeMove.accesskey;"/>
+                <spacer flex="1"/>
+              </hbox>
+              <hbox>
+                <radio id="manualMarkMode1"
+                       value="1"
+                       label="&manualMarkModeDelete.label;"
+                       accesskey="&manualMarkModeDelete.accesskey;"/>
+                <spacer flex="1"/>
+              </hbox>
+            </radiogroup>
+            <hbox>
+              <checkbox id="markAsReadOnSpam"
+                        label="&markAsReadOnSpam.label;"
+                        accesskey="&markAsReadOnSpam.accesskey;"
+                        preference="mail.spam.markAsReadOnSpam"/>
+              <spacer flex="1"/>
+            </hbox>
+            <hbox align="start">
+              <checkbox id="enableJunkLogging" label="&enableAdaptiveJunkLogging.label;"
+                        oncommand="gSecurityPane.updateJunkLogButton(this.checked);"
+                        preference="mail.spam.logging.enabled"
+                        accesskey="&enableAdaptiveJunkLogging.accesskey;"/>
+              <spacer flex="1"/>
+              <button id="openJunkLogButton" label="&openJunkLog.label;" accesskey="&openJunkLog.accesskey;"
+                      oncommand="gSecurityPane.openJunkLog();"/>
+              <button label="&resetTrainingData.label;" accesskey="&resetTrainingData.accesskey;"
+                      oncommand="gSecurityPane.resetTrainingData()"/>
+            </hbox>
+          </groupbox>
+
+          <groupbox>
+            <caption label="&itemPhishing.caption;"/>
+            <hbox>
+              <checkbox id="enablePhishingDetector"
+                        label="&enablePhishingDetector1.label;"
+                        accesskey="&enablePhishingDetector1.accesskey;"
+                        preference="mail.phishing.detection.enabled"/>
+              <spacer flex="1"/>
+            </hbox>
+            <!--
+            <checkbox id="useDownloadedList" class="indent" label="&useDownloadedList.label;"
+                      accesskey="&useDownloadedList.accesskey;"
+                      preference="browser.safebrowsing.enabled"/>
+            -->
+          </groupbox>
+
+          <groupbox>
+            <caption label="&itemAntiVirus.caption;"/>
+            <hbox>
+              <checkbox id="enableAntiVirusQuaruntine"
+                        label="&antiVirus.label;"
+                        accesskey="&antiVirus.accesskey;"
+                        preference="mailnews.downloadToTempFile"/>
+            </hbox>
+          </groupbox>
+        </tabpanel>
+      </tabpanels>
+    </tabbox>
+
+    <separator/>
+
+  </prefpane>
+</overlay>

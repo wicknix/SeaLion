@@ -1,0 +1,29 @@
+/* -*- Mode: idl; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/** Don't use these if you're not the calendar glue code! **/
+
+#include "nsISupports.idl"
+
+interface calIItemBase;
+interface calIDateTime;
+
+[scriptable, uuid(1903648f-a0ee-4ae1-84b0-d8e8d0b10506)]
+interface calIInternalShallowCopy : nsISupports
+{
+  /**
+   * create a proxy for this item; the returned item
+   * proxy will have parentItem set to this instance.
+   *
+   * @param aRecurrenceId RECURRENCE-ID of the proxy to be created 
+   */
+  calIItemBase createProxy(in calIDateTime aRecurrenceId);
+
+  // used by recurrenceInfo when cloning proxy objects to
+  // avoid an infinite loop.  aNewParent is optional, and is
+  // used to set the parent of the new item; it should be null
+  // if no new parent is passed in.
+  calIItemBase cloneShallow(in calIItemBase aNewParent);
+};

@@ -33,7 +33,7 @@ def platform(value):
       __sandbox__.set_config_impl('MOZ_JAR_MAKER_FILE_FORMAT', 'flat')
       return ''
     else:
-      return '../mozilla/toolkit/moz.configure'
+      return '../platform/toolkit/moz.configure'
 
 # Include the toolkit moz.configure or silently continue with an empty string from above
 include(platform)

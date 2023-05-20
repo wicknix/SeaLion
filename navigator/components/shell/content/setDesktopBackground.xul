@@ -1,0 +1,90 @@
+<?xml version="1.0"?> <!-- -*- Mode: HTML -*- --> 
+
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?> 
+<?xml-stylesheet href="chrome://navigator/skin/setDesktopBackground.css" type="text/css"?>
+
+<!DOCTYPE dialog [
+  <!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+  %brandDTD;
+  <!ENTITY % setDesktopDTD SYSTEM "chrome://navigator/locale/setDesktopBackground.dtd">
+  %setDesktopDTD;
+]>
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        windowtype="Shell:SetDesktopBackground"
+#ifndef XP_MACOSX
+        buttons="accept,cancel"
+#else
+        buttons="accept"
+#endif
+        buttonlabelaccept="&setDesktopBackground.abtn;"
+        onload="gSetBackground.load();"
+        ondialogaccept="gSetBackground.setDesktopBackground();"
+        title="&setDesktopBackground.title;"
+        style="width: 34em;">
+
+  <stringbundle id="backgroundBundle"
+                src="chrome://navigator/locale/shellservice.properties"/>
+  <script type="application/javascript" src="chrome://communicator/content/utilityOverlay.js"/>
+  <script type="application/javascript" src="chrome://navigator/content/setDesktopBackground.js"/>
+  <script type="application/javascript" src="chrome://global/content/contentAreaUtils.js"/>
+
+  <dialogheader class="header-large"
+                id="header"
+                title="&brandFullName;"
+                description="&setDesktopBackground.title;"/>
+
+  <hbox class="container">
+    <vbox align="center" flex="3">
+      <stack>
+        <!-- if width and height are not present, they default to 300x150 and stretch the stack -->
+        <html:canvas id="screen" width="1" height="1"/>
+        <image id="monitor"/>
+      </stack>
+    </vbox>
+#ifndef XP_MACOSX
+    <vbox flex="1">
+      <hbox align="center">
+        <label value="&color.label;"/>
+        <spacer class="colorSpacer"/>
+        <colorpicker id="desktopColor"
+                     type="button"
+                     onchange="gSetBackground.updateColor(this.color);"/>
+      </hbox>
+      <spacer style="height: 1em;"/>
+      <hbox align="center">
+        <label value="&position.label;"/>
+        <menulist id="menuPosition"
+                  label="&position.label;" 
+                  oncommand="gSetBackground.updatePosition();">
+          <menupopup>
+            <menuitem label="&fill.label;"    value="FILL" id="fillPosition"/>
+            <menuitem label="&fit.label;"     value="FIT"  id="fitPosition"/>
+            <menuitem label="&stretch.label;" value="STRETCH"/>
+            <menuitem label="&tile.label;"    value="TILE"/>
+            <menuitem label="&center.label;"  value="CENTER"/>
+          </menupopup>
+        </menulist>
+      </hbox>
+    </vbox>
+#endif
+  </hbox>
+
+  <separator class="groove"/>
+#ifdef XP_MACOSX
+  <hbox align="right">
+    <button id="setDesktopBackground"
+            label="&setDesktopBackground.title;"
+            oncommand="gSetBackground.setDesktopBackground();"/>
+    <button id="showDesktopPreferences"
+            label="&openDesktopPrefs.label;"
+            oncommand="gSetBackground.showDesktopPrefs();"
+            hidden="true"/>
+  </hbox>
+#endif
+</dialog>

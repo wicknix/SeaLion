@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!-- -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
+   - This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://global/skin/"?>
+<!DOCTYPE prefwindow [
+<!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+%brandDTD;
+<!ENTITY % sendOptionsDTD SYSTEM "chrome://messenger/locale/preferences/attachmentReminder.dtd">
+%sendOptionsDTD;
+]>
+
+<prefwindow id="attachmentReminderOptionsDialog" type="child"
+            xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+            dlgbuttons="accept,cancel"
+            title="&attachmentReminderDialog.title;"
+            ondialogaccept="gAttachmentReminderOptionsDialog.saveKeywords();"
+            style="width:38em;">
+
+  <prefpane id="attachmentReminderOptionsDialogPane"
+            onpaneload="gAttachmentReminderOptionsDialog.init();">
+
+    <script type="application/javascript" src="chrome://messenger/content/preferences/attachmentReminder.js"/>
+    <stringbundle id="bundlePreferences" src="chrome://messenger/locale/preferences/preferences.properties"/>
+
+    <groupbox>
+      <label control="keywordList">&attachKeywordText.label;</label>
+      <hbox>
+        <listbox id="keywordList" flex="1" rows="5"
+                 ondblclick="gAttachmentReminderOptionsDialog.editKeyword();"/>
+        <vbox>
+          <button label="&newKeywordButton.label;" accesskey="&newKeywordButton.accesskey;"
+                  oncommand="gAttachmentReminderOptionsDialog.addKeyword();"/>
+          <button label="&editKeywordButton1.label;" accesskey="&editKeywordButton1.accesskey;"
+                  oncommand="gAttachmentReminderOptionsDialog.editKeyword();"/>
+          <button label="&removeKeywordButton.label;" accesskey="&removeKeywordButton.accesskey;"
+                  oncommand="gAttachmentReminderOptionsDialog.removeKeyword();"/>
+        </vbox>
+      </hbox>
+    </groupbox>
+  </prefpane>
+</prefwindow>

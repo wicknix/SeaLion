@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTf-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+<?xml-stylesheet href="chrome://calendar-common/skin/calendar-properties-dialog.css" type="text/css"?>
+
+<!DOCTYPE dialog
+[
+    <!ENTITY % dtd1 SYSTEM "chrome://calendar/locale/global.dtd" > %dtd1;
+    <!ENTITY % dtd2 SYSTEM "chrome://calendar/locale/calendar.dtd" > %dtd2;
+]>
+
+<dialog
+    id="calendar-properties-dialog-2"
+    windowtype="Calendar:PropertiesDialog"
+    title="&calendar.server.dialog.title.edit;"
+    buttons="accept,cancel,extra1"
+    buttonlabelextra1="&calendarproperties.unsubscribe.label;"
+    buttonaccesskeyextra1="&calendarproperties.unsubscribe.accesskey;"
+    ondialogextra1="unsubscribeCalendar()"
+    ondialogaccept="return onAcceptDialog();"
+    ondialogcancel="return true;"
+    onload="onLoad()"
+    persist="screenX screenY"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    width="500">
+
+  <script type="application/javascript" src="chrome://calendar/content/calendar-properties-dialog.js"/>
+  <script type="application/javascript" src="chrome://calendar/content/calUtils.js"/>
+  <script type="application/javascript" src="chrome://calendar/content/calendar-ui-utils.js"/>
+
+  <description id="force-disabled-description" hidden="true">&calendarproperties.forceDisabled.label;</description>
+
+  <checkbox id="calendar-enabled-checkbox"
+            label="&calendarproperties.enabled.label;"
+            oncommand="setupEnabledCheckbox()"/>
+
+  <grid id="calendar-properties-grid">
+    <columns>
+      <column/>
+      <column flex="1"/>
+    </columns>
+    <rows id="calendar-properties-rows">
+      <row id="calendar-name-row"
+           align="center">
+        <label value="&calendar.server.dialog.name.label;"
+               disable-with-calendar="true"
+               control="calendar-name"/>
+        <textbox id="calendar-name"
+                 flex="1"
+                 disable-with-calendar="true"/>
+      </row>
+      <row id="calendar-color-row"
+           align="center">
+        <label value="&calendarproperties.color.label;"
+               disable-with-calendar="true"
+               control="calendar-color"/>
+          <hbox align="center">
+            <html:input id="calendar-color"
+                        class="small-margin"
+                        type="color"
+                        disable-with-calendar="true"/>
+          </hbox>
+      </row>
+      <row id="calendar-uri-row" align="center">
+        <label value="&calendarproperties.location.label;"
+               disable-with-calendar="true"
+               control="calendar-uri"/>
+        <!-- XXX Make location field readonly until Bug 315307 is fixed -->
+        <textbox id="calendar-uri" readonly="true" disable-with-calendar="true"/>
+      </row>
+      <row id="calendar-refreshInterval-row" align="center">
+        <label value="&calendarproperties.refreshInterval.label;"
+               disable-with-calendar="true"
+               control="calendar-refreshInterval-textbox"/>
+        <menulist id="calendar-refreshInterval-menulist"
+                  disable-with-calendar="true"
+                  label="&calendarproperties.refreshInterval.label;">
+          <menupopup id="calendar-refreshInterval-menupopup">
+            <!-- This will be filled programatically to reduce the number of needed strings -->
+            <menuseparator id="calendar-refreshInterval-manual-separator"/>
+            <menuitem id="calendar-refreshInterval-manual"
+                      value="0"
+                      label="&calendarproperties.refreshInterval.manual.label;"/>
+          </menupopup>
+        </menulist>
+      </row>
+      <row id="calendar-readOnly-row"
+           align="center">
+        <spacer/>
+        <checkbox id="read-only"
+                  label="&calendarproperties.readonly.label;"
+                  disable-with-calendar="true"/>
+      </row>
+      <row id="calendar-suppressAlarms-row"
+           align="center">
+        <spacer/>
+        <checkbox id="fire-alarms"
+                  label="&calendarproperties.firealarms.label;"
+                  disable-with-calendar="true"/>
+      </row>
+      <row id="calendar-cache-row"
+           align="center">
+        <spacer/>
+        <checkbox id="cache"
+                  label="&calendarproperties.cache3.label;"
+                  disable-with-calendar="true"/>
+      </row>
+      <spacer/>
+    </rows>
+  </grid>
+</dialog>

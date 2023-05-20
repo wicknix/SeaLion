@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet type="text/css" href="chrome://global/skin/global.css"?>
+<?xml-stylesheet type="text/css" href="chrome://calendar/skin/calendar-event-dialog.css"?>
+<?xml-stylesheet type="text/css" href="chrome://calendar/content/datetimepickers/datetimepickers.css"?>
+<?xml-stylesheet type="text/css" href="chrome://calendar-common/skin/calendar-timezone-highlighter.css"?>
+
+<!DOCTYPE dialog [
+  <!ENTITY % dtd1 SYSTEM "chrome://calendar/locale/global.dtd" > %dtd1;
+  <!ENTITY % dtd2 SYSTEM "chrome://calendar/locale/calendar.dtd" > %dtd2;
+  <!ENTITY % dtd3 SYSTEM "chrome://calendar/locale/calendar-event-dialog.dtd" > %dtd3;
+  <!ENTITY % dtd4 SYSTEM "chrome://calendar/locale/preferences/timezones.dtd" > %dtd4;
+]>
+
+<dialog id="calendar-event-dialog-timezone"
+        title="&timezone.title.label;"
+        windowtype="Calendar:EventDialog:Timezone"
+        onload="onLoad()"
+        ondialogaccept="return onAccept();"
+        ondialogcancel="return onCancel();"
+        persist="screenX screenY width height"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <!-- Javascript includes -->
+  <script type="application/javascript" src="chrome://calendar/content/calendar-event-dialog-timezone.js"/>
+  <script type="application/javascript" src="chrome://calendar/content/calendar-dialog-utils.js"/>
+  <script type="application/javascript" src="chrome://calendar/content/calendar-ui-utils.js"/>
+  <script type="application/javascript" src="chrome://calendar/content/calUtils.js"/>
+
+  <hbox align="center">
+    <spacer flex="1"/>
+    <datetimepicker id="timezone-time" disabled="true"/>
+  </hbox>
+
+  <menulist id="timezone-menulist" oncommand="updateTimezone()">
+    <menupopup id="timezone-menupopup" style="height: 460px;"/>
+  </menulist>
+
+  <stack id="timezone-stack">
+     <image src="chrome://calendar-common/skin/timezone_map.png"/>
+     <image class="timezone-highlight" tzid="+0000" id="highlighter"/>
+  </stack>
+</dialog>

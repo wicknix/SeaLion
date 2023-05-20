@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-->
+
+<bindings id="calendar-subscriptions-list-bindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <binding id="calendar-subscriptions-richlistbox"
+           extends="chrome://global/content/bindings/richlistbox.xml#richlistbox"
+           xbl:inherits="flex">
+
+    <implementation>
+      <method name="addCalendar">
+        <parameter name="aCalendar"/>
+        <parameter name="bSubscribed"/>
+        <body><![CDATA[
+          let newNode = createXULElement("calendar-subscriptions-richlistitem");
+          this.appendChild(newNode);
+          newNode.setAttribute("anonid", "subscriptions-listitem");
+          newNode.calendar = aCalendar;
+          newNode.subscribed = bSubscribed;
+        ]]></body>
+      </method>
+
+      <method name="clear">
+        <body><![CDATA[
+          while (this.hasChildNodes()) {
+              this.lastChild.remove();
+          }
+        ]]></body>
+      </method>
+    </implementation>
+  </binding>
+
+  <binding id="calendar-subscriptions-richlistitem"
+           extends="chrome://global/content/bindings/richlistbox.xml#richlistitem">
+    <content>
+      <xul:hbox flex="1">
+        <xul:checkbox anonid="subscription-checkbox" class="calendar-subscriptions-richlistitem-checkbox"/>
+        <xul:label anonid="subscription-name" flex="1" crop="end"/>
+      </xul:hbox>
+    </content>
+
+    <implementation>
+      <field name="mCalendar">null</field>
+      <field name="mSubscribed">false</field>
+
+      <property name="calendar">
+        <getter><![CDATA[
+          return this.mCalendar;
+        ]]></getter>
+        <setter><![CDATA[
+          this.setCalendar(val);
+          return val;
+        ]]></setter>
+      </property>
+
+      <property name="subscribed">
+        <getter><![CDATA[
+          return this.mSubscribed;
+        ]]></getter>
+        <setter><![CDATA[
+          this.mSubscribed = val;
+          this.checked = val;
+          return val;
+        ]]></setter>
+      </property>
+
+      <property name="checked">
+        <getter><![CDATA[
+          let checkbox = document.getAnonymousElementByAttribute(
+            this, "anonid", "subscription-checkbox");
+          if (checkbox.getAttribute("checked") == "true") {
+              return true;
+          } else {
+              return false;
+          }
+        ]]></getter>
+        <setter><![CDATA[
+          let checkbox = document.getAnonymousElementByAttribute(
+            this, "anonid", "subscription-checkbox");
+          if (val) {
+              checkbox.setAttribute("checked", "true");
+          } else {
+              checkbox.removeAttribute("checked");
+          }
+          return val;
+        ]]></setter>
+      </property>
+
+      <property name="disabled">
+        <getter><![CDATA[
+          let checkbox = document.getAnonymousElementByAttribute(
+            this, "anonid", "subscription-checkbox");
+          if (checkbox.getAttribute("disabled") == "true") {
+              return true;
+          } else {
+              return false;
+          }
+        ]]></getter>
+        <setter><![CDATA[
+          let checkbox = document.getAnonymousElementByAttribute(
+            this, "anonid", "subscription-checkbox");
+          if (val) {
+              checkbox.setAttribute("disabled", "true");
+          } else {
+              checkbox.removeAttribute("disabled");
+          }
+          return val;
+        ]]></setter>
+      </property>
+
+      <method name="setCalendar">
+        <parameter name="aCalendar"/>
+        <body><![CDATA[
+          this.mCalendar = aCalendar;
+          let label = document.getAnonymousElementByAttribute(
+              this, "anonid", "subscription-name");
+          label.setAttribute("value", aCalendar.name);
+        ]]></body>
+      </method>
+    </implementation>
+  </binding>
+</bindings>

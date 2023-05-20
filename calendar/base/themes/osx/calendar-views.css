@@ -1,0 +1,152 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@import url(chrome://calendar-common/skin/calendar-views.css);
+
+calendar-event-column {
+    -moz-user-focus: normal;
+}
+
+/** Start time bar **/
+
+.calendar-time-bar-label {
+    margin: 2px 2px;
+}
+
+calendar-event-box[invitation-status="NEEDS-ACTION"],
+calendar-editable-item[invitation-status="NEEDS-ACTION"],
+calendar-month-day-box-item[invitation-status="NEEDS-ACTION"] {
+    opacity: 0.5;
+}
+
+calendar-event-box[invitation-status="TENTATIVE"],
+calendar-editable-item[invitation-status="TENTATIVE"],
+calendar-month-day-box-item[invitation-status="TENTATIVE"],
+calendar-event-box[status="TENTATIVE"],
+calendar-editable-item[status="TENTATIVE"],
+calendar-month-day-box-item[status="TENTATIVE"],
+agenda-richlist-item[status="TENTATIVE"] {
+    opacity: 0.5;
+}
+
+calendar-event-box[invitation-status="DECLINED"],
+calendar-editable-item[invitation-status="DECLINED"],
+calendar-month-day-box-item[invitation-status="DECLINED"],
+calendar-event-box[status="CANCELLED"],
+calendar-editable-item[status="CANCELLED"],
+calendar-month-day-box-item[status="CANCELLED"],
+agenda-richlist-item[status="CANCELLED"] {
+    opacity: 0.5;
+}
+
+calendar-month-day-box-item[status="CANCELLED"] .calendar-color-box,
+calendar-event-box[status="CANCELLED"] .calendar-color-box,
+calendar-editable-item[status="CANCELLED"] .calendar-color-box,
+agenda-richlist-item[status="CANCELLED"] .agenda-container-box {
+    text-decoration: line-through;
+}
+
+/* Navigation controls for the views */
+#calendar-nav-control {
+    background-color: #E8E8E8;
+    border: solid ThreeDShadow;
+    border-width: 1px 0 0 1px;
+}
+
+#view-deck {
+    background-color: white;
+    border-width: 0 0 0 1px;
+}
+
+#view-tabs .tabs-left,
+#view-tabs .tabs-right {
+    width: 0;
+}
+
+#view-tabs {
+    padding-right: 20px;
+}
+
+#view-tabbox {
+    margin: 0;
+}
+
+.calview-tabs {
+    margin-bottom: 0;
+    padding: 0;
+}
+
+tab[calview] {
+    background-color: #CCCCCC;
+    color: #2E4E73;
+    border: 1px solid #BDBDBD;
+    border-bottom: 1px solid #D2D2D2;
+}
+
+tab[calview][selected="true"],
+tab[calview][selected="true"]:hover {
+    background-color: #FFFFFF;
+    padding-bottom: 1px;
+}
+
+tab[calview]:hover {
+    background-color: #F6F6F6;    
+}
+
+tab[calview] > .tab-middle {
+    font-size: 14px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.view-header {
+    padding-top: 5px;
+    margin-top: 3px;
+}
+
+#calendarWeek {
+    margin-top: 3px;
+    margin-bottom: 1px;
+}
+
+.navigation-inner-box {
+    border-bottom: 1px solid #D2D2D2;
+}
+
+.navigation-bottombox {
+    background-color: white;
+}
+
+.view-navigation-button {
+    -moz-user-focus: normal;
+    -moz-appearance: toolbarbutton;
+    margin-top: 3px;
+    margin-inline-start: 3px;
+    margin-inline-end: 3px;
+    margin-bottom: 1px;
+    min-width: 22px;
+}
+
+.today-navigation-button {
+    margin-top: 2px;
+    margin-bottom: 0px;
+}
+
+.view-navigation-button > .toolbarbutton-icon {
+    margin: 1px;
+}
+
+@media (-moz-mac-yosemite-theme) {
+    #calendar-nav-control:-moz-window-inactive {
+        background: -moz-mac-chrome-inactive;
+    }
+
+    .navigation-inner-box:-moz-window-inactive {
+        border-bottom-color: hsl(0, 0%, 85%);
+    }
+
+    tab[calview]:not([selected="true"]):-moz-window-inactive {
+        background-color: #EAEAEA;
+    }
+}

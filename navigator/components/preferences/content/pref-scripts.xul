@@ -1,0 +1,132 @@
+<?xml version="1.0"?><!-- -*- Mode: HTML -*- -->
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay SYSTEM "chrome://communicator/locale/pref/pref-scripts.dtd">
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <prefpane id="scripts_pane"
+            label="&pref.scripts.title;"
+            script="chrome://communicator/content/pref/pref-scripts.js">
+
+    <preferences id="scripts_preferences">
+      <preference id="javascript.enabled"
+                  name="javascript.enabled"
+                  type="bool"
+                  onchange="javascriptEnabledChange();"/>
+
+      <preference id="javascript.options.mem.gc_incremental"
+                  name="javascript.options.mem.gc_incremental"
+                  type="bool"/>
+      <preference id="javascript.options.mem.gc_generational"
+                  name="javascript.options.mem.gc_generational"
+                  type="bool"/>
+      <preference id="javascript.options.wasm"
+                  name="javascript.options.wasm"
+                  type="bool"/>
+
+      <preference id="dom.disable_window_move_resize"
+                  name="dom.disable_window_move_resize"
+                  type="bool" inverted="true"/>
+      <preference id="dom.disable_window_flip"
+                  name="dom.disable_window_flip"
+                  type="bool" inverted="true"/>
+      <preference id="dom.disable_window_open_feature.status"
+                  name="dom.disable_window_open_feature.status"
+                  type="bool" inverted="true"/>
+      <preference id="dom.disable_window_status_change"
+                  name="dom.disable_window_status_change"
+                  type="bool" inverted="true"/>
+      <preference id="dom.event.contextmenu.enabled"
+                  name="dom.event.contextmenu.enabled"
+                  type="bool"/>
+
+      <preference id="plugin.disable"
+                  name="plugin.disable"
+                  type="bool" inverted="true"/>
+      <preference id="plugins.hide_infobar_for_missing_plugin"
+                  name="plugins.hide_infobar_for_missing_plugin"
+                  type="bool" inverted="true"/>
+      <preference id="plugin.default.state"
+                  name="plugin.default.state"
+                  type="int"/>
+    </preferences>
+
+    <groupbox id="javascriptPreferences">
+      <caption label="&enableJavaScript.label;"/>
+
+      <checkbox id="javascriptAllowNavigator"
+                label="&navigator.label;"
+                accesskey="&navigator.accesskey;"
+                preference="javascript.enabled"/>
+
+      <separator class="thin"/>
+
+      <label control="FeatureList"
+             value="&featureList.label;"
+             accesskey="&featureList.accesskey;"/>
+
+      <listbox id="FeatureList" rows="5">
+        <listitem type="checkbox" id="featureIncrementalGC"
+                  label="&featureIncrementalGC.label;"
+                  preference="javascript.options.mem.gc_incremental"/>
+        <listitem type="checkbox" id="featureGenerationalGC"
+                  label="&featureGenerationalGC.label;"
+                  preference="javascript.options.mem.gc_generational"/>
+        <listitem type="checkbox" id="featureWASM"
+                  label="&featureWASM.label;"
+                  preference="javascript.options.wasm"/>
+      </listbox>
+
+      <separator class="thin"/>
+
+      <label control="AllowList"
+             value="&allowScripts.label;"
+             accesskey="&allowScripts.accesskey;"/>
+
+      <listbox id="AllowList" rows="5">
+        <listitem type="checkbox" id="allowWindowMoveResize"
+                  label="&allowWindowMoveResize.label;"
+                  preference="dom.disable_window_move_resize"/>
+        <listitem type="checkbox" id="allowWindowFlip"
+                  label="&allowWindowFlip.label;"
+                  preference="dom.disable_window_flip"/>
+        <listitem type="checkbox" id="allowHideStatusBar"
+                  label="&allowHideStatusBar.label;"
+                  preference="dom.disable_window_open_feature.status"/>
+        <listitem type="checkbox" id="allowWindowStatusChange"
+                  label="&allowWindowStatusChange.label;"
+                  preference="dom.disable_window_status_change"/>
+        <listitem type="checkbox" id="allowContextmenuDisable"
+                  label="&allowContextmenuDisable.label;"
+                  preference="dom.event.contextmenu.enabled"/>
+      </listbox>
+    </groupbox>
+
+    <groupbox id="pluginPreferences">
+      <caption label="&enablePlugins.label;"/>
+      <checkbox id="pluginForSuite"
+                label="&enablePluginForSuite.label;"
+                accesskey="&enablePluginForSuite.accesskey;"
+                preference="plugin.disable"/>
+
+      <separator class="thin"/>
+
+      <label value="&whenPageRequiresPlugins.label;"/>
+
+      <separator class="thin"/>
+
+      <checkbox id="activateAllPlugins"
+                label="&activateAllPlugins.label;"
+                accesskey="&activateAllPlugins.accesskey;"
+                preference="plugin.default.state"
+                onsyncfrompreference="return document.getElementById(this.getAttribute('preference')).value == 2;"
+                onsynctopreference="return this.checked ? 2 : 1;"/>
+      <checkbox id="warnPluginsRequired"
+                label="&warnPluginsRequired.label;"
+                accesskey="&warnPluginsRequired.accesskey;"
+                preference="plugins.hide_infobar_for_missing_plugin"/>
+    </groupbox>
+  </prefpane>
+</overlay>

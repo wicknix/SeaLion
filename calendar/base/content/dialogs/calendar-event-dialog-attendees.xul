@@ -1,0 +1,198 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet type="text/css" href="chrome://global/skin/global.css"?>
+<?xml-stylesheet type="text/css" href="chrome://calendar-common/skin/calendar-attendees.css"?>
+<?xml-stylesheet type="text/css" href="chrome://calendar/skin/calendar-event-dialog.css"?>
+<?xml-stylesheet type="text/css" href="chrome://calendar/content/calendar-event-dialog.css"?>
+<?xml-stylesheet type="text/css" href="chrome://calendar/content/datetimepickers/datetimepickers.css"?>
+
+<!DOCTYPE dialog [
+  <!ENTITY % dtd1 SYSTEM "chrome://calendar/locale/calendar.dtd" > %dtd1;
+  <!ENTITY % dtd2 SYSTEM "chrome://calendar/locale/calendar-event-dialog.dtd" > %dtd2;
+]>
+
+<dialog id="calendar-event-dialog-attendees-v2"
+        title="&invite.title.label;"
+        windowtype="Calendar:EventDialog:Attendees"
+        onload="onLoad()"
+        ondialogaccept="return onAccept();"
+        ondialogcancel="return onCancel();"
+        defaultButton="none"
+        persist="screenX screenY height width"
+        orient="vertical"
+        style="padding-top: 8px; padding-bottom: 10px; padding-inline-start: 8px; padding-inline-end: 10px;"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <!-- Javascript includes -->
+  <script type="application/javascript" src="chrome://calendar/content/calendar-event-dialog-attendees.js"/>
+  <script type="application/javascript" src="chrome://calendar/content/calendar-dialog-utils.js"/>
+  <script type="application/javascript" src="chrome://calendar/content/calUtils.js"/>
+  <script type="application/javascript" src="chrome://calendar/content/calendar-statusbar.js"/>
+  <script type="application/javascript" src="chrome://calendar/content/calendar-ui-utils.js"/>
+
+  <hbox align="center" pack="end">
+    <spacer flex="1"/>
+    <label value="&event.freebusy.suggest.slot;"/>
+    <button label="&event.freebusy.button.previous.slot;"
+            dir="normal"
+            class="left-icon"
+            id="previous-slot"
+            oncommand="onPreviousSlot();"/>
+    <button label="&event.freebusy.button.next.slot;"
+            dir="reverse"
+            class="right-icon"
+            id="next-slot"
+            oncommand="onNextSlot();"/>
+    <spacer style="width: 10em"/>
+    <label value="&event.freebusy.zoom;" control="zoom-menulist"/>
+    <toolbarbutton id="zoom-out-button"
+                   class="zoom-out-icon"
+                   oncommand="zoomWithButtons(true);"/>
+    <menulist id="zoom-menulist"
+              oncommand="setZoomFactor(this.value);"
+              persist="value">
+      <menupopup>
+        <menuitem label="400%" value="25"/>
+        <menuitem label="200%" value="50"/>
+        <menuitem label="100%" value="100"/>
+        <menuitem label="50%" value="200"/>
+        <menuitem label="25%" value="400"/>
+      </menupopup>
+    </menulist>
+    <toolbarbutton id="zoom-in-button"
+                   class="zoom-in-icon"
+                   oncommand="zoomWithButtons(false);"/>
+  </hbox>
+  <hbox flex="1">
+    <vbox id="attendees-container" flex="1" persist="width">
+      <box class="attendee-spacer-top"/>
+      <attendees-list flex="1" id="attendees-list"/>
+      <box class="attendee-spacer-bottom"/>
+    </vbox>
+    <splitter id="splitter"/>
+    <vbox id="freebusy-container" persist="width">
+      <stack flex="1">
+        <vbox flex="1">
+          <freebusy-timebar id="timebar"
+                            range="16"/>
+          <freebusy-grid flex="1"
+                         id="freebusy-grid"
+                         range="16"/>
+        </vbox>
+        <selection-bar id="selection-bar"
+                       range="16"/>
+      </stack>
+      <scrollbar orient="horizontal"
+                 id="horizontal-scrollbar"
+                 maxpos="100"/>
+    </vbox>
+    <vbox
+         id="vertical-scrollbar-box"
+         collapsed="true">
+      <box class="attendee-spacer-top"/>
+      <scrollbar orient="vertical"
+                 flex="1"
+                 id="vertical-scrollbar"
+                 maxpos="100"/>
+      <box class="attendee-spacer-bottom"/>
+    </vbox>
+  </hbox>
+  <hbox>
+    <grid flex="1">
+      <columns>
+        <column/>         <!-- role icon -->
+        <column flex="1"/><!-- role description -->
+        <column/>         <!-- status color -->
+        <column flex="1"/><!-- status description -->
+        <column/>         <!-- status color -->
+        <column flex="1"/><!-- status description -->
+      </columns>
+      <rows>
+        <row align="center">
+          <image class="role-icon" role="REQ-PARTICIPANT"/>
+          <label value="&event.attendee.role.required;"/>
+          <image class="usertype-icon" cutype="INDIVIDUAL"/>
+          <label value="&event.attendee.usertype.individual;"/>
+          <box class="legend" status="FREE"/>
+          <label value="&event.freebusy.legend.free;"/>
+        </row>
+        <row align="center">
+          <image class="role-icon" role="OPT-PARTICIPANT"/>
+          <label value="&event.attendee.role.optional;"/>
+          <image class="usertype-icon" cutype="GROUP"/>
+          <label value="&event.attendee.usertype.group;"/>
+          <box class="legend" status="BUSY_TENTATIVE"/>
+          <label value="&event.freebusy.legend.busy_tentative;"/>
+        </row>
+        <row align="center">
+          <image class="role-icon" role="CHAIR"/>
+          <label value="&event.attendee.role.chair;"/>
+          <image class="usertype-icon" cutype="RESOURCE"/>
+          <label value="&event.attendee.usertype.resource;"/>
+          <box class="legend" status="BUSY"/>
+          <label value="&event.freebusy.legend.busy;"/>
+        </row>
+        <row align="center">
+          <image class="role-icon" role="NON-PARTICIPANT"/>
+          <label value="&event.attendee.role.nonparticipant;"/>
+          <image class="usertype-icon" cutype="ROOM"/>
+          <label value="&event.attendee.usertype.room;"/>
+          <box class="legend" status="BUSY_UNAVAILABLE"/>
+          <label value="&event.freebusy.legend.busy_unavailable;"/>
+        </row>
+        <row align="center">
+          <spacer/>
+          <spacer/>
+          <spacer/>
+          <spacer/>
+          <box class="legend" status="UNKNOWN"/>
+          <label value="&event.freebusy.legend.unknown;"/>
+        </row>
+      </rows>
+    </grid>
+    <vbox>
+      <grid>
+        <columns>
+          <column/>
+          <column flex="1"/>
+        </columns>
+        <rows>
+          <row align="center">
+            <spacer/>
+            <checkbox id="all-day"
+                      oncommand="changeAllDay();"
+                      label="&event.alldayevent.label;"/>
+          </row>
+          <row align="center">
+            <label value="&newevent.from.label;" control="event-starttime"/>
+            <datetimepicker id="event-starttime"
+                            onchange="updateStartTime();"/>
+            <label id="timezone-starttime"
+                   crop="right"
+                   class="text-link"
+                   flex="1"
+                   collapsed="true"
+                   hyperlink="true"
+                   onclick="editStartTimezone()"/>
+          </row>
+          <row align="center">
+            <label value="&newevent.to.label;" control="event-endtime"/>
+            <datetimepicker id="event-endtime"
+                            onchange="updateEndTime();"/>
+            <label id="timezone-endtime"
+                   crop="right"
+                   class="text-link"
+                   flex="1"
+                   collapsed="true"
+                   hyperlink="true"
+                   onclick="editEndTimezone()"/>
+          </row>
+        </rows>
+      </grid>
+    </vbox>
+  </hbox>
+  <separator class="groove"/>
+</dialog>

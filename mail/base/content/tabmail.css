@@ -1,0 +1,75 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+.tabmail-tabs {
+  -moz-binding: url("chrome://messenger/content/tabmail.xml#tabmail-tabs");
+}
+
+.tabmail-tab {
+  -moz-binding: url("chrome://messenger/content/tabmail.xml#tabmail-tab");
+}
+
+.tabmail-tabbox {
+  -moz-binding: url("chrome://messenger/content/tabmail.xml#tabmail-tabbox");
+}
+
+.tabmail-arrowscrollbox {
+  -moz-binding: url("chrome://messenger/content/tabmail.xml#tabmail-arrowscrollbox");
+}
+
+.tabs-alltabs-popup {
+  -moz-binding: url("chrome://messenger/content/tabmail.xml#tabmail-alltabs-popup");
+}
+
+.tab-close-button, .tabs-closebutton {
+  -moz-binding: url("chrome://messenger/content/tabmail.xml#tabmail-close-tab-button");
+}
+
+.tab-stack {
+  vertical-align: top;
+}
+
+.tab-close-button {
+  display: none;
+}
+
+.tabmail-tabs > .tabmail-tab:first-child > .tab-stack > .tab-content >
+.tab-close-button {
+  visibility: collapse;
+}
+
+.tabmail-tabs:not([closebuttons="noclose"]):not([closebuttons="closeatend"]) >
+.tabmail-tab[selected="true"]:not(:only-child) > .tab-stack > .tab-content > .tab-close-button {
+  display: -moz-box;
+}
+
+.tabmail-tabs[closebuttons="alltabs"] > .tabmail-tab:not(:only-child) >
+.tab-stack > .tab-content > .tab-close-button {
+  display: -moz-box;
+}
+
+.tab-drop-indicator {
+  position: relative;
+  z-index: 2;
+}
+
+.tab-throbber:not([busy]):not([thinking]),
+.tab-throbber[busy] + .tab-icon-image,
+.tab-throbber[thinking] + .tab-icon-image,
+.tab-throbber[busy][thinking] + .tab-icon-image {
+  display: none;
+}
+
+#tabcontainer:not([overflow="true"]) ~ #alltabs-button {
+  visibility: collapse;
+}
+
+/**
+ * Override the thread pane column picker.
+ * We do it here because we don't want it in the Search dialog.
+ */
+
+#threadCols > treecolpicker {
+  -moz-binding: url("chrome://messenger/content/threadPaneColumnPicker.xml#threadPaneColumnPicker");
+}

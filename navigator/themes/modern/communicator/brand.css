@@ -1,0 +1,53 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ==== brand.css ===========================================================
+   == Styles related to branding in the Communicator suite.
+   ========================================================================== */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+#wrapper-throbber-box > #throbber-box > #navigator-throbber,
+#navigator-throbber {
+  -moz-binding: url("chrome://global/content/bindings/button.xml#button-image");
+  -moz-user-focus: ignore !important;
+  -moz-box-align: center;
+  -moz-box-pack: center;
+  margin: 6px 8px 0px;
+  border: none;
+  min-width: 0px;
+  list-style-image: url("chrome://branding/content/throbber-single.png");
+  background: transparent;
+}
+
+#navigator-throbber[busy="true"] {
+  list-style-image: url("chrome://branding/content/throbber-anim.png");
+}
+
+#throbber-box {
+  -moz-box-align: start;
+}
+
+toolbar[mode="icons"] #wrapper-throbber-box > #throbber-box > #navigator-throbber,
+toolbar[mode="icons"] #navigator-throbber {
+  margin: 4px 8px 2px;
+}
+
+window[chromehidden~="toolbar"] #navigator-throbber,
+toolbar[mode="text"] #wrapper-throbber-box > #throbber-box > #navigator-throbber,
+toolbar[iconsize="small"] #wrapper-throbber-box > #throbber-box > #navigator-throbber,
+toolbar[mode="text"] #navigator-throbber,
+toolbar[iconsize="small"] #navigator-throbber {
+  margin-top: 2px;
+  margin-bottom: 2px;
+  margin-inline-start: 6px;
+  margin-inline-end: 4px;
+  list-style-image: url("chrome://branding/content/throbber16-single.png");
+}
+
+window[chromehidden~="toolbar"] #navigator-throbber[busy="true"],
+toolbar[mode="text"] #navigator-throbber[busy="true"],
+toolbar[iconsize="small"] #navigator-throbber[busy="true"] {
+  list-style-image: url("chrome://branding/content/throbber16-anim.png");
+}

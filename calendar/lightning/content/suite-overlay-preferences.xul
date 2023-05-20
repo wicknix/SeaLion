@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://lightning/skin/lightning.css"?>
+
+<?xul-overlay href="chrome://calendar/content/preferences/general.xul"?>
+<?xul-overlay href="chrome://calendar/content/preferences/alarms.xul"?>
+<?xul-overlay href="chrome://calendar/content/preferences/categories.xul"?>
+<?xul-overlay href="chrome://calendar/content/preferences/views.xul"?>
+
+<!DOCTYPE overlay [
+    <!ENTITY % lightningDTD SYSTEM "chrome://lightning/locale/lightning.dtd">
+    %lightningDTD;
+    <!ENTITY % preferencesDTD SYSTEM "chrome://calendar/locale/preferences/preferences.dtd">
+    %preferencesDTD;
+]>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <treechildren id="prefsPanelChildren">
+        <treeitem container="true"
+                  id="lightningItem"
+                  insertafter="mailnewsItem,navigatorItem"
+                  label="&lightning.preferencesLabel;"
+                  prefpane="paneLightning">
+            <treechildren id="lightningChildren">
+                <treeitem id="lightningAlarms"
+                          label="&paneAlarms.title;"
+                          prefpane="paneLightningAlarms"/>
+                <treeitem id="lightningCategories"
+                          label="&paneCategories.title;"
+                          prefpane="paneLightningCategories"/>
+                <treeitem id="lightningViews"
+                          label="&paneViews.title;"
+                          prefpane="paneLightningViews"/>
+            </treechildren>
+        </treeitem>
+    </treechildren>
+
+    <prefwindow id="prefDialog">
+        <prefpane id="paneLightning"
+                  label="&lightning.preferencesLabel;"
+                  onpaneload="gCalendarGeneralPane.init();">
+            <vbox id="calPreferencesBoxGeneral"/>
+        </prefpane>
+        <prefpane id="paneLightningAlarms"
+                  label="&paneAlarms.title;"
+                  onpaneload="gAlarmsPane.init();">
+            <vbox id="calPreferencesBoxAlarms"/>
+        </prefpane>
+        <prefpane id="paneLightningCategories"
+                  label="&paneCategories.title;"
+                  onpaneload="gCategoriesPane.init();">
+            <vbox id="calPreferencesBoxCategories"/>
+        </prefpane>
+        <prefpane id="paneLightningViews"
+                  label="&paneViews.title;"
+                  onpaneload="gViewsPane.init();">
+            <vbox id="calPreferencesBoxViews"/>
+        </prefpane>
+    </prefwindow>
+
+    <script type="application/javascript"
+            src="chrome://calendar/content/calUtils.js"/>
+</overlay>

@@ -1,0 +1,65 @@
+#filter substitution
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+# These defines should match application.ini settings
+!define AppName               "Interlink"
+!define AppVersion            "@MOZ_APP_VERSION@"
+
+!define GREVersion            @MOZILLA_VERSION@
+!define AB_CD                 "@AB_CD@"
+
+!define FileMainEXE           "@MOZ_APP_NAME@.exe"
+!define WindowClass           "InterlinkMessageWindow"
+
+!define AppRegNameMail        "Interlink"
+!define AppRegNameNews        "Interlink (News)"
+
+!define ClientsRegName        "Binary Outcast Interlink"
+
+!define BrandShortName        "@MOZ_APP_DISPLAYNAME@"
+!define PreReleaseSuffix      "@PRE_RELEASE_SUFFIX@"
+!define BrandFullName         "${BrandFullNameInternal}${PreReleaseSuffix}"
+
+!define CERTIFICATE_NAME            "Binary Outcast Corporation"
+!define CERTIFICATE_ISSUER          "DigiCert SHA2 Assured ID Code Signing CA"
+; Changing the name or issuer requires us to have both the old and the new
+;  in the registry at the same time, temporarily.
+!define CERTIFICATE_NAME_PREVIOUS   "Binary Outcast Corporation"
+!define CERTIFICATE_ISSUER_PREVIOUS "DigiCert Assured ID Code Signing CA-1"
+
+# NO_INSTDIR_FROM_REG is defined for pre-releases which have a PreReleaseSuffix
+# (e.g. Alpha X, Beta X, etc.) to prevent finding a non-default installation
+# directory in the registry and using that as the default. This prevents
+# Beta releases built with official branding from finding an existing install
+# of an official release and defaulting to its installation directory.
+!if "@PRE_RELEASE_SUFFIX@" != ""
+!define NO_INSTDIR_FROM_REG
+!endif
+
+# ARCH is used when it is necessary to differentiate the x64 registry keys from
+# the x86 registry keys (e.g. the uninstall registry key).
+#ifdef HAVE_64BIT_BUILD
+!define HAVE_64BIT_BUILD
+!define ARCH "x64"
+!define MinSupportedVer "Microsoft Windows 7 x64"
+!define MinSupportedCPU "AVX"
+#else
+!define ARCH "x86"
+!define MinSupportedVer "Microsoft Windows 7"
+#endif
+
+# File details shared by both the installer and uninstaller
+VIProductVersion "1.0.0.0"
+VIAddVersionKey "ProductName"     "${BrandShortName}"
+VIAddVersionKey "CompanyName"     "${CompanyName}"
+#ifdef MOZ_OFFICIAL_BRANDING
+VIAddVersionKey "LegalTrademarks" "${BrandShortName} is a Trademark of Binary Outcast"
+#endif
+VIAddVersionKey "LegalCopyright"  "${CompanyName}"
+VIAddVersionKey "FileVersion"     "${AppVersion}"
+VIAddVersionKey "ProductVersion"  "${AppVersion}"
+# Comments is not used but left below commented out for future reference
+# VIAddVersionKey "Comments"        "Comments"

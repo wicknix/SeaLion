@@ -1,0 +1,190 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* ===== messenger.css ==================================================
+  == Styles shared throughout the Messenger application.
+  ======================================================================= */
+
+@import url("chrome://global/skin/");
+@import url("chrome://messenger/content/messenger.css");
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+description.error {
+  color: #FF0000;
+}
+
+.toolbar-primary {
+  -moz-binding: url("chrome://global/content/bindings/toolbar.xml#toolbar");
+  border-top: none;
+}
+
+toolbar[printpreview="true"] {
+  -moz-binding: url("chrome://global/content/printPreviewBindings.xml#printpreviewtoolbar");
+}
+
+menu.menu-iconic > .menu-iconic-left,
+menuitem.menuitem-iconic > .menu-iconic-left {
+  display: -moz-box;
+}
+
+#tabbar-toolbar {
+  -moz-appearance: none;
+  padding: 0;
+  border: none;
+}
+
+#tabbar-toolbar[customizing="true"] {
+  min-width: 24px;
+  min-height: 10px;
+}
+
+/* ::::: menubar ::::: */
+
+#menubar-items {
+  -moz-box-orient: vertical; /* for flex hack */
+  margin-bottom: 1px;
+}
+
+#menubar-items > menubar {
+  -moz-box-flex: 1; /* make menu items expand to fill toolbar height */
+} 
+
+/* ::::: throbber ::::: */
+
+#throbber-box {
+  width: 16px;
+  min-height: 16px;
+  margin: 0 3px;
+}
+
+#throbber-box[busy="true"] {
+  list-style-image: url("chrome://global/skin/icons/loading_16.png");
+}
+
+#throbber-box,
+#wrapper-throbber-box > #throbber-box {
+  list-style-image: url("chrome://global/skin/icons/notloading_16.png");
+}
+
+/* ::::: online/offline icons ::::: */
+
+#offline-status {
+  padding: 0 2px;
+}
+
+#offline-status[offline="true"] {
+  list-style-image: url("chrome://messenger/skin/icons/offline.png");
+}
+
+#offline-status {
+  list-style-image: url("chrome://messenger/skin/icons/online.png");
+}
+
+/* ::::: toolbarbutton ::::: */
+
+.toolbarbutton-1,
+.toolbarbutton-menubutton-button {
+  padding-top: 5px;
+  padding-bottom: 6px;
+  -moz-padding-start: 4px;
+  -moz-padding-end: 5px;
+}
+
+.toolbarbutton-1:hover:active:not([disabled]),
+.toolbarbutton-1[open="true"],
+.toolbarbutton-menubutton-button:hover:active:not([disabled]),
+.toolbarbutton-menubutton-button[open="true"] {
+  padding-top: 6px;
+  padding-bottom: 5px;
+  -moz-padding-start: 5px;
+  -moz-padding-end: 4px;
+}
+
+.toolbarbutton-1[checked="true"] {
+  padding-top: 6px !important;
+  padding-bottom: 5px !important;
+  -moz-padding-start: 5px !important;
+  -moz-padding-end: 4px !important;
+}
+
+.toolbarbutton-1 .toolbarbutton-icon,
+.formatting-button .toolbarbutton-icon {
+  -moz-margin-end: 0px;
+}
+
+/* Has to be !important to overrule toolkit's dropmarker.css for the
+   dropmarker[disabled="true"] case. */
+.toolbarbutton-menu-dropmarker {
+  -moz-padding-start: 3px !important;
+}
+
+toolbar[mode="full"] .toolbarbutton-1 {
+  min-width: 55px;
+}
+
+sidebarheader .toolbarbutton-text:not([value]) {
+  display: none;
+}
+
+#searchInput,
+.remote-gloda-search {
+  -moz-appearance: none;
+  min-height: 22px;
+  border: 1px solid threedshadow;
+  -moz-padding-end: 2px;
+  -moz-padding-start: 2px;
+}
+
+#searchInput:-moz-lwtheme:not([focused="true"]),
+.remote-gloda-search:-moz-lwtheme:not([focused="true"]) {
+  opacity: .85;
+}
+
+.remote-gloda-search-container {
+  padding-top: 6px;
+  padding-bottom: 5px;
+}
+
+#status-bar:-moz-lwtheme {
+  padding-bottom: 1px;
+}
+
+#tabmail-buttons > toolbarbutton {
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+
+treechildren::-moz-tree-cell-text {
+  -moz-padding-start: 5px;
+}
+
+@media not all and (-moz-windows-default-theme) {
+  treechildren::-moz-tree-cell-text {
+    -moz-padding-start: 4px !important;
+  }
+}
+
+/* Give menupopup[type="folder"] a menu look */
+menupopup[type="folder"] {
+  -moz-appearance: menupopup;
+  background-color: menu;
+}
+
+menupopup[type="folder"] menu[_moz-menuactive="true"],
+menupopup[type="folder"] menuitem[_moz-menuactive="true"] {
+  color: -moz-MenuHoverText;
+  background-color: -moz-MenuHover;
+}
+
+menupopup[type="folder"] > menu,
+menupopup[type="folder"] > menuitem {
+  -moz-appearance: menuitem !important;
+  padding-right: 0;
+  padding-left: 0;
+}
+
+menulist.folderMenuItem > .menulist-label-box > .menulist-label {
+  -moz-margin-start: 2px !important;
+}

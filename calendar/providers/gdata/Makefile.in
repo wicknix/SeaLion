@@ -1,0 +1,34 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+XPI_PKGNAME = gdata-provider-$(GDATA_VERSION).$(AB_CD).$(MOZ_PKG_PLATFORM)
+XPI_VERSION = $(GDATA_VERSION)
+XPI_NO_UNIVERSAL = 1
+XPI_EM_ID = {a62ef8ec-5fdc-40c2-873c-223b8a6925cc}
+XPI_INSTALL_EXTENSION = $(XPI_EM_ID)
+
+DEFINES += -DLIGHTNING_VERSION=$(LIGHTNING_VERSION) \
+           -DSEAMONKEY_VERSION=$(SEAMONKEY_VERSION) \
+           -DTHUNDERBIRD_VERSION=$(THUNDERBIRD_VERSION) \
+           -DCOMM_BUILD=$(COMM_BUILD) \
+           -DGDATA_VERSION=$(GDATA_VERSION) \
+           $(NULL)
+
+ifeq (cocoa,$(MOZ_WIDGET_TOOLKIT))
+# If the macbundle dist dir was already created, sync the gdata provider here to avoid
+# the need to make -C objdir/mail/app each time
+tools repackage::
+	[ -d $(DIST)/$(MOZ_MACBUNDLE_NAME) ] && rsync -a $(FINAL_TARGET)/ $(DIST)/$(MOZ_MACBUNDLE_NAME)/Contents/Resources/extensions/$(XPI_EM_ID) || true
+endif
+
+# stage the extension for use in packaged tests
+PKG_STAGE = $(DIST)/test-stage
+
+stage-package:
+	$(NSINSTALL) -D $(PKG_STAGE)/extensions/$(XPI_EM_ID)
+	(cd $(FINAL_TARGET) && tar $(TAR_CREATE_FLAGS) - *) | (cd $(PKG_STAGE)/extensions/$(XPI_EM_ID) && tar -xf -)
+
+include $(topsrcdir)/config/rules.mk
+include $(topsrcdir)/calendar/lightning/versions.mk
+include $(topsrcdir)/calendar/lightning/lightning-packager.mk

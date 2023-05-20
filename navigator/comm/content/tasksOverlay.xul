@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://communicator/skin/tasksOverlay.css" type="text/css"?>
+
+<!DOCTYPE overlay [
+  <!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+  %brandDTD;
+  <!ENTITY % tasksDTD SYSTEM "chrome://communicator/locale/tasksOverlay.dtd" >
+  %tasksDTD;
+]>
+
+<overlay id="tasksOverlay"
+      xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script type="application/javascript" src="chrome://communicator/content/tasksOverlay.js"/>
+
+<keyset id="tasksKeys">
+  <key id="key_navigator"
+       key="&navigatorCmd.commandkey;"
+       command="Tasks:Navigator"
+       modifiers="accel"/>
+  <key id="key_addOnsManager"
+       key="&addOnsManagerCmd.commandkey;"
+       command="addonsmgr"
+       modifiers="accel,shift"/>
+  <key id="key_downloadManager"
+       key="&downloadManagerCmd.commandkey;"
+       command="downloadmgr"
+       modifiers="accel"/>
+</keyset>
+
+<commandset id="tasksCommands">
+  <command id="Tasks:Navigator" oncommand="toNavigator();"/>
+  <command id="Tasks:ErrorConsole" oncommand="toJavaScriptConsole();"/>
+</commandset>
+
+<broadcasterset id="mainBroadcasterSet" />
+
+      <!-- Tasks Menu -->
+      <menu id="tasksMenu" label="&tasksMenu.label;" accesskey="&tasksMenu.accesskey;">
+        <menupopup id="taskPopup">
+          <menuitem id="addonsmgr"
+                    label="&addOnsManagerCmd.label;"
+                    accesskey="&addOnsManagerCmd.accesskey;"
+                    key="key_addOnsManager"
+                    oncommand="toEM();"
+                    insertafter="navBeginGlobalItems"/>
+          <menuitem id="downloadmgr" label="&downloadManagerCmd.label;"
+                    accesskey="&downloadManagerCmd.accesskey;"
+                    key="key_downloadManager"
+                    oncommand="toDownloadManager();"
+                    insertafter="addonsmgr"/>
+          <menu id="menu_passwordManager"
+                label="&passwordManagerCmd.label;"
+                accesskey="&passwordManagerCmd.accesskey;"
+                insertafter="downloadmgr">
+            <menupopup id="passwordPopup">
+              <menuitem label="&passwordHTTPAuthExpireCmd.label;"
+                        accesskey="&passwordHTTPAuthExpireCmd.accesskey;"
+                        oncommand="ExpireHTTPAuth();"/>
+              <menuitem label="&passwordMasterExpireCmd.label;"
+                        accesskey="&passwordMasterExpireCmd.accesskey;"
+                        oncommand="ExpireMasterPassword();"/>
+              <menuseparator/>
+              <menuitem label="&passwordDisplayCmd.label;"
+                        accesskey="&passwordDisplayCmd.accesskey;"
+                        oncommand="toPasswordManager();"/>
+            </menupopup>
+          </menu>
+          <menuseparator id="devToolsSeparator"/>
+          <menu label="&webDevelopment.label;">
+            <menupopup id="toolsPopup">
+              <menuitem id="javascriptConsole" label="&errorConsoleCmd.label;"
+                        accesskey="&errorConsoleCmd.accesskey;"
+                        command="Tasks:ErrorConsole"/>
+            </menupopup>
+          </menu>
+          <menuseparator id="sep_switchprofile"/>
+          <menuitem id="cmd_switchprofile" label="&switchProfileCmd.label;" accesskey="&switchProfileCmd.accesskey;" oncommand="toProfileManager();"/>
+        </menupopup>
+      </menu>
+
+      <menu id="windowMenu" label="&windowMenu.label;" accesskey="&windowMenu.accesskey;"
+            datasources="rdf:window-mediator" ref="NC:WindowMediatorRoot"
+            onpopupshowing="checkFocusedWindow();">
+        <template>
+          <rule>
+            <menupopup>
+              <menuitem uri="rdf:*" label="rdf:http://home.netscape.com/NC-rdf#KeyIndex rdf:http://home.netscape.com/NC-rdf#Name" type="radio"
+                        name="windowList" oncommand="ShowWindowFromResource(event.target)" accesskey="rdf:http://home.netscape.com/NC-rdf#KeyIndex"/>
+            </menupopup>
+          </rule>
+        </template>
+        <menupopup id="windowPopup">
+          <menuitem label="&navigatorCmd.label;" accesskey="&navigatorCmd.accesskey;" key="key_navigator" command="Tasks:Navigator" id="tasksMenuNavigator" class="menuitem-iconic icon-navigator16"/>
+
+          <!-- Overlays get stuffed in here. -->
+          <menuseparator id="sep-window-list"/>
+        </menupopup>
+      </menu>
+
+  <toolbar id="component-bar">
+    <toolbarbutton id="mini-nav"
+                   class="toolbarbutton-1"
+                   oncommand="toNavigator();"
+                   label="&taskNavigator.tooltip;"
+                   tooltiptext="&taskNavigator.tooltip;"/>
+  </toolbar>
+</overlay>

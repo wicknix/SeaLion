@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://messenger/skin/addressbook/cardDialog.css" type="text/css"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://messenger/locale/addressbook/abMailListDialog.dtd">
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        id="ablistWindow"
+        onload="OnLoadEditList();"
+        ondialogaccept="return EditListOKButton();"
+        ondragover="DragOverAddressListTree(event);"
+        ondrop="DropOnAddressListTree(event);">
+
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="bundle_addressBook" src="chrome://messenger/locale/addressbook/addressBook.properties"/>
+  </stringbundleset>
+
+  <!-- move needed functions into a single js file -->
+  <script type="application/javascript" src="chrome://messenger/content/messengercompose/addressingWidgetOverlay.js"/>
+  <script type="application/javascript" src="chrome://messenger/content/addressbook/abCommon.js"/>
+  <script type="application/javascript" src="chrome://messenger/content/addressbook/abMailListDialog.js"/>
+
+  <vbox id="editlist">
+    <hbox id="ListNameContainer" align="center">
+      <spacer flex="1"/>
+      <label control="ListName" value="&ListName.label;" accesskey="&ListName.accesskey;" class="CardEditLabel"/>
+      <hbox class="CardEditWidth">
+        <textbox id="ListName" flex="1"/>
+      </hbox>
+    </hbox>
+    <hbox id="ListNickNameContainer" align="center">
+      <spacer flex="1"/>
+      <label control="ListNickName" value="&ListNickName.label;" accesskey="&ListNickName.accesskey;" class="CardEditLabel"/>
+      <hbox class="CardEditWidth">
+        <textbox id="ListNickName" flex="1"/>
+      </hbox>
+    </hbox>
+    <hbox id="ListDescriptionContainer" align="center">
+      <spacer flex="1"/>
+      <label control="ListDescription" value="&ListDescription.label;" accesskey="&ListDescription.accesskey;" class="CardEditLabel"/>
+      <hbox class="CardEditWidth">
+        <textbox id="ListDescription" flex="1"/>
+      </hbox>
+    </hbox>
+
+    <spacer style="height:1em"/>
+    <label control="addressingWidget" value="&AddressTitle.label;"/>
+    <spacer style="height:0.1em"/>
+
+    <listbox id="addressingWidget" style="height: 15em;" onclick="awClickEmptySpace(event.target, true)">
+      <listitem class="addressingWidgetItem" allowevents="true">
+        <listcell class="addressingWidgetCell">
+          <textbox id="addressCol1#1" class="plain textbox-addressingWidget uri-element"
+                   type="autocomplete" flex="1"
+                   autocompletesearch="addrbook ldap"
+                   autocompletesearchparam="{}" timeout="300" maxrows="4"
+                   completedefaultindex="true" forcecomplete="true"
+                   completeselectedindex="true"
+                   minresultsforpopup="3"
+                   ontextentered="awRecipientTextCommand(param, this)"
+                   onkeypress="awHandleKeyPress(this, event);"
+                   onkeydown="awRecipientKeyDown(event, this);"
+                   onclick="awNotAnEmptyArea(event);">
+            <image onclick="this.parentNode.select();" class="person-icon"/>
+          </textbox>
+        </listcell>
+      </listitem>
+    </listbox>
+  </vbox>
+</dialog>

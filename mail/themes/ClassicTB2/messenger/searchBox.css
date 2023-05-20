@@ -1,0 +1,84 @@
+/*
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+*/
+
+/*
+ * On Vista, the emptytext style would appear to use italics.  This is causing
+ * problems for the search box because it has no minwidth and is flexy, so
+ * removing the emptytext causes the size of the box to change and this is silly
+ * and undesirable.  This change is being made to maintain the generally
+ * accepted status quo while reducing breakage.  This will cause visual
+ * inconsistency with the quick filter bar unless it gets a change like this
+ * too.
+ */
+#searchInput {
+  font-style: normal !important;
+}
+
+.quick-search-textbox {
+  padding-top: 1px;
+}
+
+#quick-search-button  {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  -moz-margin-start: 0px;
+  -moz-margin-end: 2px;
+}
+
+.gloda-search-icon {
+  list-style-image: url(chrome://global/skin/icons/Search-glass.png);
+  -moz-image-region: rect(0, 16px, 16px, 0);
+}
+
+.gloda-search-icon:-moz-locale-dir(rtl) {
+  -moz-transform: scaleX(-1);
+}
+
+.gloda-search-icon[searchbutton]:not([disabled]) {
+  cursor: pointer;
+}
+
+.gloda-search-icon[searchbutton]:not([disabled]):hover {
+  -moz-image-region: rect(0, 32px, 16px, 16px);
+}
+
+.gloda-search-icon[searchbutton]:not([disabled]):hover:active {
+  -moz-image-region: rect(0, 48px, 16px, 32px);
+}
+
+
+/* things from xul.css that only exist if Thunderbird did not define
+ * AUTOCOMPLETE_OLD_STYLE
+ */
+
+.autocomplete-history-dropmarker {
+  display: none;
+}
+
+.autocomplete-history-dropmarker[enablehistory="true"] {
+  display: -moz-box;
+  -moz-binding: url("chrome://global/content/bindings/autocomplete.xml#history-dropmarker");
+}
+
+.searchBox,
+#searchInput,
+#IMSearchInput,
+#peopleSearchInput,
+#view-task-edit-field,
+#unifinder-task-edit-field {
+  -moz-appearance: none;
+  border: 1px solid ThreeDShadow;
+  -moz-padding-end: 4px;
+  -moz-padding-start: 4px;
+}
+
+/* special treatment because this boxes are on the main toolbars */
+#searchInput,
+#IMSearchInput,
+#peopleSearchInput,
+.remote-gloda-search {
+  min-height: 24px;
+}

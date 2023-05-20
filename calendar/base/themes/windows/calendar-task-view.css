@@ -1,0 +1,206 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@import url(chrome://calendar-common/skin/calendar-task-view.css);
+
+#calendar-task-view-splitter {
+    border: none;
+    min-height: 5px;
+}
+
+#calendar-task-details-container {
+    border-top: 1px solid ThreeDShadow;
+    border-left: 1px solid ThreeDShadow;
+    border-right: 0px;
+    border-bottom: 0px;
+    overflow: hidden;
+}
+
+#other-actions-box {
+    margin-inline-end: -2px;
+}
+
+.task-details-name {
+    color: windowtext;
+    opacity: 0.5; /* lower contrast */
+}
+
+#calendar-task-details-grid > rows > .item-date-row > .headline {
+    color: windowtext;
+    opacity: 0.5; /* lower contrast */
+}
+
+.task-details-value {
+    color: WindowText;
+}
+
+#task-text-filter-field {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#task-text-filter-field .textbox-search-icons {
+    margin-bottom: -1px;
+}
+
+/* ::::: task actions toolbar ::::: */
+
+#task-actions-toolbox {
+    -moz-appearance: none;
+}
+
+#task-actions-toolbar {
+    min-height: 0;
+    padding: 0;
+}
+
+@media (-moz-os-version: windows-xp) {
+  #task-addition-box {
+    border-inline-start: 1px solid ThreeDShadow;
+  }
+
+  #calendar-task-tree {
+    border-inline-start: 1px solid ThreeDShadow;
+    border-bottom: 1px solid ThreeDHighlight;
+  }
+
+  #view-task-edit-field,
+  #task-text-filter-field {
+    margin-top: 4px;
+    margin-bottom: 3px;
+  }
+
+  #task-actions-category {
+      list-style-image: url(chrome://calendar/skin/tasks-actions.png);
+      -moz-image-region: rect(0 16px 16px 0);
+  }
+
+  #task-actions-markcompleted {
+      list-style-image: url(chrome://calendar/skin/tasks-actions.png);
+      -moz-image-region: rect(0 32px 16px 16px);
+  }
+
+  #task-actions-priority {
+      list-style-image: url(chrome://calendar/skin/tasks-actions.png);
+      -moz-image-region: rect(0 48px 16px 32px);
+  }
+
+  #calendar-delete-task-button {
+      list-style-image: url(chrome://calendar/skin/toolbar-small.png);
+      -moz-image-region: rect(0 48px 16px 32px);
+  }
+
+  #calendar-add-task-button {
+      list-style-image: url(chrome://calendar/skin/toolbar-small.png);
+      -moz-image-region: rect(0 256px 16px 240px);
+  }
+
+  #calendar-add-task-button[disabled="true"] {
+      -moz-image-region: rect(32px 256px 48px 240px);
+  }
+}
+
+@media not all and (-moz-os-version: windows-xp) {
+  #task-actions-category {
+    list-style-image: url(chrome://calendar-common/skin/calendar-toolbar.svg#category);
+  }
+
+  #task-actions-markcompleted {
+    list-style-image: url(chrome://calendar-common/skin/calendar-toolbar.svg#complete);
+  }
+
+  #task-actions-priority {
+    list-style-image: url(chrome://calendar-common/skin/calendar-toolbar.svg#priority);
+  }
+
+  #calendar-delete-task-button {
+    list-style-image: url(chrome://calendar-common/skin/calendar-toolbar.svg#delete);
+  }
+
+  #task-actions-toolbar[brighttext] > #task-actions-category {
+    list-style-image: url(chrome://calendar-common/skin/calendar-toolbar.svg#category-inverted);
+  }
+
+  #task-actions-toolbar[brighttext] > #task-actions-markcompleted {
+    list-style-image: url(chrome://calendar-common/skin/calendar-toolbar.svg#complete-inverted);
+  }
+
+  #task-actions-toolbar[brighttext] > #task-actions-priority {
+    list-style-image: url(chrome://calendar-common/skin/calendar-toolbar.svg#priority-inverted);
+  }
+
+
+  #task-actions-toolbar[brighttext] > #calendar-delete-task-button {
+    list-style-image: url(chrome://calendar-common/skin/calendar-toolbar.svg#delete-inverted);
+  }
+
+  #calendar-add-task-button {
+    list-style-image: url(chrome://calendar-common/skin/calendar-toolbar.svg#newtask);
+    -moz-image-region: rect(0 18px 18px 0);
+  }
+
+  #calendar-add-task-button[disabled="true"] > .toolbarbutton-icon {
+    opacity: 0.4;
+  }
+
+  #view-task-edit-field,
+  #task-text-filter-field {
+    width: 15em;
+  }
+
+  #calendar-task-box #calendar-task-view-splitter {
+    border: none;
+    border-bottom: 1px solid #A9B7C9;
+    min-height: 0;
+    height: 5px;
+    background-color: transparent;
+    margin-top: -5px;
+    position: relative;
+    z-index: 10;
+  }
+
+  #calendar-nav-control {
+    border-top-width: 0;
+  }
+
+  #calendar-task-details-container {
+    border-top-width: 0;
+    padding-top: 0;
+  }
+
+  @media (-moz-windows-default-theme) {
+    #task-addition-box {
+      background-color: #f8f8f8;
+      height: 32px;
+    }
+  }
+}
+
+@media (-moz-os-version: windows-vista),
+       (-moz-os-version: windows-win7) {
+  #view-task-edit-field,
+  #task-text-filter-field {
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+}
+
+@media (-moz-windows-default-theme) and (-moz-os-version: windows-win8),
+       (-moz-windows-default-theme) and (-moz-os-version: windows-win10) {
+  #task-actions-category {
+    list-style-image: url(chrome://calendar-common/skin/calendar-toolbar.svg#category-flat);
+  }
+
+  #task-actions-markcompleted {
+    list-style-image: url(chrome://calendar-common/skin/calendar-toolbar.svg#complete-flat);
+  }
+
+  #task-actions-priority {
+    list-style-image: url(chrome://calendar-common/skin/calendar-toolbar.svg#priority-flat);
+  }
+
+  #calendar-add-task-button {
+    list-style-image: url(chrome://calendar-common/skin/calendar-toolbar.svg#newtask-flat);
+  }
+}

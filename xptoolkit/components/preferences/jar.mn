@@ -1,0 +1,56 @@
+#filter substitution
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+comm.jar:
+* content/communicator/bindings/prefwindow.xml                            (content/prefwindow.xml)
+  content/communicator/pref/preferences.xul                               (content/preferences.xul)
+  content/communicator/pref/preferences.js                                (content/preferences.js)
+  content/communicator/pref/prefpanels.css                                (content/prefpanels.css)
+  content/communicator/pref/prefpanels.xml                                (content/prefpanels.xml)
+  content/communicator/pref/pref-advanced.xul                             (content/pref-advanced.xul)
+  content/communicator/pref/pref-http.js                                  (content/pref-http.js)
+  content/communicator/pref/pref-http.xul                                 (content/pref-http.xul)
+  content/communicator/pref/pref-masterpass.js                            (content/pref-masterpass.js)
+  content/communicator/pref/pref-masterpass.xul                           (content/pref-masterpass.xul)
+  content/communicator/pref/pref-proxies.js                               (content/pref-proxies.js)
+  content/communicator/pref/pref-proxies.xul                              (content/pref-proxies.xul)
+  content/communicator/pref/pref-proxies-advanced.xul                     (content/pref-proxies-advanced.xul)
+  content/communicator/pref/pref-applications.xul                         (content/pref-applications.xul)
+* content/communicator/pref/pref-applications.js                          (content/pref-applications.js)
+  content/communicator/pref/pref-applicationManager.js                    (content/pref-applicationManager.js)
+  content/communicator/pref/pref-applicationManager.xul                   (content/pref-applicationManager.xul)
+  content/communicator/pref/pref-download.js                              (content/pref-download.js)
+  content/communicator/pref/pref-download.xul                             (content/pref-download.xul)
+  content/communicator/pref/pref-smartupdate.js                           (content/pref-smartupdate.js)
+  content/communicator/pref/pref-smartupdate.xul                          (content/pref-smartupdate.xul)
+
+pippki.jar:
+  content/pippki/pref-certs.js                                           (content/pref-certs.js)
+  content/pippki/pref-certs.xul                                          (content/pref-certs.xul)
+  content/pippki/pref-ssl.js                                             (content/pref-ssl.js)
+  content/pippki/pref-ssl.xul                                            (content/pref-ssl.xul)
+
+en-US.jar:
+  locale/en-US/communicator/pref/prefutilities.dtd                        (locale/prefutilities.dtd)
+  locale/en-US/communicator/pref/prefutilities.properties                 (locale/prefutilities.properties)
+  locale/en-US/communicator/pref/preferences.dtd                          (locale/preferences.dtd)
+  locale/en-US/communicator/pref/pref-advanced.dtd                        (locale/pref-advanced.dtd)
+  locale/en-US/communicator/pref/pref-http.dtd                            (locale/pref-http.dtd)
+  locale/en-US/communicator/pref/pref-masterpass.dtd                      (locale/pref-masterpass.dtd)
+  locale/en-US/communicator/pref/pref-proxies.dtd                         (locale/pref-proxies.dtd)
+  locale/en-US/communicator/pref/pref-proxies-advanced.dtd                (locale/pref-proxies-advanced.dtd)
+  locale/en-US/communicator/pref/pref-applications.dtd                    (locale/pref-applications.dtd)
+  locale/en-US/communicator/pref/pref-applications.properties             (locale/pref-applications.properties)
+  locale/en-US/communicator/pref/pref-applicationManager.dtd              (locale/pref-applicationManager.dtd)
+  locale/en-US/communicator/pref/pref-applicationManager.properties       (locale/pref-applicationManager.properties)
+  locale/en-US/communicator/pref/pref-download.dtd                        (locale/pref-download.dtd)
+  locale/en-US/communicator/pref/pref-smartupdate.dtd                     (locale/pref-smartupdate.dtd)
+
+  locale/en-US/pippki/pref-certs.dtd                                      (locale/pref-certs.dtd)
+  locale/en-US/pippki/pref-ssl.dtd                                        (locale/pref-ssl.dtd)
+
+classic.jar:
+  skin/classic/communicator/preferences.css                               (skin/preferences.css)
+  skin/classic/communicator/prefpanels.css                                (skin/prefpanels.css)

@@ -1,0 +1,35 @@
+# vim: set filetype=python:
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+SOURCES += [
+    'nsMailComps.cpp',
+]
+
+# NOTE: if we switch away from LIBXUL_LIBRARY at any stage
+# we need to clear the EMBED_MANIFEST_AT flag. (See Bug 714495)
+if CONFIG['MOZ_INCOMPLETE_EXTERNAL_LINKAGE']:
+    XPCOMBinaryComponent('mailcomps')
+    USE_LIBS += [
+        'nspr',
+        'unicharutil_external_s',
+        'xpcomglue_s',
+        'xul',
+    ]
+    OS_LIBS += CONFIG['GLIB_LIBS']
+else:
+    Library('mailcomps')
+    FINAL_LIBRARY = 'xul'
+
+LOCAL_INCLUDES += [
+    '../migration/src',
+    '../shell',
+]
+
+if CONFIG['OS_ARCH'] == 'WINNT':
+    OS_LIBS += [
+        'ole32',
+        'shell32',
+    ]
+

@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+
+<!DOCTYPE dialog 
+[
+    <!ENTITY % dtd1 SYSTEM "chrome://calendar/locale/global.dtd" > %dtd1;
+    <!ENTITY % dtd2 SYSTEM "chrome://calendar/locale/calendar.dtd" > %dtd2;
+]>
+
+
+<dialog id="calendar-error-prompt"
+        title="&calendar.error.title;"
+        windowtype="Calendar:ErrorPrompt"
+        buttons="accept"
+        onload="loadErrorPrompt()"
+        persist="screenX screenY"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        width="500"
+        xmlns:nc="http://home.netscape.com/NC-rdf#">
+
+    <script type="application/javascript"><![CDATA[
+        function loadErrorPrompt() {
+            var args = window.arguments[0].QueryInterface(Components.interfaces.nsIDialogParamBlock);
+            document.getElementById("general-text").value = args.GetString(0);
+            document.getElementById("error-code").value = args.GetString(1);
+            document.getElementById("error-description").value = args.GetString(2);
+            this.sizeToContent();
+        }
+        function toggleDetails() {
+            var grid = document.getElementById("details-grid");
+            if (grid.collapsed)
+                grid.collapsed = false;
+            else
+                grid.collapsed = true;
+            this.sizeToContent();
+        }
+    ]]></script>
+    <vbox>
+        <textbox id="general-text" class="plain" readonly="true" 
+                 multiline="true" rows="3"/>
+        <hbox>
+            <button id="details-button" label="&calendar.error.detail;" oncommand="toggleDetails()"/>
+            <spacer flex="1"/>
+        </hbox>
+        <grid id="details-grid" collapsed="true" persist="collapsed">
+            <columns>
+                <column/>
+                <column flex="1"/>
+            </columns>
+            <rows>
+                <row>
+                    <label value="&calendar.error.code;"/>
+                    <label id="error-code" value=""/>
+                </row>
+                <row flex="1">
+                    <label value="&calendar.error.description;" control="error-description"/>
+                    <textbox id="error-description" class="plain" 
+                             readonly="true" multiline="true" rows="5"/>
+                </row>
+            </rows>
+        </grid>
+    </vbox>
+</dialog>

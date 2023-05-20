@@ -1,0 +1,47 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* avoids contributing to the min width when Lightning is not selected */
+#calendarTabPanel:not([selected]) {
+  visibility: collapse;
+}
+
+#calendar-status-todaypane-button > stack > .toolbarbutton-day-text {
+  text-align: center;
+  margin-inline-start: 0;
+  margin-bottom: -4px;
+  font-size: 7pt;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  text-shadow: none;
+  background-color: transparent;
+}
+
+#calendar-status-todaypane-button[hideLabel] > .toolbarbutton-text,
+#calendar-status-todaypane-button[hideLabel] > .toolbarbutton-icon-end {
+  display: none;
+}
+
+.imipMoreButton > .toolbarbutton-icon {
+  display: none;
+}
+
+@media not all and (-moz-os-version: windows-xp) {
+  #task-tab-button .toolbarbutton-icon,
+  #calendar-tab-button .toolbarbutton-icon,
+  .calbar-toolbarbutton-1 .toolbarbutton-icon,
+  toolbarpaletteitem > .msgHeaderView-button .toolbarbutton-icon,
+  #task-actions-toolbar > .msgHeaderView-button .toolbarbutton-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+#calendar-toolbox,
+#task-toolbox {
+  -moz-appearance: none;
+  background-color: rgb(248, 248, 248);
+  border-bottom: 1px solid threedshadow;
+  border-top: 0px;
+}

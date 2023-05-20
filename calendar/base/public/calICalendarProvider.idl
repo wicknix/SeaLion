@@ -1,0 +1,80 @@
+/* -*- Mode: IDL; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsISupports.idl"
+
+interface nsIURI;
+interface calICalendar;
+interface nsIVariant;
+interface calIProviderListener;
+
+/**
+ * High-level interface to allow providers to be plugable.
+ */
+[scriptable, uuid(30e22db4-9f13-11d9-80d6-000b7d081f44)]
+interface calICalendarProvider : nsISupports
+{
+  /**
+   * XUL overlay for configuring a calendar of this type.
+   */
+  readonly attribute nsIURI prefChromeOverlay;
+
+  /**
+   * The way to refer to this provider in UI for the end-user
+   * (eg "Shared ICS File").
+   */
+  readonly attribute AUTF8String displayName;
+
+  /**
+   * Create a new empty calendar. This will typically create a new empty
+   * file, and then call getCalendar()
+   *
+   * @param aName      the display name of the calendar to be created
+   * @param aURL       URL of the calendar to be created.
+   * @param aListener  where to call the results back to
+   */
+  void createCalendar(in AUTF8String aName, in nsIURI aURL,
+                      in calIProviderListener aListener);
+
+  /**
+   * Delete a calendar. Deletes the actual underlying calendar, which
+   * could be (for example) a file or a calendar on a server
+   * 
+   * @param aCalendar   the calendar to delete
+   * @param aListener   where to call the results back to
+   */
+  void deleteCalendar(in calICalendar aCalendar,
+                      in calIProviderListener aListener);
+
+  /**
+   * Get a new calendar object with existing calendar data
+   *
+   * @param aURL       URL of the calendar to be created.
+   */
+  calICalendar getCalendar(in nsIURI aURL);
+};
+
+[scriptable, uuid(0eebe99e-a22d-11d9-87a6-000b7d081f44)]
+interface calIProviderListener : nsISupports
+{
+  /**
+   * @param aStatus         status code summarizing what happened
+   * @param aDetail         not yet fully specified.  If aStatus is an error
+   *                        result, this will probably be an extended error
+   *                        string (eg one returned by a server).
+   */
+  void onCreateCalendar(in calICalendar aCalendar, in nsresult aStatus, 
+                        in nsIVariant aDetail);
+
+  /**
+   * @param aStatus         status code summarizing what happened
+   * @param aDetail         not yet fully specified.  If aStatus is an error
+   *                        result, this will probably be an extended error
+   *                        string (eg one returned by a server).
+   */
+  void onDeleteCalendar(in calICalendar aCalendar, in nsresult aStatus,
+                        in nsIVariant aDetail);
+};
+

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet type="text/css" href="chrome://global/skin/global.css"?>
+<?xml-stylesheet type="text/css" href="chrome://calendar-common/skin/calendar-providerUninstall-dialog.css"?>
+<?xml-stylesheet type="text/css" href="chrome://calendar/content/widgets/calendar-widget-bindings.css"?>
+<?xml-stylesheet type="text/css" href="chrome://calendar/skin/calendar-management.css"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://calendar/locale/provider-uninstall.dtd" >
+
+<dialog id="calendar-provider-uninstall-dialog"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        title="&providerUninstall.title;"
+        windowtype="Calendar:ProviderUninstall"
+        height="320"
+        width="480"
+        onload="onLoad()"
+        buttonlabelaccept="&providerUninstall.accept.label;"
+        buttonaccesskeyaccept="&providerUninstall.accept.accesskey;"
+        ondialogaccept="return onAccept()"
+        ondialogcancel="return onCancel()">
+
+  <script type="application/javascript" src="chrome://calendar/content/calendar-providerUninstall-dialog.js"/>
+  <script type="application/javascript" src="chrome://calendar/content/calendar-ui-utils.js"/>
+
+  <description id="pre-name-description">&providerUninstall.preName.label;</description>
+  <label id="provider-name-label"/>
+  <description id="post-name-description">&providerUninstall.postName.label;</description>
+  <description id="reinstall-note-description">&providerUninstall.reinstallNote.label;</description>
+
+  <calendar-list-tree id="calendar-list-tree"
+                      hidecolumnpicker="true"
+                      ignoredisabledstate="true"
+                      flex="1"/>
+</dialog>

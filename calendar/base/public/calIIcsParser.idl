@@ -1,0 +1,112 @@
+/* -*- Mode: idl; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsISupports.idl"
+
+interface calIIcalProperty;
+interface calIIcalComponent;
+interface calIItemBase;
+interface nsIInputStream;
+interface calITimezoneProvider;
+interface calIIcsParser;
+
+/**
+ * Listener being called once asynchronous parsing is done.
+ */
+[scriptable, uuid(d22527da-b0e2-41b7-b6f4-ee9c243cd285)]
+interface calIIcsParsingListener : nsISupports
+{
+    void onParsingComplete(in nsresult rc, in calIIcsParser parser);
+};
+
+/**
+ * An interface for parsing an ics string or stream into its items.
+ * Note that this is not a service. A new instance must be created for every new
+ * string or stream to be parsed.
+ */
+[scriptable, uuid(83e9befe-5e9e-49de-8bc2-d882f464f7e7)]
+interface calIIcsParser : nsISupports
+{
+  /**
+   * Parse an ics string into its items, and store top-level properties and
+   * components that are not interpreted.
+   *
+   * @param aICSString
+   *    The ICS string to parse
+   * @param optional aTzProvider
+   *    The timezone provider used to resolve timezones not contained in the
+   *    parent VCALENDAR or null (falls back to timezone service)
+   * @param optional aAsyncParsing
+   *    If non-null, parsing will be performed on a worker thread,
+   *    and the passed listener is called when it's done
+   */
+  void parseString(in AString aICSString,
+                   [optional] in calITimezoneProvider aTzProvider,
+                   [optional] in calIIcsParsingListener aAsyncParsing);
+
+  /**
+   * Parse an input stream.
+   *
+   * @see parseString
+   * @param aICSString
+   *    The stream to parse
+   * @param optional aTzProvider
+   *    The timezone provider used to resolve timezones not contained in the
+   *    parent VCALENDAR or null (falls back to timezone service)
+   * @param optional aAsyncParsing
+   *    If non-null, parsing will be performed on a worker thread,
+   *    and the passed listener is called when it's done
+   */
+  void parseFromStream(in nsIInputStream aStream,
+                       [optional] in calITimezoneProvider aTzProvider,
+                       [optional] in calIIcsParsingListener aAsyncParsing);
+
+  /**
+   * Get the items that were in the string or stream. In case an item represents a
+   * recurring series, the (unexpanded) parent item is returned only.
+   * Please keep in mind that any parentless items (see below) are not contained
+   * in the returned set of items.
+   *
+   * @param aCount
+   *    Will hold the number of items that were parsed
+   * @param aItems
+   *    The items
+   */
+  void getItems(out uint32_t aCount,
+                [array,size_is(aCount),retval] out calIItemBase aItems);
+
+  /**
+   * Get the parentless items that may have occurred, i.e. overridden items of a
+   * recurring series (having a RECURRENCE-ID) missing their parent item in the
+   * parsed content.
+   *
+   * @param aCount
+   *    Will hold the number of items that were parsed
+   * @param aItems
+   *    The items
+   */
+  void getParentlessItems(out uint32_t aCount,
+                          [array,size_is(aCount),retval] out calIItemBase aItems);
+
+  /**
+   * Get the top-level properties that were not interpreted as anything special
+   * @param aCount
+   *    Will hold the number of properties that were found
+   * @param aProperties
+   *    The properties
+   */
+  void getProperties(out uint32_t aCount,
+                     [array,size_is(aCount),retval] out calIIcalProperty aProperties);
+
+  /**
+   * Get the top-level components that were not interpreted as anything special
+   * @param aCount
+   *    Will hold the number of components that were found
+   * @param aComponents
+   *    The components
+   */
+  void getComponents(out uint32_t aCount,
+                     [array,size_is(aCount),retval] out calIIcalComponent aComponents);
+};

@@ -12,5 +12,5 @@ ifndef INCLUDED_AUTOCONF_MK
 topsrcdir := $(dir $(firstword $(MAKEFILE_LIST)))..
 endif
 
-MOZILLA_SRCDIR = $(topsrcdir)/mozilla
+MOZILLA_SRCDIR = $(topsrcdir)/platform
 include $(MOZILLA_SRCDIR)/config/baseconfig.mk

@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!-- -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+   - This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://global/skin/"?>
+<?xml-stylesheet href="chrome://messenger/skin/preferences/preferences.css"?>
+
+<!DOCTYPE prefwindow [
+  <!ENTITY % offlineDTD SYSTEM "chrome://messenger/locale/preferences/offline.dtd">
+  %offlineDTD;
+]>
+
+<prefwindow id="OfflineSettingsDialog" type="child"
+            xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+            onload="gOfflineDialog.dialogSetup();"
+            dlgbuttons="accept,cancel"
+            title="&offlineDialog.title;">
+
+  <prefpane id="OfflineSettingsDialogPane">
+    <script type="application/javascript"
+            src="chrome://messenger/content/preferences/offline.js"/>
+
+    <preferences id="OfflineSettingsPreferences">
+      <preference id="offline.autoDetect"
+                  name="offline.autoDetect"
+                  type="bool"
+                  onchange="gOfflineDialog.dialogSetup();"/>
+      <preference id="offline.startup_state"
+                  name="offline.startup_state"
+                  type="int"/>
+      <preference id="offline.send.unsent_messages"
+                  name="offline.send.unsent_messages"
+                  type="int"/>
+      <preference id="offline.download.download_messages"
+                  name="offline.download.download_messages"
+                  type="int"/>
+    </preferences>
+
+    <checkbox label="&checkAutoDetect.label;"
+              accesskey="&checkAutoDetect.accesskey;"
+              preference="offline.autoDetect"/>
+
+    <separator class="thin"/>
+
+    <label value="&titleStartUp;" control="whenStartingUp"/>
+    <radiogroup id="whenStartingUp" class="indent" preference="offline.startup_state">
+      <radio value="0" label="&radioRememberPrevState.label;"
+             accesskey="&radioRememberPrevState.accesskey;"/>
+      <radio value="1" label="&radioAskState.label;"
+             accesskey="&radioAskState.accesskey;"/>
+      <radio value="2" label="&radioAlwaysOnlineState.label;"
+             accesskey="&radioAlwaysOnlineState.accesskey;"/>
+      <radio value="3" label="&radioAlwaysOffline.label;"
+             accesskey="&radioAlwaysOffline.accesskey;"/>
+      <radio value="4" hidden="true"/>
+    </radiogroup>
+
+    <separator/>
+
+    <label value="&textGoingOnline;" control="whengoingOnlinestate"/>
+    <radiogroup id="whengoingOnlinestate" orient="horizontal" class="indent"
+                preference ="offline.send.unsent_messages">
+      <radio value="1" label="&radioAutoSend.label;"  accesskey="&radioAutoSend.accesskey;"/>
+      <radio value="2" label="&radioNotSend.label;"   accesskey="&radioNotSend.accesskey;"/>
+      <radio value="0" label="&radioAskUnsent.label;" accesskey="&radioAskUnsent.accesskey;"/>
+    </radiogroup>
+
+    <separator class="thin"/>
+
+    <label value="&textGoingOffline;" control="whengoingOfflinestate"/>
+    <radiogroup id="whengoingOfflinestate" orient="horizontal" class="indent"
+                preference="offline.download.download_messages">
+      <radio value="1" label="&radioAutoDownload.label;" accesskey="&radioAutoDownload.accesskey;"/>
+      <radio value="2" label="&radioNotDownload.label;"  accesskey="&radioNotDownload.accesskey;"/>
+      <radio value="0" label="&radioAskDownload.label;"  accesskey="&radioAskDownload.accesskey;"/>
+    </radiogroup>
+    <separator/>
+  </prefpane>
+</prefwindow>

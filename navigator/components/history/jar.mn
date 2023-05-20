@@ -1,0 +1,17 @@
+#filter substitution
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+comm.jar:
+  content/communicator/history/controller.js                       (content/controller.js)
+  content/communicator/history/history.js                          (content/history.js)
+* content/communicator/history/history.xul                         (content/history.xul)
+  content/communicator/history/history-panel.xul                   (content/history-panel.xul)
+  content/communicator/history/places.css                          (content/places.css)
+  content/communicator/history/placesOverlay.xul                   (content/placesOverlay.xul)
+  content/communicator/history/tree.xml                            (content/tree.xml)
+  content/communicator/history/treeView.js                         (content/treeView.js)
+
+en-US.jar:
+  locale/en-US/communicator/history/history.dtd                    (locale/history.dtd)

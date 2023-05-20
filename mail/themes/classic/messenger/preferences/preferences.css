@@ -1,0 +1,233 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* Global Styles */
+
+menulist > .menulist-label-box > .menulist-icon[src] {
+  margin-inline-start: 7px;
+  margin-inline-end: 10px;
+  max-width: 16px;
+  max-height: 16px;
+}
+
+radio[pane=paneGeneral] {
+  list-style-image: url("chrome://messenger/skin/preferences/general.png");
+}
+radio[pane=paneDisplay] {
+  list-style-image: url("chrome://messenger/skin/preferences/display.png");
+}
+radio[pane=paneCompose] {
+  list-style-image: url("chrome://messenger/skin/preferences/composition.png");
+}
+radio[pane=paneChat] {
+  list-style-image: url("chrome://messenger/skin/preferences/chat.png");
+}
+radio[pane=panePrivacy] {
+  list-style-image: url("chrome://messenger/skin/preferences/privacy.png");
+}
+radio[pane=paneSecurity] {
+  list-style-image: url("chrome://messenger/skin/preferences/security.png");
+}
+radio[pane=paneApplications] {
+  list-style-image: url("chrome://messenger/skin/preferences/attachments.png");
+}
+radio[pane=paneAdvanced] {
+  list-style-image: url("chrome://messenger/skin/preferences/advanced.png");
+}
+
+/* Attachments Pane */
+#MailPreferences[animated="true"] #handlersView {
+  height: 25em;
+}
+
+#MailPreferences[animated="false"] #handlersView {
+  -moz-box-flex: 1;
+}
+
+/* Modeless Window Dialogs */
+.windowDialog,
+.windowDialog prefpane {
+  padding: 0px;
+}
+
+.contentPane {
+  margin: 9px 8px 5px;
+}
+
+.actionButtons {
+  margin: 0px 3px 6px !important;
+}
+
+/* override the color style for tag items when they 
+   have selection */
+#tagList listitem[selected="true"] {
+  color: -moz-DialogText !important;
+}
+
+#tagList:focus > listitem[selected="true"] {
+  color: HighlightText !important;
+}
+
+/* Chat */
+#timeBeforeAway {
+  width: 4em;
+}
+
+/* Quota meter in Folder Properties */
+
+#quotaPercentageBar {
+  -moz-appearance: none;
+  border: 1px solid ThreeDShadow;
+}
+
+#quotaPercentageBar > .progress-bar {
+  -moz-appearance: none;
+  background-color: #88AAFF;
+  opacity: .5;
+}
+
+/* Cookies Manager */
+#cookiesChildren::-moz-tree-image(domainCol) {
+  width: 16px;
+  height: 16px;
+  margin: 0 2px;
+  list-style-image: url("chrome://mozapps/skin/places/defaultFavicon.png");
+}
+
+#cookiesChildren::-moz-tree-image(domainCol, container) {
+  list-style-image: url("chrome://global/skin/icons/folder-item.png");
+  -moz-image-region: rect(0 32px 16px 16px);
+}
+
+#cookiesChildren::-moz-tree-image(domainCol, container, open) {
+  -moz-image-region: rect(16px 32px 32px 16px);
+}
+
+#cookieInfoBox {
+  border: 1px solid ThreeDShadow;
+  border-radius: 0;
+  margin: 4px;
+  padding: 0;
+}
+
+/* Attachments */
+
+body {
+  font: message-box;
+}
+
+a {
+  color: -moz-nativehyperlinktext;
+  text-decoration: underline;
+}
+
+#provider-header {
+  border-bottom: 1px solid #898c95;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+}
+
+#provider-name {
+  padding: 0;
+  margin: 0;
+  margin-right: 120px;
+}
+
+#provider-name h1 {
+  font-size: large;
+}
+
+#provider-name h2 {
+  font: message-box;
+}
+
+#provider-terms {
+  float: right;
+  width: 110px;
+}
+
+#provider-terms a {
+  display: block;
+  margin-bottom: 5px;
+  text-align: right;
+}
+
+#provider-space {
+  text-align: right;
+  margin-right: 200px;
+  height: 100px;
+}
+
+#cloudFileView {
+  width: 150px;
+  overflow: hidden;
+}
+
+#upgrade {
+  margin-top: 1em;
+}
+
+#provider-space-visuals {
+  float: right;
+}
+
+#provider-account-settings {
+  text-align: right;
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+}
+
+.space-swatch {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: 1px solid rgba(0,0,0,0.5);
+  border-radius: 2px;
+  -moz-margin-start: 0.5ch;
+  box-sizing: border-box;
+}
+
+/* Main pane padding */
+
+#provider-management {
+  margin: 0 10px;
+}
+
+#provider-name h1 {
+  margin: 0;
+}
+
+/* Loading panel */
+#cloudFileLoadingPanel, #cloudFileDefaultPanel {
+  text-align: center;
+  padding-top: 120px;
+}
+
+/* Flexing */
+#provider-management {
+  display: block;
+  -moz-box-orient: vertical;
+}
+
+#provider-space label {
+  -moz-margin-end: 0.5ch;
+  vertical-align: middle;
+}
+
+#provider-space span {
+  vertical-align: middle;
+}
+
+#provider-header {
+  -moz-box-flex: 0;
+}
+
+#provider-spacebox {
+  -moz-box-flex: 1;
+}
+
+#provider-account-settings {
+  -moz-box-flex: 0;
+}

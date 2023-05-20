@@ -1,0 +1,38 @@
+# vim: set filetype=python:
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+DIRS += [
+    'about-support',
+    'activity',
+    'addrbook',
+    'cloudfile',
+    'compose',
+    'mailviews',
+    'migration',
+    'newmailaccount',
+    'preferences',
+    'smime',
+    'steel',
+]
+
+if CONFIG['MOZ_WIDGET_TOOLKIT'] in ('windows', 'gtk2', 'gtk3', 'cocoa', 'qt'):
+    DIRS += ['shell']
+
+DIRS += ['build']
+
+XPIDL_SOURCES += [
+    'nsIMailGlue.idl',
+]
+
+XPIDL_MODULE = 'mailcompsbase'
+
+EXTRA_COMPONENTS += [
+    'mailComponents.manifest',
+    'mailContentHandler.js',
+    'mailGlue.js',
+    'nsAboutRedirector.js',
+    'nsMailDefaultHandler.js',
+]
+

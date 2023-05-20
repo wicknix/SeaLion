@@ -1,0 +1,166 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://messenger/skin/searchBox.css" type="text/css"?>
+<?xml-stylesheet href="chrome://messenger/skin/addressbook/abContactsPanel.css" type="text/css"?>
+
+<!DOCTYPE page [
+<!ENTITY % abResultsPaneOverlayDTD SYSTEM "chrome://messenger/locale/addressbook/abResultsPaneOverlay.dtd" >
+%abResultsPaneOverlayDTD;
+<!ENTITY % abContactsPanelDTD SYSTEM "chrome://messenger/locale/addressbook/abContactsPanel.dtd" >
+%abContactsPanelDTD;
+]>
+
+<page id="abContactsPanel"
+      xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+      onload="AbPanelLoad();"
+      onunload="AbPanelUnload();"
+      selectedaddresses="true">
+
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="bundle_addressBook" src="chrome://messenger/locale/addressbook/addressBook.properties"/>
+  </stringbundleset>
+
+  <script type="application/javascript" src="chrome://global/content/nsDragAndDrop.js"/>
+  <script type="application/javascript" src="chrome://global/content/globalOverlay.js"/>
+  <script type="application/javascript" src="chrome://messenger/content/addressbook/addressbook.js"/>
+  <script type="application/javascript" src="chrome://messenger/content/addressbook/abDragDrop.js"/>
+  <script type="application/javascript" src="chrome://messenger/content/addressbook/abCommon.js"/>
+  <script type="application/javascript" src="chrome://messenger/content/addressbook/abResultsPane.js"/>
+  <script type="application/javascript" src="chrome://messenger/content/addressbook/abContactsPanel.js"/>
+
+  <commandset id="CommandUpdate_AddressBook"
+              commandupdater="true"
+              events="focus,addrbook-select"
+              oncommandupdate="CommandUpdate_AddressBook()">
+    <command id="cmd_delete" oncommand="goDoCommand('cmd_delete');"/>
+    <command id="cmd_properties" oncommand="goDoCommand('cmd_properties');"/>
+  </commandset>
+  <broadcasterset id="cmd_properties-flavors">
+    <broadcaster id="cmd_properties-contextMenu" observes="cmd_properties"
+                 valueGeneric="&propertiesContext.label;"
+                 valueGenericAccessKey="&propertiesContext.accesskey;"
+                 valueAddressBook="&abPropertiesContext.label;"
+                 valueAddressBookAccessKey="&abPropertiesContext.accesskey;"
+                 valueContact="&editContactContext.label;"
+                 valueContactAccessKey="&editContactContext.accesskey;"
+                 valueMailingList="&editMailingListContext.label;"
+                 valueMailingListAccessKey="&editMailingListContext.accesskey;"/>
+    <broadcaster id="cmd_properties-menu" observes="cmd_properties"
+                 valueGeneric="&propertiesMenu.label;"
+                 valueGenericAccessKey="&propertiesMenu.accesskey;"
+                 valueAddressBook="&abPropertiesMenu.label;"
+                 valueAddressBookAccessKey="&abPropertiesMenu.accesskey;"
+                 valueContact="&contactPropertiesMenu.label;"
+                 valueContactAccessKey="&contactPropertiesMenu.accesskey;"
+                 valueMailingList="&mailingListPropertiesMenu.label;"
+                 valueMailingListAccessKey="&mailingListPropertiesMenu.accesskey;"/>
+  </broadcasterset>
+
+  <!-- These keys do not really run any command, but they are used to show
+       the hotkeys at the corresponding menuitems -->
+  <key id="key_delete" keycode="VK_DELETE"/>
+  <key id="key_properties" modifiers="alt" keycode="VK_RETURN"/>
+
+  <menupopup id="cardProperties">
+    <menuitem label="&addtoToFieldMenu.label;"
+              accesskey="&addtoToFieldMenu.accesskey;"
+              oncommand="addSelectedAddresses('addr_to');"/>
+    <menuitem label="&addtoCcFieldMenu.label;"
+              accesskey="&addtoCcFieldMenu.accesskey;"
+              oncommand="addSelectedAddresses('addr_cc');"/>
+    <menuitem label="&addtoBccFieldMenu.label;"
+              accesskey="&addtoBccFieldMenu.accesskey;"
+              oncommand="addSelectedAddresses('addr_bcc');"/>
+    <menuseparator/>
+    <menuitem label="&deleteAddrBookCard.label;"
+              accesskey="&deleteAddrBookCard.accesskey;"
+              key="key_delete"
+              command="cmd_delete"/>
+    <menuseparator/>
+    <menuitem label="&propertiesContext.label;"
+              key="key_properties"
+              command="cmd_properties-contextMenu"/>
+  </menupopup>
+
+  <vbox id="results_box" flex="1">
+    <separator class="thin"/>
+    <label value="&addressbookPicker.label;" accesskey="&addressbookPicker.accesskey;" control="addressbookList"/>
+    <hbox id="panel-bar" class="toolbar" align="center">
+      <menulist id="addressbookList"
+                oncommand="AddressBookMenuListChange();" flex="1"
+                persist="value">
+        <menupopup id="addressbookList-menupopup" class="addrbooksPopup"/>
+      </menulist>
+    </hbox>
+
+    <separator class="thin"/>
+
+    <vbox>
+      <label value="&searchContacts.label;"
+             accesskey="&searchContacts.accesskey;"
+             control="peopleSearchInput"/>
+      <textbox type="search"
+               id="peopleSearchInput"
+               class="searchBox"
+               flex="1"
+               timeout="800"
+               placeholder="&SearchNameOrEmail.label;"
+               clickSelectsAll="true"
+               oncommand="onEnterInSearchBar();"/>
+    </vbox>
+
+    <separator class="thin"/>
+
+    <tree id="abResultsTree" flex="1" context="cardProperties" class="plain" sortCol="GeneratedName" persist="sortCol"
+          onclick="contactsListOnClick(event);"
+          onselect="this.view.selectionChanged(); document.commandDispatcher.updateCommands('addrbook-select');"
+          onkeypress="contactsListOnKeyPress(event);">
+      <treecols>
+        <!-- these column ids must match up to the mork column names, see nsIAddrDatabase.idl -->
+        <treecol id="GeneratedName"
+                 persist="hidden ordinal width sortDirection" flex="1" label="&GeneratedName.label;" primary="true"/>
+        <splitter class="tree-splitter"/>
+        <treecol id="addrbook"
+                 persist="hidden ordinal width sortDirection" hidden="true"
+                 flex="1" label="&Addrbook.label;"/>
+        <splitter class="tree-splitter"/>
+        <treecol id="PrimaryEmail"
+                 persist="hidden ordinal width sortDirection" hidden="true"
+                 flex="1" label="&PrimaryEmail.label;"/>
+      </treecols>
+      <treechildren ondragstart="nsDragAndDrop.startDrag(event, abResultsPaneObserver);"/>
+    </tree>
+
+    <separator class="thin"/>
+
+    <hbox>
+      <spring flex="1"/>
+      <grid>
+        <columns>
+          <column style="min-width: 10em"/>
+        </columns>
+        <rows>
+          <row id="toButtonBox">
+              <button id="toButton" label="&toButton.label;" accesskey="&toButton.accesskey;"
+                      oncommand="addSelectedAddresses('addr_to')"/>
+          </row>
+          <row id="ccButtonBox">
+              <button id="ccButton" label="&ccButton.label;" accesskey="&ccButton.accesskey;"
+                      oncommand="addSelectedAddresses('addr_cc')"/>
+          </row>
+          <row id="bccButtonBox">
+              <button id="bccButton" label="&bccButton.label;" accesskey="&bccButton.accesskey;"
+                      oncommand="addSelectedAddresses('addr_bcc')"/>
+          </row>
+        </rows>
+      </grid>
+      <spring flex="1"/>
+    </hbox>
+
+    <separator class="thin"/>
+  </vbox>
+</page>

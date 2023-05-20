@@ -1,0 +1,89 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsISupports.idl"
+
+interface nsIMsgIdentity;
+interface nsIURI;
+
+interface calICalendar;
+interface calIItemBase;
+interface calIOperationListener;
+
+interface calIItemACLEntry;
+
+/**
+ */
+[scriptable, uuid(a64bd8a0-e9f0-4f64-928a-1c98861e4703)]
+interface calICalendarACLManager : nsISupports
+{
+    /* Gets the calICalendarACLEntry of the current user for the specified
+       calendar. */
+    void getCalendarEntry(in calICalendar aCalendar,
+                          in calIOperationListener aListener);
+
+    /* Gets the calIItemACLEntry of the current user for the specified
+       calendar item. Depending on the implementation, each item can have
+       different permissions based on specific attributes.
+       (TODO: should be made asynchronous one day) */
+    calIItemACLEntry getItemEntry(in calIItemBase aItem);
+};
+
+[scriptable, uuid(f3da7954-52a4-45a9-bd7d-96c518133d0c)]
+interface calICalendarACLEntry : nsISupports
+{
+    /* The calICalendarACLManager instance that generated this entry. */
+    readonly attribute calICalendarACLManager aclManager;
+
+    /* Whether the underlying calendar does have access control. */
+    readonly attribute boolean hasAccessControl;
+
+    /* Whether the user accessing the calendar is its owner. */
+    readonly attribute boolean userIsOwner;
+
+    /* Whether the user accessing the calendar can add items to it. */
+    readonly attribute boolean userCanAddItems;
+
+    /* Whether the user accessing the calendar can remove items from it. */
+    readonly attribute boolean userCanDeleteItems;
+
+    /* Returns the list of user ids matching the user accessing the
+       calendar. */
+    void getUserAddresses(out uint32_t aCount,
+                          [array, size_is(aCount), retval] out wstring aAddresses);
+
+    /* Returns the list of instantiated identities for the user accessing the
+       calendar. */
+    void getUserIdentities(out uint32_t aCount,
+                           [array, size_is(aCount), retval] out nsIMsgIdentity aIdentities);
+    /* Returns the list of instantiated identities for the user representing
+       the calendar owner. */
+    void getOwnerIdentities(out uint32_t aCount,
+                            [array, size_is(aCount), retval] out nsIMsgIdentity aIdentities);
+
+    /* Helper method that forces a cleanup of any cache and a reload of the
+       current entry.
+       (TODO: should be made asynchronous one day) */
+    void refresh();
+};
+
+[scriptable, uuid(4d0b7ced-8c57-4efa-87e7-8dd5b7481312)]
+interface calIItemACLEntry : nsISupports
+{
+    /* The parent calICalendarACLEntry instance. */
+    readonly attribute calICalendarACLEntry calendarEntry;
+
+    /* Whether the active user can fully modify the item. */
+    readonly attribute boolean userCanModify;
+
+    /* Whether the active user can respond to this item, if it is an invitation. */
+    readonly attribute boolean userCanRespond;
+
+    /* Whether the active user can view all the item properties. */
+    readonly attribute boolean userCanViewAll;
+
+    /* Whether the active user can only see when this item occurs without
+       knowing any details. */
+    readonly attribute boolean userCanViewDateAndTime;
+};

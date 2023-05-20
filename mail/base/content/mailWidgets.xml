@@ -1,0 +1,2853 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+
+<!DOCTYPE bindings [
+<!ENTITY % msgHdrViewOverlayDTD SYSTEM "chrome://messenger/locale/msgHdrViewOverlay.dtd" >
+%msgHdrViewOverlayDTD;
+<!ENTITY % messengerDTD SYSTEM "chrome://messenger/locale/messenger.dtd" >
+%messengerDTD;
+]>
+
+<bindings   id="mailBindings"
+            xmlns="http://www.mozilla.org/xbl"
+            xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+            xmlns:nc="http://home.netscape.com/NC-rdf#"
+            xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <!-- dummy widget to force this file to load -->
+  <binding id="dummy" extends="xul:box"/>
+
+  <binding id="attachmentlist-base" extends="chrome://global/content/bindings/listbox.xml#listbox-base">
+    <implementation>
+      <constructor><![CDATA[
+        let children = Array.slice(this._childNodes);
+
+        children.filter(aChild => aChild.getAttribute("selected") == "true")
+                .forEach(this.selectedItems.append, this.selectedItems);
+
+        children.filter(aChild => !aChild.hasAttribute("context"))
+                .forEach(aChild => aChild.setAttribute("context",
+                           this.getAttribute("itemcontext")));
+
+        this.sizes = {small: 16, large: 32, tile: 32};
+        this.messenger = Components.classes["@mozilla.org/messenger;1"]
+                                   .createInstance(Components.interfaces.nsIMessenger);
+
+      ]]></constructor>
+
+      <!-- ///////////////// public members ///////////////// -->
+
+      <property name="view">
+        <getter><![CDATA[
+          return this.getAttribute("view");
+        ]]></getter>
+        <setter><![CDATA[
+          this.setAttribute("view", val);
+          this._setImageSize();
+          return val;
+        ]]></setter>
+      </property>
+
+      <property name="orient">
+        <getter><![CDATA[
+          return this.getAttribute("orient");
+        ]]></getter>
+        <setter><![CDATA[
+          // The current item can get messed up when changing orientation.
+          let curr = this.currentItem;
+          this.currentItem = null;
+
+          this.setAttribute("orient", val);
+          this.currentItem = curr;
+          return val;
+        ]]></setter>
+      </property>
+
+      <property name="itemCount" readonly="true"
+                onget="return this._childNodes.length;"/>
+
+      <method name="getIndexOfItem">
+        <parameter name="item"/>
+        <body><![CDATA[
+          for (let i = 0; i < this._childNodes.length; i++) {
+            if (this._childNodes[i] === item)
+              return i;
+          }
+          return -1;
+        ]]></body>
+      </method>
+      <method name="getItemAtIndex">
+        <parameter name="index"/>
+        <body><![CDATA[
+          if (index >= 0 && index < this._childNodes.length)
+            return this._childNodes[index];
+          return null;
+        ]]></body>
+      </method>
+      <method name="getRowCount">
+        <body><![CDATA[
+          return this._childNodes.length;
+        ]]></body>
+      </method>
+      <method name="getNumberOfVisibleRows">
+        <body><![CDATA[
+          let itemsPerRow = this._itemsPerRow();
+          return itemsPerRow * this._itemsPerCol(itemsPerRow);
+        ]]></body>
+      </method>
+      <method name="getIndexOfFirstVisibleRow">
+        <body><![CDATA[
+          if (this._childNodes.length == 0)
+            return -1;
+
+          // First try to estimate which row is visible, assuming they're all
+          // the same height.
+          let box = this.scrollbox;
+          let estimatedRow = Math.floor(box.scrollTop /
+                                        this._childNodes[0].boxObject.height);
+          let estimatedIndex = estimatedRow * this._itemsPerRow();
+          let offset = this._childNodes[estimatedIndex].boxObject.screenY -
+                       box.boxObject.screenY;
+
+          if (offset > 0) {
+            // We went too far! Go back until we find an item totally off-
+            // screen, then return the one after that.
+            for (let i = estimatedIndex - 1; i >= 0; i--) {
+              let childBoxObj = this._childNodes[i].boxObject;
+              if (childBoxObj.screenY + childBoxObj.height <=
+                  box.boxObject.screenY)
+                return i+1;
+            }
+
+            // If we get here, we must have gone back to the beginning of the
+            // list, so just return 0.
+            return 0;
+          }
+          else {
+            // We didn't go far enough! Keep going until we find an item at
+            // least partially on-screen.
+            for (let i = estimatedIndex; i < this._childNodes.length; i++) {
+              let childBoxObj = this._childNodes[i].boxObject;
+              if (childBoxObj.screenY + childBoxObj.height >
+                  box.boxObject.screenY > 0)
+                return i;
+            }
+
+            // If we get here, something is very wrong.
+            Components.utils.reportError(
+              "Couldn't get index of first visible row for attachmentlist!\n");
+            return -1;
+          }
+        ]]></body>
+      </method>
+      <method name="ensureIndexIsVisible">
+        <parameter name="index"/>
+        <body><![CDATA[
+          this.ensureElementIsVisible(this.getItemAtIndex(index));
+        ]]></body>
+      </method>
+      <method name="ensureElementIsVisible">
+        <parameter name="item"/>
+        <body><![CDATA[
+          let box = this.scrollbox;
+
+          // Are we too far down?
+          if (item.boxObject.screenY < box.boxObject.screenY)
+            box.scrollTop = item.boxObject.y - box.boxObject.y;
+          // ... or not far enough?
+          else if (item.boxObject.screenY + item.boxObject.height >
+                   box.boxObject.screenY + box.boxObject.height)
+            box.scrollTop = item.boxObject.y + item.boxObject.height -
+                            box.boxObject.y - box.boxObject.height;
+        ]]></body>
+      </method>
+      <method name="scrollToIndex">
+        <parameter name="index"/>
+        <body><![CDATA[
+          let box = this.scrollbox;
+          let item = this.getItemAtIndex(index);
+          if (!item)
+            return;
+          box.scrollTop = item.boxObject.y - box.boxObject.y;
+        ]]></body>
+      </method>
+      <method name="appendItem">
+        <parameter name="attachment"/>
+        <parameter name="name"/>
+        <body><![CDATA[
+          // -1 appends due to the way getItemAtIndex is implemented.
+          return this.insertItemAt(-1, attachment, name);
+        ]]></body>
+      </method>
+      <method name="insertItemAt">
+        <parameter name="index"/>
+        <parameter name="attachment"/>
+        <parameter name="name"/>
+        <body><![CDATA[
+          const XULNS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+          let item = this.ownerDocument.createElementNS(XULNS, "attachmentitem");
+          item.setAttribute("name", name || attachment.name);
+
+          let size;
+          if (attachment.size != null && attachment.size != -1)
+            size = this.messenger.formatFileSize(attachment.size);
+          else // Use a zero-width space so the size label has the right height.
+            size = "\u200b";
+          item.setAttribute("size", size);
+
+          // Pick out some nice icons (small and large) for the attachment
+          if (attachment.contentType == "text/x-moz-deleted") {
+            let base = "chrome://messenger/skin/icons/";
+            item.setAttribute("image16", base+"attachment-deleted.png");
+            item.setAttribute("image32", base+"attachment-deleted-large.png");
+          }
+          else {
+            item.setAttribute("image16", "moz-icon://" + attachment.name +
+                              "?size=16&amp;contentType=" +
+                              attachment.contentType);
+            item.setAttribute("image32", "moz-icon://" + attachment.name +
+                              "?size=32&amp;contentType=" +
+                              attachment.contentType);
+          }
+
+          item.setAttribute("imagesize", this.sizes[this.getAttribute("view")] || 16);
+          item.setAttribute("context", this.getAttribute("itemcontext"));
+          item.attachment = attachment;
+
+          this.insertBefore(item, this.getItemAtIndex(index));
+          return item;
+        ]]></body>
+      </method>
+
+      <method name="scrollOnePage">
+        <parameter name="direction"/>  <!-- Must be -1 or 1 -->
+        <body><![CDATA[
+          let pageOffset = this.getNumberOfVisibleRows() * direction;
+          let firstVisibleIndex = this.getIndexOfFirstVisibleRow();
+
+          // skip over invisible elements - the user won't care about them
+          for (let i = 0; i != pageOffset; i += direction) {
+            let item = this.getItemAtIndex(firstVisibleIndex + i);
+            if (item && !this._canUserSelect(item))
+              pageOffset += direction;
+          }
+
+          let newTop = firstVisibleIndex + pageOffset;
+          if (direction == 1) {
+            let maxTop = this.getRowCount() - this.getNumberOfVisibleRows();
+            for (let i = this.getRowCount(); i >= 0 && i > maxTop; i--) {
+              let item = this.getItemAtIndex(i);
+              if (item && !this._canUserSelect(item))
+                maxTop--;
+            }
+            if (newTop >= maxTop)
+              newTop = maxTop;
+          }
+          if (newTop < 0)
+            newTop = 0;
+          this.scrollToIndex(newTop);
+          return pageOffset;
+        ]]></body>
+      </method>
+
+      <!-- Get the preferred height (the height that would allow us to fit
+           everything without scrollbars) of the attachmentlist's boxObject. -->
+      <property name="preferredHeight" readonly="true"
+                onget="return this.scrollbox.scrollHeight - this.scrollbox.clientHeight + this.boxObject.height;"/>
+
+      <!-- Find the attachmentitem node for the specified nsIMsgAttachment. -->
+      <method name="findItemForAttachment">
+        <parameter name="aAttachment"/>
+        <body><![CDATA[
+          for (let i = 0; i < this.itemCount; i++) {
+            let item = this.getItemAtIndex(i);
+            if (item.attachment == aAttachment)
+              return item;
+          }
+          return null;
+        ]]></body>
+      </method>
+
+      <!-- ///////////////// private members ///////////////// -->
+
+      <field name="_childNodes" readonly="true">this.getElementsByTagName("attachmentitem")</field>
+      <property name="scrollbox" readonly="true"
+                onget="return document.getAnonymousElementByAttribute(this, 'anonid', 'scrollbox');"/>
+
+      <method name="_fireOnSelect">
+        <body><![CDATA[
+          if (!this._suppressOnSelect && !this.suppressOnSelect) {
+            this.dispatchEvent(new Event("select",
+                                         { bubbles: false, cancelable: true }));
+          }
+        ]]></body>
+      </method>
+
+      <method name="_itemsPerRow">
+        <body><![CDATA[
+          // For 0 or 1 children, we can assume that they all fit in one row.
+          if (this._childNodes.length < 2)
+            return this._childNodes.length;
+
+          let itemWidth = this._childNodes[1].boxObject.x -
+                          this._childNodes[0].boxObject.x;
+
+          if (itemWidth == 0) // Each item takes up a full row
+            return 1;
+          else
+            return Math.floor(this.scrollbox.clientWidth / itemWidth);
+        ]]></body>
+      </method>
+
+      <method name="_itemsPerCol">
+        <parameter name="aItemsPerRow"/>
+        <body><![CDATA[
+          let itemsPerRow = aItemsPerRow || this._itemsPerRow();
+
+          if (this._childNodes.length == 0)
+            return 0;
+          else if (this._childNodes.length <= itemsPerRow)
+            return 1;
+
+          let itemHeight = this._childNodes[itemsPerRow].boxObject.y -
+                           this._childNodes[0].boxObject.y;
+
+          return Math.floor(this.scrollbox.clientHeight / itemHeight);
+        ]]></body>
+      </method>
+
+      <method name="_setImageSize">
+        <body><![CDATA[
+          let size = this.sizes[this.view] || 16;
+
+          for (let i = 0; i < this._childNodes.length; i++)
+            this._childNodes[i].imageSize = size;
+        ]]></body>
+      </method>
+    </implementation>
+
+    <handlers>
+      <!-- The spacebar should work just like the arrow keys, except that the
+           focused element doesn't change, so use moveByOffset here. -->
+      <handler event="keypress" key=" " modifiers="control shift any"
+               action="this.moveByOffset(0, !event.ctrlKey, event.shiftKey);"
+               phase="target" preventdefault="true"/>
+      <handler event="keypress" keycode="VK_RETURN"><![CDATA[
+        if (this.currentItem) {
+          this.addItemToSelection(this.currentItem);
+          let evt = document.createEvent("XULCommandEvent");
+          evt.initCommandEvent("command", true, true, window, 0, event.ctrlKey,
+                               event.altKey, event.shiftKey, event.metaKey, null);
+          this.currentItem.dispatchEvent(evt);
+        }
+      ]]></handler>
+      <handler event="click" button="0" phase="target"><![CDATA[
+        if (this.selType != "multiple" || (!event.ctrlKey && !event.shiftKey &&
+                                           !event.metaKey))
+          this.clearSelection();
+      ]]></handler>
+      <!-- make sure we keep the focus... -->
+      <handler event="mousedown" button="0"
+               action="if (document.commandDispatcher.focusedElement != this) this.focus();"/>
+    </handlers>
+  </binding>
+
+  <binding id="attachmentlist-horizontal" extends="chrome://messenger/content/mailWidgets.xml#attachmentlist-base">
+    <content>
+      <xul:scrollbox flex="1" anonid="scrollbox" style="overflow: auto;">
+        <xul:hbox flex="1" class="attachmentlist-wrapper">
+          <children includes="attachmentitem"/>
+        </xul:hbox>
+      </xul:scrollbox>
+    </content>
+    <implementation>
+      <method name="setOptimumWidth">
+        <body><![CDATA[
+          if (this._childNodes.length == 0)
+            return;
+
+          let width = 0;
+          let border = this._childNodes[0].boxObject.width -
+                       this._childNodes[0].clientWidth;
+
+          for (let child of this._childNodes)
+            width = Math.max(width, child.scrollWidth);
+          for (let child of this._childNodes)
+            child.width = width + border;
+        ]]></body>
+      </method>
+    </implementation>
+    <handlers>
+      <handler event="keypress" keycode="VK_LEFT" modifiers="control shift any"
+               action="this.moveByOffset(-1, !event.ctrlKey, event.shiftKey);"
+               phase="target" preventdefault="true"/>
+      <handler event="keypress" keycode="VK_RIGHT" modifiers="control shift any"
+               action="this.moveByOffset(1, !event.ctrlKey, event.shiftKey);"
+               phase="target" preventdefault="true"/>
+      <handler event="keypress" keycode="VK_UP" modifiers="control shift any"
+               action="this.moveByOffset(-this._itemsPerRow(), !event.ctrlKey, event.shiftKey);"
+               phase="target" preventdefault="true"/>
+      <handler event="keypress" keycode="VK_DOWN" modifiers="control shift any"
+               action="this.moveByOffset(this._itemsPerRow(), !event.ctrlKey, event.shiftKey);"
+               phase="target" preventdefault="true"/>
+    </handlers>
+  </binding>
+
+  <binding id="attachmentlist-vertical" extends="chrome://messenger/content/mailWidgets.xml#attachmentlist-base">
+    <content>
+      <xul:scrollbox orient="vertical" flex="1" anonid="scrollbox"
+                     style="overflow: auto;">
+        <children includes="attachmentitem"/>
+      </xul:scrollbox>
+    </content>
+    <implementation>
+      <method name="_itemsPerRow">
+        <body><![CDATA[
+          // Vertical attachment lists have one item per row by definition.
+          return 1;
+        ]]></body>
+      </method>
+    </implementation>
+  </binding>
+
+  <binding id="attachmentitem" extends="chrome://global/content/bindings/listbox.xml#listitem">
+    <implementation>
+      <constructor><![CDATA[
+        this._updateImage();
+      ]]></constructor>
+
+      <property name="imageSize">
+        <getter><![CDATA[
+          return this.getAttribute("imagesize");
+        ]]></getter>
+        <setter><![CDATA[
+          this.setAttribute("imagesize", val);
+          this._updateImage();
+          return val;
+        ]]></setter>
+      </property>
+
+      <property name="image">
+        <getter><![CDATA[
+          return this.getAttribute("image");
+        ]]></getter>
+        <setter><![CDATA[
+          if (val)
+            this.setAttribute("image", val);
+          else
+            this.removeAttribute("image");
+          this._updateImage();
+          return val;
+        ]]></setter>
+      </property>
+
+      <method name="_updateImage">
+        <body><![CDATA[
+          if (!this.hasAttribute("image")) {
+            let icon = document.getAnonymousElementByAttribute(this, "anonid",
+                                                               "icon");
+            let attr = "image"+this.imageSize;
+            if (this.hasAttribute(attr))
+              icon.setAttribute("src", this.getAttribute(attr));
+          }
+        ]]></body>
+      </method>
+    </implementation>
+    <!-- Below, we want the name label to flex but not be any bigger than
+         necessary, so add a spacer with a huge flex value. -->
+    <content>
+      <xul:hbox class="attachmentcell-content" flex="1">
+        <xul:hbox align="center">
+          <xul:image class="attachmentcell-icon" anonid="icon"
+                     xbl:inherits="src=image"/>
+        </xul:hbox>
+        <xul:hbox class="attachmentcell-text" flex="1">
+          <xul:hbox class="attachmentcell-nameselection" flex="1">
+              <xul:label class="attachmentcell-name" xbl:inherits="value=name"
+                         flex="1" crop="center"/>
+          </xul:hbox>
+          <xul:spacer flex="99999"/>
+          <xul:label class="attachmentcell-size" xbl:inherits="value=size"/>
+        </xul:hbox>
+      </xul:hbox>
+    </content>
+    <handlers>
+      <handler event="click" button="0" clickcount="2"><![CDATA[
+        let evt = document.createEvent("XULCommandEvent");
+        evt.initCommandEvent("command", true, true, window, 0, event.ctrlKey,
+                             event.altKey, event.shiftKey, event.metaKey, null);
+        this.dispatchEvent(evt);
+      ]]></handler>
+    </handlers>
+  </binding>
+
+  <!-- Message Pane Widgets -->
+
+  <!-- mail-toggle-headerfield: Non-email addrs headers which have a toggle
+       associated with them (i.e. the subject).
+       Use headerValue to set the header value. -->
+  <binding id="mail-toggle-headerfield">
+    <content>
+      <xul:textbox class="headerValue" anonid="headerValue" flex="1" readonly="true"/>
+    </content>
+
+    <implementation>
+      <property name="headerValue" onset="return document.getAnonymousElementByAttribute(this, 'anonid', 'headerValue').value = val;"/>
+    </implementation>
+  </binding>
+
+  <!-- mail-headerfield: presents standard text header name & value pairs. Don't use this for email addresses.
+       use headerValue to set the header value. -->
+  <binding id="mail-headerfield">
+    <content>
+      <xul:description class="headerValue" anonid="headerValue"
+                       flex="1" readonly="true" context="copyPopup"
+                       role="textbox" aria-readonly="true"/>
+    </content>
+
+    <implementation>
+      <property name="headerValue">
+        <setter>
+          <![CDATA[
+          let valueNode = document.getAnonymousElementByAttribute(this,
+                                                                  "anonid",
+                                                                  "headerValue");
+
+          // Since the control attribute points to the <mail-headerfield>
+          // element rather than the XUL <textbox>, screen readers don't know to
+          // automagically prepend the label when reading the textbox, so we
+          // force this.  Furthermore, at least on Mac, there is no
+          // JS labelElement property at all, so we skip this.  We get away
+          // with it because there's no screen reader support on the Mac.
+          if ("labelElement" in this) {
+            let ariaLabel = this.labelElement.value + ": " + val;
+            valueNode.setAttribute("aria-label", ariaLabel);
+          }
+
+          return valueNode.textContent = val;
+          ]]>
+        </setter>
+      </property>
+    </implementation>
+  </binding>
+
+  <binding id="mail-urlfield" extends="chrome://messenger/content/mailWidgets.xml#mail-headerfield">
+    <content>
+      <xul:description
+                 onclick="if (event.button != 2)
+                            openUILink(event.target.textContent, event);"
+                 class="headerValue text-link headerValueUrl"
+                 anonid="headerValue" flex="1" readonly="true"
+                 role="textbox" aria-readonly="true" context="copyUrlPopup"/>
+    </content>
+  </binding>
+
+  <binding id="mail-emailheaderfield">
+    <content>
+      <xul:mail-emailaddress class="headerValue" containsEmail="true"
+                             anonid="emailAddressNode"/>
+    </content>
+
+    <implementation>
+      <property name="emailAddressNode" onget="return document.getAnonymousElementByAttribute(this, 'anonid', 'emailAddressNode');"
+        readonly="true"/>
+    </implementation>
+  </binding>
+
+  <!-- multi-emailHeaderField: presents multiple emailheaderfields with a toggle -->
+  <binding id="mail-multi-emailHeaderField">
+    <content>
+      <xul:hbox class="headerValueBox" anonid="longEmailAddresses" flex="1"
+                singleline="true"
+                align="baseline">
+        <xul:description class="headerValue" containsEmail="true"
+                         anonid="emailAddresses" flex="1"
+                         orient="vertical" pack="start" />
+      </xul:hbox>
+      <xul:label class="moreIndicator" onclick="this.parentNode.toggleWrap()"
+                 collapsed="true" anonid="more"/>
+    </content>
+
+    <implementation>
+      <constructor>
+        <![CDATA[
+          this.mAddresses = new Array;
+          Components.utils.import("resource://gre/modules/Services.jsm");
+        ]]>
+      </constructor>
+
+      <field name="mAddresses"/>
+
+      <!-- addAddressView: a public method used to add an address to this widget.
+           aAddresses is an object with 3 properties: displayName, emailAddress and fullAddress
+      -->
+      <method name="addAddressView">
+        <parameter name="aAddress"/>
+        <body>
+          <![CDATA[
+            this.mAddresses.push(aAddress);
+          ]]>
+        </body>
+      </method>
+
+      <!-- resetAddressView: a public method used to reset addresses shown by
+           this widget
+      -->
+      <method name="resetAddressView">
+        <body>
+          <![CDATA[
+            this.mAddresses.length = 0;
+          ]]>
+        </body>
+      </method>
+
+      <!-- updateEmailAddressNode: private method used to set properties on an address node -->
+      <method name="updateEmailAddressNode">
+        <parameter name="aEmailNode"/>
+        <parameter name="aAddress"/>
+        <body>
+          <![CDATA[
+            aEmailNode.setAttribute("label", aAddress.fullAddress || aAddress.displayName || "");
+            aEmailNode.removeAttribute("tooltiptext");
+            aEmailNode.setAttribute("emailAddress", aAddress.emailAddress || "");
+            aEmailNode.setAttribute("fullAddress", aAddress.fullAddress || "");
+            aEmailNode.setAttribute("displayName", aAddress.displayName || "");
+
+            // Since the control attribute points to the
+            // <mail-multi-emailHeaderField> element rather than the XUL
+            // <mail-emailaddress>, screen readers don't know to automagically
+            // prepend the label when reading the tag, so we force this.
+            // Furthermore, at least on Mac, there is no JS labelElement
+            // property at all, so we skip in that case.  We get away with it
+            // because there's no screen reader support on the Mac.
+            if ("labelElement" in this) {
+                let ariaLabel = this.labelElement.value + ": " +
+                                (aAddress.fullAddress || aAddress.displayName || "");
+                aEmailNode.setAttribute("aria-label", ariaLabel);
+            }
+
+            try
+            {
+              if (("UpdateEmailNodeDetails" in top) && aAddress.emailAddress)
+                UpdateEmailNodeDetails(aAddress.emailAddress, aEmailNode);
+            }
+            catch(ex)
+            {
+              dump("UpdateEmailNodeDetails failed: " + ex + "\n");
+            }
+          ]]>
+        </body>
+      </method>
+
+      <!-- This field is used to buffer the width of the comma node so that
+           it only has to be determined once during the lifetime of this
+           widget. Otherwise it would cause an expensive reflow every time. -->
+      <field name="commaNodeWidth">0</field>
+
+      <!-- fillAddressesNode: private method used to create email address
+           nodes for either our short or long view.
+           @param aAddressesNode {DOMElement}: the div to add addresses too
+           @param all {Boolean}: If false, show only a few addresses + "more"
+           @return {Integer} number of addresses we have put into the list
+      -->
+      <method name="fillAddressesNode">
+        <parameter name="aAddressesNode"/>
+        <parameter name="all"/>
+        <body>
+          <![CDATA[
+            // try to leverage any cached nodes before creating new ones
+            // XXX look for possible perf win using heuristic for the 2nd
+            // param instead of hardcoding 1
+            var cached = aAddressesNode.childNodes.length;
+
+            // XXXdmose one or more of the ancestor nodes could be collapsed,
+            // so this hack just undoes that for all ancestors.  We should do
+            // better.  Observed causes include the message header pane being
+            // collapsed before the first message has been read, as well as
+            // (more common), the <row> containing this widget being collapsed
+            // because the previously displayed message didn't have this header.
+            for (let node = aAddressesNode; node; node = node.parentNode)
+              node.collapsed = false;
+
+            // this ensures that the worst-case "n more" width is considered
+            this.addNMore(this.mAddresses.length);
+            var availableWidth = aAddressesNode.clientWidth;
+            this.more.collapsed = true;
+
+            // add addresses until we're done, or we overflow the allowed lines
+            var i = 0;
+            for (let curLine = 0, curLineWidth = 0;
+                 i < this.mAddresses.length && (all || curLine < this.maxLinesBeforeMore);
+                 i++)
+            {
+              let newAddressNode;
+
+              // First, add a comma as long as this isn't the first address.
+              if (i > 0) {
+                if (cached-- > 0)
+                  aAddressesNode.childNodes[i*2 - 1].hidden = false;
+                else {
+                  this.appendComma();
+                  if (this.commaNodeWidth == 0)
+                    this.commaNodeWidth = this.emailAddresses.lastChild.clientWidth;
+                }
+              }
+
+              // Now add an email address.
+              if (cached-- > 0) {
+                newAddressNode = aAddressesNode.childNodes[i*2];
+                newAddressNode.hidden = false;
+              } else {
+                newAddressNode = document.createElement("mail-emailaddress");
+
+                // Stash the headerName somewhere that UpdateEmailNodeDetails
+                // will be able to find it.
+                newAddressNode.setAttribute("headerName", this.headerName);
+
+                newAddressNode = aAddressesNode.appendChild(newAddressNode);
+              }
+              this.updateEmailAddressNode(newAddressNode, this.mAddresses[i]);
+
+              // Reading .clientWidth triggers an expensive reflow, so only
+              // do it when necessary for possible early loop exit to display
+              // (X more).
+              if (!all) {
+
+                // Calculate width and lines, consider the i+1 comma node if we have to
+                // <http://www.w3.org/TR/cssom-view/#client-attributes>
+                // <https://developer.mozilla.org/en/Determining_the_dimensions_of_elements>
+                let newLineWidth = i+1 < this.mAddresses.length ?
+                                   newAddressNode.clientWidth + this.commaNodeWidth:
+                                   newAddressNode.clientWidth;
+                curLineWidth += newLineWidth;
+
+                let overLineWidth = curLineWidth - availableWidth;
+                if (overLineWidth > 0 && i > 0) {
+                  curLine++;
+                  curLineWidth = newLineWidth;
+                }
+
+                // hide the last node spanning into the additional line (n>1)
+                // also hide it if <30px left after sliding the address (n=1)
+                // or if the last address would be truncated without "more"
+                if (curLine >= this.maxLinesBeforeMore &&
+                    (this.maxLinesBeforeMore > 1 ||
+                     (i+1 == this.mAddresses.length && overLineWidth > 30) ||
+                     newLineWidth - overLineWidth < 30)) {
+                  aAddressesNode.lastChild.hidden = true;
+                  i--;
+                }
+              }
+            }
+
+            // Update maxAddressesBeforeMore if we exceed the current cache
+            // estimate, but only if we aren't supposed to show all addresses.
+            if (!all && this.maxAddressesBeforeMore < i)
+              this.maxAddressesBeforeMore = i;
+
+            // Hide any extra nodes but keep them around for later.
+            cached = aAddressesNode.childNodes.length;
+            for (let j = Math.max(i*2 - 1, 0); j < cached; j++) {
+              aAddressesNode.childNodes[j].hidden = true;
+            }
+
+            // If we're not required to show all addresses, and there are still
+            // addresses remaining, add an (N more) widget.
+            if (!all) {
+              let remainingAddresses = this.mAddresses.length - i;
+              if (remainingAddresses > 0) {
+                if (aAddressesNode.childNodes.length % 2 == 0)
+                  aAddressesNode.lastChild.hidden = false;
+                else
+                  this.appendComma();
+
+                this.addNMore(remainingAddresses);
+                this.setNMoreTooltiptext(this.mAddresses.slice(-remainingAddresses));
+              }
+            }
+
+            return i; // number of addresses shown
+          ]]>
+        </body>
+      </method>
+
+      <property name="emailAddresses" onget="return document.getAnonymousElementByAttribute(this, 'anonid', 'emailAddresses');"
+        readonly="true"/>
+      <property name="longEmailAddresses" onget="return document.getAnonymousElementByAttribute(this, 'anonid', 'longEmailAddresses');"
+        readonly="true"/>
+      <property name="more" onget="return document.getAnonymousElementByAttribute(this, 'anonid', 'more')"
+        readonly="true"/>
+
+      <!-- The number of lines of addresses we will display before adding a
+           (more) indicator to the widget. This can be increased using the
+           preference mailnews.headers.show_n_lines_before_more . -->
+      <field name="maxLinesBeforeMore">1</field>
+
+      <!-- The number addresses which did fit up to now before the (more)
+           indicator became necessary to be added. This determines how many
+           address elements are cached for the lifetime of the widget. -->
+      <field name="maxAddressesBeforeMore">1</field>
+
+      <!-- Public method to build the DOM nodes for display, to be called
+           after all the addresses have been added to the widget. It uses
+           fillAddressesNode to display at most maxLinesBeforeMore lines of
+           addresses plus the (more) widget which can be clicked to reveal
+           the rest. The "singleline" attribute is set for one line only. -->
+      <method name="buildViews">
+        <body>
+          <![CDATA[
+            this.maxLinesBeforeMore = Services.prefs.getIntPref(
+              "mailnews.headers.show_n_lines_before_more");
+            const dt = Components.interfaces.nsMimeHeaderDisplayTypes;
+            let headerchoice = Services.prefs.getIntPref("mail.show_headers");
+            if (this.maxLinesBeforeMore < 1 ||
+                headerchoice == dt.AllHeaders) {
+              this.fillAddressesNode(this.emailAddresses, true);
+              this.longEmailAddresses.removeAttribute("singleline");
+            }
+            else {
+              this.fillAddressesNode(this.emailAddresses, false);
+              // force a single line only in the default n=1 case
+              if (this.maxLinesBeforeMore > 1)
+                this.longEmailAddresses.removeAttribute("singleline");
+            }
+          ]]>
+        </body>
+      </method>
+
+      <!-- Append a comma after the (currently) final (email address, we hope!)
+           node of this.emailAddresses -->
+      <method name="appendComma">
+        <body>
+          <![CDATA[
+            // Create and append a comma.
+            let commaNode = document.createElement("text");
+            commaNode.setAttribute("value", ",");
+            commaNode.setAttribute("class", "emailSeparator");
+            this.emailAddresses.appendChild(commaNode);
+           ]]>
+        </body>
+      </method>
+
+      <!-- Add a (N more) widget which can be clicked to reveal the rest. -->
+      <method name="addNMore">
+        <parameter name="aNumber"/>
+        <body>
+          <![CDATA[
+            // figure out the right plural for the language we're using
+            let words = document.getElementById("bundle_messenger")
+                                .getString("headerMoreAddrs");
+            let moreForm = PluralForm.get(aNumber, words).replace("#1",
+                                                                  aNumber);
+
+            // set the "n more" text node
+            this.more.setAttribute("value", moreForm);
+            // remove the tooltip text of the more widget
+            this.more.removeAttribute("tooltiptext");
+
+            this.more.collapsed = false;
+          ]]>
+        </body>
+      </method>
+
+      <!-- This field is used to specify the maximum number of addresses in the more
+           button tooltip text. -->
+      <field name="tooltipLength">20</field>
+      <property name="maxAddressesInMoreTooltipValue"
+                onset="return this.tooltipLength=val;"
+                onget="return this.tooltipLength;"/>
+
+      <!-- Populate the tooltiptext of the (N more) widget with hidden email
+           addresses. -->
+      <method name="setNMoreTooltiptext">
+        <parameter name="aAddresses"/>
+        <body>
+          <![CDATA[
+            if (aAddresses.length == 0)
+              return;
+
+            let tttArray = [];
+            for (let i = 0; (i < aAddresses.length) && (i < this.tooltipLength); i++) {
+              tttArray.push(aAddresses[i].fullAddress);
+            }
+            let ttText = tttArray.join(", ");
+
+            let remainingAddresses = aAddresses.length - tttArray.length;
+            // not all missing addresses fit in the tooltip
+            if (remainingAddresses > 0) {
+              // figure out the right plural for the language we're using
+              let words = document.getElementById("bundle_messenger")
+                                  .getString("headerMoreAddrsTooltip");
+              let moreForm = PluralForm.get(remainingAddresses, words)
+                                       .replace("#1", remainingAddresses);
+              ttText += moreForm;
+            }
+            this.more.setAttribute("tooltiptext", ttText);
+          ]]>
+        </body>
+      </method>
+
+      <!-- Updates the nodes of this field with a call to
+           UpdateExtraAddressProcessing. The parameters are optional fields
+           that can contain extra information to be passed to
+           UpdateExtraAddressProcessing, the implementation of that function
+           should be checked to determine what it requires -->
+      <method name="updateExtraAddressProcessing">
+        <parameter name="aParam1"/>
+        <parameter name="aParam2"/>
+        <parameter name="aParam3"/>
+        <body>
+          <![CDATA[
+            if (UpdateExtraAddressProcessing) {
+              var childNodes = this.emailAddresses.childNodes;
+              for (let i = 0; i < this.mAddresses.length; i++) {
+                UpdateExtraAddressProcessing(this.mAddresses[i],
+                                             childNodes[i * 2],
+                                             aParam1, aParam2, aParam3);
+              }
+            }
+          ]]>
+        </body>
+      </method>
+
+      <!-- Called when the (more) indicator has been clicked on; re-renders
+           the widget with all the addresses. -->
+      <method name="toggleWrap">
+        <body>
+          <![CDATA[
+            // Workaround the fact that XUL line-wrapping and "overflow: auto"
+            // don't interact properly (bug 492645), without which we
+            // would be inadvertently occluding too much of the message header
+            // text and forcing the user to scroll unnecessarily (bug 525225).
+            //
+            // Fake the "All Headers" mode, so that we get a scroll bar
+            // Will be reset when a new message loads
+            document.getElementById("expandedHeaderView").setAttribute("show_header_mode","all");
+
+            // Causes different CSS selectors to be used, which allows all
+            // of the addresses to be properly displayed and wrapped.
+            this.longEmailAddresses.removeAttribute("singleline");
+
+            this.clearChildNodes(this.emailAddresses);
+
+            // Re-render the node, this time with all the addresses.
+            this.fillAddressesNode(this.emailAddresses, true);
+            // Compute height of 'expandedHeaderView' from 'expandedHeadersBox'.
+            let expandedHeaderView = document.getElementById("expandedHeaderView");
+            expandedHeaderView.setAttribute("height", document.getElementById("expandedHeadersBox").clientHeight);
+            // This attribute will be reinit in the 'UpdateExpandedMessageHeaders()' method.
+          ]]>
+        </body>
+      </method>
+
+      <!-- internal method used to clear both our divs -->
+      <method name="clearChildNodes">
+        <parameter name="aParentNode"/>
+        <body>
+          <![CDATA[
+            this.more.collapsed = true;
+
+            // We want to keep around the first maxAddressesBeforeMore email
+            // address nodes as well as any intervening comma nodes.
+            var numItemsToPreserve = this.maxAddressesBeforeMore * 2 - 1;
+            var numItemsInNode = aParentNode.childNodes.length;
+
+            while (numItemsInNode && (numItemsInNode > numItemsToPreserve))
+            {
+              aParentNode.lastChild.remove();
+              numItemsInNode--;
+            }
+          ]]>
+        </body>
+      </method>
+
+      <method name="clearHeaderValues">
+        <body>
+          <![CDATA[
+            // clear out our local state
+            this.mAddresses = new Array;
+            this.longEmailAddresses.setAttribute("singleline", "true");
+            // remove anything inside of each of our labels....
+            this.clearChildNodes(this.emailAddresses);
+          ]]>
+        </body>
+      </method>
+    </implementation>
+  </binding>
+
+  <binding id="mail-emailaddress">
+    <content>
+      <xul:description anonid="emailValue" class="emailDisplayButton"
+                       xbl:inherits="hascard,aria-label"
+                       context="emailAddressPopup" popup="emailAddressPopup"
+                       flex="1" role="textbox" aria-readonly="true">
+        <xul:label class="emaillabel" anonid="emaillabel"
+                   xbl:inherits="value=label,crop"/>
+        <xul:image class="emailStar" anonid="emailStar"
+                   context="emailAddressPopup"
+                   onmousedown="event.preventDefault();"
+                   onclick="onClickEmailStar(event, this.parentNode.parentNode);"
+                   xbl:inherits="hascard,tooltiptext=tooltipstar,chatStatus"/>
+        <xul:image class="emailPresence" anonid="emailPresence"
+                   onmousedown="event.preventDefault();"
+                   onclick="onClickEmailPresence(event, this.parentNode.parentNode);"
+                   xbl:inherits="chatStatus,tooltiptext=presenceTooltip"/>
+      </xul:description>
+    </content>
+
+    <implementation>
+      <property name="label"      onset="this.getPart('emailValue').setAttribute('label',val); return val;"
+                                  onget="return this.getPart('emailValue').getAttribute('label');"/>
+      <property name="crop"       onset="this.getPart('emailValue').setAttribute('crop',val); return val;"
+                                  onget="return this.getPart('emailValue').getAttribute('crop');"/>
+      <property name="disabled"   onset="this.getPart('emailValue').setAttribute('disabled',val); return val;"
+                                  onget="return this.getPart('emailValue').getAttribute('disabled');"/>
+
+      <method name="getPart">
+        <parameter name="aPartId"/>
+        <body><![CDATA[
+          return document.getAnonymousElementByAttribute(this, "anonid", aPartId);
+        ]]></body>
+      </method>
+    </implementation>
+  </binding>
+
+  <!-- a single newsgroup as displayed in the message header with a drop-down
+       menu for various actions -->
+  <binding id="mail-newsgroup">
+    <content>
+      <xul:description anonid="newsgroupValue" class="emailDisplayButton"
+                       context="newsgroupPopup" popup="newsgroupPopup"
+                       flex="1">
+        <xul:label class="newsgrouplabel" anonid="newsgrouplabel"
+                   role="textbox" aria-readonly="true"
+                   xbl:inherits="value=label,crop"/>
+      </xul:description>
+    </content>
+
+    <implementation>
+      <property name="label"      onset="this.getPart('newsgroupValue').setAttribute('label',val); return val;"
+                                  onget="return this.getPart('newsgroupValue').getAttribute('label');"/>
+    </implementation>
+  </binding>
+
+  <!-- The value of the Newsgroups: headers, as displayed in the message,
+       header, composed of <mail-newsgroup> nodes.  -->
+  <binding id="mail-newsgroups-headerfield">
+    <content>
+      <xul:hbox class="headerValueBox" flex="1">
+        <xul:description class="headerValue" anonid="newsgroups" containsEmail="true"
+                         flex="1"/>
+      </xul:hbox>
+    </content>
+
+    <implementation>
+      <constructor><![CDATA[
+          this.mNewsgroups = new Array;
+      ]]></constructor>
+
+      <property name="newsgroups" onget="return document.getAnonymousElementByAttribute(this, 'anonid', 'newsgroups');"
+        readonly="true"/>
+
+      <!-- add a newsgroup to the internal list of newsgroups -->
+      <method name="addNewsgroupView">
+        <parameter name="aNewsgroup"/>
+        <body><![CDATA[
+          this.mNewsgroups.push(aNewsgroup);
+        ]]></body>
+      </method>
+
+      <!-- build the view for the current list of newsgroups -->
+      <method name="buildViews">
+        <body><![CDATA[
+          for (let i=0; i<this.mNewsgroups.length; i++)
+          {
+            let newNode = document.createElement("mail-newsgroup");
+            if (i)
+            {
+              let textNode = document.createElement("text");
+              textNode.setAttribute("value", ",");
+              textNode.setAttribute("class", "newsgroupSeparator");
+              this.newsgroups.appendChild(textNode);
+            }
+
+            let itemInDocument = this.newsgroups.appendChild(newNode);
+            itemInDocument.setAttribute("label", this.mNewsgroups[i]);
+            itemInDocument.setAttribute("newsgroup", this.mNewsgroups[i]);
+
+            // Since the control attribute points to the <newsgroups>
+            // element rather than the XUL <label>, screen
+            // readers don't know to automagically prepend the label when
+            // reading the tag, so we force this.  Furthermore, at least on
+            // Mac, there is no JS labelElement property at all, so we
+            // skip in that case.  We get away with it because there's no
+            // screen reader support on the Mac.
+            if ("labelElement" in this) {
+                let ariaLabel = this.labelElement.value + ": " +
+                                this.mNewsgroups[i];
+                let contentElement =
+                  document.getAnonymousElementByAttribute(itemInDocument,
+                                                          "anonid",
+                                                          "newsgrouplabel");
+                contentElement.setAttribute("aria-label", ariaLabel);
+            }
+          }
+        ]]></body>
+      </method>
+
+      <!-- clear the current view and internal list of newsgroups -->
+      <method name="clearHeaderValues">
+        <body><![CDATA[
+          this.mNewsgroups = new Array;
+          while(this.newsgroups.hasChildNodes())
+            this.newsgroups.lastChild.remove();
+        ]]></body>
+      </method>
+    </implementation>
+  </binding>
+
+  <binding id="mail-messageids-headerfield">
+    <content>
+      <xul:hbox class="headerNameBox" align="start" pack="end">
+        <xul:image class="addresstwisty" anonid="toggleIcon"
+                   onclick="toggleWrap();"/>
+      </xul:hbox>
+      <xul:hbox class="headerValueBox" flex="1">
+        <xul:label class="headerValue" anonid="headerValue" flex="1"/>
+      </xul:hbox>
+    </content>
+
+    <implementation>
+      <constructor>
+        <![CDATA[
+          this.mMessageIds = [];
+          this.showFullMessageIds = false;
+        ]]>
+      </constructor>
+
+      <property name="headerValue" readonly="true"
+                onget="return document.getAnonymousElementByAttribute(this, 'anonid', 'headerValue');"/>
+      <property name="toggleIcon" readonly="true"
+                onget="return document.getAnonymousElementByAttribute(this, 'anonid', 'toggleIcon');"/>
+
+      <field name="mMessageIds"/>
+
+      <!-- addMessageIdView: a public method used to add a message-id to this widget. -->
+      <method name="addMessageIdView">
+        <parameter name="aMessageId"/>
+        <body>
+          <![CDATA[
+            this.mMessageIds.push(aMessageId);
+          ]]>
+        </body>
+      </method>
+
+      <!-- updateMessageIdNode: private method used to set properties on an MessageId node -->
+      <method name="updateMessageIdNode">
+        <parameter name="aMessageIdNode"/>
+        <parameter name="aIndex"/>
+        <parameter name="aMessageId"/>
+        <parameter name="aLastId"/>
+        <body>
+          <![CDATA[
+            var showFullMessageIds = this.showFullMessageIds;
+
+            if (showFullMessageIds || aIndex == aLastId)
+            {
+              aMessageIdNode.setAttribute("label", aMessageId);
+              aMessageIdNode.removeAttribute("tooltiptext");
+            }
+            else
+            {
+              aMessageIdNode.setAttribute("label", aIndex);
+              aMessageIdNode.setAttribute("tooltiptext", aMessageId);
+            }
+
+            aMessageIdNode.setAttribute("index", aIndex);
+            aMessageIdNode.setAttribute("messageid", aMessageId);
+          ]]>
+        </body>
+      </method>
+
+      <method name="fillMessageIdNodes">
+        <body>
+          <![CDATA[
+            var headerValue    = this.headerValue;
+            var messageIdNodes = headerValue.childNodes;
+            var numMessageIds  = this.mMessageIds.length;
+            var index = 0;
+
+            while (messageIdNodes.length > numMessageIds * 2 - 1)
+              headerValue.lastChild.remove();
+
+            this.toggleIcon.hidden = numMessageIds <= 1;
+
+            for (var index = 0; index < numMessageIds; index++)
+            {
+              if (index * 2 <= messageIdNodes.length - 1)
+              {
+                this.updateMessageIdNode(messageIdNodes[index * 2], index + 1,
+                                         this.mMessageIds[index], numMessageIds);
+              }
+              else
+              {
+                var newMessageIdNode = document.createElement("mail-messageid");
+
+                if (index)
+                {
+                  var textNode = document.createElement("text");
+                  textNode.setAttribute("value", ", ");
+                  textNode.setAttribute("class", "messageIdSeparator");
+                  headerValue.appendChild(textNode);
+                }
+                var itemInDocument = headerValue.appendChild(newMessageIdNode);
+                this.updateMessageIdNode(itemInDocument, index + 1,
+                                         this.mMessageIds[index], numMessageIds);
+              }
+            }
+          ]]>
+        </body>
+      </method>
+
+      <method name="toggleWrap">
+        <body>
+          <![CDATA[
+            var headerValue        = this.headerValue;
+            var messageIdNodes     = headerValue.childNodes;
+            var showFullMessageIds = !this.showFullMessageIds;
+            var messageIds         = this.mMessageIds
+
+            for (var i = 0; i < messageIdNodes.length; i += 2)
+            {
+              if (showFullMessageIds)
+              {
+                this.toggleIcon.setAttribute("open", "true");
+                messageIdNodes[i].setAttribute("label", messageIds[i / 2]);
+                messageIdNodes[i].removeAttribute("tooltiptext");
+                headerValue.removeAttribute("singleline");
+              } else
+              {
+                this.toggleIcon.removeAttribute("open");
+                messageIdNodes[i].setAttribute("label", i / 2 + 1);
+                messageIdNodes[i].setAttribute("tooltiptext", messageIds[i / 2]);
+              }
+            }
+
+            this.showFullMessageIds = showFullMessageIds;
+          ]]>
+        </body>
+      </method>
+
+      <method name="clearHeaderValues">
+        <body>
+          <![CDATA[
+            // clear out our local state
+            this.mMessageIds = new Array;
+            if (this.showFullMessageIds)
+            {
+              this.showFullMessageIds = false;
+              this.toggleIcon.removeAttribute("open");
+            }
+          ]]>
+        </body>
+      </method>
+    </implementation>
+  </binding>
+
+  <binding id="mail-messageid">
+    <content context="messageIdContext" onclick="MessageIdClick(this, event);">
+      <xul:label anonid="messageIdValue" class="messageIdDisplayButton"
+                 xbl:inherits="value=label"/>
+      <xul:image class="messageIdDisplayImage" anonid="messageIdImage"/>
+    </content>
+
+    <implementation>
+      <property name="label"      onset="this.getPart().setAttribute('label',val); return val;"
+                                  onget="return this.getPart('messageIdValue').getAttribute('label');"/>
+
+      <method name="getPart">
+        <parameter name="aPartId"/>
+        <body><![CDATA[
+          return document.getAnonymousElementByAttribute(this, "anonid", 'messageIdValue');
+        ]]></body>
+      </method>
+    </implementation>
+  </binding>
+
+  <!-- Header field for showing the tags associated with a message -->
+  <binding id="mail-headerfield-tags">
+    <content>
+      <xul:label class="headerValue" anonid="headerValue" flex="1"/>
+    </content>
+
+    <implementation>
+      <property name="headerValue" onset="return this.buildTags(val);"/>
+      <method name="buildTags">
+        <parameter name="aTags"/>
+        <body>
+          <![CDATA[
+            // aTags contains a list of actual tag names (not the keys), delimited by spaces
+            // each tag name is encoded.
+
+            // remove any existing tag items we've appended to the list
+            var headerValueNode = document.getAnonymousElementByAttribute(this, 'anonid', 'headerValue');
+            while (headerValueNode.hasChildNodes())
+              headerValueNode.lastChild.remove();
+
+            // tokenize the keywords based on ' '
+            var tagsArray = aTags.split(' ');
+            for (var index = 0; index < tagsArray.length; index++)
+            {
+              // for each tag, create a label, give it the font color that corresponds to the
+              // color of the tag and append it.
+              var tagName;
+              try {
+                // if we got a bad tag name, getTagForKey will throw an exception, skip it
+                // and go to the next one.
+                tagName = MailServices.tags.getTagForKey(tagsArray[index]);
+              } catch (ex) { continue; }
+
+              let color = MailServices.tags.getColorForKey(tagsArray[index]);
+
+              // now create a label for the tag name, and set the color
+              var label = document.createElement("label");
+              label.setAttribute('value', tagName);
+              label.className = "tagvalue blc-" + color.substr(1);
+
+              // Since the control attribute points to the
+              // <mail-headerfield-tags> rather than the XUL <label>, screen
+              // readers don't know to automagically prepend the label when
+              // reading the tag, so we force this.  Furthermore, at least on
+              // Mac, there is no JS labelElement property at all, so we
+              // skip in that case.  We get away with it because there's no
+              // screen reader support on the Mac.
+              if ("labelElement" in this) {
+                let ariaLabel = this.labelElement.value + ": "
+                                + tagName;
+                label.setAttribute("aria-label", ariaLabel);
+              }
+
+              headerValueNode.appendChild(label);
+            }
+        ]]>
+        </body>
+      </method>
+      <constructor>
+        <![CDATA[
+          Components.utils.import("resource:///modules/mailServices.js");
+        ]]>
+      </constructor>
+    </implementation>
+  </binding>
+
+  <binding id="search-menulist-abstract" name="searchMenulistAbstract" extends="xul:box">
+    <content>
+      <xul:menulist class="search-menulist" xbl:inherits="flex,disabled" oncommand="this.parentNode.onSelect(event)">
+        <xul:menupopup class="search-menulist-popup"/>
+      </xul:menulist>
+    </content>
+
+    <implementation>
+      <field name="internalScope">null</field>
+      <field name="internalValue">-1</field>
+      <field readonly="true" name="validityManager">
+        <![CDATA[
+           Components.classes['@mozilla.org/mail/search/validityManager;1'].getService(Components.interfaces.nsIMsgSearchValidityManager);
+        ]]>
+      </field>
+      <property name="searchScope" onget="return this.internalScope;">
+        <!-- scope ID - retrieve the table -->
+        <setter>
+          <![CDATA[
+            // if scope isn't changing this is a noop
+            if (this.internalScope == val) return val;
+
+            this.internalScope = val;
+            this.refreshList();
+            var targets = this.targets;
+            if (targets) {
+              for (var i=0; i< targets.length; i++) {
+                targets[i].searchScope = val;
+              }
+            }
+            return val;
+          ]]>
+        </setter>
+      </property>
+
+      <property name="validityTable" readonly="true" onget="return this.validityManager.getTable(this.searchScope)"/>
+
+      <property name="targets" readonly="true">
+        <getter>
+          <![CDATA[
+            var forAttrs =  this.getAttribute("for");
+            if (!forAttrs) return null;
+            var targetIds = forAttrs.split(",");
+            if (targetIds.length == 0) return null;
+
+            var targets = new Array;
+            for (let j = 0, i = 0; i < targetIds.length; i++) {
+              var target = document.getElementById(targetIds[i]);
+              if (target) targets[j++] = target;
+            }
+            return targets;
+          ]]>
+        </getter>
+      </property>
+
+      <property name="optargets" readonly="true">
+        <getter>
+          <![CDATA[
+            var forAttrs =  this.getAttribute("opfor");
+            if (!forAttrs) return null;
+            var optargetIds = forAttrs.split(",");
+            if (optargetIds.length == 0) return null;
+
+            var optargets = new Array;
+            var j=0;
+            for (var i=0; i<optargetIds.length;i++) {
+              var optarget = document.getElementById(optargetIds[i]);
+              if (optarget) optargets[j++] = optarget;
+            }
+            return optargets;
+          ]]>
+        </getter>
+      </property>
+
+      <property name="value" onget="return this.internalValue;">
+        <setter>
+          <![CDATA[
+            if (this.internalValue == val)
+              return val;
+            this.internalValue = val;
+            var menulist = document.getAnonymousNodes(this)[0];
+            menulist.selectedItem = this.validMenuitem;
+
+            // now notify targets of new parent's value
+            var targets = this.targets;
+            if (targets) {
+              for (var i=0; i < targets.length; i++) {
+                targets[i].parentValue = val;
+              }
+            }
+
+            // now notify optargets of new op parent's value
+            var optargets = this.optargets;
+            if (optargets) {
+              for (i=0; i < optargets.length; i++) {
+                optargets[i].opParentValue = val;
+              }
+            }
+
+            return val;
+          ]]>
+        </setter>
+      </property>
+      <!-- label forwards to the internal menulist's "label" attribute -->
+      <property name="label" onget="return document.getAnonymousNodes(this)[0].selectedItem.getAttribute('label');">
+      </property>
+      <property name="validMenuitem" readonly="true">
+      <!-- Prepare menulist selection, adding a missing hidden menuitem if needed, and
+        updating the disabled state of the menulist label. -->
+        <getter>
+          <![CDATA[
+            if (this.value == -1) // -1 means not initialized
+              return null;
+
+            let menulist = document.getAnonymousNodes(this)[0];
+            let isCustom = isNaN(this.value);
+            let typedValue = isCustom ? this.value : parseInt(this.value);
+
+            // custom attribute to style the unavailable menulist item
+            menulist.setAttribute("unavailable",
+              (!this.valueIds.includes(typedValue)) ? "true" : null);
+
+            // add a hidden menulist item if value is missing
+            let menuitem = menulist.querySelector('[value="' + this.value + '"]');
+            if (!menuitem)
+            { // need to add a hidden menuitem
+              menuitem = menulist.appendItem(this.valueLabel, this.value);
+              menuitem.hidden = true;
+            }
+            return menuitem;
+          ]]>
+        </getter>
+      </property>
+      <method name="refreshList">
+        <parameter name="dontRestore"/> <!-- should we not restore old selection? -->
+        <body>
+          <![CDATA[
+            var menuItemIds = this.valueIds;
+            var menuItemStrings = this.valueStrings;
+
+            var menulist = document.getAnonymousNodes(this)[0];
+            var popup = menulist.firstChild;
+
+            // save our old "value" so we can restore it later
+            var oldData;
+            if (!dontRestore)
+              oldData = menulist.value;
+
+            // remove the old popup children
+            while (popup.hasChildNodes())
+              popup.lastChild.remove();
+
+            var newSelection;
+            var customizePos=-1;
+            for (var i = 0; i < menuItemIds.length; ++i)
+            {
+              // create the menuitem
+              if (Components.interfaces.nsMsgSearchAttrib.OtherHeader == menuItemIds[i].toString())
+                customizePos = i;
+              else
+              {
+                var menuitem = document.createElement("menuitem");
+                menuitem.setAttribute("label", menuItemStrings[i]);
+                menuitem.setAttribute("value", menuItemIds[i]);
+                popup.appendChild(menuitem);
+                // try to restore the selection
+                if (!newSelection || oldData == menuItemIds[i].toString())
+                  newSelection = menuitem;
+              }
+            }
+            if (customizePos != -1)
+            {
+              var separator = document.createElement("menuseparator");
+              popup.appendChild(separator);
+              menuitem = document.createElement("menuitem");
+              menuitem.setAttribute("label", menuItemStrings[customizePos]);
+              menuitem.setAttribute("value", menuItemIds[customizePos]);
+              popup.appendChild(menuitem);
+            }
+            //
+            // If we are either uninitialized, or if we are called because
+            // of a change in our parent, update the value to the
+            // default stored in newSelection.
+            //
+            if ((this.value == -1 || dontRestore) && newSelection)
+              this.value = newSelection.getAttribute("value");
+            menulist.selectedItem = this.validMenuitem;
+          ]]>
+        </body>
+      </method>
+      <method name="onSelect">
+        <parameter name="event"/>
+        <body>
+          <![CDATA[
+            var menulist = document.getAnonymousNodes(this)[0];
+            if (menulist.value == Components.interfaces.nsMsgSearchAttrib.OtherHeader)
+            {
+              // Customize menuitem selected.
+              let args = {};
+              window.openDialog("chrome://messenger/content/CustomHeaders.xul",
+                                "", "modal,centerscreen,resizable,titlebar,chrome",
+                                args);
+              // User may have removed the custom header currently selected
+              // in the menulist so temporarily set the selection to a safe value.
+              this.value = Components.interfaces.nsMsgSearchAttrib.OtherHeader;
+              // rebuild the menulist
+              UpdateAfterCustomHeaderChange();
+              // Find the created or chosen custom header and select it.
+              if (args.selectedVal) {
+                let menuitem = menulist.querySelector('[label="' + args.selectedVal + '"]');
+                this.value = menuitem.value;
+              } else {
+                // Nothing was picked in the custom headers editor so just pick something
+                // instead of the current "Customize" menuitem.
+                this.value = menulist.getItemAtIndex(0).value;
+              }
+            }
+            else
+            {
+              this.value = menulist.value;
+            }
+          ]]>
+        </body>
+      </method>
+    </implementation>
+  </binding>
+
+  <!-- searchattribute - Subject, Sender, To, CC, etc. -->
+  <binding id="searchattribute" name="searchAttribute"
+           extends="chrome://messenger/content/mailWidgets.xml#search-menulist-abstract">
+    <implementation>
+      <field name="stringBundle">
+        <![CDATA[
+          this.Services.strings.createBundle("chrome://messenger/locale/search-attributes.properties")
+        ]]>
+      </field>
+      <property name="valueLabel" readonly="true">
+        <getter>
+          <![CDATA[
+            if (isNaN(this.value)) // is this a custom term?
+            {
+              let customTerm = MailServices.filters.getCustomTerm(this.value);
+              if (customTerm)
+                return customTerm.name;
+              else
+              { // The custom term may be missing after the extension that added it
+                // was disabled or removed. We need to notify the user.
+                let scriptError = Components.classes["@mozilla.org/scripterror;1"]
+                    .createInstance(Components.interfaces.nsIScriptError);
+                scriptError.init("Missing custom search term " + this.value,
+                    null, null, 0, 0,
+                    Components.interfaces.nsIScriptError.errorFlag,
+                    "component javascript");
+                this.Services.console.logMessage(scriptError);
+                return this.stringBundle.GetStringFromName("MissingCustomTerm");
+              }
+            }
+            return this.stringBundle.GetStringFromName(
+              this.validityManager.getAttributeProperty(parseInt(this.value)));
+          ]]>
+        </getter>
+      </property>
+      <property name="valueIds" readonly="true">
+        <getter>
+          <![CDATA[
+            var length = new Object;
+            let result = this.validityTable.getAvailableAttributes(length);
+            // add any available custom search terms
+            let customEnum = MailServices.filters.getCustomTerms();
+            while (customEnum && customEnum.hasMoreElements())
+            {
+              let customTerm =
+                 customEnum.getNext()
+                           .QueryInterface(Components.interfaces.nsIMsgSearchCustomTerm);
+              // for custom terms, the array element is a string with the custom id
+              // instead of the integer attribute
+              if (customTerm.getAvailable(this.searchScope, null))
+                result.push(customTerm.id);
+            }
+            return result;
+          ]]>
+        </getter>
+      </property>
+      <property name="valueStrings" readonly="true">
+        <getter>
+          <![CDATA[
+            let strings = new Array;
+            let ids = this.valueIds;
+            let hdrsArray = null;
+            try
+            {
+              let hdrs = this.Services.prefs.getCharPref("mailnews.customHeaders");
+              hdrs = hdrs.replace(/\s+/g, "");  //remove white spaces before splitting
+              hdrsArray = hdrs.match(/[^:]+/g);
+            }
+            catch(ex)
+            {
+            }
+
+            let j = 0;
+            for (let i = 0; i < ids.length; i++)
+            {
+              if (isNaN(ids[i])) // Is this a custom search term?
+              {
+                let customTerm = MailServices.filters.getCustomTerm(ids[i]);
+                if (customTerm)
+                  strings[i] = customTerm.name;
+                else
+                  strings[i] = "";
+              }
+              else if(ids[i] > Components.interfaces.nsMsgSearchAttrib.OtherHeader && hdrsArray)
+                strings[i] = hdrsArray[j++];
+              else
+                strings[i] = this.stringBundle.GetStringFromName(
+                               this.validityManager.getAttributeProperty(ids[i]));
+            }
+            return strings;
+          ]]>
+        </getter>
+      </property>
+      <constructor>
+      <![CDATA[
+        Components.utils.import("resource:///modules/mailServices.js");
+        Components.utils.import("resource://gre/modules/Services.jsm", this);
+        initializeTermFromId(this.id);
+      ]]>
+      </constructor>
+    </implementation>
+  </binding>
+
+  <!-- searchoperator - Contains, Is Less than, etc -->
+  <binding id="searchoperator" name="searchOperator"
+           extends="chrome://messenger/content/mailWidgets.xml#search-menulist-abstract">
+    <implementation>
+      <field name="searchAttribute">Components.interfaces.nsMsgSearchAttrib.Default</field>
+      <field name="stringBundle">
+        <![CDATA[
+          this.Services.strings.createBundle("chrome://messenger/locale/search-operators.properties")
+        ]]>
+      </field>
+      <property name="valueLabel" readonly="true">
+        <getter>
+          <![CDATA[
+            return this.stringBundle.GetStringFromName(this.value);
+          ]]>
+        </getter>
+      </property>
+      <property name="valueIds" readonly="true">
+        <getter>
+          <![CDATA[
+            var length = new Object;
+            let isCustom = isNaN(this.searchAttribute);
+            if (isCustom)
+            {
+              let customTerm = MailServices.filters.getCustomTerm(this.searchAttribute);
+              if (customTerm)
+                return customTerm.getAvailableOperators(this.searchScope, length);
+              return [Components.interfaces.nsMsgSearchOp.Contains];
+            }
+            return this.validityTable.getAvailableOperators(this.searchAttribute,length);
+          ]]>
+        </getter>
+      </property>
+      <property name="valueStrings" readonly="true">
+        <getter>
+          <![CDATA[
+            let strings = new Array;
+            let ids = this.valueIds;
+            for (let i = 0; i < ids.length; i++)
+              strings[i] = this.stringBundle.GetStringFromID(ids[i]);
+            return strings;
+          ]]>
+        </getter>
+      </property>
+      <property name="parentValue">
+        <setter>
+          <![CDATA[
+            if (this.searchAttribute == val && val != Components.interfaces.nsMsgSearchAttrib.OtherHeader) return val;
+            this.searchAttribute = val;
+            this.refreshList(true); // don't restore the selection, since searchvalue nulls it
+            if (val == Components.interfaces.nsMsgSearchAttrib.AgeInDays)
+            {
+              // We want "Age in Days" to default to "is less than".
+              this.value = Components.interfaces.nsMsgSearchOp.IsLessThan;
+            }
+            return val;
+          ]]>
+        </setter>
+        <getter>
+          <![CDATA[
+            return this.searchAttribute;
+          ]]>
+        </getter>
+      </property>
+      <constructor>
+        <![CDATA[
+          Components.utils.import("resource:///modules/mailServices.js");
+          Components.utils.import("resource://gre/modules/Services.jsm", this);
+        ]]>
+      </constructor>
+    </implementation>
+  </binding>
+
+  <!-- searchvalue - a widget which dynamically changes its user interface
+       depending on what type of data it's supposed to be showing
+       currently handles arbitrary text entry, and menulists for
+       priority, status, junk status, tags, hasAttachment status,
+       and addressbook
+  -->
+  <binding id="searchvalue" name="searchValue">
+    <content>
+      <xul:textbox flex="1" class="search-value-textbox" xbl:inherits="disabled"/>
+      <xul:menulist flex="1" class="search-value-menulist" xbl:inherits="disabled">
+        <xul:menupopup class="search-value-popup">
+          <xul:menuitem value="6" stringTag="priorityHighest" class="search-value-menuitem"/>
+          <xul:menuitem value="5" stringTag="priorityHigh" class="search-value-menuitem"/>
+          <xul:menuitem value="4" stringTag="priorityNormal" class="search-value-menuitem"/>
+          <xul:menuitem value="3" stringTag="priorityLow" class="search-value-menuitem"/>
+          <xul:menuitem value="2" stringTag="priorityLowest" class="search-value-menuitem"/>
+        </xul:menupopup>
+      </xul:menulist>
+      <xul:menulist flex="1" class="search-value-menulist" xbl:inherits="disabled">
+        <xul:menupopup class="search-value-popup">
+          <xul:menuitem value="2" stringTag="replied" class="search-value-menuitem"/>
+          <xul:menuitem value="1" stringTag="read" class="search-value-menuitem"/>
+          <xul:menuitem value="65536" stringTag="new" class="search-value-menuitem"/>
+          <xul:menuitem value="4096" stringTag="forwarded" class="search-value-menuitem"/>
+          <xul:menuitem value="4" stringTag="flagged" class="search-value-menuitem"/>
+        </xul:menupopup>
+      </xul:menulist>
+      <xul:textbox flex="1" class="search-value-textbox" xbl:inherits="disabled"/>
+      <xul:menulist flex="1" class="search-value-menulist" xbl:inherits="disabled">
+        <xul:menupopup class="addrbooksPopup" localonly="true"/>
+      </xul:menulist>
+      <xul:menulist flex="1" class="search-value-menulist" xbl:inherits="disabled">
+        <xul:menupopup class="search-value-popup">
+        </xul:menupopup>
+      </xul:menulist>
+      <xul:menulist flex="1" class="search-value-menulist" xbl:inherits="disabled">
+        <xul:menupopup class="search-value-popup">
+          <xul:menuitem value="2" stringTag="junk" class="search-value-menuitem"/>
+        </xul:menupopup>
+      </xul:menulist>
+      <xul:menulist flex="1" class="search-value-menulist" xbl:inherits="disabled">
+        <xul:menupopup class="search-value-popup">
+          <xul:menuitem value="0" stringTag="hasAttachments" class="search-value-menuitem"/>
+        </xul:menupopup>
+      </xul:menulist>
+      <xul:menulist flex="1" class="search-value-menulist" xbl:inherits="disabled">
+        <xul:menupopup class="search-value-popup">
+          <xul:menuitem value="plugin" stringTag="junkScoreOriginPlugin"
+                        class="search-value-menuitem"/>
+          <xul:menuitem value="user" stringTag="junkScoreOriginUser"
+                        class="search-value-menuitem"/>
+          <xul:menuitem value="filter" stringTag="junkScoreOriginFilter"
+                        class="search-value-menuitem"/>
+          <xul:menuitem value="whitelist" stringTag="junkScoreOriginWhitelist"
+                        class="search-value-menuitem"/>
+          <xul:menuitem value="imapflag" stringTag="junkScoreOriginImapFlag"
+                        class="search-value-menuitem"/>
+        </xul:menupopup>
+      </xul:menulist>
+      <xul:textbox flex="1" class="search-value-textbox" xbl:inherits="disabled"
+                   type="number"/>
+      <xul:hbox flex="1" class="search-value-custom" xbl:inherits="disabled"/>
+    </content>
+    <implementation>
+      <field name="internalOperator">null</field>
+      <field name="internalAttribute">null</field>
+      <field name="internalValue">null</field>
+      <property name="opParentValue" onget="return this.internalOperator;">
+        <setter>
+          <![CDATA[
+            // noop if we're not changing it
+            if (this.internalOperator == val)
+              return val;
+
+            // Keywords has the null field IsEmpty
+            if (this.searchAttribute == Components.interfaces.nsMsgSearchAttrib.Keywords) {
+              if (val == Components.interfaces.nsMsgSearchOp.IsEmpty ||
+                  val == Components.interfaces.nsMsgSearchOp.IsntEmpty)
+                this.setAttribute("selectedIndex", "-1");
+              else
+                this.setAttribute("selectedIndex", "5");
+            }
+
+            // JunkStatus has the null field IsEmpty
+            if (this.searchAttribute == Components.interfaces.nsMsgSearchAttrib.JunkStatus) {
+              if (val == Components.interfaces.nsMsgSearchOp.IsEmpty ||
+                  val == Components.interfaces.nsMsgSearchOp.IsntEmpty)
+                this.setAttribute("selectedIndex", "-1");
+              else
+                this.setAttribute("selectedIndex", "6");
+            }
+
+              // if it's not sender, to, cc, alladdresses, or toorcc, we don't care
+              if (this.searchAttribute != Components.interfaces.nsMsgSearchAttrib.Sender &&
+                this.searchAttribute != Components.interfaces.nsMsgSearchAttrib.To &&
+                this.searchAttribute != Components.interfaces.nsMsgSearchAttrib.ToOrCC &&
+                this.searchAttribute != Components.interfaces.nsMsgSearchAttrib.AllAddresses &&
+                this.searchAttribute != Components.interfaces.nsMsgSearchAttrib.CC ) {
+              this.internalOperator = val;
+              return val;
+            }
+
+            var children = document.getAnonymousNodes(this);
+            if (val == Components.interfaces.nsMsgSearchOp.IsntInAB ||
+                val == Components.interfaces.nsMsgSearchOp.IsInAB) {
+              // if the old internalOperator was
+              // IsntInAB or IsInAB, and the new internalOperator is
+              // IsntInAB or IsInAB, noop because the search value
+              // was an ab type, and it still is.
+              // otherwise, switch to the ab picker and select the PAB
+              if (this.internalOperator != Components.interfaces.nsMsgSearchOp.IsntInAB &&
+                  this.internalOperator != Components.interfaces.nsMsgSearchOp.IsInAB) {
+                var abs = children[4].querySelector('[value="moz-abmdbdirectory://abook.mab"]');
+                if (abs)
+                  children[4].selectedItem = abs;
+                this.setAttribute("selectedIndex", "4");
+              }
+            }
+            else {
+              // if the old internalOperator wasn't
+              // IsntInAB or IsInAB, and the new internalOperator isn't
+              // IsntInAB or IsInAB, noop because the search value
+              // wasn't an ab type, and it still isn't.
+              // otherwise, switch to the textbox and clear it
+              if (this.internalOperator == Components.interfaces.nsMsgSearchOp.IsntInAB ||
+                  this.internalOperator == Components.interfaces.nsMsgSearchOp.IsInAB) {
+                children[0].value = "";
+                this.setAttribute("selectedIndex", "0");
+              }
+            }
+
+            this.internalOperator = val;
+            return val;
+          ]]>
+        </setter>
+      </property>
+      <!-- parentValue forwards to the attribute -->
+      <property name="parentValue" onset="return this.searchAttribute=val;"
+                                   onget="return this.searchAttribute;"/>
+      <property name="searchAttribute" onget="return this.internalAttribute;">
+        <setter>
+          <![CDATA[
+            // noop if we're not changing it
+            if (this.internalAttribute == val) return val;
+            this.internalAttribute = val;
+
+            // if the searchAttribute changing, null out the internalOperator
+            this.internalOperator = null;
+
+            // we inherit from a deck, so just use it's index attribute
+            // to hide/show widgets
+            if (isNaN(val)) // Is this a custom attribute?
+            {
+              this.setAttribute("selectedIndex", "10");
+              let customHbox = document.getAnonymousNodes(this)[10];
+              if (this.internalValue)
+                customHbox.setAttribute("value", this.internalValue.str);
+              // the searchAttribute attribute is intended as a selector in
+              // CSS for custom search terms to bind a custom value
+              customHbox.setAttribute("searchAttribute", val);
+            }
+            else if (val == Components.interfaces.nsMsgSearchAttrib.Priority)
+              this.setAttribute("selectedIndex", "1");
+            else if (val == Components.interfaces.nsMsgSearchAttrib.MsgStatus)
+              this.setAttribute("selectedIndex", "2");
+            else if (val == Components.interfaces.nsMsgSearchAttrib.Date)
+              this.setAttribute("selectedIndex", "3");
+            else if (val == Components.interfaces.nsMsgSearchAttrib.Sender) {
+              // since the internalOperator is null
+              // this is the same as the initial state
+              // the initial state for Sender isn't an ab type search
+              // it's a text search, so show the textbox
+              this.setAttribute("selectedIndex", "0");
+            }
+            else if (val == Components.interfaces.nsMsgSearchAttrib.Keywords) {
+              this.setAttribute("selectedIndex", "5");
+            }
+            else if (val == Components.interfaces.nsMsgSearchAttrib.JunkStatus) {
+              this.setAttribute("selectedIndex", "6");
+            }
+            else if (val == Components.interfaces.nsMsgSearchAttrib.HasAttachmentStatus) {
+              this.setAttribute("selectedIndex", "7");
+            }
+            else if (val == Components.interfaces.nsMsgSearchAttrib.JunkScoreOrigin) {
+              this.setAttribute("selectedIndex", "8");
+            }
+            else if (val == Components.interfaces.nsMsgSearchAttrib.AgeInDays) {
+              let valueBox = document.getAnonymousNodes(this)[9];
+              valueBox.min = -40000; // ~-100 years
+              valueBox.max = 40000; // ~100 years
+              this.setAttribute("selectedIndex", "9");
+            }
+            else if (val == Components.interfaces.nsMsgSearchAttrib.Size) {
+              let valueBox = document.getAnonymousNodes(this)[9];
+              valueBox.min = 0;
+              valueBox.max = 1000000000;
+              this.setAttribute("selectedIndex", "9");
+            }
+            else if (val == Components.interfaces.nsMsgSearchAttrib.JunkPercent) {
+              let valueBox = document.getAnonymousNodes(this)[9];
+              valueBox.min = 0;
+              valueBox.max = 100;
+              this.setAttribute("selectedIndex", "9");
+            }
+            else {
+              // a normal text field
+              this.setAttribute("selectedIndex", "0");
+            }
+            return val;
+          ]]>
+        </setter>
+      </property>
+      <property name="value" onget="return this.internalValue;">
+        <setter>
+          <![CDATA[
+          // val is a nsIMsgSearchValue object
+          this.internalValue = val;
+          var attrib = this.internalAttribute;
+          var nsMsgSearchAttrib = Components.interfaces.nsMsgSearchAttrib;
+          var children = document.getAnonymousNodes(this);
+          this.searchAttribute = attrib;
+          if (isNaN(attrib)) // a custom term
+          {
+            let customHbox = document.getAnonymousNodes(this)[10];
+            customHbox.setAttribute("value", val.str);
+            return val;
+          }
+          if (attrib == nsMsgSearchAttrib.Priority) {
+            var matchingPriority =
+              children[1].querySelector('[value="' + val.priority + '"]');
+            if (matchingPriority)
+              children[1].selectedItem = matchingPriority;
+          }
+          else if (attrib == nsMsgSearchAttrib.MsgStatus) {
+            var matchingStatus =
+              children[2].querySelector('[value="' + val.status + '"]');
+            if (matchingStatus)
+              children[2].selectedItem = matchingStatus;
+          }
+          else if (attrib == nsMsgSearchAttrib.AgeInDays)
+            children[9].value = val.age;
+          else if (attrib == nsMsgSearchAttrib.Date)
+            children[3].value = convertPRTimeToString(val.date);
+          else if (attrib == nsMsgSearchAttrib.Sender ||
+                   attrib == nsMsgSearchAttrib.To ||
+                   attrib == nsMsgSearchAttrib.CC ||
+                   attrib == nsMsgSearchAttrib.AllAddresses ||
+                   attrib == nsMsgSearchAttrib.ToOrCC)
+          {
+            if (this.internalOperator == Components.interfaces.nsMsgSearchOp.IsntInAB ||
+                this.internalOperator == Components.interfaces.nsMsgSearchOp.IsInAB) {
+              var abs = children[4].querySelector('[value="' + val.str + '"]');
+              if (abs)
+                children[4].selectedItem = abs;
+            }
+            else
+              children[0].value = val.str;
+          }
+          else if (attrib == nsMsgSearchAttrib.Keywords)
+          {
+            var keywordVal = children[5].querySelector('[value="' + val.str + '"]');
+            if (keywordVal)
+            {
+              children[5].value = val.str;
+              children[5].selectedItem = keywordVal;
+            }
+          }
+          else if (attrib == nsMsgSearchAttrib.JunkStatus) {
+            var junkStatus =
+              children[6].querySelector('[value="' + val.junkStatus + '"]');
+            if (junkStatus)
+              children[6].selectedItem = junkStatus;
+          }
+          else if (attrib == nsMsgSearchAttrib.HasAttachmentStatus) {
+            var hasAttachmentStatus =
+              children[7].querySelector('[value="' + val.hasAttachmentStatus + '"]');
+            if (hasAttachmentStatus)
+              children[7].selectedItem = hasAttachmentStatus;
+          }
+          else if (attrib == nsMsgSearchAttrib.JunkScoreOrigin) {
+            var junkScoreOrigin =
+              children[8].querySelector('[value="' + val.str + '"]');
+            if (junkScoreOrigin)
+              children[8].selectedItem = junkScoreOrigin;
+          }
+          else if (attrib == nsMsgSearchAttrib.JunkPercent) {
+            children[9].value = val.junkPercent;
+          }
+          else if (attrib == nsMsgSearchAttrib.Size) {
+            children[9].value = val.size;
+          }
+          else
+            children[0].value = val.str;
+          return val;
+          ]]>
+        </setter>
+      </property>
+      <method name="save">
+        <body>
+          <![CDATA[
+            var searchValue = this.value;
+            var searchAttribute = this.searchAttribute;
+            var nsMsgSearchAttrib = Components.interfaces.nsMsgSearchAttrib;
+            var children = document.getAnonymousNodes(this);
+
+            searchValue.attrib = searchAttribute;
+            if (searchAttribute == nsMsgSearchAttrib.Priority) {
+               searchValue.priority = children[1].selectedItem.value;
+            }
+            else if (searchAttribute == nsMsgSearchAttrib.MsgStatus)
+               searchValue.status = children[2].value;
+            else if (searchAttribute == nsMsgSearchAttrib.AgeInDays)
+               searchValue.age = children[9].value;
+            else if (searchAttribute == nsMsgSearchAttrib.Date)
+               searchValue.date = convertStringToPRTime(children[3].value);
+            else if (searchAttribute == nsMsgSearchAttrib.Sender ||
+                   searchAttribute == nsMsgSearchAttrib.To ||
+                   searchAttribute == nsMsgSearchAttrib.CC ||
+                   searchAttribute == nsMsgSearchAttrib.AllAddresses ||
+                   searchAttribute == nsMsgSearchAttrib.ToOrCC)
+            {
+              if (this.internalOperator == Components.interfaces.nsMsgSearchOp.IsntInAB ||
+                  this.internalOperator == Components.interfaces.nsMsgSearchOp.IsInAB)
+                searchValue.str = children[4].selectedItem.value;
+              else
+                searchValue.str = children[0].value;
+            }
+            else if (searchAttribute == nsMsgSearchAttrib.Keywords)
+            {
+              searchValue.str = children[5].value;
+            }
+            else if (searchAttribute == nsMsgSearchAttrib.JunkStatus)
+               searchValue.junkStatus = children[6].value;
+            else if (searchAttribute == nsMsgSearchAttrib.JunkPercent)
+               searchValue.junkPercent = children[9].value;
+            else if (searchAttribute == nsMsgSearchAttrib.Size)
+               searchValue.size = children[9].value;
+            else if (searchAttribute == nsMsgSearchAttrib.HasAttachmentStatus)
+               searchValue.status = 0x10000000;  // 0x10000000 is MSG_FLAG_ATTACHMENT;
+            else if (searchAttribute == nsMsgSearchAttrib.JunkScoreOrigin)
+               searchValue.str = children[8].value;
+            else if (isNaN(searchAttribute)) //  a custom term
+            {
+              searchValue.attrib = nsMsgSearchAttrib.Custom;
+              searchValue.str = children[10].getAttribute("value");
+            }
+            else
+              searchValue.str = children[0].value;
+          ]]>
+        </body>
+      </method>
+      <method name="saveTo">
+        <parameter name="searchValue"/>
+        <body>
+          <![CDATA[
+            this.internalValue = searchValue;
+            this.save();
+          ]]>
+        </body>
+      </method>
+      <method name="fillInTags">
+        <body>
+          <![CDATA[
+            var children = document.getAnonymousNodes(this);
+            var popupMenu = children[5].firstChild;
+            let tagArray = MailServices.tags.getAllTags({});
+            for (var i = 0; i < tagArray.length; ++i)
+            {
+              var taginfo = tagArray[i];
+              var newMenuItem = document.createElement('menuitem');
+              newMenuItem.setAttribute('label', taginfo.tag);
+              newMenuItem.setAttribute('value', taginfo.key);
+              popupMenu.appendChild(newMenuItem);
+              if (!i)
+                children[5].selectedItem = newMenuItem;
+            }
+          ]]>
+        </body>
+      </method>
+      <method name="fillStringsForChildren">
+        <parameter name="parentNode"/>
+        <parameter name="bundle"/>
+        <body>
+          <![CDATA[
+            var children = parentNode.childNodes;
+            var len=children.length;
+            for (var i=0; i<len; i++) {
+              var node = children[i];
+              var stringTag = node.getAttribute("stringTag");
+              if (stringTag) {
+                var attr = (node.tagName == "label") ? "value" : "label";
+                node.setAttribute(attr, bundle.GetStringFromName(stringTag));
+              }
+            }
+          ]]>
+        </body>
+      </method>
+      <method name="initialize">
+        <parameter name="menulist"/>
+        <parameter name="bundle"/>
+        <body>
+          <![CDATA[
+            this.fillStringsForChildren(menulist.firstChild, bundle);
+          ]]>
+        </body>
+      </method>
+      <constructor>
+      <![CDATA[
+        Components.utils.import("resource:///modules/mailServices.js");
+        Components.utils.import("resource://gre/modules/Services.jsm", this);
+
+        // initialize strings
+        var bundle = this.Services.strings.createBundle("chrome://messenger/locale/messenger.properties");
+
+        // intialize the priority picker
+        this.initialize(document.getAnonymousNodes(this)[1], bundle);
+
+        // initialize the status picker
+        this.initialize(document.getAnonymousNodes(this)[2], bundle);
+
+        // initialize the date picker
+        var datePicker = document.getAnonymousNodes(this)[3];
+        var searchAttribute = this.searchAttribute;
+        var nsMsgSearchAttrib = Components.interfaces.nsMsgSearchAttrib;
+        var time;
+        if (searchAttribute == nsMsgSearchAttrib.Date)
+         time = datePicker.value;
+        else
+         time = new Date();
+        // do .value instead of .setAttribute("value", xxx);
+        // to work around for bug #179412
+        // (caused by bug #157210)
+        //
+        // the searchvalue widget has two textboxes
+        // one for text, one as a placeholder for a date / calendar widget
+        datePicker.value = convertDateToString(time);
+
+        // initialize the address book picker
+        this.initialize(document.getAnonymousNodes(this)[4], bundle);
+
+        // initialize the junk status picker
+        this.initialize(document.getAnonymousNodes(this)[6], bundle);
+
+        // initialize the has attachment status picker
+        this.initialize(document.getAnonymousNodes(this)[7], bundle);
+
+        // initialize the junk score origin picker
+        this.initialize(document.getAnonymousNodes(this)[8], bundle);
+
+        // initialize the tag list
+        fillInTags();
+      ]]>
+      </constructor>
+    </implementation>
+    <handlers>
+      <handler event="keypress" keycode="VK_RETURN" modifiers="accel any"
+               action="onEnterInSearchTerm(event);" preventdefault="true"/>
+    </handlers>
+  </binding>
+
+  <!-- Folder picker helper widgets -->
+  <binding id="popup-base" extends="chrome://global/content/bindings/popup.xml#popup">
+    <implementation>
+      <field name="tree" readonly="true">
+        document.getAnonymousNodes(this)[0];
+      </field>
+      <method name="updateHover">
+        <parameter name="event"/>
+        <body>
+          <![CDATA[
+            var box = this.tree.treeBoxObject;
+            if (event.originalTarget == box.treeBody) {
+              var index = box.getRowAt(event.clientX, event.clientY);
+              box.view.selection.select(index);
+              return index;
+            }
+            return -1;
+          ]]>
+        </body>
+      </method>
+      <method name="fire">
+        <body>
+          <![CDATA[
+            this.hidePopup();
+            if (this.tree.currentIndex >= 0) {
+              this.setAttribute("uri", this.tree.builderView.getResourceAtIndex(this.tree.currentIndex).Value);
+              this.doCommand();
+            }
+          ]]>
+        </body>
+      </method>
+      <method name="onBlurMenuList">
+        <parameter name="event"/>
+        <body>
+          <![CDATA[
+            this.boxObject.QueryInterface(Components.interfaces.nsIMenuBoxObject).openMenu(false);
+          ]]>
+        </body>
+      </method>
+      <field name="onKeyPressMenuList" readonly="true">
+        <![CDATA[
+          ({
+            self: this,
+            tree: this.tree,
+            parentNode: this.parentNode,
+            getLastVisibleRow: function getLastVisibleRow(box) {
+              var f = box.getFirstVisibleRow();
+              var p = box.getPageLength();
+              var l = box.view.rowCount;
+              return (l < f + p ? l : f + p) - 1;
+            },
+            handleEvent: function handleEvent(event) {
+              if (event.altKey)
+                return;
+              var index;
+              var box = this.tree.treeBoxObject;
+              if (this.parentNode.hasAttribute("open")) {
+                event.stopPropagation();
+                event.preventDefault();
+                switch (event.keyCode) {
+                  case event.DOM_VK_ESCAPE:
+                    this.self.hidePopup();
+                    return;
+                  case event.DOM_VK_RETURN:
+                    this.self.fire();
+                    return;
+                }
+                index = this.tree.currentIndex;
+              } else {
+                switch (event.keyCode) {
+                  case event.DOM_VK_PAGE_UP:
+                  case event.DOM_VK_PAGE_DOWN:
+                    return;
+                }
+                index = this.self.setInitialSelection();
+              }
+              switch (event.keyCode) {
+                case event.DOM_VK_UP:
+                  if (index <= 0)
+                    return;
+                  index--;
+                  break;
+                case event.DOM_VK_DOWN:
+                  index++;
+                  if (index == box.view.rowCount)
+                    return;
+                  break;
+                case event.DOM_VK_PAGE_UP:
+                  if (index == box.getFirstVisibleRow())
+                    box.scrollByPages(-1);
+                  index = box.getFirstVisibleRow();
+                  break;
+                case event.DOM_VK_PAGE_DOWN:
+                  if (index == this.getLastVisibleRow(box))
+                    box.scrollByPages(1);
+                  index = this.getLastVisibleRow(box);
+                  break;
+                case event.DOM_VK_HOME:
+                  index = 0;
+                  break;
+                case event.DOM_VK_END:
+                  index = box.view.rowCount - 1;
+                  break;
+                default:
+                  if (event.charCode > 0 && !event.ctrlKey && !event.metaKey) {
+                    event.preventDefault();
+                    index = tree.keyNavigate(event);
+                    if (index >= 0)
+                      break;
+                  }
+                  return;
+              }
+              box.view.selection.select(index);
+              if (this.parentNode.hasAttribute("open"))
+                box.ensureRowIsVisible(index);
+              else
+                this.self.fire();
+            }
+          })
+        ]]>
+      </field>
+      <method name="setInitialSelection">
+        <body>
+          <![CDATA[
+            var view = this.tree.view;
+
+            if (!view.selection.currentColumn)
+              view.selection.currentColumn = this.tree.columns.getFirstColumn();
+
+            view.selection.selectEventsSuppressed = true;
+            for (var i = 0; i < view.rowCount; i++) {
+              if (view.isContainer(i)) {
+                if (view.isContainerEmpty(i) == view.isContainerOpen(i))
+                  view.toggleOpenState(i);
+                if (view.isContainerOpen(i)) {
+                  if (i + 1 == view.rowCount ||
+                      view.getLevel(i + 1) <= view.getLevel(i)) {
+                    view.toggleOpenState(i);
+                  }
+                }
+              }
+            }
+            var index = -1;
+            var uri = this.parentNode.getAttribute("uri");
+            if (uri) {
+              var RDF = Components.classes["@mozilla.org/rdf/rdf-service;1"].getService(Components.interfaces.nsIRDFService);
+              index = view.getIndexOfResource(RDF.GetResource(uri));
+            }
+            view.selection.select(index);
+            return index;
+          ]]>
+        </body>
+      </method>
+      <constructor>
+        <![CDATA[
+          this.setAttribute("ignorekeys", "true");
+          this.parentNode.addEventListener("keypress", this.onKeyPressMenuList, true);
+        ]]>
+      </constructor>
+      <destructor>
+        <![CDATA[
+          this.parentNode.removeEventListener("keypress", this.onKeyPressMenuList, true);
+        ]]>
+      </destructor>
+    </implementation>
+    <handlers>
+      <handler event="mousemove" action="this.updateHover(event);"/>
+      <handler event="click" button="0" action="if (this.updateHover(event) >= 0) this.fire();"/>
+      <handler event="popupshowing">
+        <![CDATA[
+          this.parentNode.addEventListener("blur", this.onBlurMenuList, false);
+          var box = this.tree.treeBoxObject;
+          box.focused = true;
+          var index = this.setInitialSelection();
+          var height = box.view.rowCount * box.rowHeight;
+          height += this.boxObject.height - box.treeBody.boxObject.height;
+          this.height = height;
+          if (index >= 0)
+            setTimeout(function() { box.ensureRowIsVisible(index); }, 0);
+        ]]>
+      </handler>
+      <handler event="popuphiding">
+        <![CDATA[
+          this.parentNode.removeEventListener("blur", this.onBlurMenuList, false);
+        ]]>
+      </handler>
+    </handlers>
+  </binding>
+
+  <binding id="folderSummary-popup" extends="chrome://global/content/bindings/popup.xml#tooltip">
+    <content>
+      <children>
+        <xul:folderSummary/>
+      </children>
+    </content>
+    <handlers>
+      <handler event="popupshowing">
+        <![CDATA[
+          let msgFolder = gFolderTreeView.getFolderAtCoords(event.clientX,
+                                                            event.clientY);
+          if (!msgFolder)
+            return false;
+
+          let tooltipnode = document.getAnonymousNodes(this)[0];
+          let asyncResults = {};
+          if (tooltipnode.parseFolder(msgFolder, null, asyncResults))
+            return true;
+
+          let row = {}, col = {};
+          gFolderTreeView._tree.getCellAt(event.clientX, event.clientY, row, col, {});
+          if (col.value.id == "folderNameCol") {
+            let cropped = gFolderTreeView._tree.isCellCropped(row.value, col.value);
+            if (tooltipnode.addLocationInfo(msgFolder, cropped))
+              return true;
+          }
+
+          let counts = gFolderTreeView.getSummarizedCounts(row.value, col.value.id);
+          if (counts) {
+            if (tooltipnode.addSummarizeExplain(counts))
+              return true;
+          }
+
+          return false;
+        ]]>
+      </handler>
+
+      <handler event="popuphiding">
+        document.getAnonymousNodes(this)[0].clear();
+      </handler>
+    </handlers>
+  </binding>
+
+  <binding id="folderSummary">
+    <content>
+      <xul:vbox/>
+    </content>
+
+    <implementation>
+      <field name="mMaxMsgHdrsInPopup">8</field>
+      <property name="hasMessages" readonly="true" onget="return document.getAnonymousNodes(this)[0].hasChildNodes();"/>
+      <method name="parseFolder">
+        <parameter name="aFolder"/>
+        <parameter name="aUrlListener"/>
+        <parameter name="aOutAsync"/>
+        <body>
+          <![CDATA[
+            // skip servers, Trash, Junk folders and newsgroups
+            if (!aFolder || aFolder.isServer || !aFolder.hasNewMessages ||
+                aFolder.getFlag(Components.interfaces.nsMsgFolderFlags.Junk) ||
+                aFolder.getFlag(Components.interfaces.nsMsgFolderFlags.Trash) ||
+                (aFolder.server instanceof Components.interfaces.nsINntpIncomingServer))
+              return false;
+            var showPreviewText = this.Services.prefs.getBoolPref("mail.biff.alert.show_preview");
+            let folderArray = [];
+            let msgDatabase;
+            try {
+              msgDatabase = aFolder.msgDatabase;
+            } catch(e) {
+              // The database for this folder may be missing (e.g. outdated/missing .msf),
+              // so just skip this folder.
+              return false;
+            }
+
+            if (aFolder.flags & Components.interfaces.nsMsgFolderFlags.Virtual)
+            {
+              let dbFolderInfo = msgDatabase.dBFolderInfo;
+              var srchFolderUri = dbFolderInfo.getCharProperty("searchFolderUri");
+              var srchFolderUriArray = srchFolderUri.split('|');
+              var foldersAdded = 0;
+              var RDF = Components.classes['@mozilla.org/rdf/rdf-service;1']
+                                  .getService(Components.interfaces.nsIRDFService);
+              for (var i in srchFolderUriArray)
+              {
+                var realFolder = RDF.GetResource(srchFolderUriArray[i])
+                                    .QueryInterface(Components.interfaces.nsIMsgFolder);
+                if (!realFolder.isServer)
+                  folderArray[foldersAdded++] = realFolder;
+              }
+            }
+            else {
+              folderArray[0] = aFolder;
+            }
+
+            var foundNewMsg = false;
+            for (var folderIndex = 0; folderIndex < folderArray.length; folderIndex++)
+            {
+              aFolder = folderArray[folderIndex];
+              // now get the database
+              try {
+                msgDatabase = aFolder.msgDatabase;
+              } catch(e) {
+                // The database for this folder may be missing (e.g. outdated/missing .msf),
+                // then just skip this folder.
+                continue;
+              }
+
+              aFolder.msgDatabase = null;
+              var msgKeys = {};
+              var numMsgKeys = {};
+              msgDatabase.getNewList(numMsgKeys, msgKeys);
+
+              if (!numMsgKeys.value)
+                continue;
+
+              if (showPreviewText)
+              {
+                // fetchMsgPreviewText forces the previewText property to get generated
+                // for each of the message keys.
+                try {
+                  aOutAsync.value = aFolder.fetchMsgPreviewText(msgKeys.value, numMsgKeys.value, false, aUrlListener);
+                  aFolder.msgDatabase = null;
+                }
+                catch (ex)
+                {
+                  // fetchMsgPreviewText throws an error when we call it on a news folder, we should just not show
+                  // the tooltip if this method returns an error.
+                  aFolder.msgDatabase = null;
+                  continue;
+                }
+              }
+              // if fetching the preview text is going to be an asynch operation and the caller
+              // is set up to handle that fact, then don't bother filling in any of the fields since
+              // we'll have to do this all over again when the fetch for the preview text completes.
+              // We don't expect to get called with a urlListener if we're doing a virtual folder.
+              if (aOutAsync.value && aUrlListener)
+                return false;
+              var unicodeConverter = Components.classes["@mozilla.org/intl/scriptableunicodeconverter"]
+                                    .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
+              unicodeConverter.charset = "UTF-8";
+              foundNewMsg = true;
+
+              var index = 0;
+              while (document.getAnonymousNodes(this)[0].childNodes.length < this.mMaxMsgHdrsInPopup && index < numMsgKeys.value)
+              {
+                var msgPopup = document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "folderSummaryMessage");
+                var msgHdr = msgDatabase.GetMsgHdrForKey(msgKeys.value[index++]);
+
+                var msgSubject = msgHdr.mime2DecodedSubject;
+                const kMsgFlagHasRe = 0x0010; // MSG_FLAG_HAS_RE
+                if(msgHdr.flags & kMsgFlagHasRe)
+                  msgSubject = (msgSubject) ? "Re: " + msgSubject : "Re: ";
+
+                msgPopup.setAttribute('subject', msgSubject);
+
+                var previewText = msgHdr.getStringProperty('preview');
+                // convert the preview text from utf-8 to unicode
+                if (previewText)
+                {
+                  try
+                  {
+                    var text = unicodeConverter.ConvertToUnicode(previewText);
+                    if (text)
+                      msgPopup.setAttribute('previewText', text);
+                  }
+                  catch (ex) { }
+                }
+
+                let addrs = MailServices.headerParser.parseEncodedHeader(
+                  msgHdr.author, msgHdr.effectiveCharset, false);
+                if (addrs.length > 0)
+                  msgPopup.setAttribute('sender', addrs[0].name || addrs[0].email);
+                msgPopup.msgHdr = msgHdr;
+                document.getAnonymousNodes(this)[0].appendChild(msgPopup);
+              }
+              if (document.getAnonymousNodes(this)[0].childNodes.length >= this.mMaxMsgHdrsInPopup)
+                return true;
+            }
+            return foundNewMsg;
+          ]]>
+        </body>
+      </method>
+
+      <method name="addLocationInfo">
+        <parameter name="aFolder"/>
+        <parameter name="aCropped"/>
+        <body>
+          <![CDATA[
+            // Display also server name for items that are on level 0 and are not server names
+            // by themselves and do not have server name already appended in their label.
+            let folderIndex = gFolderTreeView.getIndexOfFolder(aFolder);
+            if (!aFolder.isServer &&
+                gFolderTreeView.getLevel(folderIndex) == 0 &&
+                !gFolderTreeView.getServerNameAdded(folderIndex))
+            {
+              let loc = document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "folderSummaryLocation");
+              let midPath = "";
+              let midFolder = aFolder.parent;
+              while (aFolder.server.rootFolder != midFolder) {
+                midPath = midFolder.name + " - " + midPath;
+                midFolder = midFolder.parent;
+              }
+              loc.setAttribute("location", aFolder.server.prettyName + " - " + midPath + aFolder.name);
+              document.getAnonymousNodes(this)[0].appendChild(loc);
+              return true;
+            }
+
+            // If folder name is cropped or is a newsgroup and abbreviated per
+            // pref, use the full name as a tooltip.
+            if (aCropped ||
+                ((aFolder.server instanceof Components.interfaces.nsINntpIncomingServer) &&
+                 !(aFolder.flags & Components.interfaces.nsMsgFolderFlags.Virtual) &&
+                 aFolder.server.abbreviate) && !aFolder.isServer) {
+              let loc = document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "folderSummaryLocation");
+              loc.setAttribute("location", aFolder.name);
+              document.getAnonymousNodes(this)[0].appendChild(loc);
+              return true;
+            }
+
+            return false;
+          ]]>
+        </body>
+      </method>
+
+      <method name="addSummarizeExplain">
+        <parameter name="aCounts"/>
+        <body>
+          <![CDATA[
+            if (!aCounts || !aCounts[1])
+              return false;
+            let expl = document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "folderSummarySubfoldersSummary");
+            let sumString = document.getElementById("bundle_messenger")
+                                    .getFormattedString("subfoldersExplanation", [aCounts[0], aCounts[1]], 2);
+            expl.setAttribute("subfolders", sumString);
+            document.getAnonymousNodes(this)[0].appendChild(expl);
+            return true;
+          ]]>
+        </body>
+      </method>
+
+      <method name="clear">
+        <body>
+          <![CDATA[
+            var containingBox = document.getAnonymousNodes(this)[0];
+            while (containingBox.hasChildNodes())
+              containingBox.lastChild.remove();
+          ]]>
+        </body>
+      </method>
+      <constructor>
+        <![CDATA[
+          Components.utils.import("resource:///modules/mailServices.js");
+          Components.utils.import("resource://gre/modules/Services.jsm", this);
+        ]]>
+      </constructor>
+    </implementation>
+  </binding>
+
+  <binding id="folderSummary-location">
+    <content>
+      <xul:hbox>
+        <xul:label anonid="location" xbl:inherits="value=location"/>
+      </xul:hbox>
+    </content>
+  </binding>
+
+  <binding id="folderSummary-subfoldersSummary">
+    <content>
+      <xul:hbox>
+        <xul:label anonid="subfolders" xbl:inherits="value=subfolders"/>
+      </xul:hbox>
+    </content>
+  </binding>
+
+  <binding id="folderSummary-message">
+    <content>
+      <xul:vbox class="folderSummaryMessage">
+        <xul:hbox class="folderSummary-message-row">
+          <xul:label anonid="subject" flex="1" class="folderSummary-subject" xbl:inherits="value=subject" crop="right"/>
+          <xul:label anonid="sender"  class="folderSummary-sender" xbl:inherits="value=sender" crop="right"/>
+          <xul:spring anonid="spring" flex="100%"/>
+        </xul:hbox>
+        <xul:description anonid="preview" class="folderSummary-message-row folderSummary-previewText" xbl:inherits="value=previewText" crop="right"></xul:description>
+      </xul:vbox>
+    </content>
+    <implementation>
+      <constructor>
+        <![CDATA[
+          Components.utils.import("resource:///modules/MailUtils.js");
+          Components.utils.import("resource://gre/modules/Services.jsm", this);
+
+          if (!this.Services.prefs.getBoolPref("mail.biff.alert.show_preview"))
+            document.getAnonymousElementByAttribute(this, "anonid", "preview").hidden = true;
+          var hideSubject = !this.Services.prefs.getBoolPref("mail.biff.alert.show_subject");
+          var hideSender = !this.Services.prefs.getBoolPref("mail.biff.alert.show_sender");
+          if (hideSubject)
+            document.getAnonymousElementByAttribute(this, "anonid", "subject").hidden = true;
+          if (hideSender)
+            document.getAnonymousElementByAttribute(this, "anonid", "sender").hidden = true;
+          if (hideSubject && hideSender)
+            document.getAnonymousElementByAttribute(this, "anonid", "spring").hidden = true;
+        ]]>
+      </constructor>
+    </implementation>
+    <handlers>
+      <handler event="click" button="0">
+        <![CDATA[
+          MailUtils.displayMessageInFolderTab(this.msgHdr);
+          if (gAlertListener)
+            gAlertListener.observe(null, "alertclickcallback", "");
+        ]]>
+      </handler>
+    </handlers>
+  </binding>
+  <binding id="splitmenu">
+    <content>
+      <xul:hbox anonid="menuitem" flex="1"
+                class="splitmenu-menuitem"
+                xbl:inherits="iconic,label,disabled,onclick=oncommand,_moz-menuactive=active"/>
+      <xul:menu anonid="menu" class="splitmenu-menu"
+                xbl:inherits="disabled,_moz-menuactive=active"
+                oncommand="event.stopPropagation();">
+        <children includes="menupopup"/>
+      </xul:menu>
+    </content>
+
+    <implementation implements="nsIDOMEventListener">
+      <constructor><![CDATA[
+        this._parentMenupopup.addEventListener("DOMMenuItemActive", this, false);
+        this._parentMenupopup.addEventListener("popuphidden", this, false);
+      ]]></constructor>
+
+      <destructor><![CDATA[
+        this._parentMenupopup.removeEventListener("DOMMenuItemActive", this, false);
+        this._parentMenupopup.removeEventListener("popuphidden", this, false);
+      ]]></destructor>
+
+      <field name="menuitem" readonly="true">
+        document.getAnonymousElementByAttribute(this, "anonid", "menuitem");
+      </field>
+      <field name="menu" readonly="true">
+        document.getAnonymousElementByAttribute(this, "anonid", "menu");
+      </field>
+
+      <field name="_menuDelay">600</field>
+
+      <field name="_parentMenupopup"><![CDATA[
+        this._getParentMenupopup(this);
+      ]]></field>
+
+      <method name="_getParentMenupopup">
+        <parameter name="aNode"/>
+        <body><![CDATA[
+          let node = aNode.parentNode;
+          while (node) {
+            if (node.localName == "menupopup")
+              break;
+            node = node.parentNode;
+          }
+          return node;
+        ]]></body>
+      </method>
+
+      <method name="handleEvent">
+        <parameter name="event"/>
+        <body><![CDATA[
+          switch (event.type) {
+            case "DOMMenuItemActive":
+              if (this.getAttribute("active") == "true" &&
+                  event.target != this &&
+                  this._getParentMenupopup(event.target) == this._parentMenupopup)
+                this.removeAttribute("active");
+              break;
+            case "popuphidden":
+              if (event.target == this._parentMenupopup)
+                this.removeAttribute("active");
+              break;
+          }
+        ]]></body>
+      </method>
+    </implementation>
+
+    <handlers>
+      <handler event="mouseover"><![CDATA[
+        if (this.getAttribute("active") != "true") {
+          this.setAttribute("active", "true");
+
+          this.dispatchEvent(new Event("DOMMenuItemActive",
+                                       { bubbles: true, cancelable: false }));
+
+          if (this.getAttribute("disabled") != "true") {
+            let self = this;
+            setTimeout(function () {
+              if (self.getAttribute("active") == "true")
+                self.menu.open = true;
+            }, this._menuDelay);
+          }
+        }
+      ]]></handler>
+
+      <handler event="popupshowing"><![CDATA[
+        if (event.target == this.firstChild &&
+            this._parentMenupopup._currentPopup)
+          this._parentMenupopup._currentPopup.hidePopup();
+      ]]></handler>
+
+      <handler event="click" phase="capturing"><![CDATA[
+        if (this.getAttribute("disabled") == "true") {
+          // Prevent the command from being carried out
+          event.stopPropagation();
+          return;
+        }
+
+        let node = event.originalTarget;
+        while (true) {
+          if (node == this.menuitem)
+            break;
+          if (node == this)
+            return;
+          node = node.parentNode;
+        }
+
+        this._parentMenupopup.hidePopup();
+      ]]></handler>
+    </handlers>
+  </binding>
+
+  <binding id="appmenu-vertical" extends="chrome://global/content/bindings/toolbarbutton.xml#menu-vertical">
+    <implementation>
+      <method name="_setupAppmenu">
+        <parameter name="event"/>
+        <body><![CDATA[
+          if (event.target == this) {
+              let appmenuPopup = document.getElementById("appmenu-popup");
+              if (this.lastChild != appmenuPopup) {
+                this.appendChild(appmenuPopup);
+              }
+          }
+        ]]></body>
+      </method>
+    </implementation>
+    <handlers>
+      <!-- While it would seem we could do this by handling oncommand, we can't
+           because any external oncommand handlers might get called before ours,
+           and then they would see the incorrect value of checked. Additionally
+           a command attribute would redirect the command events anyway.
+           Also, the appmenu-popup needs to be appended to the target 'Hamburger
+           button' dynamically at every button click (as opposed to appended
+           once in the binding's constructor) otherwise only one of the four
+           Hamburger buttons (on the Mail, Calendar, Tasks and Chat tabs) will
+           get the popup menu (namely, Mail). See Bug 890332. -->
+      <handler event="mousedown" button="0" action="this._setupAppmenu(event);"/>
+      <handler event="keypress" key=" " action="this._setupAppmenu(event);"/>
+    </handlers>
+  </binding>
+</bindings>

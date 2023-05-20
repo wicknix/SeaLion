@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet type="text/css" href="chrome://communicator/skin/"?>
+<?xml-stylesheet type="text/css" href="chrome://communicator/content/communicator.css"?>
+<?xml-stylesheet type="text/css" href="chrome://communicator/content/pref/prefpanels.css"?>
+<?xml-stylesheet type="text/css" href="chrome://communicator/skin/prefpanels.css"?>
+<?xml-stylesheet type="text/css" href="chrome://communicator/skin/preferences.css"?>
+
+<!DOCTYPE prefwindow [
+  <!ENTITY % dtdPrefs    SYSTEM "chrome://communicator/locale/pref/preferences.dtd"> %dtdPrefs;
+]>
+
+<prefwindow id="prefDialog"
+            xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+            title="&prefWindow.title;"
+            height="660px"
+            width="690px"
+            overflow="auto"
+            onload="OnLoad();"
+            windowtype="mozilla:preferences"
+            buttons="accept,cancel"
+            autopanes="true">
+
+  <script type="application/javascript" src="chrome://communicator/content/pref/preferences.js"/>
+  <!-- Used by pref-smartupdate, pref-privatedata, pref-cookies, pref-images, pref-popups and pref-passwords, as well as pref-sync (gSyncUtils.*open* -> openUILinkIn) -->
+  <script type="application/javascript" src="chrome://communicator/content/utilityOverlay.js"/>
+  <script type="application/javascript" src="chrome://communicator/content/tasksOverlay.js"/>
+
+  <stringbundleset id="prefBundleset">
+    <stringbundle id="bundle_prefutilities"
+                  src="chrome://communicator/locale/pref/prefutilities.properties"/>
+    <stringbundle id="languageNamesBundle"
+                  src="chrome://global/locale/languageNames.properties"/>
+    <stringbundle id="regionNamesBundle"
+                  src="chrome://global/locale/regionNames.properties"/>
+  </stringbundleset>
+
+  <tree id="prefsTree"
+        style="width: 30ch;"
+        seltype="single"
+        hidecolumnpicker="true"
+        hidden="true"
+        flex="1">
+
+    <treechildren id="prefsPanelChildren">
+      <treeitem id="mainItem">
+        <treechildren id="mainChildren">
+          <treeitem id="downloadItem"
+                    label="&download.label;"
+                    prefpane="download_pane"
+                    url="chrome://communicator/content/pref/pref-download.xul"/>
+          <treeitem id="applicationsItem"
+                    label="&applications.label;"
+                    prefpane="applications_pane"
+                    url="chrome://communicator/content/pref/pref-applications.xul"/>
+          <treeitem id="smartupdateItem"
+                    label="&smart.label;"
+                    prefpane="smartupdate_pane"
+                    url="chrome://communicator/content/pref/pref-smartupdate.xul"/>
+        </treechildren>
+      </treeitem>
+
+      <treeitem open="true"
+                container="true"
+                id="contentItem"
+                label="&content.label;"
+                prefpane="content_pane"
+                url="chrome://communicator/content/pref/pref-content.xul">
+        <treechildren id="contentChildren">
+          <treeitem id="colorsItem"
+                    label="&colors.label;"
+                    prefpane="colors_pane"
+                    url="chrome://communicator/content/pref/pref-colors.xul"/>
+          <treeitem id="fontsItem"
+                    label="&fonts.label;"
+                    prefpane="fonts_pane"
+                    url="chrome://communicator/content/pref/pref-fonts.xul"/>
+          <treeitem id="languagesItem"
+                    label="&languages.label;"
+                    prefpane="languages_pane"
+                    url="chrome://communicator/content/pref/pref-languages.xul"/>
+          <treeitem id="scriptsItem"
+                    label="&scriptsAndWindows.label;"
+                    prefpane="scripts_pane"
+                    url="chrome://communicator/content/pref/pref-scripts.xul"/>
+          <treeitem id="mousewheelItem"
+                    label="&mousewheel.label;"
+                    prefpane="mousewheel_pane"
+                    url="chrome://communicator/content/pref/pref-mousewheel.xul"/>
+        </treechildren>
+      </treeitem>
+
+      <!-- Privacy items -->
+      <treeitem open="true"
+                container="true"
+                id="privacyItem"
+                prefpane="privacy_pane"
+                label="&privacy.label;"
+                url="chrome://communicator/content/pref/pref-privacy.xul">
+        <treechildren id="privacyChildren">
+          <treeitem id="privatedataItem"
+                    label="&privatedata.label;"
+                    prefpane="privatedata_pane"
+                    url="chrome://communicator/content/pref/pref-privatedata.xul"/>
+          <treeitem id="historyItem"
+                    label="&history.label;"
+                    prefpane="history_pane"
+                    url="chrome://communicator/content/pref/pref-history.xul"/>
+          <treeitem id="cookiesItem"
+                    label="&cookies.label;"
+                    prefpane="cookies_pane"
+                    url="chrome://communicator/content/pref/pref-cookies.xul"/>
+          <treeitem id="cacheItem"
+                    label="&cache.label;"
+                    prefpane="cache_pane"
+                    url="chrome://communicator/content/pref/pref-cache.xul"/>
+          <treeitem id="offlineAppsItem"
+                    label="&offlineApps.label;"
+                    prefpane="offlineapps_pane"
+                    url="chrome://communicator/content/pref/pref-offlineapps.xul"/>
+        </treechildren>
+      </treeitem>
+
+
+      <!-- Networking & Security items -->
+      <treeitem open="true"
+                container="true"
+                id="httpItem"
+                label="&httpnetworking.label;"
+                prefpane="http_pane"
+                url="chrome://communicator/content/pref/pref-http.xul">
+        <treechildren id="securityChildren">
+          <treeitem id="proxiesItem"
+                    label="&proxies.label;"
+                    prefpane="proxies_pane"
+                    url="chrome://communicator/content/pref/pref-proxies.xul"/>
+          <treeitem id="sslItem"
+                    label="&ssltls.label;"
+                    prefpane="ssl_pane"
+                    url="chrome://pippki/content/pref-ssl.xul"/>
+          <treeitem id="certItem"
+                    label="&certs.label;"
+                    prefpane="certs_pane"
+                    url="chrome://pippki/content/pref-certs.xul"/>
+          <treeitem id="masterpassItem"
+                    label="&masterpass.label;"
+                    prefpane="masterpass_pane"
+                    url="chrome://communicator/content/pref/pref-masterpass.xul"/>
+        </treechildren>
+      </treeitem>
+
+      <!-- Advanced items xptoolkit -->
+      <treeitem open="true"
+                container="true"
+                id="advancedItem"
+                label="&advance.label;"
+                prefpane="advanced_pane"
+                url="chrome://communicator/content/pref/pref-advanced.xul">
+        <treechildren id="advancedChildren"/>
+      </treeitem>
+    </treechildren>
+  </tree>
+
+</prefwindow>

@@ -1,0 +1,352 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsISupports.idl"
+
+interface nsISimpleEnumerator;
+interface nsIVariant;
+
+interface nsIPropertyBag;
+
+interface calIItemACLEntry;
+interface calIAlarm;
+interface calIAttachment;
+interface calIAttendee;
+interface calICalendar;
+interface calIDateTime;
+interface calIDuration;
+interface calIIcalComponent;
+interface calIRecurrenceInfo;
+interface calIRelation;
+
+//
+// calIItemBase
+//
+// Base for Events, Todos, Journals, etc.
+//
+
+[scriptable, uuid(9c988b8d-af45-4046-b05e-34417bba9058)]
+interface calIItemBase : nsISupports
+{
+  // returns true if this thing is able to be modified;
+  // if the item is not mutable, attempts to modify
+  // any data will throw CAL_ERROR_ITEM_IS_IMMUTABLE
+  readonly attribute boolean isMutable;
+
+  // makes this item immutable
+  void makeImmutable();
+
+  // clone always returns a mutable event
+  calIItemBase clone();
+
+  /**
+   * Hash Id that incorporates the item's UID, RECURRENCE-ID and calendar.id
+   * to be used for lookup of items that come from different calendars.
+   * Setting either id, recurrenceId or the calendar attribute leads to
+   * a recomputation of hashId.
+   *
+   * @attention Individual implementors of calIItemBase must stick to the
+   *            same algorithm that base/src/calItemBase.js uses.
+   */
+  readonly attribute AUTF8String hashId;
+
+  /**
+   * Checks whether the argument object refers the same calendar item as
+   * this one, by testing both the id and recurrenceId property.  This
+   *
+   * @arg aItem     the item to compare against this one
+   *
+   * @return        true if both ids match, false otherwise
+   */
+  boolean hasSameIds(in calIItemBase aItem);
+
+  /**
+   * Returns the acl entry associated to the item.
+   */
+  readonly attribute calIItemACLEntry aclEntry;
+
+  //
+  // the generation number of this item
+  //
+  attribute uint32_t generation;
+
+  // the time when this item was created
+  readonly attribute calIDateTime creationDate;
+
+  // last time any attribute was modified on this item, in UTC
+  readonly attribute calIDateTime lastModifiedTime;
+
+  // last time a "significant change" was made to this item
+  readonly attribute calIDateTime stampTime;
+
+  // the calICalendar to which this event belongs
+  attribute calICalendar calendar;
+
+  // the ID of this event
+  attribute AUTF8String id;
+
+  // event title
+  attribute AUTF8String title;
+
+  // event priority
+  attribute short priority;
+  attribute AUTF8String privacy;
+
+  // status of the event
+  attribute AUTF8String status;
+
+  // ical interop; writing this means parsing
+  // the ical string into this event
+  attribute AUTF8String icalString;
+
+  // an icalComponent for this item, suitable for serialization.
+  // the icalComponent returned is not live: changes in it or this
+  // item will not be reflected in the other.
+  attribute calIIcalComponent icalComponent;
+
+  //
+  // alarms
+  //
+
+  /**
+   * Get all alarms assigned to this item
+   *
+   * @param count       The number of alarms
+   * @param aAlarms     The array of calIAlarms
+   */
+  void getAlarms(out uint32_t count, [array, size_is(count), retval] out calIAlarm aAlarms);
+
+   /**
+   * Add an alarm to the item
+   *
+   * @param aAlarm      The calIAlarm to add
+   */
+  void addAlarm(in calIAlarm aAlarm);
+
+  /**
+   * Delete an alarm from the item
+   *
+   * @param aAlarm      The calIAlarm to delete
+   */
+  void deleteAlarm(in calIAlarm aAlarm);
+
+  /**
+   * Clear all alarms from the item
+   */
+  void clearAlarms();
+
+  // The last time this alarm was fired and acknowledged by the user; coerced to UTC.
+  attribute calIDateTime alarmLastAck;
+
+  //
+  // recurrence
+  //
+  attribute calIRecurrenceInfo recurrenceInfo;
+  readonly attribute calIDateTime recurrenceStartDate;
+
+  //
+  // All event properties are stored in a property bag;
+  // some number of these are "promoted" to top-level
+  // accessor attributes.  For example, "SUMMARY" is
+  // promoted to the top-level "title" attribute.
+  //
+  // If you use the has/get/set/deleteProperty
+  // methods, property names are case-insensitive.
+  //
+  // For purposes of ICS serialization, all property names in
+  // the hashbag are in uppercase.
+  //
+  // The isPropertyPromoted() attribute can will indicate
+  // if a particular property is promoted or not, for
+  // serialization purposes.
+  //
+
+  // Note that if this item is a proxy, then any requests for
+  // non-existant properties will be forward to the parent item.
+
+  // some other properties that may exist:
+  //
+  // 'description' - description (string)
+  // 'location' - location (string)
+  // 'categories' - categories (string)
+  // 'syncId' - sync id (string)
+  // 'inviteEmailAddress' - string
+  // alarmLength/alarmUnits/alarmEmailAddress/lastAlarmAck
+  // recurInterval/recurCount/recurWeekdays/recurWeeknumber
+
+  // these forward to an internal property bag; implemented here, so we can
+  // do access control on set/delete to have control over mutability.
+  readonly attribute nsISimpleEnumerator propertyEnumerator;
+  boolean hasProperty(in AString name);
+
+  /**
+   * Gets a particular property.
+   * Objects passed back are still owned by the item, e.g. if callers need to
+   * store or modify a calIDateTime they must clone it.
+   */
+  nsIVariant getProperty(in AString name);
+
+  /**
+   * Sets a particular property.
+   * Ownership of objects gets passed to the item, e.g. callers must not
+   * modify a calIDateTime after it's been passed to an item.
+   *
+   * @warning this reflects the current implementation
+   *          xxx todo: rethink whether it's more sensible to store
+   *                    clones in calItemBase.
+   */
+  void setProperty(in AString name, in nsIVariant value);
+
+  // will not throw an error if you delete a property that doesn't exist
+  void deleteProperty(in AString name);
+
+  // returns true if the given property is promoted to some
+  // top-level attribute (e.g. id or title)
+  boolean isPropertyPromoted(in AString name);
+
+  /**
+   * Returns a particular parameter value for a property, or null if the
+   * parameter does not exist.  If the property does not exist, throws.
+   *
+   * @param aPropertyName  the name of the property
+   * @param aParameterName the name of the parameter on the property
+   */
+  AString getPropertyParameter(in AString aPropertyName,
+                               in AString aParameterName);
+
+  /**
+   * Checks if the given property has the given parameter.
+   *
+   * @param aPropertyName   The name of the property.
+   * @param aParameterName  The name of the parameter on the property.
+   * @return                True, if the parameter exists on the property
+   */
+  boolean hasPropertyParameter(in AString aPropertyName,
+                              in AString aParameterName);
+
+  /**
+   * Sets a particular parameter value for a property, or unsets if null is
+   * passed. If the property does not exist, throws.
+   *
+   * @param aPropertyName   The name of the property
+   * @param aParameterName  The name of the parameter on the property
+   * @param aParameterValue The value of the parameter to set
+   */
+  void setPropertyParameter(in AString aPropertyName,
+                            in AString aParameterName,
+                            in AUTF8String aParameterValue);
+
+  /**
+   * Returns a property parameter enumerator for the given property name
+   *
+   * @param aPropertyName   The name of the property.
+   * @return                The parameter enumerator.
+   */
+  nsISimpleEnumerator getParameterEnumerator(in AString aPropertyName);
+
+  /**
+   * The organizer (originator) of the item.  We will likely not
+   * honour or preserve all fields in the calIAttendee passed around here.
+   * A base class like calIPerson might be more appropriate here, if we ever
+   * grow one.
+   */
+  attribute calIAttendee organizer;
+
+  //
+  // Attendees
+  //
+
+  // The array returned here is not live; it will not reflect calls to
+  // removeAttendee/addAttendee that follow the call to getAttendees.
+  void getAttendees(out uint32_t count,
+                    [array,size_is(count),retval] out calIAttendee attendees);
+
+  /**
+   * getAttendeeById's matching is done in a case-insensitive manner to handle
+   * places where "MAILTO:" or similar properties are capitalized arbitrarily
+   * by different calendar clients.
+   */
+  calIAttendee getAttendeeById(in AUTF8String id);
+  void addAttendee(in calIAttendee attendee);
+  void removeAttendee(in calIAttendee attendee);
+  void removeAllAttendees();
+
+  //
+  // Attachments
+  //
+  void getAttachments(out uint32_t count,
+                      [array,size_is(count),retval] out calIAttachment attachments);
+  void addAttachment(in calIAttachment attachment);
+  void removeAttachment(in calIAttachment attachment);
+  void removeAllAttachments();
+
+  //
+  // Categories
+  //
+
+  /**
+   * Gets the array of categories this item belongs to.
+   */
+  void getCategories(out uint32_t aCount,
+                     [array, size_is(aCount), retval] out wstring aCategories);
+
+  /**
+   * Sets the array of categories this item belongs to.
+   */
+  void setCategories(in uint32_t aCount,
+                     [array, size_is(aCount)] in wstring aCategories);
+
+  //
+  // Relations
+  //
+
+  /**
+   * This gives back every relation where the item is neighter the owner of the
+   * relation nor the referred relation
+   */
+  void getRelations(out uint32_t count,
+                    [array,size_is(count),retval] out calIRelation relations);
+
+  /**
+   * Adds a relation to the item
+   */
+  void addRelation(in calIRelation relation);
+
+  /**
+   * Removes the relation for this item and the referred item
+   */
+  void removeRelation(in calIRelation relation);
+
+  /**
+   * Removes every relation for this item (in this items and also where it is referred
+   */
+  void removeAllRelations();
+
+  // Occurrence querying
+  //
+
+  /**
+   * Return a list of occurrences of this item between the given dates.  The items
+   * returned are the same type as this one, as proxies.
+   */
+  void getOccurrencesBetween (in calIDateTime aStartDate, in calIDateTime aEndDate,
+                              out uint32_t aCount,
+                              [array,size_is(aCount),retval] out calIItemBase aOccurrences);
+
+  /**
+   * If this item is a proxy or overridden item, parentItem will point upwards
+   * to our parent.  Otherwise, it will point to this.
+   * parentItem can thus always be used for modifyItem() calls
+   * to providers.
+   */
+  attribute calIItemBase parentItem;
+
+  /**
+   * The recurrence ID, a.k.a. DTSTART-of-calculated-occurrence,
+   * or null if this isn't an occurrence.
+   * Be conservative about setting this. It isn't marked as such, but
+   * consider it as readonly.
+   */
+  attribute calIDateTime recurrenceId;
+};

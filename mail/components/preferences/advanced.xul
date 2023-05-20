@@ -1,0 +1,363 @@
+<?xml version="1.0"?>
+# -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+<!DOCTYPE overlay [
+<!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+<!ENTITY % advancedDTD SYSTEM "chrome://messenger/locale/preferences/advanced.dtd">
+%brandDTD;
+%advancedDTD;
+]>
+
+<overlay id="AdvancedPaneOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <prefpane id="paneAdvanced" onpaneload="gAdvancedPane.init();">
+    <script type="application/javascript" src="chrome://messenger/content/preferences/advanced.js"/>
+    <script type="application/javascript" src="chrome://communicator/content/utilityOverlay.js"/>
+
+    <preferences id="advancedPreferences">
+      <preference id="mail.preferences.advanced.selectedTabIndex"
+                  name="mail.preferences.advanced.selectedTabIndex" type="int"/>
+      <!-- General tab -->
+
+      <preference id="general.autoScroll"
+                  name="general.autoScroll"
+                  type="bool"/>
+      <preference id="general.smoothScroll"
+                  name="general.smoothScroll"
+                  type="bool"/>
+
+      <preference id="mailnews.database.global.indexer.enabled"
+                  name="mailnews.database.global.indexer.enabled"
+                  type="bool"/>
+
+      <preference id="layers.acceleration.enabled"
+                  name="layers.acceleration.enabled"
+#ifdef XP_WIN
+                  type="bool"
+                  onchange="gAdvancedPane.updateHardwareAcceleration(this.value);"/>
+#else
+                  type="bool"/>
+#endif
+
+#ifdef HAVE_SHELL_SERVICE
+      <preference id="mail.shell.checkDefaultClient"
+                  name="mail.shell.checkDefaultClient"
+                  type="bool"/>
+      <preference id="pref.general.disable_button.default_mail"
+                  name="pref.general.disable_button.default_mail"
+                  type="bool"/>
+#endif
+      <!-- Keep one id, so that we don't have to do platform specific stuff later -->
+
+      <!-- Network tab -->
+      <preference id="mail.prompt_purge_threshhold"
+                  name="mail.prompt_purge_threshhold" type="bool"/>
+      <preference id="mail.purge_threshhold_mb"
+                  name="mail.purge_threshhold_mb" type="int"/>
+      <preference id="browser.cache.disk.capacity"
+                  name="browser.cache.disk.capacity" type="int"/>
+#ifdef MOZ_UPDATER
+      <!-- Update tab -->
+      <preference id="app.update.enabled" name="app.update.enabled"
+type="bool"/>
+      <preference id="app.update.auto" name="app.update.auto"
+type="bool"/>
+      <preference id="app.update.disable_button.showUpdateHistory"
+                  name="app.update.disable_button.showUpdateHistory"
+                  type="bool"/>
+#endif
+      <!-- Certificates tab -->
+      <preference id="security.default_personal_cert"
+                  name="security.default_personal_cert"
+                  type="string"/>
+      <preference id="security.disable_button.openCertManager"
+                  name="security.disable_button.openCertManager"
+                  type="bool"/>
+      <preference id="security.disable_button.openDeviceManager"
+                  name="security.disable_button.openDeviceManager"
+                  type="bool"/>
+      <preference id="security.OCSP.enabled"
+                  name="security.OCSP.enabled"
+                  type="int"/>
+    </preferences>
+
+#ifdef HAVE_SHELL_SERVICE
+    <stringbundle id="bundlePreferences" src="chrome://messenger/locale/preferences/preferences.properties"/>
+    <stringbundle id="bundleBrand" src="chrome://branding/locale/brand.properties"/>
+#endif
+
+    <commandset id="networkTabCommandSet">
+      <command id="cmd_toggleCompact"
+               oncommand="gAdvancedPane.updateCompactOptions();"/>
+    </commandset>
+
+    <tabbox id="advancedPrefs" flex="1" onselect="gAdvancedPane.tabSelectionChanged();">
+      <tabs id="advancedPrefsTabs">
+        <tab id="generalTab" label="&itemGeneral.label;"/>
+#ifdef MOZ_DATA_REPORTING
+        <tab id="dataChoicesTab" label="&dataChoicesTab.label;"/>
+#endif
+        <tab id="networkingTab" label="&itemNetworking.label;"/>
+#ifdef MOZ_UPDATER
+        <tab id="updateTab" label="&itemUpdate.label;"/>
+#endif
+        <tab id="certificateTab" label="&itemCertificates.label;"/>
+      </tabs>
+
+      <tabpanels id="advancedPrefsPanels" flex="1">
+        <!-- General -->
+        <tabpanel orient="vertical">
+          <hbox align="center">
+            <description flex="1">&returnReceiptsInfo.label;</description>
+            <button id="showReturnReceipts"
+                    label="&showReturnReceipts.label;"
+                    accesskey="&showReturnReceipts.accesskey;"
+                    oncommand="gAdvancedPane.showReturnReceipts();"/>
+          </hbox>
+
+          <!-- Scrolling -->
+          <groupbox id="scrollingGroup">
+            <caption label="&scrolling.label;"/>
+            <hbox>
+              <checkbox id="useAutoScroll"
+                        label="&useAutoScroll.label;"
+                        accesskey="&useAutoScroll.accesskey;"
+                        preference="general.autoScroll"/>
+              <spacer flex="1"/>
+            </hbox>
+            <hbox>
+              <checkbox id="useSmoothScrolling"
+                        label="&useSmoothScrolling.label;"
+                        accesskey="&useSmoothScrolling.accesskey;"
+                        preference="general.smoothScroll"/>
+              <spacer flex="1"/>
+            </hbox>
+          </groupbox>
+
+#ifdef HAVE_SHELL_SERVICE
+          <groupbox id="systemDefaultsGroup" orient="vertical">
+            <caption label="&systemIntegration.label;"/>
+            <hbox id="checkDefaultBox" align="center">
+              <checkbox id="alwaysCheckDefault"
+                        preference="mail.shell.checkDefaultClient"
+                        label="&alwaysCheckDefault.label;"
+                        accesskey="&alwaysCheckDefault.accesskey;"/>
+              <spacer flex="1"/>
+              <button id="checkDefaultButton" label="&checkDefaultsNow.label;"
+                      accesskey="&checkDefaultsNow.accesskey;"
+                      oncommand="gAdvancedPane.checkDefaultNow();"
+                      preference="pref.general.disable_button.default_mail"/>
+            </hbox>
+          </groupbox>
+#endif
+          <groupbox>
+            <caption label="&configEditDesc.label;"/>
+            <vbox>
+              <hbox>
+                <checkbox id="enableGloda"
+                          preference="mailnews.database.global.indexer.enabled"
+                          label="&enableGlodaSearch.label;"
+                          accesskey="&enableGlodaSearch.accesskey;"/>
+              </hbox>
+              <hbox align="center">
+                <label value="&storeType.label;"
+                       accesskey="&storeType.accesskey;"
+                       control="storeTypeMenulist"/>
+                <menulist id="storeTypeMenulist"
+                          oncommand="gAdvancedPane.updateDefaultStore(this.selectedItem.value)">
+                  <menupopup id="storeTypeMenupopup">
+                    <menuitem id="mboxStore"
+                              label="&mboxStore2.label;"
+                              value="@mozilla.org/msgstore/berkeleystore;1"/>
+                    <menuitem id="maildirStore"
+                              label="&maildirStore.label;"
+                              value="@mozilla.org/msgstore/maildirstore;1"/>
+                  </menupopup>
+                </menulist>
+              </hbox>
+              <hbox>
+                <checkbox id="allowHWAccel"
+                          label="&allowHWAccel.label;"
+                          accesskey="&allowHWAccel.accesskey;"
+                          preference="layers.acceleration.enabled"/>
+              </hbox>
+            </vbox>
+            <vbox>
+              <hbox pack="end">
+                <button id="configEditor" label="&configEdit.label;"
+                        accesskey="&configEdit.accesskey;"
+                        oncommand="gAdvancedPane.showConfigEdit();"/>
+              </hbox>
+            </vbox>
+          </groupbox>
+        </tabpanel>
+
+#ifdef MOZ_DATA_REPORTING
+        <!-- Data Choices -->
+        <tabpanel id="dataChoicesPanel" orient="vertical">
+#ifdef MOZ_CRASHREPORTER
+          <groupbox>
+            <caption label="&crashReporterSection.label;"/>
+            <description>&crashReporterDesc.label;</description>
+            <hbox>
+              <checkbox id="submitCrashesBox"
+                        oncommand="gAdvancedPane.updateSubmitCrashes();"
+                        label="&enableCrashReporter.label;"
+                        accesskey="&enableCrashReporter.accesskey;"/>
+
+              <spacer flex="1"/>
+              <label id="crashReporterLearnMore"
+                     class="text-link"
+                     value="&crashReporterLearnMore.label;"
+                     onclick="gAdvancedPane.openTextLink(event)"/>
+            </hbox>
+          </groupbox>
+#endif
+        </tabpanel>
+#endif
+
+        <tabpanel orient="vertical">
+          <!-- Networking & Disk Space -->
+          <groupbox>
+            <caption label="&connectionsInfo.caption;"/>
+            <hbox align="center">
+              <description flex="1" control="catProxiesButton">&proxiesConfigure.label;</description>
+              <button id="catProxiesButton" icon="network" label="&showSettings.label;"
+                      accesskey="&showSettings.accesskey;"
+                      oncommand="gAdvancedPane.showConnections();"/>
+            </hbox>
+          </groupbox>
+
+          <groupbox>
+            <caption label="&offlineInfo.caption;"/>
+            <hbox align="center">
+              <description flex="1" control="offlineSettingsButton">&offlineInfo.label;</description>
+              <button id="offlineSettingsButton" label="&showOffline.label;"
+                      accesskey="&showOffline.accesskey;"
+                      oncommand="gAdvancedPane.showOffline();"/>
+            </hbox>
+          </groupbox>
+
+          <groupbox>
+            <caption label="&Diskspace;"/>
+            <hbox align="center">
+              <label id="actualDiskCacheSize" flex="1"/>
+              <button id="clearCacheButton" icon="clear"
+                      label="&clearCacheNow.label;" accesskey="&clearCacheNow.accesskey;"
+                      oncommand="gAdvancedPane.clearCache();"/>
+            </hbox>
+            <hbox align="center">
+              <label id="useCacheBefore" control="cacheSize"
+                     accesskey="&useCacheBefore.accesskey;" value="&useCacheBefore.label;"/>
+              <textbox id="cacheSize" type="number" size="4" max="1024"
+                       preference="browser.cache.disk.capacity"
+                       onsyncfrompreference="return gAdvancedPane.readCacheSize();"
+                       onsynctopreference="return gAdvancedPane.writeCacheSize();"
+                       aria-labelledby="useCacheBefore cacheSize useCacheAfter"/>
+              <label id="useCacheAfter" flex="1">&useCacheAfter.label;</label>
+            </hbox>
+            <hbox align="center">
+                <checkbox id="offlineCompactFolder"
+                          label="&offlineCompactFolders.label;"
+                          accesskey="&offlineCompactFolders.accesskey;"
+                          command="cmd_toggleCompact"
+                          aria-labelledby="offlineCompactFolder offlineCompactFolderMin compactFolderMB"
+                          preference="mail.prompt_purge_threshhold"/>
+                <textbox id="offlineCompactFolderMin" size="4" value="20"
+                         type="number" min="1" max="2048" increment="10"
+                         preference="mail.purge_threshhold_mb"
+                         aria-labelledby="offlineCompactFolder offlineCompactFolderMin compactFolderMB"/>
+                <label id="compactFolderMB" value="&offlineCompactFoldersMB.label;"/>
+            </hbox>
+          </groupbox>
+        </tabpanel>
+
+#ifdef MOZ_UPDATER
+        <!-- Update -->
+        <tabpanel orient="vertical" align="start">
+          <groupbox id="updateApp">
+            <caption label="&updateApp.label;"/>
+            <radiogroup id="updateRadioGroup"
+                        oncommand="gAdvancedPane.updateWritePrefs();">
+              <radio value="auto"
+                     label="&updateAuto.label;"
+                     accesskey="&updateAuto.accesskey;"/>
+              <hbox>
+                <radio value="checkOnly"
+                       label="&updateCheck.label;"
+                       accesskey="&updateCheck.accesskey;"/>
+                <spacer flex="1"/>
+              </hbox>
+              <hbox>
+                <radio value="manual"
+                       label="&updateManual.label;"
+                       accesskey="&updateManual.accesskey;"/>
+                <spacer flex="1"/>
+              </hbox>
+            </radiogroup>
+
+            <hbox>
+              <button id="showUpdateHistory"
+                      label="&updateHistory.label;"
+                      accesskey="&updateHistory.accesskey;"
+                      preference="app.update.disable_button.showUpdateHistory"
+                      oncommand="gAdvancedPane.showUpdates();"/>
+            </hbox>
+          </groupbox>
+        </tabpanel>
+#endif
+
+        <!-- Certificates -->
+        <tabpanel orient="vertical">
+          <description id="CertSelectionDesc" control="certSelection">&certSelection.description;</description>
+
+          <!--
+            The values on these radio buttons may look like l12y issues, but
+            they're not - this preference uses *those strings* as its values.
+            I KID YOU NOT.
+          -->
+          <radiogroup id="certSelection" class="indent"
+                      orient="horizontal" preftype="string"
+                      preference="security.default_personal_cert"
+                      aria-labelledby="CertGroupCaption CertSelectionDesc">
+            <radio label="&certs.auto;" accesskey="&certs.auto.accesskey;"
+                    value="Select Automatically"/>
+            <radio label="&certs.ask;" accesskey="&certs.ask.accesskey;"
+                    value="Ask Every Time"/>
+          </radiogroup>
+
+          <separator/>
+
+          <hbox>
+            <checkbox id="enableOCSP"
+                      label="&enableOCSP.label;"
+                      accesskey="&enableOCSP.accesskey;"
+                      onsyncfrompreference="return gAdvancedPane.readEnableOCSP();"
+                      onsynctopreference="return gAdvancedPane.writeEnableOCSP();"
+                      preference="security.OCSP.enabled"/>
+            <spacer flex="1"/>
+          </hbox>
+
+            <separator/>
+
+          <hbox>
+            <button id="manageCertificatesButton"
+                    label="&manageCertificates.label;"
+                    accesskey="&manageCertificates.accesskey;"
+                    oncommand="gAdvancedPane.showCertificates();"
+                    preference="security.disable_button.openCertManager"/>
+            <button id="viewSecurityDevicesButton"
+                    label="&viewSecurityDevices.label;"
+                    accesskey="&viewSecurityDevices.accesskey;"
+                    oncommand="gAdvancedPane.showSecurityDevices();"
+                    preference="security.disable_button.openDeviceManager"/>
+          </hbox>
+        </tabpanel>
+      </tabpanels>
+    </tabbox>
+    <separator/>
+  </prefpane>
+</overlay>

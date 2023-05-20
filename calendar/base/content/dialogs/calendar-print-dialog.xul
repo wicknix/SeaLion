@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://calendar/content/datetimepickers/datetimepickers.css" type="text/css"?>
+
+<!DOCTYPE dialog [
+    <!ENTITY % dtd1 SYSTEM "chrome://calendar/locale/global.dtd" > %dtd1;
+    <!ENTITY % dtd2 SYSTEM "chrome://calendar/locale/calendar.dtd" > %dtd2;
+]>
+
+
+<dialog id="calendar-new-printwindow"
+        title="&calendar.print.window.title;"
+        windowtype="Calendar:PrintDialog"
+        onload="loadCalendarPrintDialog();"
+        buttons="accept,cancel"
+        buttonlabelaccept="&calendar.print.button.label;"
+        buttonaccesskeyaccept="&calendar.print.button.accesskey;"
+        defaultButton="accept"
+        ondialogaccept="return printAndClose();"
+        ondialogcancel="return true;"
+        persist="screenX screenY width height"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/javascript" src="chrome://calendar/content/calendar-print-dialog.js"/>
+  <script type="application/javascript" src="chrome://calendar/content/calUtils.js"/>
+  <script type="application/javascript" src="chrome://calendar/content/calendar-ui-utils.js"/>
+  <script type="application/javascript" src="chrome://global/content/printUtils.js"/>
+
+  <hbox id="firstHbox" flex="1">
+    <vbox id="groupboxVbox">
+      <groupbox id="settingsGroup">
+        <caption label="&calendar.print.settingsGroup.label;"/>
+
+        <grid>
+          <columns>
+            <column/>
+            <column flex="1"/>
+          </columns>
+
+          <rows>
+            <row align="center">
+              <label control="title-field"
+                     value="&calendar.print.title.label;"/>
+              <textbox id="title-field"
+                       class="padded"
+                       flex="1"
+                       onchange="refreshHtml();"/>
+            </row>
+            <row align="center">
+              <label control="layout-field"
+                     value="&calendar.print.layout.label;"/>
+              <hbox>
+                <menulist id="layout-field">
+                  <!-- This menupopup will be populated by calendar-print-dialog.js! -->
+                  <menupopup id="layout-menulist-menupopup"
+                             oncommand="refreshHtml();"/>
+                </menulist>
+                <spacer flex="1"/>
+              </hbox>
+            </row>
+          </rows>
+        </grid>
+      </groupbox>
+
+      <groupbox id="what-to-print-group">
+        <caption label="&calendar.print.range.label;"/>
+        <grid id="grid-events-and-tasks">
+          <columns id="columns-for-events-and-tasks">
+            <column id="column-event">
+              <checkbox id="events" label="&calendar.print.events.label;" checked="true"
+                        oncommand="eventsAndTasksOptions(this.id); refreshHtml();" persist="checked" autocheck="false"/>
+            </column>
+            <column id="column-tasks">
+              <checkbox id="tasks" label="&calendar.print.tasks.label;" checked="true"
+                        oncommand="eventsAndTasksOptions(this.id); refreshHtml();" persist="checked" autocheck="false"/>
+            </column>
+          </columns>
+        </grid>
+        <radiogroup id="view-field"
+                    oncommand="refreshHtml();">
+          <radio id="printCurrentViewRadio"
+                 label="&calendar.print.currentView2.label;"
+                 value="currentView"/>
+          <radio id="selected"
+                 label="&calendar.print.selectedEventsAndTasks.label;"
+                 value="selected"/>
+          <radio id="custom-range"
+                 label="&calendar.print.custom.label;"
+                 value="custom"/>
+          <grid>
+            <columns>
+              <column/>
+              <column flex="1"/>
+            </columns>
+
+            <rows>
+              <row align="center">
+                <label control="start-date-picker"
+                       value="&calendar.print.from.label;"/>
+                <datepicker id="start-date-picker"
+                            onchange="onDatePick();"/>
+              </row>
+              <row align="center">
+                <label control="end-date-picker"
+                       value="&calendar.print.to.label;"/>
+                <datepicker id="end-date-picker"
+                            onchange="onDatePick();"/>
+              </row>
+            </rows>
+          </grid>
+        </radiogroup>
+      </groupbox>
+      <groupbox id="optionsGroup" label="&calendar.print.optionsGroup.label;">
+        <caption label="&calendar.print.optionsGroup.label;"/>
+        <checkbox id="tasks-with-no-due-date" label="&calendar.print.taskswithnoduedate.label;" checked="true" oncommand="refreshHtml();"/>
+        <checkbox id="completed-tasks" label="&calendar.print.completedtasks.label;" checked="true" oncommand="refreshHtml();"/>
+      </groupbox>
+    </vbox>
+
+    <splitter/>
+
+    <iframe src="about:blank"
+            id="content"
+            flex="1"
+            style="border: 2px solid #3c3c3c; width:30em; height:30em; background-color: white;"/>
+  </hbox>
+</dialog>

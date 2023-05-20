@@ -1,0 +1,140 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* Note to themers:
+   On rows and all cells, those properties for download states are available:
+   active, inactive, resumable, paused, downloading, finished, failed, canceled, blocked
+*/
+
+#clearListButton {
+  -moz-appearance: toolbarbutton;
+  text-shadow: 0 1px rgba(255, 255, 255, 0.4);
+  margin: 0 6px;
+  min-height: 18px;
+  min-width: 0;
+}
+
+#clearListButton:-moz-lwtheme:not([disabled="true"]) {
+  color: inherit;
+  text-shadow: inherit;
+}
+
+treechildren::-moz-tree-image {
+  margin-inline-start: -1px;
+}
+
+treechildren::-moz-tree-image(Name) {
+  margin-inline-end: 2px;
+}
+
+#ActionPlay {
+  list-style-image: url("chrome://communicator/skin/downloads/downloadButtons.png");
+  -moz-image-region: rect(0px, 16px, 16px, 0px);
+}
+
+treechildren::-moz-tree-image(ActionPlay, downloading, resumable),
+#pauseButton {
+  /* pause */
+  list-style-image: url("chrome://communicator/skin/downloads/downloadButtons.png");
+  -moz-image-region: rect(0px, 48px, 16px, 32px);
+}
+
+treechildren::-moz-tree-image(ActionPlay, paused, resumable),
+#resumeButton {
+  /* resume */
+  list-style-image: url("chrome://communicator/skin/downloads/downloadButtons.png");
+  -moz-image-region: rect(0px, 16px, 16px, 0px);
+}
+
+treechildren::-moz-tree-image(ActionPlay, failed),
+treechildren::-moz-tree-image(ActionPlay, canceled),
+#retryButton {
+  /* retry */
+  list-style-image: url("chrome://communicator/skin/downloads/downloadButtons.png");
+  -moz-image-region: rect(0px, 64px, 16px, 48px);
+}
+
+#ActionStop {
+  list-style-image: url("chrome://communicator/skin/downloads/downloadButtons.png");
+  -moz-image-region: rect(0px, 32px, 16px, 16px);
+}
+
+treechildren::-moz-tree-image(ActionStop, active),
+#cancelButton {
+  /* cancel */
+  list-style-image: url("chrome://communicator/skin/downloads/downloadButtons.png");
+  -moz-image-region: rect(0px, 32px, 16px, 16px);
+}
+
+treechildren::-moz-tree-image(ActionStop, inactive) {
+  /* remove */
+  list-style-image: url("chrome://communicator/skin/downloads/dl-remove.png");
+  -moz-image-region: auto;
+}
+
+/* There's no way this will look like a native progressbar, but we can at least
+   try to mimic the aqua, graphite and non-active colors. */
+treechildren::-moz-tree-progressmeter {
+  background: url("chrome://communicator/skin/downloads/progressBg.png") repeat-x;
+  color: rgba(0, 115, 255, 0.5);
+  border: none;
+  padding-bottom: 1px;
+  margin-top: 3px;
+}
+
+treechildren:-moz-system-metric(mac-graphite-theme)::-moz-tree-progressmeter {
+  color: rgba(43, 71, 106, 0.5);
+}
+
+treechildren:-moz-window-inactive::-moz-tree-progressmeter {
+  color: rgba(0, 0, 0, 0.1);
+}
+
+/* progress dialogs */
+
+#dlProgressWindow {
+  padding: 14px;
+}
+
+/* focusable label, focus ring like .link-text but not a link */
+#fileName, #fileSource {
+  border: 1px solid transparent;
+  /* 1px is used for border, make margins smaller by that */
+  margin-top: 0px;
+  margin-bottom: 1px;
+  margin-inline-start: 5px;
+  margin-inline-end: 4px;
+}
+
+#fileName:focus,
+#fileSource:focus {
+  border: 1px dotted -moz-DialogText;
+}
+
+#fileName {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.mini-button {
+  -moz-appearance: none;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  min-height: 0;
+}
+
+.mini-button > .button-box {
+  -moz-appearance: none;
+  padding: 0 !important;
+}
+
+#progressBox {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}

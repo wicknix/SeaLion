@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+                      "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"
+  [
+  <!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+  %brandDTD;
+  <!ENTITY % globalDTD SYSTEM "chrome://global/locale/global.dtd">
+  %globalDTD;
+  <!ENTITY % startDTD SYSTEM "chrome://messenger/locale/multimessageview.dtd">
+  %startDTD;
+  ]>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <head>
+    <link rel="stylesheet" media="screen" type="text/css"
+          href="chrome://messenger/skin/messenger.css"/>
+    <link rel="stylesheet" media="screen" type="text/css"
+          href="chrome://messenger/skin/primaryToolbar.css"/>
+    <link rel="stylesheet" media="screen" type="text/css"
+          href="chrome://messenger/skin/messageHeader.css"/>
+    <link rel="stylesheet" media="screen, print" type="text/css"
+          href="chrome://messenger/skin/multimessageview.css"/>
+    <link rel="stylesheet" media="print" type="text/css"
+          href="chrome://messenger/content/multimessageview_print.css"/>
+    <link rel="stylesheet" media="screen, print" type="text/css"
+          href="chrome://messenger/skin/tagColors.css"/>
+    <title>&window.title;</title>
+    <script type="application/javascript;version=1.8"
+            src="chrome://messenger/content/multimessageview.js"/>
+  </head>
+  <body>
+    <div id="heading_wrapper">
+      <xul:toolbox id="header-view-toolbox" class="inline-toolbox"
+                   labelalign="end"
+                   xmlns:html="http://www.w3.org/1999/xhtml"
+                   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+        <toolbar id="header-view-toolbar" class="inline-toolbar"
+                 align="start" iconsize="small" mode="full">
+          <toolbarbutton id="hdrArchiveButton"
+                         class="toolbarbutton-1 msgHeaderView-button hdrArchiveButton"
+                         label="&archiveButton.label;"
+                         onclick="if (event.button == 0) window.top.MsgArchiveSelectedMessages(null);" />
+          <toolbarbutton id="hdrTrashButton"
+                         class="toolbarbutton-1 msgHeaderView-button hdrTrashButton"
+                         label="&deleteButton.label;"
+                         onclick="if (event.button == 0) window.top.DefaultController.doCommand('cmd_delete');"/>
+        </toolbar>
+      </xul:toolbox>
+
+      <h1 id="heading">
+        <span id="summary_title">&selectedmessages.label;</span>&#x200B;<span
+              id="summary_subtitle"/>
+      </h1>
+    </div>
+    <div id="content">
+      <ul id="message_list"/>
+      <div id="footer">
+        <span class="info" id="size"/> <span class="info" id="notice"/>
+      </div>
+    </div>
+  </body>
+</html>

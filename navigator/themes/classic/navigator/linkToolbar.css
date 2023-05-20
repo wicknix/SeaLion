@@ -1,0 +1,125 @@
+/* -*- Mode: C; c-basic-offset: 2 -*- */
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/**
+ * Link toolbar items
+ **/
+
+#link-top
+{
+  list-style-image    : url("chrome://navigator/skin/btn1/top.gif");
+}
+
+#link-top[disabled="true"]
+{
+  list-style-image    : url("chrome://navigator/skin/btn1/top-disabled.gif") !important;
+}
+
+#link-top:hover,
+#link-top:hover:active
+{
+  list-style-image    : url("chrome://navigator/skin/btn1/top-hover.gif");
+}
+
+#link-up
+{
+  list-style-image    : url("chrome://navigator/skin/btn1/up.gif");
+}
+
+#link-up[disabled="true"]
+{
+  list-style-image    : url("chrome://navigator/skin/btn1/up-disabled.gif") !important;
+}
+
+#link-up:hover,
+#link-up:hover:active
+{
+  list-style-image    : url("chrome://navigator/skin/btn1/up-hover.gif");
+}
+
+#link-first
+{
+  list-style-image    : url("chrome://navigator/skin/btn1/first.gif");
+}
+
+#link-first[disabled="true"]
+{
+  list-style-image    : url("chrome://navigator/skin/btn1/first-disabled.gif") !important;
+}
+
+#link-first:hover,
+#link-first:hover:active
+{
+  list-style-image    : url("chrome://navigator/skin/btn1/first-hover.gif");
+}
+
+#link-prev
+{
+  list-style-image    : url("chrome://navigator/skin/btn1/previous.gif");
+}
+
+#link-prev[disabled="true"]
+{
+  list-style-image    : url("chrome://navigator/skin/btn1/previous-disabled.gif") !important;
+}
+
+#link-prev:hover,
+#link-prev:hover:active
+{
+  list-style-image    : url("chrome://navigator/skin/btn1/previous-hover.gif");
+}
+
+#link-next
+{
+  list-style-image    : url("chrome://navigator/skin/btn1/next.gif");
+}
+
+#link-next[disabled="true"]
+{
+  list-style-image    : url("chrome://navigator/skin/btn1/next-disabled.gif") !important;
+}
+
+#link-next:hover,
+#link-next:hover:active
+{
+  list-style-image    : url("chrome://navigator/skin/btn1/next-hover.gif");
+}
+
+#link-last
+{
+  list-style-image    : url("chrome://navigator/skin/btn1/last.gif");
+}
+
+#link-last[disabled="true"]
+{
+  list-style-image    : url("chrome://navigator/skin/btn1/last-disabled.gif") !important;
+}
+
+#link-last:hover,
+#link-last:hover:active
+{
+  list-style-image    : url("chrome://navigator/skin/btn1/last-hover.gif");
+}
+
+#link-feed {
+  list-style-image: url("chrome://navigator/skin/btn1/feeds.png") !important;
+  -moz-image-region: rect(0px 32px 16px 16px);
+}
+
+#link-feed:hover {
+  -moz-image-region: rect(16px 32px 32px 16px);
+}
+
+#link-feed[disabled="true"] {
+  -moz-image-region: rect(32px 32px 48px 16px);
+}
+
+#link-feed[open="true"] {
+  -moz-image-region: rect(48px 32px 64px 16px);
+}

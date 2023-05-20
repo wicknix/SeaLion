@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay [
+<!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+%brandDTD;
+<!ENTITY % prefSecurityDTD SYSTEM "chrome://communicator/locale/pref/pref-privacy.dtd">
+%prefSecurityDTD;
+]>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <prefpane id="privacy_pane" label="&pref.privacy.title;"
+            script="chrome://communicator/content/pref/pref-privacy.js">
+    <preferences id="security_preferences">
+      <!-- User Tracking -->
+      <preference id="privacy.donottrackheader.enabled"
+                  name="privacy.donottrackheader.enabled"
+                  type="bool"/>
+      <preference id="privacy.trackingprotection.enabled"
+                  name="privacy.trackingprotection.enabled"
+                  type="bool"
+                  onchange="SetWarnTrackEnabled(this.value);"/>
+      <preference id="privacy.warn_tracking_content"
+                  name="privacy.warn_tracking_content"
+                  type="bool"/>
+
+      <!-- Location Aware Browsing -->
+      <preference id="geo.enabled"
+                  name="geo.enabled"
+                  type="bool"/>
+    </preferences>
+
+    <!-- User Tracking -->
+    <groupbox id="trackingGroup">
+      <caption label="&tracking.label;"/>
+
+      <description>&trackingIntro.label;</description>
+      <checkbox id="doNotTrack"
+                label="&doNotTrack.label;"
+                accesskey="&doNotTrack.accesskey;"
+                preference="privacy.donottrackheader.enabled"/>
+      <checkbox id="trackProtect"
+                label="&trackProtect.label;"
+                accesskey="&trackProtect.accesskey;"
+                preference="privacy.trackingprotection.enabled"/>
+      <checkbox id="warnTrackContent"
+                class="indent"
+                label="&warnTrackContent.label;"
+                accesskey="&warnTrackContent.accesskey;"
+                preference="privacy.warn_tracking_content"/>
+    </groupbox>
+
+    <!-- Location Aware Browsing -->
+    <groupbox id="geoLocationGroup">
+      <caption label="&geoLocation.label;"/>
+
+      <description>&geoIntro.label;</description>
+      <radiogroup id="geoSelection"
+                  preference="geo.enabled">
+        <radio id="geoEnabled"
+               value="true"
+               label="&geoEnabled.label;"
+               accesskey="&geoEnabled.accesskey;"/>
+        <radio id="geoDisabled"
+               value="false"
+               label="&geoDisabled.label;"
+               accesskey="&geoDisabled.accesskey;"/>
+      </radiogroup>
+    </groupbox>
+  </prefpane>
+</overlay>

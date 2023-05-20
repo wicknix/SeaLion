@@ -1,0 +1,60 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsISupports.idl"
+interface calICalendar;
+interface nsIDOMChromeWindow;
+
+[scriptable, uuid(60160f68-4514-41b4-a19d-2f2cf0143426)]
+interface calIStatusObserver : nsISupports
+{
+
+ void initialize(in nsIDOMChromeWindow aWindow);
+
+ /**
+  * Starts the display of an operation to check a series of calendars
+  * This operation may either be determined or undetermined
+  * @param aProgressMode    An integer value that can accept DETERMINED_PROGRESS,
+  *                           UNDETERMINED_PROGRESS or NO_PROGRESS
+  * @param aCalendarsCount  If the first parameter is DETERMINED_PROGRESS
+  *                           aCalendarCount is the number of Calendars
+  *                           which completion is to be displayed
+  */
+  void startMeteors(in unsigned long aProgressMode, in unsigned long aCalendarCount);
+
+  /**
+  * stops the display of an progressed operation
+  */
+  void stopMeteors();
+
+  /**
+   * increments the display value denoting that a calendar has been processed
+   */
+  void calendarCompleted(in calICalendar aCalendar);
+
+  /**
+   * @return    An integer value denoting wheter a progress is running or not;
+   *              if it returns DETERMINED_PROGRESS a determined progress 
+                  is running;
+   *              if it returns UNDETERMINED_PROGRESS an undetermined progress 
+                  is running;
+   *              if it returns NO_PROGRESS no Progress is running.
+   */
+  readonly attribute unsigned long spinning;
+
+  /**
+   * A constant that denotes that no operation is running
+   */
+  const unsigned long NO_PROGRESS = 0;
+
+  /**
+   * A constant that refers to whether an operation is determined
+   */
+  const unsigned long DETERMINED_PROGRESS = 1;
+
+  /**
+   * A constant that refers to whether an operation is undetermined
+   */
+  const unsigned long UNDETERMINED_PROGRESS = 2;
+};

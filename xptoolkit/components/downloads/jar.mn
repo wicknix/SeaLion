@@ -1,0 +1,29 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+comm.jar:
+  content/communicator/downloads/downloadmanager.js                       (content/downloadmanager.js)
+* content/communicator/downloads/downloadmanager.xul                      (content/downloadmanager.xul)
+  content/communicator/downloads/DownloadProgressListener.js              (content/DownloadProgressListener.js)  
+* content/communicator/downloads/progressDialog.xul                       (content/progressDialog.xul)
+  content/communicator/downloads/progressDialog.js                        (content/progressDialog.js)
+  content/communicator/downloads/uploadProgress.xul                       (content/uploadProgress.xul)
+  content/communicator/downloads/uploadProgress.js                        (content/uploadProgress.js)
+  content/communicator/downloads/treeView.js                              (content/treeView.js)
+
+en-US.jar:
+  locale/en-US/communicator/downloads/downloadmanager.dtd                 (locale/downloadmanager.dtd)
+  locale/en-US/communicator/downloads/downloadmanager.properties          (locale/downloadmanager.properties)
+  locale/en-US/communicator/downloads/progressDialog.dtd                  (locale/progressDialog.dtd)
+
+classic.jar:
+  skin/classic/communicator/downloads/dl-remove.png                       (skin/dl-remove.png)
+#ifdef XP_MACOSX
+  skin/classic/communicator/downloads/downloadButtons.png                 (skin/mac/downloadButtons.png)
+  skin/classic/communicator/downloads/downloadmanager.css                 (skin/mac/downloadmanager.css)
+  skin/classic/communicator/downloads/progressBg.png                      (skin/mac/progressBg.png)
+#else
+  skin/classic/communicator/downloads/downloadButtons.png                 (skin/downloadButtons.png)
+  skin/classic/communicator/downloads/downloadmanager.css                 (skin/downloadmanager.css)
+#endif

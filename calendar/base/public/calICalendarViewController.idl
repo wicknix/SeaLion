@@ -1,0 +1,71 @@
+/* -*- Mode: IDL; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+#include "nsISupports.idl"
+
+interface calICalendar;
+interface calIDateTime;
+interface calIEvent;
+interface calIItemBase;
+
+[scriptable, uuid(40430501-a666-4c24-b234-eeac5ccb70f6)]
+interface calICalendarViewController : nsISupports
+{
+  /**
+   * Create an event, with an optional start time and optional end
+   * time in the given Calendar.  The Calendar will be the
+   * displayCalendar set on the View which invokes this method
+   * on the controller, or null, if the views wish to delegate the
+   * choice of the calendar to the controller.
+   *
+   * If neither aStartTime or aEndTime are given, the user wants to
+   * create a generic event with no information prefilled.
+   *
+   * If aStartTime is given and is a date, the user wants to
+   * create an all day event, optionally a multi-all-day event if
+   * aEndTime is given (and is also a date).
+   *
+   * If aStartTime is given and is a time, but no aEndTime is
+   * given, the user wants to create an event starting at
+   * aStartTime and of the default duration.  The controller has the
+   * option of creating this event automatically or via the dialog.
+   *
+   * If both aStartTime and aEndTime are given as times, then
+   * the user wants to create an event going from aStartTime
+   * to aEndTime.
+   */
+  void createNewEvent (in calICalendar aCalendar,
+		       in calIDateTime aStartTime,
+		       in calIDateTime aEndTime);
+
+  /**
+   * Modify aOccurrence.  If aNewStartTime and aNewEndTime are given,
+   * update the event to those times.  If aNewTitle is given, modify the title
+   * of the item.  If no parameters are given, ask the user to modify.
+   */
+  void modifyOccurrence (in calIItemBase aOccurrence,
+                         in calIDateTime aNewStartTime,
+                         in calIDateTime aNewEndTime,
+                         in AString aNewTitle);
+  /**
+   * Delete all events in the given array. If more than one event is passed,
+   * this will prompt whether to delete just this occurrence or all occurrences.
+   * All passed events will be handled in one transaction, i.e undoing this will
+   * make all events reappear.
+   *
+   * @param aCount          The number of events in the array
+   * @param aOccurrences    An array of Items/Occurrences to delete
+   * @param aUseParentItems If set, each occurrence will have its parent item
+   *                        deleted.
+   * @param aDoNotConfirm   If set, the events will be deleted without
+   *                        confirmation.
+   */
+  void deleteOccurrences (in uint32_t aCount,
+                          [array, size_is(aCount)] in calIItemBase aOccurrences,
+                          in boolean aUseParentItems,
+                          in boolean aDoNotConfirm);
+};
+

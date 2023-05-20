@@ -1,0 +1,21 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* Hide buttons from the message pane */
+#msgHeaderView:not([showToolbar=true]) #header-view-toolbox,
+#msgHeaderView:not([showToolbar=true]) #otherActionsButton,
+#msgHeaderView:not([showToolbar=true]) #expandedBoxSpacer{
+  display: none;
+}
+
+/* Remove the extra space left from the buttons */
+/* and squeeze the headers a little closer */
+#msgHeaderView:not([showToolbar=true]) #expandedHeaderRows{
+  padding-top: 0px;
+}
+#msgHeaderView:not([showToolbar=true]) .headerValue{
+  line-height: 1.25em;
+}

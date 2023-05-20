@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE overlay>
+
+<?xml-stylesheet href="chrome://messenger/skin/extensionsOverlay.css"?>
+
+<overlay id="extensionsOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script type="application/javascript" src="chrome://messenger/content/extensionsOverlay.js" />
+  <script type="application/javascript" src="chrome://communicator/content/contentAreaClick.js"/>
+
+  <!-- The Add-ons Manager is not a window.. We do treat it as one, some of the time... -->
+  <page id="addons-page" persist="width height screenX screenY sizemode">
+    <stringbundle id="bundle_brand" src="chrome://branding/locale/brand.properties" />
+    <stringbundle id="bundle_extensionsOverlay" src="chrome://messenger/locale/extensionsOverlay.properties" />
+    <notificationbox id="addons-notifications" notificationside="top" insertbefore="header" />
+  </page>
+
+  <!-- We need to attach contentAreaClick to the discover pane browser
+       else _blank link targets will get appshell to load a new browser via chrome window
+       defined in browser.chromeURL. Failing that it is hard coded to load navigator.xul -->
+  <browser id="discover-browser" onclick="return contentAreaClick(event, false);"/>
+</overlay>

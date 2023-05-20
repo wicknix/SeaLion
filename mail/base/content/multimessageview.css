@@ -1,0 +1,124 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* Generic (cross-platform) multimessage view CSS.  Some bits will be overriden
+  by theme specific files */
+
+@import url("chrome://messenger/content/sharedsummary.css");
+
+/* The heading area */
+
+#summary_subtitle {
+  margin-inline-start: 1em;
+  font-size: small;
+  white-space: nowrap;
+}
+
+/* The main content area */
+
+#content {
+  position: absolute;
+  top: 4em;
+  right: 0;
+  left: 0;
+  z-index: -1;
+  padding: 1ex 1em;
+  margin: 0;
+  font-size: small;
+}
+
+#message_list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+#footer {
+  margin-top: 1em;
+  padding-inline-start: 1em;
+}
+
+.info {
+  font-size: small;
+}
+
+/* The message/thread summary rows */
+
+#message_list > li {
+  position: relative;
+  margin-bottom: 1ex;
+  border-width: 2px;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  border-bottom-color: lightgrey;
+}
+
+#message_list > li.thread {
+  border-color: lightgrey;
+}
+
+.star {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  left: -4px;
+  top: 6px;
+  display: inline-block;
+  margin-left: 1ex;
+  margin-right: 1ex;
+  background-repeat: no-repeat;
+}
+
+.star:-moz-locale-dir(rtl) {
+  right: -4px;
+}
+
+.item_summary {
+  margin-inline-start: 19px;
+  padding: 0.3ex 0;
+}
+
+.item_header {
+  padding-inline-end: 18px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.unread .primary_header  {
+  font-weight: bold;
+}
+
+.right {
+  float: right;
+}
+
+.count {
+  white-space: nowrap;
+  color: InactiveCaptionText;
+  margin-inline-start: 1ch;
+}
+
+.tags {
+  padding-top: 4px;
+  margin-inline-start: 1ch;
+}
+
+.tag {
+  display: inline-block; /* to avoid splitting 'To' and 'Do' e.g. */
+  margin-inline-start: 0;
+  margin-inline-end: 3px;
+  padding: 0 0.5ex;
+  background-image: url("chrome://messenger/skin/tagbg.png");
+  border-radius: 3px;
+  border-style: outset;
+  border-width: 0.5px;
+  text-shadow: 0 1px 0 rgba(238,238,236,0.4); /* Tango Alumninum 1 */
+  color: #111;
+}
+
+.snippet {
+  opacity: .65;
+  padding-inline-end: 1.5em;
+  padding-bottom: 1ex;
+}

@@ -1,5 +1,6 @@
-# SeaLion - A web browser for Mac OS X 10.7 - 12.6
-# and 32-bit PowerPC Linux (Void / Debian 11).
+# SeaLion - A web browser for Mac OS X 10.7 - 12.6.
+# SeaMail - A mail and news client for Mac OS X 10.7 - 12.6.
+
 Built upon the unified XUL platform (UXP).
 https://repo.palemoon.org/MoonchildProductions/UXP
 
@@ -12,6 +13,7 @@ What features are included
 * XUL Overlay and Bootstrap Extension Support
 * SeaMonkey (if slightly modified) Theme Support
 * Supports Plug-ins
+* Supports the JXL image format
 * Open Search Engine Providers
 * TLS 1.3 support
 * Based on a mature code base
@@ -22,7 +24,7 @@ What is not included
 * Digital Rights Management (DRM) such as Encrypted Media Extensions (EME)
 * WebRTC
 * WebExtensions
-* Developer tools
+* Developer tools (can be added via an extension)
 * Lightweight Themes/Toolbar Backgrounds
 * Language Packs
 

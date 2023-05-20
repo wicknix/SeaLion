@@ -1,0 +1,1768 @@
+<?xml version="1.0"?>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+  - License, v. 2.0. If a copy of the MPL was not distributed with this
+  - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<bindings id="glodaFacetBindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:xbl="http://www.mozilla.org/xbl"
+          xmlns:svg="http://www.w3.org/2000/svg">
+
+<!-- ===== Constraints ===== -->
+
+<binding id="query-explanation">
+  <content>
+  </content>
+  <implementation>
+    <constructor><![CDATA[
+      Components.utils.import("resource:///modules/mailServices.js");
+    ]]></constructor>
+    <!-- Indicate that we are based on a fulltext search-->
+    <method name="setFulltext">
+      <parameter name="aMsgSearcher" />
+      <body><![CDATA[
+        while (this.hasChildNodes())
+          this.lastChild.remove();
+
+        let dis = this;
+        let spanify = function(aText, aClass) {
+          let span = document.createElement("span");
+          span.setAttribute("class", aClass);
+          span.textContent = aText;
+          dis.appendChild(span);
+          return span;
+        }
+
+        let searchLabel = glodaFacetStrings.get(
+          "glodaFacetView.search.label");
+        spanify(searchLabel, "explanation-fulltext-label");
+
+        let criteriaText = glodaFacetStrings.get(
+          "glodaFacetView.constraints.query.fulltext." +
+          (aMsgSearcher.andTerms ? "and" : "or") + "JoinWord");
+        for (let [iTerm, term] of aMsgSearcher.fulltextTerms.entries()) {
+          if (iTerm)
+            spanify(criteriaText, "explanation-fulltext-criteria");
+          spanify(term, "explanation-fulltext-term");
+        }
+      ]]></body>
+    </method>
+    <method name="setQuery">
+      <parameter name="aMsgQuery" />
+      <body><![CDATA[
+      try {
+        while (this.hasChildNodes())
+          this.lastChild.remove();
+
+        let dis = this;
+        let spanify = function(aText, aClass) {
+          let span = document.createElement("span");
+          span.setAttribute("class", aClass);
+          span.textContent = aText;
+          dis.appendChild(span);
+          return span;
+        }
+
+        let label = glodaFacetStrings.get(
+          "glodaFacetView.search.label");
+        spanify(label, "explanation-query-label");
+
+        let constraintStrings = [];
+        for (let constraint of aMsgQuery._constraints) {
+          if (constraint[0] != 1) return; // no idea what this is about
+          if (constraint[1].attributeName == 'involves') {
+            let involvesLabel = glodaFacetStrings.get(
+              "glodaFacetView.constraints.query.involves.label");
+            involvesLabel = involvesLabel.replace("#1", constraint[2].value)
+            spanify(involvesLabel, "explanation-query-involves");
+          } else if (constraint[1].attributeName == 'tag') {
+            let tagLabel = glodaFacetStrings.get(
+              "glodaFacetView.constraints.query.tagged.label");
+            let tag = constraint[2];
+            let tagNode = document.createElement("span");
+            let colorClass = "blc-" + MailServices.tags.getColorForKey(tag.key).substr(1);
+            tagNode.setAttribute("class", "message-tag tag " + colorClass);
+            tagNode.textContent = tag.tag;
+            spanify(tagLabel, "explanation-query-tagged");
+            this.appendChild(tagNode);
+          }
+        }
+        label = label + constraintStrings.join(', '); // XXX l10n?
+      } catch (e) {
+        logException(e);
+      }
+      ]]></body>
+    </method>
+  </implementation>
+</binding>
+
+<!-- ===== Facets ===== -->
+
+<binding id="facets">
+  <content>
+  </content>
+  <implementation>
+    <method name="clearFacets">
+      <body><![CDATA[
+        while (this.hasChildNodes())
+          this.lastChild.remove();
+      ]]></body>
+    </method>
+    <method name="addFacet">
+      <parameter name="aType" />
+      <parameter name="aAttrDef" />
+      <parameter name="aArgs" />
+      <body><![CDATA[
+        let facets = this;
+
+        let facet = document.createElement("div");
+        facet.attrDef = aAttrDef;
+        facet.nounDef = aAttrDef.objectNounDef;
+        for (let key in aArgs) {
+          facet[key] = aArgs[key];
+        }
+        facet.setAttribute("class", "facetious");
+        facet.setAttribute("type", aType);
+        facet.setAttribute("name", aAttrDef.attributeName);
+        facets.appendChild(facet);
+
+        return facet;
+      ]]></body>
+    </method>
+  </implementation>
+</binding>
+
+<binding id="facet-base">
+  <implementation>
+    <method name="brushItems">
+      <body><![CDATA[
+      ]]></body>
+    </method>
+    <method name="clearBrushedItems">
+      <body><![CDATA[
+      ]]></body>
+    </method>
+  </implementation>
+</binding>
+
+<!--
+  - A boolean facet; we presume orderedGroups contains at most two entries, and
+  -  that their group values consist of true or false.
+  -
+  - The implication of this UI is that you only want to filter to true values
+  -  and would never want to filter out the false values.  Consistent with this
+  -  assumption we disable the UI if there are no true values.
+  -
+  - This depressingly
+  -->
+<binding id="facet-boolean"
+         extends="chrome://messenger/content/glodaFacetBindings.xml#facet-base">
+  <content>
+    <html:span anonid="bubble" class="facet-checkbox-bubble">
+      <html:input anonid="checkbox" type="checkbox" />
+      <html:span anonid="label" class="facet-checkbox-label" />
+      <html:span anonid="count" class="facet-checkbox-count" />
+    </html:span>
+  </content>
+  <implementation>
+    <constructor><![CDATA[
+      this.bubble = document.getAnonymousElementByAttribute(this, "anonid",
+                                                            "bubble");
+      this.checkbox = document.getAnonymousElementByAttribute(this, "anonid",
+                                                              "checkbox");
+      this.labelNode = document.getAnonymousElementByAttribute(this, "anonid",
+                                                               "label");
+      this.countNode = document.getAnonymousElementByAttribute(this, "anonid",
+                                                               "count");
+
+      let dis = this;
+      this.bubble.addEventListener("click", function (event) {
+        return dis.bubbleClicked(event);
+      }, true);
+
+      this.extraSetup();
+
+      if ("faceter" in this)
+        this.build(true);
+    ]]></constructor>
+    <field name="canUpdate" readonly="true">true</field>
+    <property name="disabled">
+      <getter><![CDATA[
+        return this.getAttribute("disabled") == "true";
+      ]]></getter>
+      <setter><![CDATA[
+        if (val) {
+          this.setAttribute("disabled", "true");
+          this.checkbox.setAttribute("disabled", true);
+        }
+        else {
+          this.removeAttribute("disabled");
+          this.checkbox.removeAttribute("disabled");
+        }
+      ]]></setter>
+    </property>
+    <property name="checked">
+      <getter><![CDATA[
+        return this.getAttribute("checked") == "true";
+      ]]></getter>
+      <setter><![CDATA[
+        if (this.checked == val)
+          return;
+        this.checkbox.checked = val;
+        if (val) {
+          // the XBL inherits magic appears to fail if we explicitly check the
+          //  box itself rather than via our click handler, presumably because
+          //  we unshadow something.  So manually apply changes ourselves.
+          this.setAttribute("checked", "true");
+          this.checkbox.setAttribute("checked", "true");
+          if (!this.disabled)
+            FacetContext.addFacetConstraint(this.faceter, true,
+                                            this.trueGroups);
+        }
+        else {
+          this.removeAttribute("checked");
+          this.checkbox.removeAttribute("checked");
+          if (!this.disabled)
+            FacetContext.removeFacetConstraint(this.faceter, true,
+                                               this.trueGroups);
+        }
+        this.checkStateChanged();
+      ]]></setter>
+    </property>
+    <method name="extraSetup">
+      <body><![CDATA[
+      ]]></body>
+    </method>
+    <method name="checkStateChanged">
+      <body><![CDATA[
+      ]]></body>
+    </method>
+    <method name="build">
+      <parameter name="aFirstTime" />
+      <body><![CDATA[
+        if (aFirstTime) {
+          this.labelNode.textContent = this.facetDef.strings.facetNameLabel;
+          this.checkbox.setAttribute("aria-label",
+                                     this.facetDef.strings.facetNameLabel);
+          this.trueValues = [];
+        }
+
+        // If we do not currently have a constraint applied and there is only
+        //  one (or no) group, then: disable us, but reflect the underlying
+        //  state of the data (checked or non-checked)
+        if (!this.faceter.constraint && (this.orderedGroups.length <= 1)){
+          this.disabled = true;
+          let count = 0;
+          if (this.orderedGroups.length) {
+            // true case?
+            if (this.orderedGroups[0][0]) {
+              count = this.orderedGroups[0][1].length;
+              this.checked = true;
+            }
+            else {
+              this.checked = false;
+            }
+          }
+          this.countNode.textContent = count.toLocaleString();
+          return;
+        }
+        // if we were disabled checked before, clear ourselves out
+        if (this.disabled && this.checked)
+          this.checked = false;
+        this.disabled = false;
+
+        // if we are here, we have our 2 groups, find true...
+        // (note: it is possible to get jerked around by null values
+        //  currently, so leave a reasonable failure case)
+        this.trueValues = [];
+        this.trueGroups = [true];
+        for (let groupPair of this.orderedGroups) {
+          if (groupPair[0] == true)
+            this.trueValues = groupPair[1];
+        }
+
+        this.countNode.textContent = this.trueValues.length.toLocaleString();
+      ]]></body>
+    </method>
+    <method name="bubbleClicked">
+      <parameter name="event" />
+      <body><![CDATA[
+      if (!this.disabled)
+        this.checked = !this.checked;
+      event.stopPropagation();
+      ]]></body>
+    </method>
+  </implementation>
+  <handlers>
+    <handler event="mouseover"><![CDATA[
+      FacetContext.hoverFacet(this.faceter, this.faceter.attrDef,
+                              true, this.trueValues);
+    ]]></handler>
+    <handler event="mouseout"><![CDATA[
+      FacetContext.unhoverFacet(this.faceter, this.faceter.attrDef,
+                                true, this.trueValues);
+    ]]></handler>
+  </handlers>
+</binding>
+
+<!--
+  - A check-box with filter-box front-end to a standard discrete faceter.  If
+  -  there are no non-null values, we disable the UI.  If there are non-null
+  -  values the checkbox is enabled and the filter is hidden.  Once you check
+  -  the box we apply the facet and show the filtering mechanism.
+  -->
+<binding id="facet-boolean-filtered"
+         extends="chrome://messenger/content/glodaFacetBindings.xml#facet-boolean">
+  <content>
+    <html:span anonid="bubble" class="facet-checkbox-bubble">
+      <html:input anonid="checkbox" type="checkbox"
+                  xbl:inherits="checked,disabled"/>
+      <html:span anonid="label" class="facet-checkbox-label" />
+      <html:span anonid="count" class="facet-checkbox-count" />
+    </html:span>
+    <html:select anonid="filter" class="facet-filter-list" />
+  </content>
+  <implementation>
+    <method name="extraSetup">
+      <body><![CDATA[
+        this.filterNode = document.getAnonymousElementByAttribute(
+                            this, "anonid", "filter");
+        this.groupDisplayProperty = this.getAttribute("groupDisplayProperty");
+
+        let dis = this;
+        this.filterNode.addEventListener("change", function(event) {
+          return dis.filterChanged(event);
+        }, false);
+
+        this.selectedValue = "all";
+      ]]></body>
+    </method>
+    <method name="build">
+      <parameter name="aFirstTime" />
+      <body><![CDATA[
+        if (aFirstTime) {
+          this.labelNode.textContent = this.facetDef.strings.facetNameLabel;
+          this.checkbox.setAttribute("aria-label",
+                                     this.facetDef.strings.facetNameLabel);
+          this.trueValues = [];
+        }
+
+        // Only update count if anything other than "all" is selected.
+        //  Otherwise we lose the set of attachment types in our select box,
+        //  and that makes us sad.  We do want to update on "all" though
+        //  because other facets may further reduce the number of attachments
+        //  we see.  (Or if this is not just being used for attachments, it
+        //  still holds.)
+        if (this.selectedValue != "all") {
+          let count = 0;
+          for (let groupPair of this.orderedGroups) {
+            if (groupPair[0] != null)
+              count += groupPair[1].length;
+          }
+          this.countNode.textContent = count.toLocaleString();
+          return;
+        }
+
+        while (this.filterNode.hasChildNodes())
+          this.filterNode.lastChild.remove();
+        let allNode = document.createElement("option");
+        allNode.textContent =
+          glodaFacetStrings.get("glodaFacetView.facets.filter." +
+                                this.attrDef.attributeName + ".allLabel");
+        allNode.setAttribute("value", "all");
+        if (this.selectedValue == "all")
+          allNode.setAttribute("selected", "selected");
+        this.filterNode.appendChild(allNode);
+
+        // if we are here, we have our 2 groups, find true...
+        // (note: it is possible to get jerked around by null values
+        //  currently, so leave a reasonable failure case)
+        // empty true groups is for the checkbox
+        this.trueGroups = [];
+        // the real true groups is the actual true values for our explicit
+        //  filtering
+        this.realTrueGroups = [];
+        this.trueValues = [];
+        this.falseValues = [];
+        let selectNodes = [];
+        for (let groupPair of this.orderedGroups) {
+          if (groupPair[0] == null)
+            this.falseValues.push.apply(this.falseValues, groupPair[1]);
+          else {
+            this.trueValues.push.apply(this.trueValues, groupPair[1]);
+
+            let groupValue = groupPair[0];
+            let selNode = document.createElement("option");
+            selNode.textContent = groupValue[this.groupDisplayProperty];
+            selNode.setAttribute("value", this.realTrueGroups.length);
+            if (this.selectedValue == groupValue.category)
+              selNode.setAttribute("selected", "selected");
+            selectNodes.push(selNode);
+
+            this.realTrueGroups.push(groupValue);
+          }
+        }
+        selectNodes.sort(function(a, b) {
+          return a.textContent.localeCompare(b.textContent);
+        });
+        selectNodes.forEach(function(selNode) { this.filterNode.appendChild(selNode); }, this);
+
+        this.disabled = !this.trueValues.length;
+
+        this.countNode.textContent = this.trueValues.length.toLocaleString();
+      ]]></body>
+    </method>
+    <method name="checkStateChanged">
+      <body><![CDATA[
+        // if they un-check us, revert our value to all.
+        if (!this.checked)
+          this.selectedValue = "all";
+      ]]></body>
+    </method>
+    <method name="filterChanged">
+      <parameter name="event" />
+      <body><![CDATA[
+        if (!this.checked)
+          return;
+        if (this.filterNode.value == "all") {
+          this.selectedValue = "all";
+          FacetContext.addFacetConstraint(this.faceter, true,
+                                          this.trueGroups, false, true);
+        }
+        else {
+          let groupValue = this.realTrueGroups[parseInt(this.filterNode.value)];
+          this.selectedValue = groupValue.category;
+          FacetContext.addFacetConstraint(this.faceter, true,
+                                          [groupValue], false, true);
+        }
+      ]]></body>
+    </method>
+  </implementation>
+</binding>
+
+<binding id="popup-menu">
+  <content>
+    <html:div anonid="parent" class="parent"
+              tabindex="0"
+      ><html:div anonid="include-item" class="popup-menuitem top"
+        tabindex="0"
+        onmouseover="this.focus()"
+        onkeypress="if (event.keyCode == event.DOM_VK_RETURN) this.parentNode.parentNode.doInclude()"
+        onmouseup="this.parentNode.parentNode.doInclude()"></html:div
+      ><html:div anonid="exclude-item" class="popup-menuitem bottom"
+        tabindex="0"
+        onmouseover="this.focus()"
+        onkeypress="if (event.keyCode == event.DOM_VK_RETURN) this.parentNode.parentNode.doExclude()"
+        onmouseup="this.parentNode.parentNode.doExclude()"></html:div
+      ><html:div anonid="undo-item" class="popup-menuitem undo"
+        tabindex="0"
+        onmouseover="this.focus()"
+        onkeypress="if (event.keyCode == event.DOM_VK_RETURN) this.parentNode.parentNode.doUndo()"
+        onmouseup="this.parentNode.parentNode.doUndo()"></html:div
+    ></html:div>
+  </content>
+  <handlers>
+    <handler event="keypress" keycode="VK_ESCAPE"
+             action="this.hide();"/>
+    <handler event="keypress" keycode="VK_DOWN"
+             action="this.moveFocus(event, 1);"/>
+    <handler event="keypress" keycode="VK_TAB"
+             action="this.moveFocus(event, 1);"/>
+    <handler event="keypress" keycode="VK_TAB" modifiers="shift"
+             action="this.moveFocus(event, -1);"/>
+    <handler event="keypress" keycode="VK_UP"
+             action="this.moveFocus(event, -1);"/>
+  </handlers>
+  <implementation>
+    <constructor><![CDATA[
+      this.includeNode = document.getAnonymousElementByAttribute(this, "anonid",
+                                                        "include-item");
+      this.excludeNode = document.getAnonymousElementByAttribute(this, "anonid",
+                                                     "exclude-item");
+      this.undoNode = document.getAnonymousElementByAttribute(this, "anonid",
+                                                     "undo-item");
+    ]]></constructor>
+    <method name="_getLabel">
+      <parameter name="facetDef"/>
+      <parameter name="facetValue"/>
+      <parameter name="groupValue"/>
+      <parameter name="stringName"/>
+      <body><![CDATA[
+        let label, labelFormat;
+        if (stringName in facetDef.strings)
+          labelFormat = facetDef.strings[stringName];
+        else
+          labelFormat = glodaFacetStrings.get(
+              "glodaFacetView.facets."+stringName+".fallbackLabel");
+        if (!labelFormat.includes("#1"))
+          return labelFormat;
+        else
+          return labelFormat.replace("#1", facetValue);
+      ]]></body>
+    </method>
+    <method name="build">
+      <parameter name="facetDef"/>
+      <parameter name="facetValue"/>
+      <parameter name="groupValue"/>
+      <body><![CDATA[
+      try {
+        if (groupValue)
+          this.includeNode.textContent = this._getLabel(facetDef, facetValue,
+                                                        groupValue, "mustMatchLabel");
+        else
+          this.includeNode.textContent = this._getLabel(facetDef, facetValue,
+                                                        groupValue, "mustMatchNoneLabel");
+        if (groupValue)
+          this.excludeNode.textContent = this._getLabel(facetDef, facetValue,
+                                                        groupValue, "cantMatchLabel");
+        else
+          this.excludeNode.textContent = this._getLabel(facetDef, facetValue,
+                                                        groupValue, "mustMatchSomeLabel");
+        if (groupValue)
+          this.undoNode.textContent = this._getLabel(facetDef, facetValue,
+                                                     groupValue, "mayMatchLabel");
+        else
+          this.undoNode.textContent = this._getLabel(facetDef, facetValue,
+                                                     groupValue, "mayMatchAnyLabel");
+      } catch (e) {
+        logException(e);
+      }
+      ]]>
+      </body>
+    </method>
+    <method name="moveFocus">
+      <parameter name="event"/>
+      <parameter name="delta"/>
+      <body><![CDATA[
+      try {
+        let parent = document.getAnonymousElementByAttribute(this,
+          "anonid", "parent");
+        // We probably want something quite generic in the long term, but that
+        // is way too much for now (needs to skip over invisible items, etc)
+        let focused = document.activeElement;
+        if (focused == this.includeNode)
+          this.excludeNode.focus();
+        else if (focused == this.excludeNode)
+          this.includeNode.focus();
+        event.preventDefault();
+        event.stopPropagation();
+      } catch (e) {
+        logException(e);
+      }
+      ]]>
+      </body>
+    </method>
+    <method name="selectItem">
+      <parameter name="event"/>
+      <body><![CDATA[
+      try {
+        let focused = document.activeElement;
+        if (focused == this.includeNode)
+          this.doInclude();
+        else if (focused == this.excludeNode)
+          this.doExclude();
+        else
+          this.doUndo();
+      } catch (e) {
+        logException(e);
+      }
+      ]]>
+      </body>
+    </method>
+    <method name="show">
+      <parameter name="event"/>
+      <parameter name="facetNode"/>
+      <parameter name="barNode"/>
+      <body><![CDATA[
+        try {
+          this.node = barNode;
+          this.facetNode = facetNode;
+          let facetDef = facetNode.facetDef;
+          let groupValue = barNode.groupValue;
+          let variety = barNode.getAttribute("variety");
+          let label = barNode.querySelector(".bar-link").textContent;
+          this.build(facetDef, label, groupValue);
+          this.node.setAttribute("selected", "true");
+          var rtl = window.getComputedStyle(this, null).direction == "rtl";
+          /* We show different menus if we're on an "unselected" facet value,
+             or if we're on a preselected facet value, whether included or
+             excluded. The variety attribute handles that through CSS */
+          this.setAttribute("variety", variety);
+          let rect = barNode.getBoundingClientRect();
+          let X, Y;
+          if (event.type == "click") {
+            // center the menu on the mouse click
+            if (rtl)
+              X = event.pageX + 10;
+            else
+              X = event.pageX - 10;
+            Y = Math.max(20, event.pageY - 15);
+          } else {
+            if (rtl)
+              X = rect.left + rect.width / 2 + 20;
+            else
+              X = rect.left + rect.width / 2 - 20;
+            Y = rect.top - 10;
+          }
+          if (rtl)
+            this.style.left = (X - this.getBoundingClientRect().width) + "px";
+          else
+            this.style.left = X + "px";
+          this.style.top = Y + "px";
+
+          if (variety == "remainder")
+            // include
+            document.getAnonymousElementByAttribute(this,
+              "anonid", "parent").firstChild.focus();
+          else
+            // undo
+            document.getAnonymousElementByAttribute(this,
+              "anonid", "parent").lastChild.focus();
+        } catch (e) {
+          logException(e);
+        }
+      ]]>
+      </body>
+    </method>
+    <method name="hide">
+      <body><![CDATA[
+      try {
+        this.setAttribute("variety", "invisible");
+        if (this.node) {
+          this.node.removeAttribute("selected");
+          this.node.focus();
+        }
+      } catch (e) {
+        logException(e);
+      }
+      ]]>
+      </body>
+    </method>
+    <method name="doInclude">
+      <body><![CDATA[
+      try {
+        this.facetNode.includeFacet(this.node);
+        this.hide();
+      } catch (e) {
+        logException(e);
+      }
+      ]]>
+      </body>
+    </method>
+    <method name="doExclude">
+      <body><![CDATA[
+        this.facetNode.excludeFacet(this.node);
+        this.hide();
+      ]]>
+      </body>
+    </method>
+    <method name="doUndo">
+      <body><![CDATA[
+        this.facetNode.undoFacet(this.node);
+        this.hide();
+      ]]>
+      </body>
+    </method>
+  </implementation>
+</binding>
+
+<binding id="facet-discrete">
+  <content>
+  <!-- without this explicit div here, the sibling selectors used to span
+       included-label/included and excluded-label/excluded fail to apply.
+       so. magic! (this is why our binding node's class is facetious. -->
+  <html:div class="facet">
+    <html:h2 anonid="name"></html:h2>
+    <html:div anonid="content-box" class="facet-content">
+      <html:h3 anonid="included-label" class="facet-included-header"></html:h3>
+      <html:ul anonid="included" class="facet-included barry"></html:ul>
+      <html:h3 anonid="remainder-label" class="facet-remaindered-header"></html:h3>
+      <html:ul anonid="remainder" class="facet-remaindered barry"></html:ul>
+      <html:h3 anonid="excluded-label" class="facet-excluded-header"></html:h3>
+      <html:ul anonid="excluded" class="facet-excluded barry"></html:ul>
+      <html:div anonid="more" class="facet-more" needed="false" tabindex="0"
+                role="button"/>
+    </html:div>
+  </html:div>
+  </content>
+  <implementation>
+    <constructor><![CDATA[
+      if ("faceter" in this)
+        this.build(true);
+    ]]></constructor>
+    <field name="canUpdate" readonly="true">false</field>
+    <method name="build">
+      <parameter name="aFirstTime" />
+      <body><![CDATA[
+        // -- Header Building
+        let nameNode = document.getAnonymousElementByAttribute(this, "anonid",
+                                                               "name");
+        nameNode.textContent = this.facetDef.strings.facetNameLabel;
+
+        // - include
+        // setup the include label
+        this.includeLabel = document.getAnonymousElementByAttribute(
+                           this, "anonid", "included-label");
+        if ("includeLabel" in this.facetDef.strings)
+          this.includeLabel.textContent = this.facetDef.strings.includeLabel;
+        else
+          this.includeLabel.textContent =
+            glodaFacetStrings.get(
+              "glodaFacetView.facets.included.fallbackLabel");
+        this.includeLabel.setAttribute("state", "empty");
+
+        // include list ref
+        this.includeList = document.getAnonymousElementByAttribute(
+                                      this, "anonid", "included");
+
+        // - exclude
+        // setup the exclude label
+        this.excludeLabel = document.getAnonymousElementByAttribute(
+                                       this, "anonid", "excluded-label");
+        if ("excludeLabel" in this.facetDef.strings)
+          this.excludeLabel.textContent = this.facetDef.strings.excludeLabel;
+        else
+          this.excludeLabel.textContent =
+            glodaFacetStrings.get(
+              "glodaFacetView.facets.excluded.fallbackLabel");
+        this.excludeLabel.setAttribute("state", "empty");
+
+        // exclude list ref
+        this.excludeList = document.getAnonymousElementByAttribute(
+                                      this, "anonid", "excluded");
+
+        // - remainder
+        // setup the remainder label
+        this.remainderLabel = document.getAnonymousElementByAttribute(
+                                this, "anonid", "remainder-label");
+        if ("remainderLabel" in this.facetDef.strings)
+          this.remainderLabel.textContent = this.facetDef.strings.remainderLabel;
+        else
+          this.remainderLabel.textContent =
+            glodaFacetStrings.get(
+              "glodaFacetView.facets.remainder.fallbackLabel");
+        // remainder list ref
+        this.remainderList = document.getAnonymousElementByAttribute(
+                                        this, "anonid", "remainder");
+
+        // - more button
+        this.moreButton = document.getAnonymousElementByAttribute(
+                            this, "anonid", "more");
+
+        // we need to know who the content box is for flying fun
+        this.contentBox = document.getAnonymousElementByAttribute(
+                            this, "anonid", "content-box");
+
+
+        // -- House-cleaning
+        // -- All/Top mode decision
+        this.modes = ["all"];
+        if (this.maxDisplayRows >= this.orderedGroups.length) {
+          this.mode = "all";
+        }
+        else {
+          // top mode must be used
+          this.modes.push("top");
+          this.mode = "top";
+          this.topGroups = FacetUtils.makeTopGroups(this.attrDef,
+                                                    this.orderedGroups,
+                                                    this.maxDisplayRows);
+          // setup the more button string
+          let groupCount = this.orderedGroups.length;
+          this.moreButton.textContent =
+            PluralForm.get(groupCount,
+                           glodaFacetStrings.get(
+                             "glodaFacetView.facets.mode.top.listAllLabel"))
+                      .replace("#1", groupCount);
+        }
+
+        // -- Row Building
+        this.buildRows();
+
+      ]]></body>
+    </method>
+    <method name="changeMode">
+      <parameter name="aNewMode" />
+      <body><![CDATA[
+        this.mode = aNewMode;
+        this.setAttribute("mode", aNewMode);
+        this.buildRows();
+      ]]></body>
+    </method>
+    <method name="buildRows">
+      <body><![CDATA[
+        let nounDef = this.nounDef;
+        let useGroups = (this.mode == "all") ? this.orderedGroups
+                                             : this.topGroups;
+
+        // should we just rely on automatic string coercion?
+        this.moreButton.setAttribute("needed",
+                                     (this.mode == "top") ? "true" : "false");
+
+        let constraint = this.faceter.constraint;
+
+        // -- empty all of our display buckets...
+        let remainderList = this.remainderList;
+        while (remainderList.hasChildNodes())
+          remainderList.lastChild.remove();
+        let includeList = this.includeList, excludeList = this.excludeList;
+        while (includeList.hasChildNodes())
+          includeList.lastChild.remove();
+        while (excludeList.hasChildNodes())
+          excludeList.lastChild.remove();
+
+        // -- first pass, check for ambiguous labels
+        // It's possible that multiple groups are identified by the same short
+        //  string, in which case we want to use the longer string to
+        //  disambiguate.  For example, un-merged contacts can result in
+        //  multiple identities having contacts with the same name.  In that
+        //  case we want to display both the contact name and the identity
+        //  name.
+        // This is generically addressed by using the userVisibleString function
+        //  defined on the noun type if it is defined.  It takes an argument
+        //  indicating whether it should be a short string or a long string.
+        // Our algorithm is somewhat dumb.  We get the short strings, put them
+        //  in a dictionary that maps to whether they are ambiguous or not.  We
+        //  do not attempt to map based on their id, so then when it comes time
+        //  to actually build the labels, we must build the short string and
+        //  then re-call for the long name.  We could be smarter by building
+        //  a list of the input values that resulted in the output string and
+        //  then using that to back-update the id map, but it's more compelx and
+        //  the performance difference is unlikely to be meaningful.
+        let ambiguousKeyValues;
+        if ("userVisibleString" in nounDef) {
+          ambiguousKeyValues = {};
+          for (let groupPair of useGroups) {
+            let [groupValue, groupItems] = groupPair;
+
+            // skip null values, they are handled by the none special-case
+            if (groupValue == null)
+              continue;
+
+            let groupStr = nounDef.userVisibleString(groupValue, false);
+            // We use hasOwnProperty because it is possible that groupStr could
+            //  be the same as the name of one of the attributes on
+            //  Object.prototype.
+            if (ambiguousKeyValues.hasOwnProperty(groupStr))
+              ambiguousKeyValues[groupStr] = true;
+            else
+              ambiguousKeyValues[groupStr] = false;
+          }
+        }
+
+        // -- create the items, assigning them to the right list based on
+        //  existing constraint values
+        for (let groupPair of useGroups) {
+          let [groupValue, groupItems] = groupPair;
+          let li = document.createElement("li");
+          li.setAttribute("class", "bar");
+          li.setAttribute("tabindex", "0");
+          li.setAttribute("role", "link");
+          li.setAttribute("aria-haspopup", "true");
+          li.groupValue = groupValue;
+          li.setAttribute("groupValue", groupValue);
+          li.groupItems = groupItems;
+
+          let countSpan = document.createElement("span");
+          countSpan.setAttribute("class", "bar-count");
+          countSpan.textContent = groupItems.length.toLocaleString();
+          li.appendChild(countSpan);
+
+          let label = document.createElement("span");
+          label.setAttribute("class", "bar-link");
+
+          // Set a tooltip with this label's textContent on the binding when
+          // the mouse enters the label. This lets us show the full contents of
+          // the label even if we overflowed. We set it on the binding because
+          // anonymous XBL nodes can't be the source of HTML tooltips. Shadow
+          // DOMs are screwy! (We also clear out the tooltip when the mouse
+          // leaves the label, just to be polite.)
+          let rootBinding = this;
+          label.addEventListener("mouseenter", function() {
+            rootBinding.setAttribute("title", this.textContent);
+          });
+          label.addEventListener("mouseleave", function() {
+            rootBinding.setAttribute("title", "");
+          });
+
+          // The null value is a special indicator for 'none'
+          if (groupValue == null) {
+            label.textContent =
+              glodaFacetStrings.get("glodaFacetView.facets.noneLabel");
+          }
+          // Otherwise stringify the group object
+          else {
+            let labelStr;
+            if (ambiguousKeyValues) {
+              labelStr = nounDef.userVisibleString(groupValue, false);
+              if (ambiguousKeyValues[labelStr])
+                labelStr = nounDef.userVisibleString(groupValue, true);
+            }
+            else if ("labelFunc" in this.facetDef) {
+              labelStr = this.facetDef.labelFunc(groupValue);
+            }
+            else {
+              labelStr = groupValue.toLocaleString().substring(0, 80);
+            }
+            label.textContent = labelStr;
+          }
+          li.appendChild(label);
+
+          // root it under the appropriate list
+          if (constraint) {
+            if (constraint.isIncludedGroup(groupValue)) {
+              li.setAttribute("variety", "include");
+              includeList.appendChild(li);
+            }
+            else if (constraint.isExcludedGroup(groupValue)) {
+              li.setAttribute("variety", "exclude");
+              excludeList.appendChild(li);
+            }
+            else {
+              li.setAttribute("variety", "remainder");
+              remainderList.appendChild(li);
+            }
+          }
+          else {
+            li.setAttribute("variety", "remainder");
+            remainderList.appendChild(li);
+          }
+        }
+
+        this.updateHeaderStates();
+      ]]></body>
+    </method>
+    <!--
+      - Mark the include/exclude headers as "some" if there is anything in their
+      -  lists, mark the remainder header as "needed" if either of include /
+      -  exclude exist so we need that label.
+      -->
+    <method name="updateHeaderStates">
+      <parameter name="aItems" />
+      <body><![CDATA[
+        this.includeLabel.setAttribute("state",
+          this.includeList.childElementCount ? "some" : "empty");
+        this.excludeLabel.setAttribute("state",
+          this.excludeList.childElementCount ? "some" : "empty");
+        this.remainderLabel.setAttribute("needed",
+          ((this.includeList.childElementCount ||
+            this.excludeList.childElementCount) &&
+           this.remainderList.childElementCount) ? "true" : "false");
+
+        // nuke the style attributes.
+        this.includeLabel.removeAttribute("style");
+        this.excludeLabel.removeAttribute("style");
+        this.remainderLabel.removeAttribute("style");
+      ]]></body>
+    </method>
+    <method name="brushItems">
+      <parameter name="aItems" />
+      <body><![CDATA[
+      ]]></body>
+    </method>
+    <method name="clearBrushedItems">
+      <body><![CDATA[
+      ]]></body>
+    </method>
+    <method name="afterListVisible">
+      <parameter name="aVariety" />
+      <parameter name="aCallback" />
+      <body><![CDATA[
+        let labelNode = this[aVariety + "Label"];
+        let listNode = this[aVariety + "List"];
+
+        // if there are already things displayed, no need
+        if (listNode.childElementCount) {
+          aCallback();
+          return;
+        }
+
+        let remListVisible =
+          this.remainderLabel.getAttribute("needed") == "true";
+        let remListShouldBeVisible =
+          this.remainderList.childElementCount > 1;
+
+        labelNode.setAttribute("state", "some");
+
+        // We used to use jQuery here, but it turns out that it has issues with
+        // XML namespaces and stringification, so we now resort to poking the
+        // nodes directly.
+        let showNodes = [labelNode];
+        if (remListVisible != remListShouldBeVisible)
+          showNodes = [labelNode, this.remainderLabel];
+
+        showNodes.forEach(node => node.style.display = "block");
+
+        aCallback();
+      ]]></body>
+    </method>
+    <method name="_flyBarAway">
+      <parameter name="aBarNode" />
+      <parameter name="aVariety" />
+      <parameter name="aCallback" />
+      <body><![CDATA[
+        function getRect(aElement) {
+          let box = aElement.getBoundingClientRect();
+          let documentElement = aElement.ownerDocument.documentElement;
+          return {
+            top: box.top + window.pageYOffset - documentElement.clientTop,
+            left: box.left + window.pageXOffset - documentElement.clientLeft,
+            width: box.width,
+            height: box.height
+          };
+        };
+        // figure out our origin location prior to adding the target or it
+        //  will shift us down.
+        let origin = getRect(aBarNode);
+
+        // clone the node into its target location
+        let targetNode = aBarNode.cloneNode(true);
+        targetNode.groupValue = aBarNode.groupValue;
+        targetNode.groupItems = aBarNode.groupItems;
+        targetNode.setAttribute("variety", aVariety);
+
+        let targetParent = this[aVariety + "List"];
+        targetParent.appendChild(targetNode);
+
+        // create a flying clone
+        let flyingNode = aBarNode.cloneNode(true);
+
+        let dest = getRect(targetNode);
+
+        // if the flying box wants to go higher than the content box goes, just
+        //  send it to the top of the content box instead.
+        let contentRect = getRect(this.contentBox);
+        if (dest.top < contentRect.top)
+          dest.top = contentRect.top;
+        // likewise if it wants to go further south than the content box, stop
+        //  that
+        if (dest.top > (contentRect.top + contentRect.height))
+          dest.top = contentRect.top + contentRect.height - dest.height;
+
+        flyingNode.style.position = "absolute";
+        flyingNode.style.width = origin.width + "px";
+        flyingNode.style.height = origin.height + "px";
+        flyingNode.style.top = origin.top + "px";
+        flyingNode.style.left = origin.left + "px";
+        flyingNode.style.zIndex = 1000;
+
+        flyingNode.style.transitionDuration = (Math.abs(dest.top - origin.top) * 2) + "ms";
+        flyingNode.style.transitionProperty = "top, left";
+
+        flyingNode.addEventListener("transitionend", function() {
+          aBarNode.parentNode.removeChild(aBarNode);
+          targetNode.style.display = "block";
+          flyingNode.parentNode.removeChild(flyingNode);
+
+          if (aCallback)
+            setTimeout(aCallback, 50);
+        });
+
+        document.body.appendChild(flyingNode);
+
+        // animate the flying clone... flying!
+        window.requestAnimationFrame(function() {
+          flyingNode.style.top = dest.top + "px";
+          flyingNode.style.left = dest.left + "px";
+        });
+
+        // hide the target (cloned) node
+        targetNode.style.display = "none";
+
+        // hide the original node and remove its JS properties
+        aBarNode.style.visibility = "hidden";
+        delete aBarNode.groupValue;
+        delete aBarNode.groupItems;
+      ]]></body>
+    </method>
+    <method name="barClicked">
+      <parameter name="aBarNode" />
+      <parameter name="aVariety" />
+      <body><![CDATA[
+        let groupValue = aBarNode.groupValue;
+        let groupItems = aBarNode.groupItems;
+        let dis = this;
+        // These determine what goAnimate actually does.
+        // flyAway allows us to cancel flying in the case the constraint is
+        //  being fully dropped and so the facet is just going to get rebuilt
+        let flyAway = true;
+
+        function goAnimate() {
+          setTimeout(function () {
+            if (flyAway) {
+              dis.afterListVisible(aVariety, function() {
+                dis._flyBarAway(aBarNode, aVariety, function() {
+                  dis.updateHeaderStates();
+                });
+              });
+            }
+          }, 0);
+        };
+
+        // Immediately apply the facet change, triggering the animation after
+        //  the faceting completes.
+        if (aVariety == "remainder") {
+          let currentVariety = aBarNode.getAttribute("variety");
+          let constraintGone = FacetContext.removeFacetConstraint(
+                                 this.faceter,
+                                 currentVariety == "include",
+                                 [groupValue],
+                                 goAnimate);
+          // we will automatically rebuild if the constraint is gone, so
+          //  just make the animation a no-op.
+          if (constraintGone)
+            flyAway = false;
+        }
+        // include/exclude
+        else {
+          let revalidate = FacetContext.addFacetConstraint(
+                             this.faceter,
+                             aVariety == "include",
+                             [groupValue],
+                             false, false, goAnimate);
+          // revalidate means we need to blow away the other dudes, in which
+          //  case it makes the most sense to just trigger a rebuild of ourself
+          if (revalidate) {
+            flyAway = false;
+            this.build(false);
+          }
+        }
+      ]]></body>
+    </method>
+    <method name="barHovered">
+      <parameter name="aBarNode" />
+      <parameter name="aInclude" />
+      <body><![CDATA[
+        let groupValue = aBarNode.groupValue;
+        let groupItems = aBarNode.groupItems;
+
+        FacetContext.hoverFacet(this.faceter, this.attrDef, groupValue, groupItems);
+      ]]></body>
+    </method>
+    <!-- HoverGone! HoverGone!
+         We know it's gone, but where has it gone? -->
+    <method name="barHoverGone">
+      <parameter name="aBarNode" />
+      <parameter name="aInclude" />
+      <body><![CDATA[
+        let groupValue = aBarNode.groupValue;
+        let groupItems = aBarNode.groupItems;
+
+        FacetContext.unhoverFacet(this.faceter, this.attrDef, groupValue, groupItems);
+      ]]></body>
+    </method>
+    <method name="includeFacet">
+      <parameter name="node"/>
+      <body>
+      <![CDATA[
+          this.barClicked(node,
+                          (node.getAttribute("variety") == "remainder") ?
+                            "include" : "remainder");
+      ]]>
+      </body>
+    </method>
+    <method name="undoFacet">
+      <parameter name="node"/>
+      <body>
+      <![CDATA[
+          this.barClicked(node,
+                          (node.getAttribute("variety") == "remainder") ?
+                            "include" : "remainder");
+      ]]>
+      </body>
+    </method>
+    <method name="excludeFacet">
+      <parameter name="node"/>
+      <body>
+      <![CDATA[
+        this.barClicked(node, "exclude");
+      ]]>
+      </body>
+    </method>
+    <method name="showPopup">
+      <parameter name="event"/>
+      <body>
+        <![CDATA[
+        try {
+          // event.originalTarget could be the <li> node, or a span inside
+          // of it, or perhaps the facet-more button, or maybe something
+          // else that we'll handle in the next version.  We walk up its
+          // parent chain until we get to the right level of the DOM
+          // hierarchy, or the facet-content which seems to be the root.
+          if (this.currentNode)
+            this.currentNode.removeAttribute("selected");
+
+          let node = event.originalTarget;
+          while ((! (node && node.hasAttribute && node.hasAttribute("class"))) ||
+                 (!node.classList.contains("bar") &&
+                  !node.classList.contains("facet-more") &&
+                  !node.classList.contains("facet-content")))
+            node = node.parentNode;
+
+          if (! (node && node.hasAttribute && node.hasAttribute("class")))
+            return false;
+
+          this.currentNode = node;
+          node.setAttribute("selected", "true");
+          if (node.classList.contains("bar"))
+            document.getElementById("popup-menu").show(event, this, node);
+          else if (node.classList.contains("facet-more"))
+            this.changeMode("all");
+          return false;
+        } catch (e) {
+          logException(e);
+        }
+      ]]>
+      </body>
+    </method>
+    <method name="activateLink">
+      <parameter name="event"/>
+      <body>
+        <![CDATA[
+        try {
+          let node = event.originalTarget;
+          while ((!node.hasAttribute("class")) ||
+                 (!node.classList.contains("facet-more") &&
+                  !node.classList.contains("facet-content")))
+            node = node.parentNode;
+          if (node.classList.contains("facet-more"))
+            this.changeMode("all");
+          return false;
+        } catch (e) {
+          logException(e);
+        }
+      ]]>
+      </body>
+    </method>
+  </implementation>
+  <handlers>
+    <handler event="click" phase="target" action="this.showPopup(event)"/>
+    <handler event="keypress" keycode="VK_RETURN"
+             action="this.showPopup(event);"
+             phase="target" preventdefault="true"/>
+    <handler event="keypress" key=" "
+             action="this.activateLink(event);"
+             phase="target" preventdefault="true"/>
+    <handler event="mouseover"><![CDATA[
+      // we dispatch based on the class of the thing we clicked on.
+      // there are other ways we could accomplish this, but they all sorta suck.
+      if (event.originalTarget.hasAttribute("class") &&
+          event.originalTarget.classList.contains("bar-link")) {
+        this.barHovered(event.originalTarget.parentNode, true);
+      }
+    ]]></handler>
+    <handler event="mouseout"><![CDATA[
+      // we dispatch based on the class of the thing we clicked on.
+      // there are other ways we could accomplish this, but they all sorta suck.
+      if (event.originalTarget.hasAttribute("class") &&
+          event.originalTarget.classList.contains("bar-link")) {
+        this.barHoverGone(event.originalTarget.parentNode, true);
+      }
+    ]]></handler>
+  </handlers>
+</binding>
+
+<binding id="facet-date">
+  <content>
+    <html:div class="facet date-wrapper">
+      <html:h2 anonid="name"></html:h2>
+      <!-- we need to do this because of something protovis is doing where
+           it attempts to re-interpret the text and the html namespace no
+           longer exists in that context. -->
+      <html:div anonid="canvas" class="date-vis-frame"></html:div>
+      <html:div class="facet-date-zoom-out" onclick="FacetContext.zoomOut()"
+                role="image"/>
+    </html:div>
+  </content>
+  <implementation>
+    <constructor><![CDATA[
+      this.canvasNode = document.getAnonymousElementByAttribute(
+                                   this, "anonid", "canvas");
+      this.vis = null;
+      if ("faceter" in this)
+        this.build(true);
+    ]]></constructor>
+    <field name="canUpdate" readonly="true">true</field>
+    <method name="build">
+      <parameter name="aDoSize" />
+      <body><![CDATA[
+        if (!this.vis) {
+          this.vis = new DateFacetVis(this, this.canvasNode);
+          this.vis.build();
+        }
+        else {
+          while (this.canvasNode.hasChildNodes())
+            this.canvasNode.lastChild.remove();
+          if (aDoSize)
+            this.vis.build()
+          else
+            this.vis.rebuild();
+        }
+      ]]></body>
+    </method>
+    <method name="brushItems">
+      <parameter name="aItems" />
+      <body><![CDATA[
+        this.vis.hoverItems(aItems);
+      ]]></body>
+    </method>
+    <method name="clearBrushedItems">
+      <body><![CDATA[
+        this.vis.clearHover();
+      ]]></body>
+    </method>
+  </implementation>
+</binding>
+
+<!-- ===== Results ===== -->
+
+<binding id="results-message">
+  <content>
+    <html:div class="results-message-header">
+      <html:h2 class="results-message-count" anonid="count"></html:h2>
+      <html:div class="results-message-showall">
+        <html:span class="results-message-showall-button"
+            tabindex="0" anonid="showall" role="button"
+            onclick="FacetContext.showActiveSetInTab()"></html:span>
+      </html:div>
+      <html:div anonid="sort" class="results-message-sort-bar">
+        <html:span anonid="sort-label" class="results-message-sort-label"/>
+        <html:span anonid="sort-relevance" class="results-message-sort-value"
+            tabindex="0" role="button"/>
+        <html:span anonid="sort-date" class="results-message-sort-value"
+            tabindex="0" role="button"/>
+      </html:div>
+    </html:div>
+    <html:div class="messages" anonid="messages">
+    </html:div>
+  </content>
+  <implementation>
+    <method name="setMessages">
+      <parameter name="aMessages" />
+      <body><![CDATA[
+        // -- Count
+        let countNode = document.getAnonymousElementByAttribute(
+                          this, "anonid", "count");
+        let topMessagesPluralFormat = glodaFacetStrings.get(
+          "glodaFacetView.results.header.countLabel.NMessages");
+        let outOfPluralFormat = glodaFacetStrings.get(
+          "glodaFacetView.results.header.countLabel.ofN");
+        let groupingFormat = glodaFacetStrings.get(
+          "glodaFacetView.results.header.countLabel.grouping");
+
+        let displayCount = aMessages.length;
+        let totalCount = FacetContext.activeSet.length;
+
+        // set the count so CSS selectors can know what the results look like
+        this.setAttribute("state", (totalCount <= 0)? "empty" : "some");
+
+        let topMessagesStr = PluralForm.get(displayCount,
+                                            topMessagesPluralFormat)
+                                       .replace("#1",
+                                                displayCount.toLocaleString());
+        let outOfStr = PluralForm.get(totalCount,
+                                      outOfPluralFormat)
+                                 .replace("#1", totalCount.toLocaleString());
+        countNode.textContent = groupingFormat.replace("#1", topMessagesStr)
+                                              .replace("#2", outOfStr);
+
+        // -- Show All
+        let showNode = document.getAnonymousElementByAttribute(
+                          this, "anonid", "showall");
+        const GlodaMessage = Gloda.lookupNounDef("message").clazz;
+        let visible = aMessages.some(m => m instanceof GlodaMessage);
+        showNode.style.display = visible ? "inline" : "none";
+        showNode.textContent = glodaFacetStrings.get(
+          "glodaFacetView.results.message.openEmailAsList.label");
+        showNode.setAttribute("title", glodaFacetStrings.get(
+          "glodaFacetView.results.message.openEmailAsList.tooltip"));
+        showNode.onkeypress = function(event) {
+          if (event.charCode == KeyEvent.DOM_VK_SPACE) {
+            FacetContext.showActiveSetInTab()
+            event.preventDefault();
+          }
+        }
+
+        let sortLabelNode = document.getAnonymousElementByAttribute(
+                          this, "anonid", "sort-label");
+        sortLabelNode.textContent = glodaFacetStrings.get(
+          "glodaFacetView.results.message.sort.label");
+
+        let sortRelevanceNode = document.getAnonymousElementByAttribute(
+                          this, "anonid", "sort-relevance");
+        sortRelevanceNode.textContent = glodaFacetStrings.get(
+          "glodaFacetView.results.message.sort.relevance");
+
+        let dis = this;
+        sortRelevanceNode.onclick = function() {
+          FacetContext.sortBy = '-dascore';
+          dis.updateSortLabels();
+        }
+        sortRelevanceNode.onkeypress = function(event) {
+          if (event.charCode == KeyEvent.DOM_VK_SPACE) {
+            FacetContext.sortBy = '-dascore';
+            dis.updateSortLabels();
+            event.preventDefault();
+          }
+        }
+
+        let sortDateNode = document.getAnonymousElementByAttribute(
+                          this, "anonid", "sort-date");
+        sortDateNode.textContent = glodaFacetStrings.get(
+          "glodaFacetView.results.message.sort.date");
+        sortDateNode.onclick = function() {
+          FacetContext.sortBy = '-date';
+          dis.updateSortLabels();
+        }
+        sortDateNode.onkeypress = function(event) {
+          if (event.charCode == KeyEvent.DOM_VK_SPACE) {
+            FacetContext.sortBy = '-date';
+            dis.updateSortLabels();
+            event.preventDefault();
+          }
+        }
+
+        this.updateSortLabels(FacetContext.sortBy);
+
+        let messagesNode = document.getAnonymousElementByAttribute(
+                             this, "anonid", "messages");
+        while (messagesNode.hasChildNodes())
+          messagesNode.lastChild.remove();
+      try {
+        // -- Messages
+        for (let message of aMessages) {
+          let msgNode = document.createElement("message");
+          msgNode.message = message;
+          msgNode.setAttribute("class", "message");
+          messagesNode.appendChild(msgNode);
+        }
+      } catch (e) {
+        logException(e);
+      }
+      ]]></body>
+    </method>
+    <method name="ensureNodeVisible">
+      <parameter name="messageIndex"/>
+      <body><![CDATA[
+        let messagesNode = document.getAnonymousElementByAttribute(
+                             this, "anonid", "messages");
+        let message = messagesNode.childNodes[messageIndex];
+        window.scrollTo(0, $(message).position()['top'] + $(window).scrollTop());
+      ]]></body>
+    </method>
+
+    <method name="updateSortLabels">
+      <body><![CDATA[
+      try {
+        let sortBy = FacetContext.sortBy;
+        let sortRelevanceNode = document.getAnonymousElementByAttribute(
+                          this, "anonid", "sort-relevance");
+        let sortDateNode = document.getAnonymousElementByAttribute(
+                          this, "anonid", "sort-date");
+
+        if (sortBy == "-dascore") {
+          sortRelevanceNode.setAttribute("selected", "true");
+          sortDateNode.removeAttribute("selected");
+        } else if (sortBy == "-date") {
+          sortRelevanceNode.removeAttribute("selected");
+          sortDateNode.setAttribute("selected", "true");
+        }
+      } catch (e ) {
+        logException(e);
+      }
+      ]]></body>
+    </method>
+  </implementation>
+</binding>
+
+<binding id="result-message">
+  <content>
+    <html:div class="message-header">
+      <html:div class="message-line">
+        <html:div class="message-meta">
+          <html:div anonid="addresses-group" class="message-addresses-group">
+            <html:div anonid="author-group" class="message-author-group">
+              <html:span anonid="author" class="message-author"></html:span>
+              <html:div anonid="date" class="message-date"></html:div>
+            </html:div>
+          </html:div>
+        </html:div>
+        <html:div class="message-subject-group">
+          <html:span anonid="star" class="message-star"></html:span>
+          <html:span anonid="subject" class="message-subject" tabindex="0"
+              role="link"></html:span>
+          <html:span anonid="tags" class="message-tags"></html:span>
+          <html:div anonid="recipients-group" class="message-recipients-group">
+            <html:span anonid="to" class="message-to-label"></html:span>
+            <html:div anonid="recipients" class="message-recipients"/>
+          </html:div>
+        </html:div>
+      </html:div>
+    </html:div>
+    <html:pre anonid="snippet" class="message-body"></html:pre>
+      <html:div anonid="attachments" class="message-attachments"></html:div>
+  </content>
+  <implementation>
+    <constructor><![CDATA[
+      Components.utils.import("resource:///modules/mailServices.js");
+      this.build();
+    ]]></constructor>
+    <method name="build">
+      <body><![CDATA[
+        let message = this.message;
+        let dis = this;
+        function anonElem(aAnonId) {
+          return document.getAnonymousElementByAttribute(dis, "anonid",
+                                                         aAnonId);
+        }
+        let subject = anonElem("subject");
+        // -- eventify
+        subject.onclick = function(aEvent) {
+          FacetContext.showConversationInTab(this,
+                                             aEvent.button == 1);
+        }.bind(this);
+        subject.onkeypress = function(aEvent) {
+          if (aEvent.keyCode == aEvent.DOM_VK_RETURN)
+            FacetContext.showConversationInTab(this,
+                                               aEvent.shiftKey == true);
+        }.bind(this);
+
+        // -- Content Poking
+        if (message.subject.trim() == "")
+          subject.textContent = glodaFacetStrings.get("glodaFacetView.result.message.noSubject");
+        else
+          subject.textContent = message.subject;
+        let authorNode = anonElem("author");
+        authorNode.setAttribute("title", message.from.value);
+        authorNode.textContent = message.from.contact.name
+        let toNode = anonElem("to");
+        toNode.textContent = glodaFacetStrings.get("glodaFacetView.result.message.toLabel");
+
+        //anonElem("author").textContent = ;
+        anonElem("date").textContent = makeFriendlyDateAgo(message.date);
+
+        // - Recipients
+      try {
+        let recipientsNode = anonElem("recipients");
+        if (message.recipients) {
+          let recipientCount = 0;
+          const MAX_RECIPIENTS = 3;
+          let totalRecipientCount = message.recipients.length;
+          let recipientSeparator = glodaFacetStrings.get(
+              "glodaFacetView.results.message.recipientSeparator")
+          for (let index in message.recipients) {
+            let recipNode = document.createElement("span");
+            recipNode.setAttribute("class", "message-recipient");
+            recipNode.textContent = message.recipients[index].contact.name;
+            recipientsNode.appendChild(recipNode);
+            recipientCount++;
+            if (recipientCount == MAX_RECIPIENTS)
+              break;
+            if (index != totalRecipientCount - 1) {
+              // add separators (usually commas)
+              let sepNode = document.createElement("span");
+              sepNode.setAttribute("class", "message-recipient-separator");
+              sepNode.textContent = recipientSeparator;
+              recipientsNode.appendChild(sepNode);
+            }
+          }
+          if (totalRecipientCount > MAX_RECIPIENTS) {
+            let nOthers = totalRecipientCount - recipientCount;
+            let andNOthers = document.createElement("span");
+            andNOthers.setAttribute("class", "message-recipients-andothers");
+
+            let andOthersLabel= PluralForm.get(nOthers, glodaFacetStrings.get(
+                              "glodaFacetView.results.message.andOthers"))
+                             .replace("#1", nOthers);
+
+            andNOthers.textContent = andOthersLabel;
+            recipientsNode.appendChild(andNOthers);
+          }
+        }
+      } catch (e) {
+        logException(e);
+      }
+
+        // - Starred
+        let starNode = anonElem("star");
+        if (message.starred) {
+          starNode.setAttribute("starred", "true")
+        }
+
+        // - Attachments
+        if (message.attachmentNames) {
+          let attachmentsNode = anonElem("attachments");
+          let imgNode = document.createElement("div");
+          imgNode.setAttribute("class", "message-attachment-icon");
+          attachmentsNode.appendChild(imgNode);
+          for (let attach of message.attachmentNames) {
+            let attachNode = document.createElement("div");
+            attachNode.setAttribute("class", "message-attachment");
+            if (attach.length >= 28)
+              attach = attach.substring(0, 24) + "…";
+            attachNode.textContent = attach;
+            attachmentsNode.appendChild(attachNode);
+          }
+        }
+
+        // - Tags
+        let tagsNode = anonElem("tags");
+        if ("tags" in message && message.tags.length) {
+          for (let tag of message.tags) {
+            let tagNode = document.createElement("span");
+            let colorClass = "blc-" + MailServices.tags.getColorForKey(tag.key).substr(1);
+            tagNode.setAttribute("class", "message-tag tag " + colorClass);
+            tagNode.textContent = tag.tag;
+            tagsNode.appendChild(tagNode);
+          }
+        }
+
+        // - Body
+        if (message.indexedBodyText) {
+          let bodyText = message.indexedBodyText;
+
+          let matches = [];
+          if ("stashedColumns" in FacetContext.collection) {
+            let collection;
+            if ("IMCollection" in FacetContext &&
+                message instanceof Gloda.lookupNounDef("im-conversation").clazz)
+              collection = FacetContext.IMCollection;
+            else
+              collection = FacetContext.collection;
+            let offsets = collection.stashedColumns[message.id][0];
+            let offsetNums = offsets.split(" ").map(x => parseInt(x));
+            for (let i = 0; i < offsetNums.length; i += 4) {
+              // i is the column index. The indexedBodyText is in the column 0.
+              // Ignore matches for other columns.
+              if (offsetNums[i] != 0)
+                continue;
+
+              // i+1 is the term index, indicating which queried term was found.
+              // We can ignore for now...
+
+              // i+2 is the *byte* offset at which the term is in the string.
+              // i+3 is the term's length.
+              matches.push([offsetNums[i + 2], offsetNums[i + 3]]);
+            }
+
+            // Sort the matches by index, just to be sure.
+            // They are probably already sorted, but if they aren't it could
+            // mess things up at the next step.
+            matches.sort((a, b) => a[0] - b[0]);
+
+            // Convert the byte offsets and lengths into character indexes.
+            let charCodeToByteCount = function(c) {
+              // UTF-8 stores:
+              // - code points below U+0080 on 1 byte,
+              // - code points below U+0800 on 2 bytes,
+              // - code points U+D800 through U+DFFF are UTF-16 surrogate halves
+              // (they indicate that JS has split a 4 bytes UTF-8 character
+              // in two halves of 2 bytes each),
+              // - other code points on 3 bytes.
+              return c < 0x80 ? 1 : (c < 0x800 || (c >= 0xD800 && c <= 0xDFFF)) ? 2 : 3;
+            }
+            let byteOffset = 0;
+            let offset = 0;
+            for (let match of matches) {
+              while (byteOffset < match[0])
+                byteOffset += charCodeToByteCount(bodyText.charCodeAt(offset++));
+              match[0] = offset;
+              for (let i = offset; i < offset + match[1]; ++i) {
+                let size = charCodeToByteCount(bodyText.charCodeAt(i));
+                if (size > 1)
+                  match[1] -= size - 1;
+              }
+            }
+          }
+
+          // how many lines of context we want before the first match:
+          const kContextLines = 2;
+
+          let startIndex = 0;
+          if (matches.length > 0) {
+            // Find where the snippet should begin to show at least the
+            // first match and kContextLines of context before the match.
+            startIndex = matches[0][0];
+            for (let context = kContextLines; context >= 0; --context) {
+              startIndex = bodyText.lastIndexOf("\n", startIndex - 1);
+              if (startIndex == -1) {
+                startIndex = 0;
+                break;
+              }
+            }
+          }
+
+          // start assuming it's just one line that we want to show
+          let idxNewline = -1;
+          let ellipses = "…";
+
+          let maxLineCount = 5;
+          if (startIndex != 0) {
+            // Avoid displaying an ellipses followed by an empty line.
+            while (bodyText[startIndex + 1] == "\n")
+              ++startIndex;
+            bodyText = ellipses + bodyText.substring(startIndex);
+            // The first line will only contain the ellipsis as the character
+            // at startIndex is always \n, so we show an additional line.
+            ++maxLineCount;
+          }
+
+          for (let newlineCount = 0; newlineCount < maxLineCount; newlineCount++) {
+            idxNewline = bodyText.indexOf("\n", idxNewline+1);
+            if (idxNewline == -1) {
+              ellipses = '';
+              break;
+            }
+          }
+          let snippet = "";
+          if (idxNewline > -1)
+            snippet = bodyText.substring(0, idxNewline);
+          else
+            snippet = bodyText;
+          if (ellipses)
+            snippet = snippet.trimRight() + ellipses;
+
+          let parent = anonElem("snippet");
+          let node = document.createTextNode(snippet);
+          parent.appendChild(node);
+
+          let offset = startIndex ? startIndex - 1 : 0; // The ellipsis takes 1 character.
+          for (let match of matches) {
+            if (idxNewline > -1 && match[0] > startIndex + idxNewline)
+              break;
+            let secondNode = node.splitText(match[0] - offset);
+            node = secondNode.splitText(match[1]);
+            offset += match[0] + match[1] - offset;
+            let span = document.createElement("span");
+            span.textContent = secondNode.data;
+            if (!this.firstMatchText)
+              this.firstMatchText = secondNode.data;
+            span.setAttribute("class", "message-body-fulltext-match");
+            parent.replaceChild(span, secondNode);
+          }
+        }
+
+        // - Misc attributes
+        if (!message.read)
+          this.setAttribute("unread", "true");
+      ]]></body>
+    </method>
+  </implementation>
+  <handlers>
+    <handler event="mouseover"><![CDATA[
+      FacetContext.hoverFacet(FacetContext.fakeResultFaceter,
+                              FacetContext.fakeResultAttr,
+                              this.message, [this.message]);
+    ]]></handler>
+    <handler event="mouseout"><![CDATA[
+      FacetContext.unhoverFacet(FacetContext.fakeResultFaceter,
+                                FacetContext.fakeResultAttr,
+                                this.message, [this.message]);
+    ]]></handler>
+  </handlers>
+</binding>
+
+</bindings>

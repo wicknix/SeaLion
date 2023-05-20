@@ -1,0 +1,36 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@import url(chrome://calendar-common/skin/calendar-unifinder.css);
+
+/* restyle splitter-border to match Thunderbird's layout */
+#calendar-view-splitter {
+   -moz-appearance: none;
+   border-bottom: 1px solid ThreeDShadow;
+   /* splitter grip area */
+   height: 5px;
+   /* make only the splitter border visible */
+   margin-top: -5px;
+   /* because of the negative margin needed to make the splitter visible */
+   position: relative;
+   z-index: 10;
+}
+
+#bottom-events-box {
+    border-left: 1px solid ThreeDShadow;
+}
+
+/* added for new id ..... search box ..... */
+#unifinder-searchBox {
+    background-color: transparent;
+    border-bottom: 1px solid ThreeDShadow;
+    height: 37px;
+}
+
+.unifinder-closebutton {
+    -moz-appearance: none;
+    border: none;
+    padding: 2px;
+    background: transparent;
+}

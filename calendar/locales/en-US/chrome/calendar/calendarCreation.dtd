@@ -1,0 +1,22 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!ENTITY wizard.title             "Create New Calendar" >
+<!ENTITY wizard.label             "Create a new calendar" >
+<!ENTITY wizard.description       "Locate your calendar" >
+
+<!ENTITY initialpage.description    "Your calendar can be stored on your computer or be stored on a server in order to access it remotely or share it with your friends or co-workers." >
+<!ENTITY initialpage.computer.label  "On My Computer">
+<!ENTITY initialpage.network.label  "On the Network">
+
+<!ENTITY locationpage.description         "Provide info about what is needed to access your remote calendar" >
+<!ENTITY locationpage.login.description   "Optional: enter an username and password" >
+<!ENTITY locationpage.username.label      "Username:" >
+<!ENTITY locationpage.password.label      "Password:" >
+
+<!ENTITY custompage.shortdescription  "Customize your calendar" >
+<!ENTITY custompage.longdescription   "You can give your calendar a nickname and colorize the events from this calendar." >
+
+<!ENTITY finishpage.shortdescription  "Calendar Created" >
+<!ENTITY finishpage.longdescription   "Your calendar has been created." >

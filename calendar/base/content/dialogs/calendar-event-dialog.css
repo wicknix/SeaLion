@@ -1,0 +1,64 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+daypicker-weekday {
+    -moz-binding: url(chrome://calendar/content/calendar-daypicker.xml#daypicker-weekday);
+    -moz-user-focus: normal;
+}
+
+daypicker-monthday {
+    -moz-binding: url(chrome://calendar/content/calendar-daypicker.xml#daypicker-monthday);
+    -moz-user-focus: normal;
+}
+
+recurrence-preview {
+    -moz-binding: url(chrome://calendar/content/calendar-event-dialog-recurrence-preview.xml#recurrence-preview);
+    -moz-user-focus: normal;
+}
+
+/****************************************************************************************/
+
+attendees-list {
+    -moz-binding: url(chrome://calendar/content/calendar-event-dialog-attendees.xml#attendees-list);
+    -moz-user-focus: normal;
+}
+
+selection-bar {
+    -moz-binding: url(chrome://calendar/content/calendar-event-dialog-attendees.xml#selection-bar);
+    -moz-user-focus: normal;
+}
+
+/****************************************************************************************/
+
+scroll-container {
+    -moz-binding: url(chrome://calendar/content/calendar-event-dialog-freebusy.xml#scroll-container);
+    -moz-user-focus: normal;
+}
+
+freebusy-day {
+    -moz-binding: url(chrome://calendar/content/calendar-event-dialog-freebusy.xml#freebusy-day);
+    -moz-user-focus: normal;
+}
+
+freebusy-timebar {
+    -moz-binding: url(chrome://calendar/content/calendar-event-dialog-freebusy.xml#freebusy-timebar);
+    -moz-user-focus: normal;
+}
+
+freebusy-row {
+    -moz-binding: url(chrome://calendar/content/calendar-event-dialog-freebusy.xml#freebusy-row);
+    -moz-user-focus: normal;
+}
+
+freebusy-grid {
+    -moz-binding: url(chrome://calendar/content/calendar-event-dialog-freebusy.xml#freebusy-grid);
+    -moz-user-focus: normal;
+}
+
+/****************************************************************************************/
+
+timezone-page {
+    -moz-binding: url(chrome://calendar/content/calendar-event-dialog-timezone.xml#timezone-page);
+    -moz-user-focus: normal;
+}
