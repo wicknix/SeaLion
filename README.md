@@ -30,8 +30,9 @@ What is not included
 * Lightweight Themes/Toolbar Backgrounds
 * Language Packs
 
-![SeaLion](https://user-images.githubusercontent.com/39230578/233512154-70590149-3d1a-49dc-aca2-ae0bd42b855a.png)
+![SL-modern](https://github.com/wicknix/SeaLion/assets/39230578/42f9768f-38f1-4776-b829-2f93f2f4133b)
 
 ![SeaLion-ppc32-Linux](https://user-images.githubusercontent.com/39230578/235285348-8500793c-58eb-4cbe-8e85-d4d4b78b8d0e.png)
 
 ![SeaMail](https://github.com/wicknix/SeaLion/assets/39230578/7dc7e909-6a4b-4fb3-b115-2e753b7875da)
+
