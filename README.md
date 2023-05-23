@@ -14,7 +14,9 @@ What features are included
 * SeaMonkey (if slightly modified) Theme Support
 * Supports Plug-ins
 * Supports the JXL image format
-* Open Search Engine Providers
+* Supports Flash
+* Supports 'dark mode' on supported sites (set via preferences pane)
+* Multiple Search Engine Providers built in
 * TLS 1.3 support
 * Based on a mature code base
 
@@ -32,3 +34,4 @@ What is not included
 
 ![SeaLion-ppc32-Linux](https://user-images.githubusercontent.com/39230578/235285348-8500793c-58eb-4cbe-8e85-d4d4b78b8d0e.png)
 
+![SeaMail](https://github.com/wicknix/SeaLion/assets/39230578/7dc7e909-6a4b-4fb3-b115-2e753b7875da)
