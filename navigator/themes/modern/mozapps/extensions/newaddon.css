@@ -22,9 +22,9 @@
 }
 
 #addon-container {
-  color: #22262F;
-  background: #C7D0D9;
-  border: 1px solid #494F5D;
+  color: #222222;
+  background: #DDDDDD;
+  border: 1px solid #494949;
   border-radius: 10px;
   max-width: 600px;
   margin: 20px;
@@ -37,7 +37,7 @@
 }
 
 #icon {
-  margin-inline-end: 10px;
+  -moz-margin-end: 10px;
   list-style-image: url("chrome://mozapps/skin/extensions/extensionGeneric.png");
 }
 
@@ -78,11 +78,11 @@
   list-style-image: url("chrome://mozapps/skin/extensions/alerticon-warning.png");
   width: 16px;
   height: 15px;
-  margin-inline-end: 5px;
+  -moz-margin-end: 5px;
 }
 
 #allow {
-  margin-inline-start: 84px;
+  -moz-margin-start: 84px;
   margin-bottom: 20px;
 }
 

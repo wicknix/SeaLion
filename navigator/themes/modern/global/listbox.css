@@ -13,10 +13,10 @@
 listbox {
   margin: 2px 4px;
   border: 2px solid;
-  -moz-border-top-colors: #BEC3D3 #5D616E;
-  -moz-border-right-colors: #F8FAFE #5D616E;
-  -moz-border-bottom-colors: #F8FAFE #5D616E;
-  -moz-border-left-colors: #BEC3D3 #5D616E;
+  -moz-border-top-colors: #BEBEBE #5D5D5D;
+  -moz-border-right-colors: #F8F8F8 #5D5D5D;
+  -moz-border-bottom-colors: #F8F8F8 #5D5D5D;
+  -moz-border-left-colors: #BEBEBE #5D5D5D;
   background-color: #FFFFFF;
   color: #000000;
 }
@@ -38,20 +38,20 @@ listbox:focus > listitem[current="true"] {
 }
 
 listitem[selected="true"] {
-  background-color: #C7D0D9;
+  background-color: #DDDDDD;
   color: #000000;
 }
 
 listbox:focus > listitem[selected="true"] {
-  background-color: #424F63;
+  background-color: #424242;
   color: #FFFFFF;
 }
 
 listcell {
   padding-top: 0px;
   padding-bottom: 1px;
-  padding-inline-start: 2px;
-  padding-inline-end: 0px;
+  -moz-padding-start: 2px;
+  -moz-padding-end: 0px;
 }
 
 /* ::::: listcell checkbox ::::: */
@@ -79,12 +79,12 @@ listcell {
 listheader {
   -moz-box-align: center;
   border: 2px solid;
-  -moz-border-top-colors: #EEF0F3 #C7D0D9;
-  -moz-border-right-colors: #63676B #A5ABB0;
-  -moz-border-bottom-colors: #63676B #A5ABB0;
-  -moz-border-left-colors: #EEF0F3 #C7D0D9;
+  -moz-border-top-colors: #EEEEEE #DDDDDD;
+  -moz-border-right-colors: #636363 #A5A5A5;
+  -moz-border-bottom-colors: #636363 #A5A5A5;
+  -moz-border-left-colors: #EEEEEE #DDDDDD;
   padding: 0 4px;
-  background-color: #C7D0D9;
+  background-color: #DDDDDD;
   color: #000000;
 }
 
@@ -93,18 +93,18 @@ listheader[sortable="true"]:hover:active {
   border-right: 1px solid;
   border-bottom: 1px solid;
   border-left: 2px solid;
-  -moz-border-top-colors: #A5ABB0 #C7D0D9;
-  -moz-border-right-colors: #A5ABB0;
-  -moz-border-bottom-colors: #A5ABB0;
-  -moz-border-left-colors: #A5ABB0 #C7D0D9;
+  -moz-border-top-colors: #A5A5A5 #DDDDDD;
+  -moz-border-right-colors: #A5A5A5;
+  -moz-border-bottom-colors: #A5A5A5;
+  -moz-border-left-colors: #A5A5A5 #DDDDDD;
   padding-top: 1px;
   padding-bottom: 0px;
-  padding-inline-start: 5px;
-  padding-inline-end: 4px;
+  -moz-padding-start: 5px;
+  -moz-padding-end: 4px;
 }
 
 .listheader-icon {
-  margin-inline-end: 2px;
+  -moz-margin-end: 2px;
 }
 
 .listheader-label {
@@ -131,13 +131,13 @@ listheader[sortable="true"]:hover:active {
   margin: 0px !important;
   padding-top: 0px;
   padding-bottom: 1px;
-  padding-inline-start: 4px;
-  padding-inline-end: 0px;
+  -moz-padding-start: 4px;
+  -moz-padding-end: 0px;
   white-space: nowrap;
 }
 
 .listcell-icon {
-  margin-inline-end: 2px;
+  -moz-margin-end: 2px;
 }
 
 .listcell-label[disabled="true"] {

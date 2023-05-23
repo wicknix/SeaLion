@@ -13,10 +13,10 @@
 groupbox {
   margin: 5px;
   border: 2px solid;
-  -moz-border-top-colors: #858B97 #ECEFF2;
-  -moz-border-right-colors: #ECEFF2 #858B97;
-  -moz-border-bottom-colors: #ECEFF2 #858B97;
-  -moz-border-left-colors: #858B97 #ECEFF2;
+  -moz-border-top-colors: #858585 #ECECEC;
+  -moz-border-right-colors: #ECECEC #858585;
+  -moz-border-bottom-colors: #ECECEC #858585;
+  -moz-border-left-colors: #858585 #ECECEC;
   padding: 5px;
 }
 
@@ -27,5 +27,5 @@ groupbox {
 caption {
   margin: 0px 6px 2px;
   padding: 0px 3px;
-  background-color: #C7D0D9; 
+  background-color: #DDDDDD; 
 }

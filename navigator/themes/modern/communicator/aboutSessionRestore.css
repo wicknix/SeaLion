@@ -41,5 +41,5 @@ treechildren::-moz-tree-checkbox(partial) {
 
 #buttons {
   margin-top: 2em;
-  margin-inline-start: 80px;
+  -moz-margin-start: 80px;
 }

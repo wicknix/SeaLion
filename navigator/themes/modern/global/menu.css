@@ -27,7 +27,7 @@ menu[disabled="true"],
 menuitem[disabled="true"],
 menu[_moz-menuactive="true"][disabled="true"],
 menuitem[_moz-menuactive="true"][disabled="true"] {
-  color: #8C99AB;
+  color: #8C8C8C;
 }
 
 /* ..... internal content .... */
@@ -37,29 +37,29 @@ menuitem[_moz-menuactive="true"][disabled="true"] {
 .menu-iconic-text {
   margin-top: 0px !important;
   margin-bottom: 0px !important;
-  margin-inline-start: 0px !important;
-  margin-inline-end: 2px !important;
+  -moz-margin-start: 0px !important;
+  -moz-margin-end: 2px !important;
   color: inherit;
 }
 
 .menu-text {
-  margin-inline-start: 18px !important;
+  -moz-margin-start: 18px !important;
   font-weight: inherit;
 }
 
 .menu-description {
   font-style: italic;
-  color: #8C99AB;
-  margin-inline-start: 1ex !important;
+  color: #8C8C8C;
+  -moz-margin-start: 1ex !important;
 }
 
 .menu-accel,
 .menu-iconic-accel {
   margin-top: 0px !important;
   margin-bottom: 0px !important;
-  margin-inline-start: 7px !important;
-  margin-inline-end: 2px !important;
-  padding-inline-end: 14px;
+  -moz-margin-start: 7px !important;
+  -moz-margin-end: 2px !important;
+  -moz-padding-end: 14px;
   color: inherit;
 }
 
@@ -74,8 +74,8 @@ menuitem[_moz-menuactive="true"][disabled="true"] {
 .menu-right {
   margin-top: 0px;
   margin-bottom: 0px;
-  margin-inline-start: 6px;
-  margin-inline-end: 4px;
+  -moz-margin-start: 6px;
+  -moz-margin-end: 4px;
   width: 4px;
   list-style-image: url("chrome://global/skin/menu/menu-arrow.gif");
   -moz-image-region: auto;
@@ -100,7 +100,7 @@ menubar > menu {
 }
 
 menubar > menu[_moz-menuactive="true"] {
-  border: 1px outset #DDE3EB;
+  border: 1px outset #DDDDDD;
   background-color: transparent;
   color: #000000;
 }
@@ -114,16 +114,16 @@ menubar > menu[_moz-menuactive="true"][open="true"] {
 .menubar-left {
   margin-top: 0px;
   margin-bottom: 0px;
-  margin-inline-start: 0px;
-  margin-inline-end: 2px;
+  -moz-margin-start: 0px;
+  -moz-margin-end: 2px;
   color: inherit;
 }
 
 .menubar-text {
   margin-top: 0px !important;
   margin-bottom: 0px !important;
-  margin-inline-start: 0px !important;
-  margin-inline-end: 2px !important;
+  -moz-margin-start: 0px !important;
+  -moz-margin-end: 2px !important;
   color: inherit;
 }
 
@@ -137,7 +137,7 @@ menuitem {
 
 menu[_moz-menuactive="true"],
 menuitem[_moz-menuactive="true"] {
-  background-color: #424F63;
+  background-color: #424242;
   color: #FFFFFF;
 }
 
@@ -154,7 +154,7 @@ menulist > menupopup > menu {
 }
 
 menulist > menupopup > menuitem {
-  padding-inline-end: 30px;
+  -moz-padding-end: 30px;
 }
     
 /* ..... selected state ..... */
@@ -207,8 +207,8 @@ menuitem[checked="true"][type="radio"][_moz-menuactive="true"] {
 
 menuseparator {
   margin: 2px 3px;
-  border-top: 1px solid #A5ABC0;
-  border-bottom: 1px solid #EEF1F7;
+  border-top: 1px solid #A5A5A5;
+  border-bottom: 1px solid #EEEEEE;
 }
 
 menulist > menupopup > menuseparator,
@@ -227,7 +227,7 @@ menulist > menupopup > menuseparator,
 /* ::::: tree column picker ::::: */
 
 .treecell-popupcell-menu {
-  margin-inline-start: -2px;
+  -moz-margin-start: -2px;
   list-style-image: url("chrome://global/skin/tree/columnpicker.gif");
   -moz-image-region: auto;
 }

@@ -4,8 +4,6 @@
 
 window,
 dialog {
-  width: 568px;
-  min-width: 568px;
   padding: 7px 5px 5px 5px;
 }
 
@@ -19,7 +17,7 @@ dialog {
   border-left: 2px solid;
   border-right: 2px solid;
   border-bottom: 3px solid;
-  -moz-border-right-colors: #F8FAFE #5D616E;
-  -moz-border-bottom-colors: #5D616E #5D616E #BEC3D3;
-  -moz-border-left-colors: #5D616E #F8FAFE;
+  -moz-border-right-colors: #F8F8F8 #5D5D5D;
+  -moz-border-bottom-colors: #5D5D5D #5D5D5D #BEBEBE;
+  -moz-border-left-colors: #5D5D5D #F8F8F8;
 }

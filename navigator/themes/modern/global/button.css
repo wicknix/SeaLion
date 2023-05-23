@@ -11,37 +11,37 @@
 button {
   margin: 2px;
   border: 6px solid;
-  -moz-border-top-colors: transparent transparent transparent #000000 #BBC6D1 #B1BBC9;
-  -moz-border-right-colors: transparent transparent transparent #000000 #A2AEBB #A7B4C1;
-  -moz-border-bottom-colors: transparent transparent transparent #000000 #97A6B6 #9DAAB9;
-  -moz-border-left-colors: transparent transparent transparent #000000 #BBC6D1 #B1BBC9;
+  -moz-border-top-colors: transparent transparent transparent #000000 #BBBBBB #B1B1B1;
+  -moz-border-right-colors: transparent transparent transparent #000000 #A2A2A2 #A7A7A7;
+  -moz-border-bottom-colors: transparent transparent transparent #000000 #979797 #9D9D9D;
+  -moz-border-left-colors: transparent transparent transparent #000000 #BBBBBB #B1B1B1;
   border-radius: 5px;
   min-width: 6em;
-  background-color: #AAB6C4;
+  background-color: #AAAAAA;
   background-clip: padding-box;
   color: #000000;
   font: menu;
 }
 
 .button-icon {
-  margin-inline-start: 2px;
+  -moz-margin-start: 2px;
 }
 
 .button-text {
   margin-top: 0px !important;
   margin-bottom: 0px !important;
-  margin-inline-start: 4px !important;
-  margin-inline-end: 6px !important;
+  -moz-margin-start: 4px !important;
+  -moz-margin-end: 6px !important;
   text-align: center;
 }
 
 /* .......... focused state .......... */
 
 button:focus {
-  -moz-border-top-colors: transparent #98A5B2 #98A5B2 #000000 #BBC6D1 #B1BBC9;
-  -moz-border-right-colors: transparent #98A5B2 #98A5B2 #000000 #A2AEBB #A7B4C1;
-  -moz-border-bottom-colors: transparent #98A5B2 #98A5B2 #000000 #97A6B6 #9DAAB9;
-  -moz-border-left-colors: transparent #98A5B2 #98A5B2 #000000 #BBC6D1 #B1BBC9;
+  -moz-border-top-colors: transparent #989898 #989898 #000000 #BBBBBB #B1B1B1;
+  -moz-border-right-colors: transparent #989898 #989898 #000000 #A2A2A2 #A7A7A7;
+  -moz-border-bottom-colors: transparent #989898 #989898 #000000 #979797 #9D9D9D;
+  -moz-border-left-colors: transparent #989898 #989898 #000000 #BBBBBB #B1B1B1;
 }
 
 /* .......... active/open/checked state .......... */
@@ -49,63 +49,63 @@ button:focus {
 button:hover:active,
 button[checked="true"],
 button[open="true"] {
-  -moz-border-top-colors: transparent transparent transparent #000000 #8290A5 #899AAC;
-  -moz-border-right-colors: transparent transparent transparent #000000 #8290A5 #899AAC;
-  -moz-border-bottom-colors: transparent transparent transparent #000000 #8290A5 #899AAC;
-  -moz-border-left-colors: transparent transparent transparent #000000 #8290A5 #899AAC;
-  background-color: #90A1B3;
+  -moz-border-top-colors: transparent transparent transparent #000000 #828282 #898989;
+  -moz-border-right-colors: transparent transparent transparent #000000 #828282 #898989;
+  -moz-border-bottom-colors: transparent transparent transparent #000000 #828282 #898989;
+  -moz-border-left-colors: transparent transparent transparent #000000 #828282 #898989;
+  background-color: #909090;
   color: #FFFFFF;
 }
 
 button:hover:active:focus,
 button[checked="true"]:focus,
 button[open="true"]:focus {
-  -moz-border-top-colors: transparent #98A5B2 #98A5B2 #000000 #8290A5 #899AAC;
-  -moz-border-right-colors: transparent #98A5B2 #98A5B2 #000000 #8290A5 #899AAC;
-  -moz-border-bottom-colors: transparent #98A5B2 #98A5B2 #000000 #8290A5 #899AAC;
-  -moz-border-left-colors: transparent #98A5B2 #98A5B2 #000000 #8290A5 #899AAC;
+  -moz-border-top-colors: transparent #989898 #989898 #000000 #828282 #898989;
+  -moz-border-right-colors: transparent #989898 #989898 #000000 #828282 #898989;
+  -moz-border-bottom-colors: transparent #989898 #989898 #000000 #828282 #898989;
+  -moz-border-left-colors: transparent #989898 #989898 #000000 #828282 #898989;
 }
 
 /* .......... disabled state .......... */
 
 button[disabled="true"] {
-  -moz-border-top-colors: transparent transparent transparent #8290A5 #C6CDD7 #BCC5D1 !important;
-  -moz-border-right-colors: transparent transparent transparent #8290A5 #A9B5C1 #B2BAC7 !important;
-  -moz-border-bottom-colors: transparent transparent transparent #8290A5 #A9B5C1 #B2BAC7 !important;
-  -moz-border-left-colors: transparent transparent transparent #8290A5 #C6CDD7 #BCC5D1 !important;
-  background-color: #B7BFCB !important;
-  color: #8C99AB !important;
+  -moz-border-top-colors: transparent transparent transparent #828282 #C6C6C6 #BCBCBC !important;
+  -moz-border-right-colors: transparent transparent transparent #828282 #A9A9A9 #B2B2B2 !important;
+  -moz-border-bottom-colors: transparent transparent transparent #828282 #A9A9A9 #B2B2B2 !important;
+  -moz-border-left-colors: transparent transparent transparent #828282 #C6C6C6 #BCBCBC !important;
+  background-color: #B7B7B7 !important;
+  color: #8C8C8C !important;
 }
   
 /* .......... default state .......... */
 
 button[default="true"] {
-  -moz-border-top-colors: transparent transparent #000000 #000000 #BBC6D1 #B1BBC9;
-  -moz-border-right-colors: transparent transparent #000000 #000000 #A2AEBB #A7B4C1;
-  -moz-border-bottom-colors: transparent transparent #000000 #000000 #97A6B6 #9DAAB9;
-  -moz-border-left-colors: transparent transparent #000000 #000000 #BBC6D1 #B1BBC9;
+  -moz-border-top-colors: transparent transparent #000000 #000000 #BBBBBB #B1B1B1;
+  -moz-border-right-colors: transparent transparent #000000 #000000 #A2A2A2 #A7A7A7;
+  -moz-border-bottom-colors: transparent transparent #000000 #000000 #979797 #9D9D9D;
+  -moz-border-left-colors: transparent transparent #000000 #000000 #BBBBBB #B1B1B1;
 }
 
 button[default="true"]:hover:active {
-  -moz-border-top-colors: transparent transparent #000000 #000000 #8290A5 #899AAC;
-  -moz-border-right-colors: transparent transparent #000000 #000000 #8290A5 #899AAC;
-  -moz-border-bottom-colors: transparent transparent #000000 #000000 #8290A5 #899AAC;
-  -moz-border-left-colors: transparent transparent #000000 #000000 #8290A5 #899AAC;
+  -moz-border-top-colors: transparent transparent #000000 #000000 #828282 #898989;
+  -moz-border-right-colors: transparent transparent #000000 #000000 #828282 #898989;
+  -moz-border-bottom-colors: transparent transparent #000000 #000000 #828282 #898989;
+  -moz-border-left-colors: transparent transparent #000000 #000000 #828282 #898989;
   border-radius: 4px;
 }
 
 button[default="true"]:hover:active:focus {
-  -moz-border-top-colors: #98A5B2 #98A5B2 #000000 #000000 #8290A5 #899AAC;
-  -moz-border-right-colors: #98A5B2 #98A5B2 #000000 #000000 #8290A5 #899AAC;
-  -moz-border-bottom-colors: #98A5B2 #98A5B2 #000000 #000000 #8290A5 #899AAC;
-  -moz-border-left-colors: #98A5B2 #98A5B2 #000000 #000000 #8290A5 #899AAC;
+  -moz-border-top-colors: #989898 #989898 #000000 #000000 #828282 #898989;
+  -moz-border-right-colors: #989898 #989898 #000000 #000000 #828282 #898989;
+  -moz-border-bottom-colors: #989898 #989898 #000000 #000000 #828282 #898989;
+  -moz-border-left-colors: #989898 #989898 #000000 #000000 #828282 #898989;
 }
 
 button[default="true"]:focus {
-  -moz-border-top-colors: #98A5B2 #98A5B2 #000000 #000000 #BBC6D1 #B1BBC9;
-  -moz-border-right-colors: #98A5B2 #98A5B2 #000000 #000000 #A2AEBB #A7B4C1;
-  -moz-border-bottom-colors: #98A5B2 #98A5B2 #000000 #000000 #97A6B6 #9DAAB9;
-  -moz-border-left-colors: #98A5B2 #98A5B2 #000000 #000000 #BBC6D1 #B1BBC9;
+  -moz-border-top-colors: #989898 #989898 #000000 #000000 #BBBBBB #B1B1B1;
+  -moz-border-right-colors: #989898 #989898 #000000 #000000 #A2A2A2 #A7A7A7;
+  -moz-border-bottom-colors: #989898 #989898 #000000 #000000 #979797 #9D9D9D;
+  -moz-border-left-colors: #989898 #989898 #000000 #000000 #BBBBBB #B1B1B1;
 }
 
 /* ::::: menu/menu-button buttons ::::: */
@@ -129,8 +129,8 @@ button[type="menu-button"] {
 .button-menubutton-dropmarker[open="true"] {
   margin-top: 2px;
   margin-bottom: 0px;
-  margin-inline-start: 2px;
-  margin-inline-end: 0px;
+  -moz-margin-start: 2px;
+  -moz-margin-end: 0px;
 }
 
 /* ::::: plain buttons ::::: */

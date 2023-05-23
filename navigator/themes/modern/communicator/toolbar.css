@@ -12,14 +12,14 @@
 
 .toolbar-primary {
   -moz-binding: url("chrome://communicator/skin/toolbar/toolbarBindings.xml#toolbar-primary");
-  background-color: #B1BDC9;
+  background-color: #B1B1B1;
 }
 
 .toolbar-primary-holder {
   background: url("chrome://communicator/skin/toolbar/prtb-bg-line.gif") repeat-x top;
   border-top: none;
-  border-right: 1px solid #95A0AD;
-  border-bottom: 1px solid #95A0AD;
+  border-right: 1px solid #959595;
+  border-bottom: 1px solid #959595;
   border-left: none;
 }
 
@@ -42,11 +42,6 @@
 .toolbar-primary-icon[iconsize="small"],
 .toolbar-primary-icon[labelalign="end"] {
   display: none;
-}
-
-.toolbar-primary > .toolbaritem-noline,
-.toolbar-primary > toolbarpaletteitem > .toolbaritem-noline {
-  background: url("chrome://communicator/skin/toolbar/prtb-bg-noline.gif") #B1BDC9 repeat-x top;
 }
 
 toolbar[mode="text"] toolbarbutton[type="menu-button"],

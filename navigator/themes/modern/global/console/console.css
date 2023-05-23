@@ -21,9 +21,9 @@
 }
 
 .console-row-icon {
-  border-right: 1px outset #C7D0D9;
+  border-right: 1px outset #DDDDDD;
   padding: 5px;
-  background-color: #C7D0D9;
+  background-color: #DDDDDD;
   -moz-box-align: start !important;
 }
 
@@ -36,8 +36,8 @@
 .console-row-code {
   padding-top: 3px;
   padding-bottom: 3px;
-  padding-inline-start: 3px;
-  padding-inline-end: 0px;
+  -moz-padding-start: 3px;
+  -moz-padding-end: 0px;
   color: #0000BB;
   font-size: 120%;
 }
@@ -65,7 +65,7 @@
 /* ..... selected state ..... */
 
 .console-row[selected="true"] {
-  background-color: #B7DBEB !important;
+  background-color: #BFBFBF !important;
 }
 
 .console-row-code[selected="true"],
@@ -77,26 +77,18 @@
 
 .console-row[type="error"],
 .console-row[type="exception"] {
-  list-style-image: url("chrome://global/skin/icons/error-48.png");
+  list-style-image: url("chrome://global/skin/icons/alert-error.gif");
 }
 
 .console-row[type="warning"] {
-  list-style-image: url("chrome://global/skin/icons/warning-48.png");
+  list-style-image: url("chrome://global/skin/icons/alert-exclam.gif");
 }
 
 .console-row[type="message"] {
-  list-style-image: url("chrome://global/skin/icons/information-48.png");
+  list-style-image: url("chrome://global/skin/icons/alert-message.gif");
 }
 
 /* ::::: toolbars ::::: */
-
-#ToolbarMode {
-  background-image: url("chrome://communicator/skin/toolbar/prtb-bg-noline.gif");
-}
-
-#ToolbarEval {
-  background: url("chrome://global/skin/toolbar/tb-mid.gif") #C7D0D9 repeat-x top;
-}
 
 #TextfieldEval {
   margin: 2px !important;
@@ -105,8 +97,8 @@
 #ButtonEval {
   margin-top: 2px !important;
   margin-bottom: 2px !important;
-  margin-inline-start: 0px !important;
-  margin-inline-end: 2px !important;
+  -moz-margin-start: 0px !important;
+  -moz-margin-end: 2px !important;
 }
 
 toolbarseparator {

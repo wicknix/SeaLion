@@ -35,26 +35,24 @@ textbox[nomatch="true"][highlightnonmatches="true"] {
 .autocomplete-history-dropmarker[open="true"] {
   margin-top: 3px;
   margin-bottom: 1px;
-  margin-inline-start: 3px;
-  margin-inline-end: 1px;
+  -moz-margin-start: 3px;
+  -moz-margin-end: 1px;
 }
 
-/* ::::: autocomplete popups ::::: */
+/* ::::: popups ::::: */
 
-panel[type="autocomplete"],
-panel[type="autocomplete-richlistbox"],
-.autocomplete-history-popup {
-  -moz-appearance: none;
+.autocomplete-history-popup,
+panel[type="autocomplete"] {
   border: 1px solid;
-  -moz-border-top-colors: #6B747E;
-  -moz-border-right-colors: #6B747E;
-  -moz-border-bottom-colors: #6B747E;
-  -moz-border-left-colors: #6B747E;
+  -moz-border-top-colors: #6B6B6B;
+  -moz-border-right-colors: #6B6B6B;
+  -moz-border-bottom-colors: #6B6B6B;
+  -moz-border-left-colors: #6B6B6B;
   background-color: #FFFFFF;
 }
 
 .autocomplete-history-popup {
-  max-height: 180px;
+  max-height: 25em;
 }
 
 /* ::::: tree ::::: */
@@ -71,12 +69,12 @@ panel[type="autocomplete-richlistbox"],
 }
 
 .autocomplete-treebody::-moz-tree-cell-text {
-  padding-inline-start: 8px;
+  -moz-padding-start: 8px;
   color: #000000;
 }
 
 .autocomplete-treebody::-moz-tree-row(selected) {
-  background-color: #9499AC;
+  background-color: #949494;
 }
 
 .autocomplete-treebody::-moz-tree-cell-text(selected) {
@@ -86,23 +84,4 @@ panel[type="autocomplete-richlistbox"],
 .autocomplete-treebody::-moz-tree-image(treecolAutoCompleteValue) {
   max-width: 16px;
   height: 16px;
-}
-
-/* ::::: richlistbox autocomplete ::::: */
-
-.autocomplete-richlistbox {
-  -moz-appearance: none;
-  margin: 0px !important;
-  border: none !important;
-  padding: 0px !important;
-}
-
-/* ::::: textboxes inside toolbarpaletteitems ::::: */
-
-toolbarpaletteitem > toolbaritem > textbox > hbox > hbox > html|*.textbox-input {
-  visibility: hidden;
-}
-
-toolbarpaletteitem > toolbaritem > * > textbox > hbox > hbox > html|*.textbox-input {
-  visibility: hidden;
 }

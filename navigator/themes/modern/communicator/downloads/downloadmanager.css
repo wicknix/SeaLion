@@ -10,7 +10,7 @@
 */
 
 treechildren::-moz-tree-image(Name) {
-  margin-inline-end: 2px;
+  -moz-margin-end: 2px;
 }
 
 #pauseButton,
@@ -64,7 +64,7 @@ treechildren::-moz-tree-image(ActionStop, inactive) {
 
 #fileName:focus,
 #fileSource:focus {
-  outline: 3px solid #98A5B2;
+  outline: 3px solid #989898;
   -moz-outline-radius: 4px 5px;
 }
 
@@ -87,15 +87,11 @@ treechildren::-moz-tree-image(ActionStop, inactive) {
 }
 
 .mini-button:focus {
-  outline: 3px solid #98A5B2;
+  outline: 3px solid #989898;
   outline-offset: -2px;
   -moz-outline-radius: 50%;
 }
 
 .mini-button > .button-box > .button-text {
   margin: 0 !important;
-}
-
-#downloadToolbar {
-  background-image: url("chrome://communicator/skin/toolbar/prtb-bg-noline.gif");
 }

@@ -10,7 +10,7 @@
 }
 
 #clientBox {
-  background-color: #C7D0D9;
+  background-color: #DDDDDD;
   color: #000000;
 }
 
@@ -22,7 +22,7 @@
   list-style-image: url("chrome://mozapps/skin/extensions/extensionGeneric.png");
   max-width: 64px;
   max-height: 64px;
-  margin-inline-end: 6px;
+  -moz-margin-end: 6px;
 }
 
 #genericAbout[addontype="theme"] #extensionIcon {
@@ -64,7 +64,7 @@
 }
 
 .boxIndent {
-  margin-inline-start: 18px;
+  -moz-margin-start: 18px;
 }
 
 #extensionCreator, .contributor {

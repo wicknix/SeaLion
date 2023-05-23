@@ -43,19 +43,19 @@ radio[pane] {
 }
 
 radio[pane][selected="true"] {
-  background-color: #C7D0D9;
+  background-color: #DDDDDD;
 }
 
 radio[pane]:hover:active {
-  background-color: #90A1B3;
+  background-color: #909090;
   color: #FFFFFF;
 }
 
 .paneSelector {
   border-bottom: 2px solid;
-  -moz-border-bottom-colors: #ECEFF2 #2D3B49;
+  -moz-border-bottom-colors: #ECECEC #2D2D2D;
   margin: 0px;
-  padding-inline-start: 10px;
+  -moz-padding-start: 10px;
   background-color: #FFFFFF;
   color: #000000;
 }

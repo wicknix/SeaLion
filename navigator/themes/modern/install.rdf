@@ -25,8 +25,8 @@
     </em:targetApplication>
 
     <!-- Front End MetaData -->
-    <em:name>Communicator Theme</em:name>
-    <em:description>A truly anachronistic theme.</em:description>
+    <em:name>Modern Theme</em:name>
+    <em:description>A truly old school theme.</em:description>
 
     <!-- EXTENSION AUTHORS!
          DO NOT COPY THIS PROPERTY INTO YOUR INSTALL RDF FILES

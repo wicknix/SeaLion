@@ -18,10 +18,10 @@ splitter {
   border-right: 2px solid;
   border-bottom: 1px solid;
   border-left: 2px solid;
-  -moz-border-top-colors: #DFE5EF;
-  -moz-border-right-colors: #3B414F #AAB4BF;
-  -moz-border-bottom-colors: #AAB4BF;
-  -moz-border-left-colors: #97A4B2 #DFE5EF;
+  -moz-border-top-colors: #DFDFDF;
+  -moz-border-right-colors: #3B3B3B #AAAAAA;
+  -moz-border-bottom-colors: #AAAAAA;
+  -moz-border-left-colors: #979797 #DFDFDF;
   min-width: 5px;
   background-color: #C1CBD5;
 }
@@ -48,10 +48,10 @@ splitter[orient="vertical"] {
   border-right: 1px solid;
   border-bottom: 2px solid;
   border-left: 1px solid;
-  -moz-border-top-colors: #97A4B2 #DFE5EF;
-  -moz-border-right-colors: #AAB4BF;
-  -moz-border-bottom-colors: #3B414F #AAB4BF;
-  -moz-border-left-colors: #DFE5EF;
+  -moz-border-top-colors: #979797 #DFDFDF;
+  -moz-border-right-colors: #AAAAAA;
+  -moz-border-bottom-colors: #3B3B3B #AAAAAA;
+  -moz-border-left-colors: #DFDFDF;
   min-width: 0;
   min-height: 5px;
 }

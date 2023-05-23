@@ -9,8 +9,8 @@
   padding: 0 !important;
   margin-top: 3px !important;
   margin-bottom: 3px !important;
-  margin-inline-start: 6px !important;
-  margin-inline-end: 4px !important;
+  -moz-margin-start: 6px !important;
+  -moz-margin-end: 4px !important;
   border: none;
 }
 
@@ -24,10 +24,10 @@
 
 findbar {
   min-width: 1px;
-  background-color: #C7D0D9;
-  border-top: 1px solid #EBF4FF;
-  border-right: 1px solid #95A0AD;
-  border-bottom: 1px solid #95A0AD;
+  background-color: #DDDDDD;
+  border-top: 1px solid #ECECEC;
+  border-right: 1px solid #959595;
+  border-bottom: 1px solid #959595;
 }
 
 /* find-next button */
@@ -75,8 +75,8 @@ findbar {
   list-style-image: none;
   margin-top: 2px;
   margin-bottom: 2px;
-  margin-inline-start: 8px;
-  margin-inline-end: 0;
+  -moz-margin-start: 8px;
+  -moz-margin-end: 0;
   width: 16px;
   height: 16px;
 }

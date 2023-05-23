@@ -7,7 +7,7 @@
 
 /* This affects all resizers, even native anonymous ones. */
 resizer {
-  background-color: #B1BBC5;
+  background-color: #B1B1B1;
 }
 
 resizer[dir="top"],

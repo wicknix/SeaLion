@@ -9,8 +9,8 @@
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
 #sidebar-box {
-  border-left: 1px solid #8998AA;
-  background-color: #B9C4D0;
+  border-left: 1px solid #898989;
+  background-color: #B9B9B9;
 }
 
 /* ::::: sidebar header ::::: */
@@ -23,22 +23,21 @@
 
 .sidebarheader-main {
   -moz-binding: url("chrome://communicator/skin/sidebar/sidebarBindings.xml#sidebarheader") !important;
-  background-color: #B9C4D0;
+  background-color: #B9B9B9;
   background-image: url("chrome://communicator/skin/sidebar/sbar-top.gif");
   background-repeat: no-repeat;
-  overflow-x: hidden;
 }
 
 /* ..... picker button ..... */
 
 #sidebar-panel-picker {
-  margin-inline-end: 1px;
+  -moz-margin-end: 1px;
   margin-top: 1px;
   padding: 2px;
 }
 
 #sidebar-panel-picker:hover {
-  border: 1px outset #B1BDC9;
+  border: 1px outset #B1B1B1;
 }
 
 #sidebar-panel-picker[open="true"] {
@@ -47,8 +46,8 @@
 
 #sidebar-panel-picker > .toolbarbutton-menu-dropmarker {
   list-style-image: url("chrome://communicator/skin/sidebar/sbpicker-arrow.gif");
-  padding-inline-end: 2px;
-  padding-inline-start: 2px;
+  -moz-padding-end: 2px;
+  -moz-padding-start: 2px;
 }
 
 /* ..... close button ..... */
@@ -71,7 +70,7 @@
 }
 
 .text-panel-loading[loading="false"] {
-  margin-inline-start: 11px;
+  -moz-margin-start: 11px;
 }
 
 .image-panel-loading {
@@ -83,13 +82,13 @@
 
 .iframe-panel {
   border-bottom: 6px solid;
-  -moz-border-bottom-colors: #B9C4D0 #B9C4D0 #B9C4D0 #B9C4D0 #DAE3ED #96A7B8;
+  -moz-border-bottom-colors: #B9B9B9 #B9B9B9 #B9B9B9 #B9B9B9 #DADADA #969696;
 }
 
 .browser-sidebar {
   -moz-binding: url("chrome://global/skin/globalBindings.xml#browser-miniscroll") !important;
   border-bottom: 6px solid;
-  -moz-border-bottom-colors: #B9C4D0 #B9C4D0 #B9C4D0 #B9C4D0 #DAE3ED #96A7B8;  
+  -moz-border-bottom-colors: #B9B9B9 #B9B9B9 #B9B9B9 #B9B9B9 #DADADA #969696;  
 }
 
 
@@ -100,7 +99,7 @@
 .box-texttab {
   -moz-binding: url("chrome://communicator/skin/sidebar/sidebarBindings.xml#sidebar-tab");
   color: #000000;
-  border-left: 1px solid #DAE3ED;
+  border-left: 1px solid #DADADA;
 }
 
 .sidebar-tab-left-box,
@@ -110,8 +109,8 @@
 
 .sidebar-tab-left-box {
   border-top: 2px solid;
-  border-bottom: 2px solid #B9C4D0;
-  -moz-border-top-colors: #8A9DAF #D4E1EA;
+  border-bottom: 2px solid #B9B9B9;
+  -moz-border-top-colors: #8A8A8A #D4D4D4;
   min-width: 90px;
 }
 
@@ -137,14 +136,14 @@
 
 .sidebar-tab-right-line {
   border-bottom: 2px solid;
-  -moz-border-bottom-colors: #DAE3ED #96A7B8;
+  -moz-border-bottom-colors: #DADADA #969696;
 }
 
 /* ..... hover state ..... */
 
 .box-texttab:hover > .sidebar-tab-left-box {
   border-bottom: 2px solid;
-  -moz-border-bottom-colors: #CCD7E2 #9CADBB;
+  -moz-border-bottom-colors: #CCCCCC #9C9C9C;
 }
 
 .box-texttab:hover > .sidebar-tab-right-box > .sidebar-tab-right-top-box 
@@ -166,10 +165,10 @@
 
 .box-texttab:hover:active > .sidebar-tab-left-box {
   border-left: 2px solid;
-  -moz-border-bottom-colors: #D8E2EC #A1B1BE	;
-  -moz-border-top-colors: #8A9DAF #748490;
-  -moz-border-left-colors: #737E8A #90A0AD;
-  background-color: #A1B1BE;
+  -moz-border-bottom-colors: #D8D8D8 #A1A1A1	;
+  -moz-border-top-colors: #8A8A8A #747474;
+  -moz-border-left-colors: #737373 #909090;
+  background-color: #A1A1A1;
 }
 
 .box-texttab:hover:active > .sidebar-tab-left-box > .sidebar-tab-left {
@@ -193,16 +192,16 @@
 /* ..... selected state ..... */
 
 .box-texttab[selected] {
-  border-left: 1px solid #E8EEF5 !important;
-  border-bottom: 1px solid #CBD5E0 !important;
+  border-left: 1px solid #E8E8E8 !important;
+  border-bottom: 1px solid #CBCBCB !important;
   color: #000000 !important;
 }
 
 .box-texttab[selected] > .sidebar-tab-left-box {
   border-bottom: none !important;
   border-left: none !important;
-  -moz-border-top-colors: #8A9DAF #DFEBF2 !important;
-  background-color: #CBD5E0 !important;
+  -moz-border-top-colors: #8A8A8A #DFDFDF !important;
+  background-color: #CBCBCB !important;
 }
 
 .box-texttab[selected] > .sidebar-tab-left-box,
@@ -225,12 +224,12 @@
 }
 
 .box-texttab[selected] > .sidebar-tab-right-box > .sidebar-tab-right-btm {
-  background: #CBD5E0 !important;
+  background: #CBCBCB !important;
 }
 
 .box-texttab[selected] > .sidebar-tab-right-box > .sidebar-tab-right-top-box > .sidebar-tab-right-line 
 {
-  -moz-border-bottom-colors: #E2EAF4 #8CA2B3 !important;
+  -moz-border-bottom-colors: #E2E2E2 #8C8C8C !important;
 }
 
 /* ::::: sidebar navigation buttons ::::: */

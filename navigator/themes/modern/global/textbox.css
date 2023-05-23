@@ -18,25 +18,25 @@ textbox {
   border: 2px solid;
   padding-top: 1px;
   padding-bottom: 1px;
-  padding-inline-start: 2px;
-  padding-inline-end: 0px;
+  -moz-padding-start: 2px;
+  -moz-padding-end: 0px;
   background-color: #FFFFFF;
   color: #000000;
   font: inherit;
 }
 
-html|*.textbox-input::placeholder,
-html|*.textbox-textarea::placeholder {
+html|*.textbox-input::-moz-placeholder,
+html|*.textbox-textarea::-moz-placeholder {
   color: #999999;
   opacity: 1.0;
 }
 
 textbox,
 textbox[readonly="true"][focused="true"] {
-  -moz-border-top-colors: #BEC3D3 #5D616E;
-  -moz-border-right-colors: #F8FAFE #5D616E;
-  -moz-border-bottom-colors: #F8FAFE #5D616E;
-  -moz-border-left-colors: #BEC3D3 #5D616E;
+  -moz-border-top-colors: #BEBEBE #5D5D5D;
+  -moz-border-right-colors: #F8F8F8 #5D5D5D;
+  -moz-border-bottom-colors: #F8F8F8 #5D5D5D;
+  -moz-border-left-colors: #BEBEBE #5D5D5D;
 }
 
 html|*.textbox-input,
@@ -53,20 +53,20 @@ html|*.textbox-textarea {
 /* ..... focused state ..... */
 
 textbox[focused="true"] {
-  -moz-border-top-colors: #98A5B2 #000000;
-  -moz-border-right-colors: #98A5B2 #000000;
-  -moz-border-bottom-colors: #98A5B2 #000000;
-  -moz-border-left-colors: #98A5B2 #000000;
+  -moz-border-top-colors: #989898 #000000;
+  -moz-border-right-colors: #989898 #000000;
+  -moz-border-bottom-colors: #989898 #000000;
+  -moz-border-left-colors: #989898 #000000;
 }
 
 /* ..... disabled state ..... */
 
 textbox[disabled="true"] {
-  -moz-border-top-colors: #BEC3D3 #98A5B2;
-  -moz-border-right-colors: #F8FAFE #98A5B2;
-  -moz-border-bottom-colors: #F8FAFE #98A5B2;
-  -moz-border-left-colors: #BEC3D3 #98A5B2;
-  background-color: #C7D0D9;
+  -moz-border-top-colors: #BEBEBE #989898;
+  -moz-border-right-colors: #F8F8F8 #989898;
+  -moz-border-bottom-colors: #F8F8F8 #989898;
+  -moz-border-left-colors: #BEBEBE #989898;
+  background-color: #DDDDDD;
   color: #999999;
   cursor: default !important;
 }
@@ -74,7 +74,7 @@ textbox[disabled="true"] {
 /* ..... readonly state ..... */
 
 textbox[readonly="true"] {
-  background-color: #C7D0D9;
+  background-color: #DDDDDD;
 }
 
 /* ::::: plain textbox ::::: */

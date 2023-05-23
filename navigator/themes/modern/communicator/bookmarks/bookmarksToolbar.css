@@ -98,6 +98,6 @@ menuitem.bookmark-item[disabled="true"][container="true"] {
 .menupopup-drop-indicator {
   list-style-image: none;
   height: 2px;
-  margin-inline-end: -4em;
-  background-color: #424F63;
+  -moz-margin-end: -4em;
+  background-color: #424242;
 }

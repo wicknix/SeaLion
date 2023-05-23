@@ -82,7 +82,7 @@ description > .text-link:focus {
 }
 
 .inputColumn {
-  margin-inline-end: 2px;
+  -moz-margin-end: 2px;
 }
 
 .recommended {

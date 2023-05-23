@@ -13,8 +13,8 @@
   /* Disabled because of bug 623615
   overflow: hidden;
   */
-  background-color: #C7D0D9;
-  border: 1px solid #494F5D;
+  background-color: #DDDDDD;
+  border: 1px solid #494949;
   border-radius: 5px;
 }
 
@@ -23,8 +23,7 @@
 }
 
 #forward-btn {
-  border-inline-start: none;
-  margin-left: -5px;
+  -moz-border-start: none;
 }
 
 #back-btn:-moz-locale-dir(ltr),
@@ -63,7 +62,7 @@
 
 #detail-view .global-warning {
   padding: 4px 12px;
-  border-bottom: 1px solid #CAD4E0;
+  border-bottom: 1px solid #CBCBCB;
 }
 
 @media (max-width: 600px) {
@@ -129,9 +128,9 @@
   -moz-box-align: center;
   padding: 10px;
   color: #000000;
-  border: 1px solid #494F5D;
+  border: 1px solid #494949;
   border-radius: 8px;
-  background-color: #C7D0D9;
+  background-color: #DDDDDD;
 }
 
 .alert .alert-title {
@@ -145,7 +144,7 @@
 }
 
 .loading {
-  list-style-image: url("chrome://communicator/skin/icons/loading.gif");
+  list-style-image: url("chrome://global/skin/icons/loading_16.png");
   padding-left: 20px;
   padding-right: 20px;
 }
@@ -156,7 +155,7 @@
 #categories {
   -moz-appearance: none;
   border: none;
-  margin-inline-end: -1px;
+  -moz-margin-end: -1px;
   background-color: transparent;
   position: relative;
   margin-top: 31px;
@@ -165,7 +164,7 @@
 .category {
   -moz-appearance: none;
   background-color: transparent;
-  color: #252F3B;
+  color: #252525;
   min-height: 0;
   padding: 10px 4px;
   border-width: 1px;
@@ -201,10 +200,10 @@
 }
 
 .category[selected] {
-  background-color: #C7D0D9;
+  background-color: #DDDDDD;
   color: #000000;
-  border-color: #494F5D;
-  border-inline-end-color: #C7D0D9;
+  border-color: #494949;
+  -moz-border-end-color: #DDDDDD;
 }
 
 .category-name {
@@ -219,7 +218,7 @@
 }
 
 .category-badge {
-  background-color: #55D4FF;
+  background-color: #999999;
   padding: 2px 8px;
   margin: 6px 0;
   border-radius: 10000px;
@@ -235,7 +234,7 @@
 .category-icon {
   width: 32px;
   height: 32px;
-  margin-inline-start: 6px;
+  -moz-margin-start: 6px;
 }
 
 #category-search {
@@ -282,7 +281,7 @@
 
 #header-utils-btn {
   list-style-image: url("chrome://mozapps/skin/extensions/utilities.png");
-  margin-inline-end: 16px;
+  -moz-margin-end: 16px;
 }
 
 .view-header {
@@ -290,7 +289,7 @@
   padding: 4px;
   margin: 0;
   min-height: 31px;
-  border-bottom: 1px solid #CAD4E0;
+  border-bottom: 1px solid #CBCBCB;
 }
 
 
@@ -320,7 +319,7 @@
 .sorter[checkState="1"],
 .sorter[checkState="2"] {
   background-color: rgba(194, 200, 206, 0.4);
-  box-shadow: 1px 1px 2px #B6BBC4 inset;
+  box-shadow: 1px 1px 2px #B6B6B6 inset;
 }
 
 .sorter[checkState="1"] {
@@ -332,7 +331,7 @@
 }
 
 .sorter .button-icon {
-  margin-inline-start: 4px;
+  -moz-margin-start: 4px;
 }
 
 
@@ -350,7 +349,7 @@
 
 .discover-logo {
   list-style-image: url("chrome://mozapps/skin/extensions/discover-logo.png");
-  margin-inline-end: 15px;
+  -moz-margin-end: 15px;
 }
 
 .discover-title {
@@ -404,7 +403,7 @@
 .details {
   cursor: pointer;
   margin: 0;
-  margin-inline-start: 10px;
+  -moz-margin-start: 10px;
 }
 
 .icon-container {
@@ -459,7 +458,7 @@
 }
 
 .description-container {
-  margin-inline-start: 6px;
+  -moz-margin-start: 6px;
   -moz-box-align: center;
 }
 
@@ -470,7 +469,7 @@
 .warning,
 .pending,
 .error {
-  margin-inline-start: 48px;
+  -moz-margin-start: 48px;
   font-weight: bold;
   -moz-box-align: center;
 }
@@ -526,12 +525,12 @@
 
 .addon-view[pending="disable"] .pending,
 .addon-view[pending="uninstall"] .pending {
-  color: #62666E;
+  color: #626262;
 }
 
 .addon .relnotes-container {
   -moz-box-align: start;
-  margin-inline-start: 6px;
+  -moz-margin-start: 6px;
   height: 0;
   overflow: hidden;
   opacity: 0;
@@ -561,7 +560,7 @@
 }
 
 .addon .relnotes-toggle > .button-box > .button-icon {
-  padding-inline-start: 4px;
+  -moz-padding-start: 4px;
 }
 
 .addon[show-relnotes] .relnotes-toggle {
@@ -569,12 +568,12 @@
 }
 
 .addon[active="false"] {
-  background-color: #B7BFCB;
+  background-color: #B7B7B7;
 }
 
 .addon-view[active="false"],
 .addon-view[active="false"] .name-container {
-  color: #8C99AB;
+  color: #8C8C8C;
 }
 
 .addon-view[notification="warning"] {
@@ -614,7 +613,7 @@
 }
 
 .addon[active="false"][selected] .name-container {
-  color: #8C99AB;
+  color: #8C8C8C;
 }
 
 
@@ -643,7 +642,7 @@
 #search-filter {
   padding: 5px 20px;
   font-size: 120%;
-  border-bottom: 1px solid #CAD4E0;
+  border-bottom: 1px solid #CBCBCB;
   overflow-x: hidden;
 }
 
@@ -702,11 +701,11 @@
 #detail-notifications .warning,
 #detail-notifications .pending,
 #detail-notifications .error {
-  margin-inline-start: 0;
+  -moz-margin-start: 0;
 }
 
 #detail-icon {
-  margin-inline-end: 10px;
+  -moz-margin-end: 10px;
   margin-top: 6px;
   max-width: 64px;
   max-height: 64px;
@@ -721,7 +720,7 @@
 }
 
 #detail-screenshot {
-  margin-inline-end: 2em;
+  -moz-margin-end: 2em;
   max-width: 300px;
   max-height: 300px;
 }
@@ -731,7 +730,7 @@
 }
 
 #detail-desc, #detail-fulldesc {
-  margin-inline-start: 6px;
+  -moz-margin-start: 6px;
   /* This is necessary to fix layout issues with multi-line descriptions, see
      bug 592712*/
   outline: solid transparent;
@@ -745,16 +744,16 @@
 
 #detail-contributions {
   border-radius: 5px;
-  border: 1px solid #D2DBE8;
+  border: 1px solid #D2D2D2;
   margin-bottom: 2em;
   padding: 1em;
-  background-color: #F3F7FB;
+  background-color: #F3F3F3;
 }
 
 #detail-contrib-description {
   font-style: italic;
   margin-bottom: 1em;
-  color: #373D48;
+  color: #373737;
 }
 
 #detail-contrib-suggested {
@@ -777,7 +776,7 @@
 }
 
 #detail-contrib-btn .button-icon {
-  margin-inline-end: 3px;
+  -moz-margin-end: 3px;
 }
 
 #detail-contrib-btn:not(:active):hover {
@@ -815,7 +814,7 @@
 }
 
 .detail-row-value {
-  margin-inline-start: 0;
+  -moz-margin-start: 0;
 }
 
 #detail-controls {
@@ -823,14 +822,14 @@
 }
 
 #detail-view[active="false"]:not([pending]):not([notification]) {
-  background-color: #B7BFCB;
+  background-color: #B7B7B7;
 }
 
 /*** creator ***/
 
 .creator > label {
-  margin-inline-start: 0;
-  margin-inline-end: 0;
+  -moz-margin-start: 0;
+  -moz-margin-end: 0;
 }
 
 .creator > .text-link {
@@ -842,8 +841,8 @@
 /*** rating ***/
 
 .meta-rating {
-  margin-inline-start: 0;
-  margin-inline-end: 0;
+  -moz-margin-start: 0;
+  -moz-margin-end: 0;
   padding-top: 2px;
 }
 
@@ -895,13 +894,13 @@
 }
 
 .download-progress .start-cap {
-  margin-inline-start: -1px;
-  border-inline-end-width: 0;
+  -moz-margin-start: -1px;
+  -moz-border-end-width: 0;
 }
 
 .download-progress .end-cap {
-  margin-inline-end: -1px;
-  border-inline-start-color: 0px !important;
+  -moz-margin-end: -1px;
+  -moz-border-start-width: 0px !important;
 }
 
 .download-progress .progress .progress-bar  {
@@ -962,7 +961,7 @@
 }
 
 .download-progress .cancel .button-icon {
-  margin-inline-start: 0;
+  -moz-margin-start: 0;
 }
 
 .download-progress .cancel {
@@ -1038,31 +1037,31 @@
 .header-button {
   margin: 2px;
   border: 6px solid;
-  -moz-border-top-colors: transparent transparent transparent #000000 #BBC6D1 #B1BBC9;
-  -moz-border-right-colors: transparent transparent transparent #000000 #A2AEBB #A7B4C1;
-  -moz-border-bottom-colors: transparent transparent transparent #000000 #97A6B6 #9DAAB9;
-  -moz-border-left-colors: transparent transparent transparent #000000 #BBC6D1 #B1BBC9;
+  -moz-border-top-colors: transparent transparent transparent #000000 #BCBCBC #B1B1B1;
+  -moz-border-right-colors: transparent transparent transparent #000000 #A2AEBB #A7A7A7;
+  -moz-border-bottom-colors: transparent transparent transparent #000000 #97A6B6 #9E9E9E;
+  -moz-border-left-colors: transparent transparent transparent #000000 #BCBCBC #B1B1B1;
   border-radius: 5px;
-  background-color: #AAB6C4;
+  background-color: #AAAAAA;
   background-clip: padding-box;
   color: #000000;
   font: menu;
 }
 
 .header-button:focus {
-  -moz-border-top-colors: transparent #98A5B2 #98A5B2 #000000 #BBC6D1 #B1BBC9;
-  -moz-border-right-colors: transparent #98A5B2 #98A5B2 #000000 #A2AEBB #A7B4C1;
-  -moz-border-bottom-colors: transparent #98A5B2 #98A5B2 #000000 #97A6B6 #9DAAB9;
-  -moz-border-left-colors: transparent #98A5B2 #98A5B2 #000000 #BBC6D1 #B1BBC9;
+  -moz-border-top-colors: transparent #989898 #989898 #000000 #BCBCBC #B1B1B1;
+  -moz-border-right-colors: transparent #989898 #989898 #000000 #A2AEBB #A7A7A7;
+  -moz-border-bottom-colors: transparent #989898 #989898 #000000 #97A6B6 #9E9E9E;
+  -moz-border-left-colors: transparent #989898 #989898 #000000 #BCBCBC #B1B1B1;
 }
 
 .header-button[disabled="true"] {
-  -moz-border-top-colors: transparent transparent transparent #8290A5 #C6CDD7 #BCC5D1 !important;
-  -moz-border-right-colors: transparent transparent transparent #8290A5 #A9B5C1 #B2BAC7 !important;
-  -moz-border-bottom-colors: transparent transparent transparent #8290A5 #A9B5C1 #B2BAC7 !important;
-  -moz-border-left-colors: transparent transparent transparent #8290A5 #C6CDD7 #BCC5D1 !important;
-  background-color: #B7BFCB !important;
-  color: #8C99AB !important;
+  -moz-border-top-colors: transparent transparent transparent #838383 #C7C7C7 #BCBCBC !important;
+  -moz-border-right-colors: transparent transparent transparent #838383 #A9A9A9 #B2B2B2 !important;
+  -moz-border-bottom-colors: transparent transparent transparent #838383 #A9A9A9 #B2B2B2 !important;
+  -moz-border-left-colors: transparent transparent transparent #838383 #C7C7C7 #BCBCBC !important;
+  background-color: #B7B7B7 !important;
+  color: #8C8C8C !important;
 }
 
 .header-button[disabled="true"] > .toolbarbutton-icon {
@@ -1071,20 +1070,20 @@
 
 .header-button:not([disabled="true"]):active:hover,
 .header-button[open="true"] {
-  -moz-border-top-colors: transparent transparent transparent #000000 #8290A5 #899AAC;
-  -moz-border-right-colors: transparent transparent transparent #000000 #8290A5 #899AAC;
-  -moz-border-bottom-colors: transparent transparent transparent #000000 #8290A5 #899AAC;
-  -moz-border-left-colors: transparent transparent transparent #000000 #8290A5 #899AAC;
-  background-color: #90A1B3;
+  -moz-border-top-colors: transparent transparent transparent #000000 #838383 #898989;
+  -moz-border-right-colors: transparent transparent transparent #000000 #838383 #898989;
+  -moz-border-bottom-colors: transparent transparent transparent #000000 #838383 #898989;
+  -moz-border-left-colors: transparent transparent transparent #000000 #838383 #898989;
+  background-color: #909090;
   color: #FFFFFF;
 }
 
 .header-button:not([disabled="true"]):active:hover:focus,
 .header-button[open="true"]:focus {
-  -moz-border-top-colors: transparent #98A5B2 #98A5B2 #000000 #8290A5 #899AAC;
-  -moz-border-right-colors: transparent #98A5B2 #98A5B2 #000000 #8290A5 #899AAC;
-  -moz-border-bottom-colors: transparent #98A5B2 #98A5B2 #000000 #8290A5 #899AAC;
-  -moz-border-left-colors: transparent #98A5B2 #98A5B2 #000000 #8290A5 #899AAC;
+  -moz-border-top-colors: transparent #989898 #989898 #000000 #838383 #898989;
+  -moz-border-right-colors: transparent #989898 #989898 #000000 #838383 #898989;
+  -moz-border-bottom-colors: transparent #989898 #989898 #000000 #838383 #898989;
+  -moz-border-left-colors: transparent #989898 #989898 #000000 #838383 #898989;
 }
 
 .header-button > .toolbarbutton-text {

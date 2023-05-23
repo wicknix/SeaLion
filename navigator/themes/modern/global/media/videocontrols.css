@@ -7,7 +7,7 @@
 
 .controlBar {
   height: 28px;
-  background-color: #989EA6;
+  background-color: #989898;
 }
 
 /* Remove the button styling */
@@ -39,7 +39,7 @@ button {
   /* make bar 8px tall (control height = 28, minus 2 * 10 margin) */
   /* margin left/right: 1/2 of scrubber thumb width, for overhang. */
   margin: 10px 22px;
-  background-color: #C7D0D9;
+  background-color: #DDDDDD;
   border-radius: 4px;
 }
 
@@ -53,14 +53,25 @@ button {
   min-height: 0px;
 }
 
+.volumeStack {
+  width: 28px;
+  height: 70px;
+  background-color: #989898;
+  /* use negative margin to place stack over the mute button to its left. */
+  margin: -70px 3px 28px -31px;
+  overflow: hidden; /* crop it when sliding down, don't grow the control bar */
+  position: relative; /* Trick to work around negative margin interfering with dragging the thumb. */
+  padding-top: 6px;
+}
+
 /* .progress-bar is an element inside the <progressmeter> implementation. */
 .bufferBar > .progress-bar {
-  background-color: #B1BBC5;
+  background-color: #B1B1B1;
   border-radius: 4px;
 }
 
 .progressBar > .progress-bar {
-  background-color: #6B7B8D;
+  background-color: #6B6B6B;
   border-radius: 4px;
 }
 
@@ -74,31 +85,29 @@ button {
 }
 
 .volumeControl {
-  width: 32px;
+  min-height: 64px;
 }
 
 /* .scale-thumb is an element inside the <scale> implementation. */
 .volumeControl .scale-thumb {
   /* Override the default thumb appearance. */
-  background-color: #B1BBC5;
+  background-color: #B1B1B1;
   background-image: none;
   border: 2px solid;
   -moz-border-top-colors: #000000;
   -moz-border-right-colors: #000000;
   -moz-border-bottom-colors: #000000;
   -moz-border-left-colors: #000000;
-  border-radius: 4px;
-  min-height: 20px;
-  min-width: 8px;
+  border-radius: 5px;
+  min-height: 11px;
+  min-width: 20px;
 }
 
-/* Draws a right-angled triangle. */
-.volumeBackground {
-  margin: 6px 0px;
-  border: 0px solid transparent;
-  border-top-width: 16px;
-  border-inline-end-width: 32px;
-  border-inline-end-color: #B1BBC5;
+.volumeBackgroundBar {
+  /* margin left/right: make bar 8px wide (control width = 28, minus 2 * 10 margin) */
+  margin: 0px 10px;
+  background-color: #B1B1B1;
+  border-radius: 4px;
 }
 
 .durationBox {

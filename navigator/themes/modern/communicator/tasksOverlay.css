@@ -9,6 +9,79 @@
 
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
+/* ::::: communicator product icons ::::: */
 
+#mini-nav {
+  list-style-image: url("chrome://communicator/skin/taskbar/taskbar.png");
+  -moz-image-region: rect(0 13px 13px 0);
+  -moz-margin-end: 2px;
+}
 
+#mini-nav:hover:active {
+  -moz-image-region: rect(13px 13px 26px 0);
+}
+
+.icon-navigator16 {
+  list-style-image: url("chrome://communicator/skin/taskbar/taskmenu-browser.png");
+}
+
+#mini-mail {
+  list-style-image: url("chrome://communicator/skin/taskbar/taskbar.png");
+  -moz-image-region: rect(0 34px 13px 13px);
+  -moz-margin-start: 1px;
+}
+
+#mini-mail:hover:active {
+  -moz-image-region: rect(13px 34px 26px 13px);
+}
+
+#mini-mail[BiffState="NewMail"] {
+  -moz-image-region: rect(0 55px 13px 34px);
+}
+
+#mini-mail[BiffState="NewMail"]:hover:active {
+  -moz-image-region: rect(13px 55px 26px 34px);
+}
+
+.icon-mail16 {
+  list-style-image: url("chrome://communicator/skin/taskbar/taskmenu-mailnews.png");
+}
+
+#mini-addr {
+  list-style-image: url("chrome://communicator/skin/taskbar/taskbar.png");
+  -moz-image-region: rect(0 89px 13px 74px);
+}
+
+#mini-addr:hover:active {
+  -moz-image-region: rect(13px 89px 26px 74px);
+}
+
+.icon-addressbook16 {
+  list-style-image: url("chrome://communicator/skin/taskbar/taskmenu-abook.png");
+}
+
+#mini-comp {
+  list-style-image: url("chrome://communicator/skin/taskbar/taskbar.png");
+  -moz-image-region: rect(0 74px 13px 55px);
+}
+
+#mini-comp:hover:active {
+  -moz-image-region: rect(13px 74px 26px 55px);
+}
+
+.icon-composer16 {
+  list-style-image: url("chrome://communicator/skin/taskbar/taskmenu-composer.png");
+}
+
+/* ::::: component bar ::::: */
+
+#component-bar {
+  padding: 1px 3px 0px;
+}
+
+.taskbutton {
+  margin: 0px 3px;
+  border: none !important;
+  padding: 0px !important;
+}
 

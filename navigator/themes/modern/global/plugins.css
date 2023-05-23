@@ -8,9 +8,9 @@
 
 body {
   background-color: #FFFFFF;
-  color: #22262F;
+  color: #222222;
   font: message-box;
-  text-align: start;
+  text-align: center;
 }
 
 a:link, a:visited, a:active {
@@ -31,13 +31,13 @@ div#plugs {
   text-align: center;
   font-size: x-large;
   font-weight: bold;
-  color: #5D616E;
+  color: #5D5D5D;
 }
 
 div#noplugs {
   font-size: large;
   font-weight: bold;
-  color: #5D616E;
+  color: #5D5D5D;
 }
 
 div#findmore {
@@ -50,7 +50,7 @@ div.plugname {
   font-size: large;
   text-align: left;
   font-weight: bold;
-  color: #5D616E;
+  color: #5D5D5D;
 }
 
 dl {
@@ -58,30 +58,30 @@ dl {
 }
 
 table {
-  background-color: #C7D0D9;
-  color: #22262F;
+  background-color: #DDDDDD;
+  color: #222222;
   font: message-box;
   text-align: left;
   width: 100%;
-  border: 1px solid #2D3B49;
+  border: 1px solid #2D2D2D;
   border-spacing: 0px;
 }
 
 th {
   text-align: center;
   font-weight: bold;
-  background-color: #90A1B3;
+  background-color: #909090;
   color: #000000;
 }
 
 th + th,
 td + td {
-  border-left: 1px dotted #2D3B49; 
+  border-left: 1px dotted #2D2D2D; 
 }
 
 td {
   text-align: left;
-  border-top: 1px dotted #2D3B49;
+  border-top: 1px dotted #2D2D2D;
 }
 
 th, td {

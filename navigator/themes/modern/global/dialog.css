@@ -19,12 +19,12 @@ dialog {
 dialogheader {
   margin: 0px 5px 5px;
   border: 2px solid;
-  -moz-border-top-colors: #858B97 #2D3B49;
-  -moz-border-right-colors: #ECEFF2 #2D3B49;
-  -moz-border-bottom-colors: #ECEFF2 #2D3B49;
-  -moz-border-left-colors: #858B97 #2D3B49;
+  -moz-border-top-colors: #858585 #2D2D2D;
+  -moz-border-right-colors: #ECECEC #2D2D2D;
+  -moz-border-bottom-colors: #ECECEC #2D2D2D;
+  -moz-border-left-colors: #858585 #2D2D2D;
   padding: 5px 8px;
-  background-color: #90A1B3;
+  background-color: #909090;
   color: #000000;
 }
 
@@ -40,8 +40,8 @@ dialogheader {
   -moz-box-orient: vertical;
   margin-top: -7px;
   margin-bottom: 5px;
-  margin-inline-start: -7px;
-  margin-inline-end: -5px;
+  -moz-margin-start: -7px;
+  -moz-margin-end: -5px;
   border-left: none;
   border-right: none;
   border-top: none;
@@ -49,9 +49,9 @@ dialogheader {
   -moz-border-bottom-colors: #000000;
   padding-top: 12px;
   padding-bottom: 12px;
-  padding-inline-start: 25px;
-  padding-inline-end: 5px;
-  background-color: #90A1B3;
+  -moz-padding-start: 25px;
+  -moz-padding-end: 5px;
+  background-color: #909090;
   color: #000000;
 }
 
@@ -61,5 +61,5 @@ dialogheader {
 }
 
 .header-large > .dialogheader-description {
-  margin-inline-start: 12px !important;
+  -moz-margin-start: 12px !important;
 }

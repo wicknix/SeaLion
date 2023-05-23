@@ -4,7 +4,7 @@
 
 /* The following are used by both syncSetup.xul and syncGenericChange.xul */
 .statusIcon {
-  margin-inline-start: 4px;
+  -moz-margin-start: 4px;
   max-height: 16px;
   max-width: 16px;
 }
@@ -28,8 +28,12 @@
   font-weight: bold;
 }
 
-#change-dialog {
+dialog#change-dialog {
   width: 40em;
+}
+
+image#syncIcon {
+  list-style-image: url("chrome://communicator/skin/sync/sync-32.png");
 }
 
 #introText {

@@ -33,19 +33,19 @@ slider[orient="vertical"] {
 thumb,
 scrollbarbutton {
   border: 3px solid;
-  -moz-border-top-colors: #000000 #E4EBF2 #C3CAD2;
-  -moz-border-right-colors: #000000 #8F9DAD #A4AFBB;
-  -moz-border-bottom-colors: #000000 #8F9DAD #A4AFBB;
-  -moz-border-left-colors: #000000 #E4EBF2 #C3CAD2;
-  background: #B1BBC5 50% 50% no-repeat;
+  -moz-border-top-colors: #000000 #E4E4E4 #C3C3C3;
+  -moz-border-right-colors: #000000 #8F8F8F #A4A4A4;
+  -moz-border-bottom-colors: #000000 #8F8F8F #A4A4A4;
+  -moz-border-left-colors: #000000 #E4E4E4 #C3C3C3;
+  background: #B1B1B1 50% 50% no-repeat;
 }
 
 thumb:active {
-  background-color: #C2CCD6;
-  -moz-border-top-colors: #111111 #F5FCF3 #D4DBE3;
-  -moz-border-right-colors: #111111 #9FAEBE #B5BFCC;
-  -moz-border-bottom-colors: #111111 #9FAEBE #B5BFCC;
-  -moz-border-left-colors: #111111 #D5FCF3 #D4DBE3;
+  background-color: #C3C3C3;
+  -moz-border-top-colors: #111111 #F5F5F5 #D4D4D4;
+  -moz-border-right-colors: #111111 #9F9F9F #B5B5B5;
+  -moz-border-bottom-colors: #111111 #9F9F9F #B5B5B5;
+  -moz-border-left-colors: #111111 #D6D6D6 #D4D4D4;
 }
 
 /* ::::: thumb (horizontal) ::::: */
@@ -75,11 +75,11 @@ scrollbarbutton[active="true"],
 scrollbarbutton:hover:active {
   border-left-width: 2px;
   border-right-width: 2px;
-  -moz-border-top-colors: #000000 #708092 #939FAD;
-  -moz-border-right-colors: #000000 #718193 #9EA9B5;
-  -moz-border-bottom-colors: #000000 #8795A4 #929EAC;
-  -moz-border-left-colors: #000000 #ADB6C0 #9EA9B5;
-  background-color: #9CA8B4;
+  -moz-border-top-colors: #000000 #717171 #939393;
+  -moz-border-right-colors: #000000 #727272 #9F9F9F;
+  -moz-border-bottom-colors: #000000 #888888 #929292;
+  -moz-border-left-colors: #000000 #ADADAD #9F9F9F;
+  background-color: #9C9C9C;
 }
 
 /* ::::: square at the corner of two scrollbars ::::: */
@@ -88,7 +88,7 @@ scrollcorner {
   -moz-binding: url("chrome://global/content/bindings/scrollbar.xml#scrollbar-base");
   width: 15px;
   cursor: default;
-  background-color: #B1BBC5;
+  background-color: #B1B1B1;
 }
 
 /* ..... increment .... */
@@ -133,19 +133,19 @@ scrollbar[orient="vertical"] > scrollbarbutton[type="decrement"] {
   html|div thumb,
   html|div scrollbarbutton {
     border: 3px solid;
-    -moz-border-top-colors: #000000 #E4EBF2 #C3CAD2;
-    -moz-border-right-colors: #000000 #8F9DAD #A4AFBB;
-    -moz-border-bottom-colors: #000000 #8F9DAD #A4AFBB;
-    -moz-border-left-colors: #000000 #E4EBF2 #C3CAD2;
-    background: #B1BBC5 50% 50% no-repeat;
+    -moz-border-top-colors: #000000 #E4E4E4 #C3C3C3;
+    -moz-border-right-colors: #000000 #8F8F8F #A4A4A4;
+    -moz-border-bottom-colors: #000000 #8F8F8F #A4A4A4;
+    -moz-border-left-colors: #000000 #E4E4E4 #C3C3C3;
+    background: #B1B1B1 50% 50% no-repeat;
   }
 
   html|div thumb:active {
-    background-color: #C2CCD6;
-    -moz-border-top-colors: #111111 #F5FCF3 #D4DBE3;
-    -moz-border-right-colors: #111111 #9FAEBE #B5BFCC;
-    -moz-border-bottom-colors: #111111 #9FAEBE #B5BFCC;
-    -moz-border-left-colors: #111111 #D5FCF3 #D4DBE3;
+    background-color: #C3C3C3;
+    -moz-border-top-colors: #111111 #F5F5F5 #D4D4D4;
+    -moz-border-right-colors: #111111 #9F9F9F #B5B5B5;
+    -moz-border-bottom-colors: #111111 #9F9F9F #B5B5B5;
+    -moz-border-left-colors: #111111 #D6D6D6 #D4D4D4;
   }
 
   /* ::::: thumb (horizontal) ::::: */
@@ -172,11 +172,11 @@ scrollbar[orient="vertical"] > scrollbarbutton[type="decrement"] {
   html|div scrollbarbutton:hover:active {
     border-left-width: 2px;
     border-right-width: 2px;
-    -moz-border-top-colors: #000000 #708092 #939FAD;
-    -moz-border-right-colors: #000000 #718193 #9EA9B5;
-    -moz-border-bottom-colors: #000000 #8795A4 #929EAC;
-    -moz-border-left-colors: #000000 #ADB6C0 #9EA9B5;
-    background-color: #9CA8B4;
+    -moz-border-top-colors: #000000 #717171 #939393;
+    -moz-border-right-colors: #000000 #727272 #9F9F9F;
+    -moz-border-bottom-colors: #000000 #888888 #929292;
+    -moz-border-left-colors: #000000 #ADADAD #9F9F9F;
+    background-color: #9C9C9C;
   }
 
   /* ..... increment .... */

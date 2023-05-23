@@ -21,11 +21,7 @@ textbox {
 }
 
 textbox.header {
-  margin-inline-start: 0;
-}
-
-textbox.meta-properties {
-  margin-top: 1px;
+  -moz-margin-start: 0;
 }
 
 .iframe {
@@ -66,7 +62,7 @@ treechildren::-moz-tree-cell-text(broken) {
 #feedListbox > richlistitem {
   padding: 6px 7px;
   min-height: 25px;
-  border-bottom: 1px dotted #C7D0D9;
+  border-bottom: 1px dotted #DDDDDD;
 }
 
 .feedTitle { 
@@ -82,10 +78,10 @@ treechildren::-moz-tree-cell-text(broken) {
 .permission {
   padding-top: 6px;
   padding-bottom: 6px;
-  padding-inline-start: 7px;
-  padding-inline-end: 7px;
+  -moz-padding-start: 7px;
+  -moz-padding-end: 7px;
   min-height: 25px;
-  border-bottom: 1px dotted #C7D0D9;
+  border-bottom: 1px dotted #DDDDDD;
 }
 
 .permissionLabel {

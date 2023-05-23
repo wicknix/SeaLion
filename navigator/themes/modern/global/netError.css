@@ -21,19 +21,19 @@ html {
 body {
   margin: 0;
   padding: 0 1em;
-  color: #22262F;
+  color: #222222;
   font: message-box;
 }
 
 h1 {
   margin: 0 0 .6em;
-  border-bottom: 1px solid #7A8490;
+  border-bottom: 1px solid #7A7A7A;
   font-size: 160%;
 }
 
 ul, ol {
   margin: 0;
-  margin-inline-start: 1.5em;
+  -moz-margin-start: 1.5em;
   padding: 0;
 }
 
@@ -50,57 +50,57 @@ ul {
   min-width: 13em;
   max-width: 52em;
   margin: 4em auto;
-  border: 1px solid #494F5D;
+  border: 1px solid #494949;
   border-radius: 10px;
   padding: 3em;
-  padding-inline-start: 30px;
-  background: url("chrome://global/skin/icons/warning-48.png") left 0 no-repeat #C7D0D9;
+  -moz-padding-start: 30px;
+  background: url("chrome://global/skin/icons/alert-exclam.gif") left 0 no-repeat #DDDDDD;
   background-origin: content-box;
 }
 
 #errorPageContainer.certerror {
-  background-image: url("chrome://global/skin/icons/authentication-48.png");
+  background-image: url("chrome://global/skin/icons/alert-security.gif");
 }
 
-#errorPageContainer:dir(rtl) {
+#errorPageContainer:-moz-dir(rtl) {
   background-position: right 0;
 }
 
 #errorTitle {
-  margin-inline-start: 80px;
+  -moz-margin-start: 80px;
 }
 
 #errorLongContent {
-  margin-inline-start: 80px;
+  -moz-margin-start: 80px;
 }
 
 #errorShortDesc > p {
   overflow: auto;
-  border-bottom: 1px solid #7A8490;
+  border-bottom: 1px solid #7A7A7A;
   padding-bottom: 1em;
   font-size: 130%;
   white-space: pre-wrap;
 }
 
 #errorLongDesc {
-  padding-inline-end: 3em;
+  -moz-padding-end: 3em;
   font-size: 110%;
 }
 
 #errorPageContainer > #errorTryAgain {
   margin-top: 2em;
-  margin-inline-start: 80px;
+  -moz-margin-start: 80px;
 }
 
 #brand {
   position: absolute;
   right: 0;
   bottom: -1.5em;
-  margin-inline-end: 10px;
+  -moz-margin-end: 10px;
   opacity: .6;
 }
 
-#brand:dir(rtl) {
+#brand:-moz-dir(rtl) {
   right: auto;
   left: 0;
 }

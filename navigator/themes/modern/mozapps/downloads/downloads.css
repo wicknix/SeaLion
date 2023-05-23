@@ -33,7 +33,7 @@ richlistitem[type="download"] .dateTime {
 }
 
 richlistitem[type="download"] progressmeter {
-  background-color: #C7D0D9;
+  background-color: #DDDDDD;
 }
 
 richlistitem[type="download"]:not([selected="true"]) .dateTime,
@@ -42,12 +42,12 @@ richlistitem[type="download"]:not([selected="true"]) .status {
 }
 
 .mini-button > .button-box > .button-icon {
-  margin-inline-start: 0;
+  -moz-margin-start: 0;
 }
 
 .mini-button > .button-box > .button-text {
-  margin-inline-start: 0 !important;
-  margin-inline-end: 0 !important;
+  -moz-margin-start: 0 !important;
+  -moz-margin-end: 0 !important;
 }
 
 .mini-button {

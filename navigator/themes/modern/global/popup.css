@@ -16,13 +16,13 @@ menupopup,
 popup {
   cursor: default;
   border: 2px solid;
-  -moz-border-top-colors: #7F8893 #EEF4FC;
-  -moz-border-right-colors: #7F8893 #B9BFC7;
-  -moz-border-bottom-colors: #7F8893 #B9BFC7;
-  -moz-border-left-colors: #7F8893 #EEF4FC;
+  -moz-border-top-colors: #7F7F7F #EEEEEE;
+  -moz-border-right-colors: #7F7F7F #B9B9B9;
+  -moz-border-bottom-colors: #7F7F7F #B9B9B9;
+  -moz-border-left-colors: #7F7F7F #EEEEEE;
   min-width: 1px;
-  background-color: #DDE3EB;
-  color: #22262F;
+  background-color: #DDDDDD;
+  color: #222222;
 }
 
 menupopup > menu > menupopup,
@@ -52,22 +52,22 @@ panel[type="arrow"][side="right"] {
 
 .panel-arrow[side="top"] {
   border-top-style: none;
-  -moz-border-bottom-colors: #7F8893;
+  -moz-border-bottom-colors: #7F7F7F;
 }
 
 .panel-arrow[side="bottom"] {
   border-bottom-style: none;
-  -moz-border-top-colors: #7F8893;
+  -moz-border-top-colors: #7F7F7F;
 }
 
 .panel-arrow[side="left"] {
   border-left-style: none;
-  -moz-border-right-colors: #7F8893;
+  -moz-border-right-colors: #7F7F7F;
 }
 
 .panel-arrow[side="right"] {
   border-right-style: none;
-  -moz-border-left-colors: #7F8893;
+  -moz-border-left-colors: #7F7F7F;
 }
 
 /* ::::: tooltip ::::: */
@@ -86,8 +86,8 @@ tooltip[titletip="true"] {
   /* See bug 32157 comment 128
    * margin-top: -2px;
    * margin-bottom: 0px;
-   * margin-inline-start: -4px;
-   * margin-inline-end: 0px;
+   * -moz-margin-start: -4px;
+   * -moz-margin-end: 0px;
    */
   max-width: none;
 }

@@ -22,18 +22,18 @@ menulist {
 .menulist-label {
   margin-top: 0px !important;
   margin-bottom: 0px !important;
-  margin-inline-start: 0px !important;
-  margin-inline-end: 2px !important;
+  -moz-margin-start: 0px !important;
+  -moz-margin-end: 2px !important;
 }
 
 .menulist-description {
   font-style: italic;
-  color: #5D616E;
-  margin-inline-start: 1em !important;
+  color: #5D5D5D;
+  -moz-margin-start: 1em !important;
 }
 
 .menulist-icon {
-  margin-inline-end: 2px;
+  -moz-padding-end: 2px;
 }
 
 .menulist-label-box {
@@ -42,18 +42,18 @@ menulist {
   border-top: 3px solid;
   border-bottom: 3px solid;
   border-left: 3px solid;
-  -moz-border-top-colors: #000000 #BBC4D1 #B3BBC9;
-  -moz-border-bottom-colors: #000000 #99A7B7 #9EACBB;
-  -moz-border-left-colors: #000000 #BBC4D1 #B3BBC9;
+  -moz-border-top-colors: #000000 #BBBBBB #B3B3B3;
+  -moz-border-bottom-colors: #000000 #9F9F9F #A3A3A3;
+  -moz-border-left-colors: #000000 #BBBBBB #B3B3B3;
   border-top-left-radius: 2px;
   border-bottom-left-radius: 2px;
-  background-color: #A6B3C0;
-  padding-inline-start: 8px;
+  background-color: #A6A6A6;
+  -moz-padding-start: 8px;
 }
 
 .menulist-dropmarker {
   border-left: 2px solid;
-  -moz-border-left-colors: #6D7C8F #C1CBD9;
+  -moz-border-left-colors: #6D6D6D #C1C1C1;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
 }
@@ -65,9 +65,9 @@ menulist {
 /* ..... focused state ..... */
 
 menulist:focus {
-  border-color: #98A5B2;
+  border-color: #989898;
   border-radius: 7px;
-  background-color: #98A5B2;
+  background-color: #989898;
 }
 
 /* ..... active state ..... */
@@ -77,10 +77,10 @@ menulist[open="true"] {
 }
   
 menulist[open="true"] > .menulist-label-box {
-  -moz-border-top-colors: #313948 #8393A7 #8C9DAF;
-  -moz-border-bottom-colors: #313948 #8393A7 #8C9DAF;
-  -moz-border-left-colors: #313948 #8393A7 #8C9DAF;
-  background-color: #91A2B4;
+  -moz-border-top-colors: #313131 #838383 #8D8D8D;
+  -moz-border-bottom-colors: #313131 #838383 #8D8D8D;
+  -moz-border-left-colors: #313131 #838383 #8D8D8D;
+  background-color: #929292;
 }
 
 menulist[open="true"] > .menulist-dropmarker {
@@ -90,21 +90,21 @@ menulist[open="true"] > .menulist-dropmarker {
 /* ..... disabled state ..... */
 
 menulist[disabled="true"] {
-  color: #8C99AB !important;
+  color: #8C8C8C !important;
 }
   
 menulist[disabled="true"] > .menulist-label-box {
-  -moz-border-top-colors: #727D8E #D0D6DF #BDC6D2 !important;
-  -moz-border-bottom-colors: #727D8E #AAB5C2 #B3BBC8 !important;
-  background-color: #B7BFCB !important;
+  -moz-border-top-colors: #727272 #D0D0D0 #BDBDBD !important;
+  -moz-border-bottom-colors: #727272 #ABABAB #B3B3B3 !important;
+  background-color: #B7B7B7 !important;
 }
 
 menulist[disabled="true"] > .menulist-label-box {
-  -moz-border-left-colors: #727D8E #C9D0D9 #BDC6D2 !important;
+  -moz-border-left-colors: #727272 #C9D0D9 #BDBDBD !important;
 }
 
 menulist[disabled="true"] > .menulist-dropmarker {
-  -moz-border-left-colors: #95A1AD #C7D0DC !important;
+  -moz-border-left-colors: #959595 #C7C7C7 !important;
 }
 
 /* ::::: editable menulists ::::: */
@@ -115,8 +115,8 @@ menulist[disabled="true"] > .menulist-dropmarker {
   background-color: #FFFFFF;
   padding-top: 2px;
   padding-bottom: 2px;
-  padding-inline-start: 2px;
-  padding-inline-end: 0px;
+  -moz-padding-start: 2px;
+  -moz-padding-end: 0px;
 }
 
 html|*.menulist-editable-input {
@@ -128,10 +128,10 @@ html|*.menulist-editable-input {
 }
 
 menulist[focused="true"] {
-  border-color: #98A5B2;
+  border-color: #989898;
   border-top-right-radius: 7px;
   border-bottom-right-radius: 7px;
-  background-color: #98A5B2;
+  background-color: #989898;
 }
 
 /* ::::: compact menulists ::::: */
@@ -141,22 +141,22 @@ menulist[focused="true"] {
   -moz-box-pack: center;
   margin: 0;
   border: 2px solid;
-  -moz-border-top-colors: #CED5DD #A6B3C0;
-  -moz-border-right-colors: #5D616E #99A9BA;
-  -moz-border-bottom-colors: #5D616E #99A9BA;
-  -moz-border-left-colors: #CED5DD #A6B3C0;
+  -moz-border-top-colors: #CECECE #A6A6A6;
+  -moz-border-right-colors: #5D5D5D #9A9A9A;
+  -moz-border-bottom-colors: #5D5D5D #9A9A9A;
+  -moz-border-left-colors: #CECECE #A6A6A6;
   border-radius: 0;
   padding: 1px;
   min-height: 0px;
-  background-color: #A6B3C0;
+  background-color: #A6A6A6;
   color: #000000;
 }
 
 .menulist-compact > .menulist-label {
   margin-top: 0px !important;
   margin-bottom: 0px !important;
-  margin-inline-start: 0px !important;
-  margin-inline-end: 3px !important;
+  -moz-margin-start: 0px !important;
+  -moz-margin-end: 3px !important;
   text-align: end;
 }  
 
@@ -175,9 +175,9 @@ menulist[focused="true"] {
 }
       
 .menulist-compact[open="true"] {
-  -moz-border-top-colors: #788797 #91A2B4;
-  -moz-border-right-colors: #5D616E #788797;
-  -moz-border-bottom-colors: #5D616E #788797;
-  -moz-border-left-colors: #788797 #91A2B4;
-  background-color: #91A2B4;
+  -moz-border-top-colors: #797979 #929292;
+  -moz-border-right-colors: #5D5D5D #797979;
+  -moz-border-bottom-colors: #5D5D5D #797979;
+  -moz-border-left-colors: #797979 #929292;
+  background-color: #929292;
 }

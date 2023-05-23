@@ -13,10 +13,10 @@
 progressmeter {
   margin: 2px 4px;
   border: 2px solid;
-  -moz-border-top-colors: #8997A1 #C7D0D9;
-  -moz-border-right-colors: #E0ECF6 #C7D0D9;
-  -moz-border-bottom-colors: #E0ECF6 #C7D0D9;
-  -moz-border-left-colors: #8997A1 #C7D0D9;
+  -moz-border-top-colors: #8A8A8A #DDDDDD;
+  -moz-border-right-colors: #E0E0E0 #DDDDDD;
+  -moz-border-bottom-colors: #E0E0E0 #DDDDDD;
+  -moz-border-left-colors: #8A8A8A #DDDDDD;
   min-width: 128px;
   height: 14px;
 }
@@ -27,7 +27,7 @@ progressmeter[mode="undetermined"] {
 
 .progress-bar {
   min-width: 0px;
-  background-color: #6B7B8D;
+  background-color: #6B6B6B;
 }
 
 .progress-bar[mode="undetermined"],
@@ -40,8 +40,8 @@ progressmeter[mode="undetermined"] {
 .progressmeter-statusbar {
   margin: 0;
   -moz-border-bottom-colors: transparent transparent;
-  -moz-border-top-colors: #E0ECF6 #C7D0D9;
-  -moz-border-right-colors: #8997A1 #C7D0D9;
-  -moz-border-left-colors: #E0ECF6 #C7D0D9;
+  -moz-border-top-colors: #E0E0E0 #DDDDDD;
+  -moz-border-right-colors: #8A8A8A #DDDDDD;
+  -moz-border-left-colors: #E0E0E0 #DDDDDD;
 }
 

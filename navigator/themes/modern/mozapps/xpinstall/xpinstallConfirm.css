@@ -11,16 +11,16 @@
   margin-bottom: 10px;
   height: 14em;
   border: 2px solid;
-  -moz-border-top-colors: #BEC3D3 #5D616E;
-  -moz-border-right-colors: #F8FAFE #5D616E;
-  -moz-border-bottom-colors: #F8FAFE #5D616E;
-  -moz-border-left-colors: #BEC3D3 #5D616E;
+  -moz-border-top-colors: #BEBEBE #5D5D5D;
+  -moz-border-right-colors: #F8F8F8 #5D5D5D;
+  -moz-border-bottom-colors: #F8F8F8 #5D5D5D;
+  -moz-border-left-colors: #BEBEBE #5D5D5D;
   background-color: #FFFFFF;
   color: #000000;
 }
 
 #itemWarningIntro {
-  margin-inline-start: 8px;
+  -moz-margin-start: 8px;
 }
 
 #dialogContentBox {
@@ -30,14 +30,14 @@
 installitem {
   padding-top: 5px;
   padding-bottom: 5px;
-  padding-inline-start: 5px;
-  padding-inline-end: 0;
-  border-bottom: 1px solid #A5ABC0;
+  -moz-padding-start: 5px;
+  -moz-padding-end: 0;
+  border-bottom: 1px solid #A5A5A5;
   margin-bottom: 5px;
 }
 
 .alert-icon {
-  margin-inline-end: 20px;
+  -moz-margin-end: 20px;
 }
 
 .warning {
@@ -49,7 +49,7 @@ installitem {
 .xpinstallIconContainer {
   width: 32px;
   height: 32px;
-  margin-inline-end: 5px;
+  -moz-margin-end: 5px;
 }
 
 .xpinstallItemName {
@@ -68,8 +68,8 @@ installitem {
   color: #000000;
   margin-top: 1px;
   margin-bottom: 1px;
-  margin-inline-start: 6px;
-  margin-inline-end: 5px;
+  -moz-margin-start: 6px;
+  -moz-margin-end: 5px;
 }
 
 .xpinstallItemIcon {

@@ -8,21 +8,21 @@
 filefield {
   margin: 2px 4px;
   border: 2px solid;
-  -moz-border-top-colors: #BEC3D3 #5D616E;
-  -moz-border-right-colors: #F8FAFE #5D616E;
-  -moz-border-bottom-colors: #F8FAFE #5D616E;
-  -moz-border-left-colors: #BEC3D3 #5D616E;
+  -moz-border-top-colors: #BEBEBE #5D5D5D;
+  -moz-border-right-colors: #F8F8F8 #5D5D5D;
+  -moz-border-bottom-colors: #F8F8F8 #5D5D5D;
+  -moz-border-left-colors: #BEBEBE #5D5D5D;
 }
 
 .fileFieldContentBox {
-  background-color: #C7D0D9;
+  background-color: #DDDDDD;
 }
 
 filefield[disabled="true"] {
-  -moz-border-top-colors: #BEC3D3 #98A5B2;
-  -moz-border-right-colors: #F8FAFE #98A5B2;
-  -moz-border-bottom-colors: #F8FAFE #98A5B2;
-  -moz-border-left-colors: #BEC3D3 #98A5B2;
+  -moz-border-top-colors: #BEBEBE #989898;
+  -moz-border-right-colors: #F8F8F8 #989898;
+  -moz-border-bottom-colors: #F8F8F8 #989898;
+  -moz-border-left-colors: #BEBEBE #989898;
 }
 
 .fileFieldIcon[disabled="true"] {
@@ -34,8 +34,8 @@ filefield[disabled="true"] {
   height: 16px;
   margin-top: 1px;
   margin-bottom: 1px;
-  margin-inline-start: 1px;
-  margin-inline-end: 4px;
+  -moz-margin-start: 1px;
+  -moz-margin-end: 4px;
 }
 
 .fileFieldLabel {

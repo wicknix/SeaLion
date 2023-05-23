@@ -17,12 +17,8 @@ toolbarbutton[type="menu-button"] {
   -moz-binding: url("chrome://global/skin/globalBindings.xml#toolbar-menu-button");
 }
 
-toolbarbutton.devtools-toolbarbutton[type="menu-button"] {
-  -moz-binding: url("chrome://global/content/bindings/toolbarbutton.xml#menu-button");
-}
-
 .menulist-compact {
-  -moz-binding: url("chrome://global/skin/globalBindings.xml#menulist-compact");
+  -moz-binding: url("chrome://global/content/bindings/menulist.xml#menulist-compact");
 }
 
 /* ::::: root elements ::::: */
@@ -32,7 +28,7 @@ page,
 dialog,
 wizard,
 prefwindow { 
-  background-color: #C7D0D9;
+  background-color: #C7C7C7;
   color: #000000;
   font: message-box;
 }
@@ -49,33 +45,33 @@ window.dialog {
 /* ::::: alert icons :::::*/
 
 .message-icon {
-  width: 48px;
-  height: 48px;
-  list-style-image: url("chrome://global/skin/icons/information-48.png");
+  width: 46px;
+  height: 39px;
+  list-style-image: url("chrome://global/skin/icons/alert-message.gif");
 }
 
 .alert-icon {
-  width: 48px;
-  height: 48px;
-  list-style-image: url("chrome://global/skin/icons/warning-48.png");
+  width: 46px;
+  height: 39px;
+  list-style-image: url("chrome://global/skin/icons/alert-exclam.gif");
 }
 
 .error-icon {
-  width: 48px;
-  height: 48px;
-  list-style-image: url("chrome://global/skin/icons/error-48.png");
+  width: 46px;
+  height: 36px;
+  list-style-image: url("chrome://global/skin/icons/alert-error.gif");
 }
 
 .question-icon {
-  width: 48px;
-  height: 48px;
-  list-style-image: url("chrome://global/skin/icons/question-48.png");
+  width: 46px;
+  height: 36px;
+  list-style-image: url("chrome://global/skin/icons/alert-question.gif");
 }
 
 .authentication-icon {
-  width: 48px;
-  height: 48px;
-  list-style-image: url("chrome://global/skin/icons/authentication-48.png");
+  width: 46px;
+  height: 41px;
+  list-style-image: url("chrome://global/skin/icons/alert-security.gif");
 }
 
 /* ::::: iframe ::::: */
@@ -91,21 +87,21 @@ iframe {
 /* ::::: statusbar ::::: */
 
 statusbar {
-  border-top: 1px solid #C7D0D9;
-  min-height: 18px;
+  border-top: 1px solid #DDDDDD;
+  min-height: 15px;
   min-width: 1px; /* DON'T DELETE!
     Prevents hiding of scrollbars in browser when window is made smaller.*/
-  background-color: #C7D0D9;
-  color: #22262F;
+  background-color: #C7C7C7;
+  color: #222222;
   font-size: 83.3333%;
 }
 
 statusbarpanel {
   -moz-box-align: center;
   -moz-box-pack: center;
-  border-top: 1px solid #E0ECF6;
-  border-right: 1px solid #8997A1;
-  border-left: 1px solid #E0ECF6;
+  border-top: 1px solid #E0E0E0;
+  border-right: 1px solid #898989;
+  border-left: 1px solid #E0E0E0;
   padding: 0px 4px;
 }
 
@@ -192,33 +188,19 @@ description.error {
   background-position: right bottom;
 }
 
-/* :::::: Close button icons ::::: */
-
-.close-icon {
-  list-style-image: url("chrome://global/skin/icons/close.gif");
-}
-
-.close-icon:hover {
-  list-style-image: url("chrome://global/skin/icons/close-hov.gif");
-}
-
-.close-icon:hover:active {
-  list-style-image: url("chrome://global/skin/icons/close-act.gif");
-}
-
 /* ===== taken from formatting.css ===== */
 
 /* ::::: inset areas ::::: */
 
 .inset {
-  border: 1px inset #C7D0D9;
+  border: 1px inset #C7C7C7;
   margin: 0px 5px 5px 5px;
 }
 
 /* ::::: formatting ::::: */
 
 .outset {
-  border: 1px outset #C7D0D9;
+  border: 1px outset #C7C7C7;
 }
 
 /* ::::: separator rules ::::: */
@@ -247,7 +229,7 @@ separator.thin[orient="vertical"] {
 
 separator.groove,
 separator.groove[orient="horizontal"] {
-  border-top: 1px solid #7A8490;
+  border-top: 1px solid #7A7A7A;
   border-bottom: 1px solid #FEFEFE;
   height: 0px;
   margin-top: 0.4em;
@@ -255,7 +237,7 @@ separator.groove[orient="horizontal"] {
 }
 
 separator.groove[orient="vertical"] {
-  border-left: 1px solid #7A8490;
+  border-left: 1px solid #7A7A7A;
   border-right: 1px solid #FEFEFE;
   margin: 0 .4em;
 }
@@ -263,12 +245,12 @@ separator.groove[orient="vertical"] {
 /* ..... thin groove separators ..... */
 
 separator.groove-thin {
-  border-top: 2px groove #D7D9E0;
+  border-top: 2px groove #D7D7D7;
   height: 0px;
 }
 
 separator[orient="vertical"].groove-thin {
-  border-left: 2px groove #D7D9E0;
+  border-left: 2px groove #D7D7D7;
 }
 
 /* ::::: text formatting rules ::::: */
@@ -300,7 +282,7 @@ label {
 
 description[disabled="true"],
 label[disabled="true"] {
-  color: #8C99AB;
+  color: #8C8C8C;
 }
 
 .tooltip-label {
@@ -316,7 +298,7 @@ label[disabled="true"] {
 }
 
 .indent {
-  margin-inline-start: 20px;
+  -moz-margin-start: 20px;
 }
 
 .box-padded {

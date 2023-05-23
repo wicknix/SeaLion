@@ -10,20 +10,20 @@
 }
 
 body {
-  border: 1px solid #494F5D;
+  border: 1px solid #494949;
   border-radius: 10px;
   padding: 3em;
   min-width: 30em;
   max-width: 65em;
   margin: 4em auto;
-  background-color: #C7D0D9;
-  color: #22262F;
+  background-color: #DDDDDD;
+  color: #222222;
 }
 
 h1 {
   font-size: 160%;
   margin: 0 0 .6em;
-  border-bottom: 1px solid #7A8490;
+  border-bottom: 1px solid #7A7A7A;
   font-weight: normal;
 }
 
@@ -54,7 +54,7 @@ float: right;
 }
 
 #UI_showHidden:not(:hover) {
-  color: #8C99AB;
+  color: #8C8C8C;
 }
 
 body[dir="rtl"] #UI_showHidden {
@@ -80,8 +80,8 @@ th:hover > a {
   text-decoration: underline;
 }
 
-body > table > tbody > tr:hover {
-  outline: 1px solid #98A5B2;
+tbody > tr:hover {
+  outline: 1px solid #989898;
   -moz-outline-radius: .3em;
 }
 
@@ -91,12 +91,12 @@ td:not(:first-child) {
 
 .up {
   padding: 0 .5em;
-  margin-inline-start: 24px;
+  -moz-margin-start: 24px;
 }
 
 .up::before {
-  margin-inline-end: 4px;
-  margin-inline-start: -24px;
+  -moz-margin-end: 4px;
+  -moz-margin-start: -24px;
   vertical-align: middle;
   content: url("chrome://global/skin/filepicker/folder-up.gif");
 }

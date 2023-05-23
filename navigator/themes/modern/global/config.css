@@ -18,35 +18,31 @@
 
 #warningBox
 {
-  background-color: #C7D0D9;
-  background-image: url("chrome://global/skin/icons/warning-48.png");
-  background-repeat: no-repeat;
-  background-position: 30px 3em;
-  color: #22262F;
-  border: 1px solid #494F5D;
+  background-color: #DDDDDD;
+  color: #222222;
+  border: 1px solid #494949;
   border-radius: 10px;
   padding: 3em;
-  padding-inline-start: 78px;
+  -moz-padding-start: 30px;
   margin: 0 1em;
 }
 
-.title, .description
+#warningInnerBox
 {
   max-width: 50em;
-  padding-inline-start: 3em;
 }
 
 #warningTitle
 {
   margin: 0 0 .6em;
   font-size: 160%;
-  border-bottom: 1px solid #7A8490;
+  border-bottom: 1px solid #7A7A7A;
 }
 
 #warningText
 {
   font-size: 110%;
-  margin-inline-start: 0;
+  -moz-margin-start: 0;
 }
 
 #warningButton
@@ -57,6 +53,14 @@
 #showWarningNextTime
 {
   margin-top: 0.6em;
+}
+
+#exclam
+{
+  width: 46px;
+  height: 39px;
+  list-style-image: url("chrome://global/skin/icons/alert-exclam.gif");
+  -moz-margin-end: 3em;
 }
 
 /* ::::: tree rows ::::: */
