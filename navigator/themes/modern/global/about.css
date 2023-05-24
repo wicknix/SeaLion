@@ -15,11 +15,11 @@ body {
   min-width: 330px;
   max-width: 50em;
   margin: 4em auto;
-  border: 1px solid #494949;
+  border: 1px solid #494F5D;
   border-radius: 10px;
   padding: 3em;
-  -moz-padding-start: 30px;
-  background: #DDDDDD;
+  padding-inline-start: 30px;
+  background: #C7D0D9;
   text-align: left;
 }
 
@@ -28,8 +28,8 @@ body {
 }
 
 #aboutLogoContainer {
-  border: 1px solid #494949;
   width: 300px;
+  margin: 0 auto;
   margin-bottom: 2em;
 }
 
@@ -37,19 +37,9 @@ img {
   border: 0;
 }
 
-#version {
-  font-weight: bold;
-  color: #000;
-  margin-top: -24px;
-  margin-bottom: 9px;
-  -moz-margin-start: 10px;
-  -moz-margin-end: 0px;
-  font-size: 130%;
-}
-
 ul {
   margin: 0;
-  -moz-margin-start: 1.5em;
+  margin-inline-start: 1.5em;
   padding: 0;
   list-style: square;
   font-size: 110%;
