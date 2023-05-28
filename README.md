@@ -32,6 +32,8 @@ What is not included
 
 ![SL-modern](https://github.com/wicknix/SeaLion/assets/39230578/42f9768f-38f1-4776-b829-2f93f2f4133b)
 
+![SL-default-theme](https://github.com/wicknix/SeaLion/assets/39230578/5aa88392-c5e5-4646-a18d-e57a6bbee974)
+
 ![SeaLion-ppc32-Linux](https://user-images.githubusercontent.com/39230578/235285348-8500793c-58eb-4cbe-8e85-d4d4b78b8d0e.png)
 
 ![SeaMail](https://github.com/wicknix/SeaLion/assets/39230578/7dc7e909-6a4b-4fb3-b115-2e753b7875da)
