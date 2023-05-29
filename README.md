@@ -1,7 +1,7 @@
 # SeaLion - A web browser for Mac OS X 10.7 - 12.6.
 # SeaMail - A mail and news client for Mac OS X 10.7 - 12.6.
 
-Built upon the unified XUL platform [UXP](https://repo.palemoon.org/MoonchildProductions/UXP).
+Built upon the [unified XUL platform](https://repo.palemoon.org/MoonchildProductions/UXP).
 
 What features are included
 =========================================================================
