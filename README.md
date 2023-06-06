@@ -1,5 +1,4 @@
-# SeaLion - A web browser for Mac OS X 10.7 - 12.6.
-# SeaMail - A mail and news client for Mac OS X 10.7 - 12.6.
+# SeaLion - A web browser for MacOS 10.7 - 12.6 & Linux.
 
 Built upon the [unified XUL platform](https://repo.palemoon.org/MoonchildProductions/UXP).
 
@@ -35,5 +34,4 @@ What is not included
 
 ![SeaLion-ppc32-Linux](https://user-images.githubusercontent.com/39230578/235285348-8500793c-58eb-4cbe-8e85-d4d4b78b8d0e.png)
 
-![SeaMail](https://github.com/wicknix/SeaLion/assets/39230578/7dc7e909-6a4b-4fb3-b115-2e753b7875da)
 
