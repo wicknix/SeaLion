@@ -14,9 +14,10 @@ What features are included
 * Supports the JXL image format
 * Supports Flash
 * Supports 'dark mode' on supported sites (set via preferences pane)
+* Ability to switch profiles
 * Multiple Search Engine Providers built in
 * TLS 1.3 support
-* Based on a mature code base
+* Built upon a mature code base
 
 What is not included
 =========================================================================
