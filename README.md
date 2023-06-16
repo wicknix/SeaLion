@@ -1,4 +1,7 @@
-# SeaLion - A web browser for MacOS 10.7 - 12.6 & Linux.
+
+![sealion-logo](https://github.com/wicknix/SeaLion/assets/39230578/70f36a32-360f-407d-9060-1e62e1ffc44e)
+
+A web browser for MacOS 10.7 - 12.6 & Linux.
 
 Built upon the [unified XUL platform](https://repo.palemoon.org/MoonchildProductions/UXP).
 
