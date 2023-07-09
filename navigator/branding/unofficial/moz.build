@@ -42,11 +42,11 @@ elif CONFIG['MOZ_WIDGET_TOOLKIT'] in ('gtk2', 'gtk3'):
         'icons/gtk/seamonkey.png'
     ]
     
-        BRANDING_FILES.icons += [
-        'icons/gtk/document.png',
-        'icons/gtk/seamonkey.png'
-    ]
-
+#        BRANDING_FILES.icons += [
+#        'icons/gtk/document.png',
+#        'icons/gtk/seamonkey.png'
+#    ]
+#
 DEFINES['MOZ_APP_NAME'] = CONFIG['MOZ_APP_NAME']
 DEFINES['MOZ_APP_VERSION'] = CONFIG['MOZ_APP_VERSION']
 DEFINES['MOZ_BRANDING_DIRECTORY'] = CONFIG['MOZ_BRANDING_DIRECTORY']
