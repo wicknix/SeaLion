@@ -36,6 +36,6 @@ What is not included
 
 ![SL-default-theme](https://github.com/wicknix/SeaLion/assets/39230578/5aa88392-c5e5-4646-a18d-e57a6bbee974)
 
-![SeaLion-ppc32-Linux](https://user-images.githubusercontent.com/39230578/235285348-8500793c-58eb-4cbe-8e85-d4d4b78b8d0e.png)
+![sealion-powerpc-about](https://github.com/wicknix/SeaLion/assets/39230578/84c5a83c-c174-4340-9e46-b99c32410d31)
 
 
