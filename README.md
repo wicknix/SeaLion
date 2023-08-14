@@ -32,7 +32,7 @@ What is not included
 * Lightweight Themes/Toolbar Backgrounds
 * Language Packs
 
-![SL-modern](https://github.com/wicknix/SeaLion/assets/39230578/42f9768f-38f1-4776-b829-2f93f2f4133b)
+![sl-lion](https://github.com/wicknix/SeaLion/assets/39230578/8998bc06-3e16-40ae-8125-7a027c007f82)
 
 ![SL-default-theme](https://github.com/wicknix/SeaLion/assets/39230578/5aa88392-c5e5-4646-a18d-e57a6bbee974)
 
