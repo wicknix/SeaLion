@@ -17,7 +17,7 @@ scrollbar {
 }
 
 /* ::::: slider ::::: */
-/*
+
 slider {
   min-width: 15px;
   min-height: 15px;
@@ -27,7 +27,7 @@ slider {
 slider[orient="vertical"] {
   background: url("chrome://global/skin/scrollbar/slider-vrt.gif") repeat-y;
 }
-*/
+
 /* ::::: borders for thumb and buttons ::::: */
 
 thumb,
