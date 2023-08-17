@@ -213,7 +213,7 @@
 #endif
 #endif
 
-; shell icons
+; shell icons - uncomment the next line for Linux builds
 ;@RESPATH@/chrome/icons/default/*
 
 ; [Default Preferences]
