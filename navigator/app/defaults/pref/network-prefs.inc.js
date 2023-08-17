@@ -18,7 +18,7 @@
  */
  
 // Url shown when you type moz://a
-pref("toolkit.mozprotocol.url", "http://www.seamonkey-project.org/");
+pref("toolkit.mozprotocol.url", "https://github.com/wicknix/SeaLion");
 
 // Handle mail/news URLs internally by default...
 pref("network.protocol-handler.external.mailto", true); // for mail
