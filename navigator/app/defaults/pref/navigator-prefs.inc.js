@@ -269,10 +269,10 @@ pref("browser.safebrowsing.downloads.remote.block_potentially_unwanted", false);
 pref("browser.safebrowsing.downloads.remote.block_uncommon", false);
 
 // Overriding defaults defined in all.js (use full version 2.x, bypassing bug 1077874)
-pref("browser.safebrowsing.provider.google.updateURL", "https://safebrowsing.google.com/safebrowsing/downloads?client=SAFEBROWSING_ID&appver=%VERSION%&pver=2.2&key=%GOOGLE_API_KEY%");
-pref("browser.safebrowsing.provider.google.gethashURL", "https://safebrowsing.google.com/safebrowsing/gethash?client=SAFEBROWSING_ID&appver=%VERSION%&pver=2.2");
-pref("browser.safebrowsing.provider.mozilla.updateURL", "https://shavar.services.mozilla.com/downloads?client=SAFEBROWSING_ID&appver=%VERSION%&pver=2.2");
-pref("browser.safebrowsing.provider.mozilla.gethashURL", "https://shavar.services.mozilla.com/gethash?client=SAFEBROWSING_ID&appver=%VERSION%&pver=2.2");
+pref("browser.safebrowsing.provider.google.updateURL", "");
+pref("browser.safebrowsing.provider.google.gethashURL", "");
+pref("browser.safebrowsing.provider.mozilla.updateURL", "");
+pref("browser.safebrowsing.provider.mozilla.gethashURL", "");
 
 //Theoretically the "client ID" sent in updates should be appinfo.name but
 //anything except "Firefox" or "navclient-auto-ffox" will cause safebrowsing
@@ -280,8 +280,8 @@ pref("browser.safebrowsing.provider.mozilla.gethashURL", "https://shavar.service
 pref("browser.safebrowsing.id", "navclient-auto-ffox");
 
 // Those are only used in our utilityOverlay.js (see bug 1270168)
-pref("browser.safebrowsing.warning.infoURL", "https://www.mozilla.org/%LOCALE%/firefox/phishing-protection/");
-pref("browser.safebrowsing.controlledAccess.infoURL", "https://support.mozilla.org/kb/controlledaccess/");
+pref("browser.safebrowsing.warning.infoURL", "");
+pref("browser.safebrowsing.controlledAccess.infoURL", "");
 
 pref("browser.sessionstore.resume_from_crash", true);
 pref("browser.sessionstore.resume_session_once", false);
