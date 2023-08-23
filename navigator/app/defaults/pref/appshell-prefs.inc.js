@@ -22,7 +22,7 @@ pref("app.vendorURL", "chrome://branding/locale/brand.properties");
 pref("startup.homepage_override_url","chrome://branding/locale/brand.properties");
 
 // Base URL for web-based support pages.
-pref("app.support.baseURL", "about:blank");
+pref("app.support.baseURL", "https://github.com/wicknix/SeaLion/issues");
 
 // App-specific update preferences
 
@@ -33,16 +33,16 @@ pref("app.update.enabled", true);
 pref("app.update.auto", false);
 
 // If set to true, the Update Service will present no UI for any event.
-pref("app.update.silent", false);
+pref("app.update.silent", true);
 
 // Update service URL:
-pref("app.update.url", "about:blank");
+pref("app.update.url", "https://github.com/wicknix/SeaLion/releases");
 // URL user can browse to manually if for some reason all update installation
 // attempts fail.
-pref("app.update.url.manual", "about:blank");
+pref("app.update.url.manual", "https://github.com/wicknix/SeaLion/releases");
 // A default value for the "More information about this update" link
 // supplied in the "An update is available" page of the update wizard.
-pref("app.update.url.details", "about:blank");
+pref("app.update.url.details", "https://github.com/wicknix/SeaLion/releases");
 
 // User-settable override to app.update.url for testing purposes.
 //pref("app.update.url.override", "");
