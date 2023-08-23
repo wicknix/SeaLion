@@ -63,8 +63,8 @@ pref("dom.ipc.plugins.enabled", true);
 #endif
 
 // plugin finder service url
-pref("pfs.datasource.url", "https://pfs.mozilla.org/plugins/PluginFinderService.php?mimetype=%PLUGIN_MIMETYPE%&appID=%APP_ID%&appVersion=%APP_VERSION%&clientOS=%CLIENT_OS%&chromeLocale=%CHROME_LOCALE%");
-pref("plugins.update.url", "https://www.mozilla.org/%LOCALE%/plugincheck/");
+pref("pfs.datasource.url", "");
+pref("plugins.update.url", "");
 pref("plugins.update.notifyUser", false);
 pref("plugins.hide_infobar_for_outdated_plugin", false);
 pref("plugins.hide_infobar_for_carbon_failure_plugin", false);
