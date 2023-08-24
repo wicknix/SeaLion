@@ -28,9 +28,23 @@ What is not included
 * Digital Rights Management (DRM) such as Encrypted Media Extensions (EME)
 * WebRTC
 * WebExtensions
-* Developer tools (can be added via an extension)
+* Developer tools (some functionality can be added back via an extension)
 * Lightweight Themes/Toolbar Backgrounds
 * Language Packs
+
+===============================================================
+* Some of the more common extensions that SeaLion supports are:
+* ChatZilla
+* DOM Inspector
+* DownThemAll
+* FireFTP
+* GreaseMonkey
+* nMatrix
+* OverbiteFF
+* uBlock Origin
+* User Agent Switcher
+* Download the SeaLion-Extras.zip for these extensions and some themes
+
 
 ![sl-lion](https://github.com/wicknix/SeaLion/assets/39230578/8998bc06-3e16-40ae-8125-7a027c007f82)
 
