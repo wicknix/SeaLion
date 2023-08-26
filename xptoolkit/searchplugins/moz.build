@@ -11,5 +11,6 @@ FINAL_TARGET_FILES.searchplugins += [
     'ekoru.xml',
     'github.xml',
     'google.xml',
+    'startpage-https.xml',
     'wikipedia.xml',
 ]
