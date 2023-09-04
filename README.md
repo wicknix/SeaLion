@@ -32,19 +32,49 @@ What is not included
 * Lightweight Themes/Toolbar Backgrounds
 * Language Packs
 
-===============================================================
-* Some of the more common extensions that SeaLion supports are:
-* ChatZilla
-* DOM Inspector
-* DownThemAll
-* FireFTP
-* GreaseMonkey
-* nMatrix
-* OverbiteFF
-* uBlock Origin
-* User Agent Switcher
-* Download the SeaLion-Extras.zip for these extensions and some themes
+===================================================
 
+* Some of the more common extensions & themes that SeaLion supports are:
+
+Extensions for SeaLion
+======================
+adblocklatitude
+bbcodextra
+chatzilla
+cookies-exterminator
+copy_as_plain_text
+dom-inspector
+dorando_keyconfig
+downthemall
+email_this
+ematrix
+fireftp
+fireshot
+greasemonkey
+https-always
+menu_wizard
+modhresponse
+nicereader
+overbiteff
+palefill
+pdf-js
+private_tab
+quicknote
+quick_passwords
+seatab_x_2
+tab_clicking_options
+torrent_tornado
+uBlock0rigin
+user_agent_switcher
+web_developer
+world_ip_geo
+
+Extra themes for SeaLion
+======================
+kilome
+modern2
+orthodox
+pinball
 
 ![sl-lion](https://github.com/wicknix/SeaLion/assets/39230578/8998bc06-3e16-40ae-8125-7a027c007f82)
 
