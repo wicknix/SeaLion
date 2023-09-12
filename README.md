@@ -12,7 +12,7 @@ What features are included
 * Comprehensive control of Preferences
 * Customizable Toolbars
 * XUL Overlay and Bootstrap Extension Support
-* SeaMonkey (if slightly modified) Theme Support
+* SeaMonkey Theme Support
 * Supports Plug-ins
 * Supports the JXL image format
 * Supports Flash
@@ -37,38 +37,38 @@ Available Extensions for SeaLion
 ======================
 * adblocklatitude
 * bbcodextra
-* bluehell-firewall
+* bluehell firewall
 * chatzilla
-* cookies-exterminator
-* copy_as_plain_text
-* dom-inspector
-* dorando_keyconfig
-* download-status-bar
+* cookies exterminator
+* copy as plain text
+* dom inspector
+* dorando keyconfig
+* download status bar
 * downthemall
-* email_this
+* email this
 * ematrix
 * fireftp
 * fireshot
 * greasemonkey
-* https-always
-* menu_wizard
+* https always
+* menu wizard
 * modhresponse
-* multiple-tab-handler
+* multiple tab handler
 * nicereader
 * overbiteff
 * palefill
 * pdf-js
-* private_tab
+* private tab
 * quicknote
-* quick_passwords
-* seatab_x_2
+* quick passwords
+* seatab
 * swarth
-* tab_clicking_options
-* torrent_tornado
+* tab clicking options
+* torrent tornado
 * uBlock0rigin
-* user_agent_switcher
-* web_developer
-* world_ip_geo
+* user agent switcher
+* web developer
+* world ip
 
 Available Extra Themes for SeaLion
 ======================
