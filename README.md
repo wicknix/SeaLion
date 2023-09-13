@@ -20,7 +20,8 @@ What features are included
 * Ability to switch profiles
 * Multiple Search Engine Providers built in
 * TLS 1.3 support
-* Built upon a mature code base
+* Built upon a mature and secure code base
+* Privacy respecting. Doesn't 'phone home' like many 'popular' browsers do
 
 What is not included
 =========================================================================
@@ -30,12 +31,12 @@ What is not included
 * WebExtensions
 * Developer tools (some functionality can be added back via an extension)
 * Lightweight Themes/Toolbar Backgrounds
-* Language Packs
+* Language Packs (English only)
 
 
 Available Extensions for SeaLion
 ======================
-* adblocklatitude
+* adblock latitude
 * bbcodextra
 * bluehell firewall
 * chatzilla
@@ -44,7 +45,7 @@ Available Extensions for SeaLion
 * dom inspector
 * dorando keyconfig
 * download status bar
-* downthemall
+* down them all
 * email this
 * ematrix
 * fireftp
@@ -77,9 +78,14 @@ Available Extra Themes for SeaLion
 * orthodox
 * pinball
 * littlemonkey
-* gnomerunner
+* gnomerunner (linux only)
 
-![sl-lion](https://github.com/wicknix/SeaLion/assets/39230578/8998bc06-3e16-40ae-8125-7a027c007f82)
+You can also drag your extension icons to the component bar instead of having them on the tool bar.
+======================
+
+![component-bar](https://github.com/wicknix/SeaLion/assets/39230578/946a5dac-dbf6-421b-b871-48056dc34621)
+
+![gnomerunner-theme-linux](https://github.com/wicknix/SeaLion/assets/39230578/37e3a277-9918-4681-984f-50f2651b0747)
 
 ![SL-default-theme](https://github.com/wicknix/SeaLion/assets/39230578/5aa88392-c5e5-4646-a18d-e57a6bbee974)
 
