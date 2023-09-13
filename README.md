@@ -80,10 +80,10 @@ Available Extra Themes for SeaLion
 * littlemonkey
 * gnomerunner (linux only)
 
-You can also drag your extension icons to the component bar instead of having them on the tool bar.
+You can also drag your extension icons to the component bar (lower left) instead of having them on the tool bar for a cleaner look.
 ![component-bar](https://github.com/wicknix/SeaLion/assets/39230578/946a5dac-dbf6-421b-b871-48056dc34621)
 
-GnomeRunner Linux theme - Uses GTK icons and theme style
+GnomeRunner Linux theme - Uses GTK theme style and icons
 ![gnomerunner-theme-linux](https://github.com/wicknix/SeaLion/assets/39230578/37e3a277-9918-4681-984f-50f2651b0747)
 
 The 'default theme' even though on first start it will use Gray Modern instead
