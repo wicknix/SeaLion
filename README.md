@@ -81,14 +81,15 @@ Available Extra Themes for SeaLion
 * gnomerunner (linux only)
 
 You can also drag your extension icons to the component bar instead of having them on the tool bar.
-======================
-
 ![component-bar](https://github.com/wicknix/SeaLion/assets/39230578/946a5dac-dbf6-421b-b871-48056dc34621)
 
+GnomeRunner Linux theme - Uses GTK icons and theme style
 ![gnomerunner-theme-linux](https://github.com/wicknix/SeaLion/assets/39230578/37e3a277-9918-4681-984f-50f2651b0747)
 
+The 'default theme' even though on first start it will use Gray Modern instead
 ![SL-default-theme](https://github.com/wicknix/SeaLion/assets/39230578/5aa88392-c5e5-4646-a18d-e57a6bbee974)
 
+PowerPC Linux build is compatible with 32-bit Debian 12 / Fienix 6 / MintPPC
 ![sealion-powerpc-about](https://github.com/wicknix/SeaLion/assets/39230578/84c5a83c-c174-4340-9e46-b99c32410d31)
 
 
