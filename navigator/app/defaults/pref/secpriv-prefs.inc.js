@@ -81,4 +81,13 @@ pref("geo.provider.use_gpsd", false);
 #endif
 
 pref("geo.wifi.uri", "http://ip-api.com/json/?fields=lat,lon,status,message");
+pref("geo.enabled", false);
 
+// Disable OCSP querying
+pref("services.sync.prefs.sync.security.OCSP.enabled", false);
+pref("security.OCSP.GET.enabled", false);
+pref("security.OSCP.require", false);
+pref("security.OCSP.enabled", 0);
+
+// Disable extension blocklist - Let the users use whatever they want.
+pref("extensions.blocklist.enabled", false);

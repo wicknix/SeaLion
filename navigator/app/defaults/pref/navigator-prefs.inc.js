@@ -74,10 +74,10 @@ pref("browser.search.update.log", false);
 pref("browser.search.update.interval", 21600);
 
 // enable search suggestions by default
-pref("browser.search.suggest.enabled", true);
+pref("browser.search.suggest.enabled", false);
 
 pref("browser.urlbar.autocomplete.enabled", true);
-pref("browser.urlbar.formatting.enabled", true);
+pref("browser.urlbar.formatting.enabled", false);
 pref("browser.urlbar.highlight.secure", true);
 pref("browser.urlbar.clickSelectsAll", true);
 // when clickSelectsAll=true, does it also apply when the click is past end of text?
@@ -400,3 +400,6 @@ pref("bidi.browser.ui", false);
 // Zoom levels for View > Zoom and Ctrl +/- keyboard shortcuts
 pref("toolkit.zoomManager.zoomValues", "0.2,0.3,0.5,0.67,0.8,0.9,1,1.1,1.2,1.33,1.5,1.7,2,2.4,3,4,5,6,7,8");
 
+// Disable CSS animations to speed up some shitty bloated websites.
+pref("layout.css.animation.enabled", false);
+pref("layout.css.transition.enabled", false);

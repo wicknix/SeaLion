@@ -5,5 +5,5 @@
 <!ENTITY loadError.label        "Page Load Error">
 <!ENTITY gopherAddon.title      "Gopher Protocol">
 <!ENTITY gopherAddon.shortDesc  "gopher is not a registered protocol.">
-<!ENTITY gopherAddon.longDesc   "The address specifies the gopher protocol which is no longer supported, so the browser cannot connect to the site. You can get a compatible add-on to access this server from Mozilla Add-ons.">
+<!ENTITY gopherAddon.longDesc   "The address specifies the gopher protocol which is no longer supported, so the browser cannot connect to the site. You can get a compatible add-on in the SeaLion-Extras.zip. Install OverBiteFF.">
 <!ENTITY goToAddOn.label        "Go to Add-on Page">

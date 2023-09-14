@@ -5,7 +5,7 @@
 
 FINAL_TARGET_FILES.searchplugins += [
     'bing.xml',
-    'duckduckgo-palemoon.xml',
+    'duckduckgo.xml',
     'eBay.xml',
     'ecosia.xml',
     'ekoru.xml',
