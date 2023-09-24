@@ -19,7 +19,6 @@ What features are included
 * Supports 'dark mode' on supported sites (set via preferences pane)
 * Ability to switch profiles
 * Multiple Search Engine Providers built in
-* TLS 1.3 support
 * Built upon a mature and secure code base
 * Privacy respecting. Doesn't 'phone home' like many 'popular' browsers do
 
@@ -36,40 +35,41 @@ What is not included
 
 Available Extensions for SeaLion
 ======================
-* adblock latitude
-* bbcodextra
-* bluehell firewall
-* chatzilla
-* cookies exterminator
-* copy as plain text
-* dom inspector
-* dorando keyconfig
-* download status bar
-* down them all
-* email this
-* ematrix
-* fireftp
-* fireshot
-* greasemonkey
-* https always
-* menu wizard
-* modhresponse
-* multiple tab handler
-* nicereader
-* overbiteff
-* palefill
-* pdf-js
-* private tab
-* quicknote
-* quick passwords
-* seatab
-* swarth
-* tab clicking options
-* torrent tornado
-* uBlock0rigin
-* user agent switcher
-* web developer
-* world ip
+* adblock latitude - ad blocker
+* bbcodextra - adds custom tag commands to context menu
+* bluehell firewall - ad blocker
+* chatzilla - irc client
+* cookies exterminator - auto deletes cookies
+* copy as plain text - copies text w/out formatting
+* dom inspector - inspects the structure and properties of a window
+* dorando keyconfig - rebind your keys
+* download status bar - powerful download manager
+* down them all - media downloader
+* email this - adds context menu to 'email this'
+* ematrix - port of umatrix that blocks scripts, ads, etc
+* fireftp - ftp client
+* fireshot - take screen shots of web pages
+* greasemonkey - user script manager
+* hit a hint - open links with keyboard shortcuts
+* https always - encrypt the web
+* menu wizard - customize your browsers menus
+* modhresponse - rewrite http response
+* multiple tab handler - manage your tabs
+* nicereader - similar to readerview
+* overbiteff - enables the gopher protocol
+* palefill - injects polyfills for various web technologies
+* pdf-js - html5 pdf reader
+* private tab - opens a private browsing tab
+* quicknote - notes extension with advanced features
+* quick passwords - quickly login and get passwords
+* seatab - adds a close button to each tab
+* swarth - dark mode extension 
+* tab clicking options - assign tab related actions to clicking events
+* torrent tornado - torrent client
+* uBlock0rigin - ad blocker
+* user agent switcher - self explanitory
+* web developer - adds some extra easy to access functions
+* world ip - geo add-on with security features and advanced network tools
 
 Available Extra Themes for SeaLion
 ======================
@@ -86,7 +86,7 @@ You can also drag your extension icons to the component bar (lower left) instead
 GnomeRunner Linux theme - Uses GTK theme style and icons
 ![gnomerunner-theme-linux](https://github.com/wicknix/SeaLion/assets/39230578/37e3a277-9918-4681-984f-50f2651b0747)
 
-The 'default theme' even though on first start it will use Gray Modern instead
+The 'default theme' even though on first start it will use Gray Modern by default
 ![SL-default-theme](https://github.com/wicknix/SeaLion/assets/39230578/5aa88392-c5e5-4646-a18d-e57a6bbee974)
 
 PowerPC Linux build is compatible with 32-bit Debian 12 / Fienix 6 / MintPPC
