@@ -69,6 +69,7 @@ Available Extensions for SeaLion
 * uBlock0rigin - ad blocker
 * user agent switcher - self explanitory
 * web developer - adds some extra easy to access functions
+* website navigation bar - reintroduces SeaMonkeys navigation bar
 * world ip - geo add-on with security features and advanced network tools
 
 Available Extra Themes for SeaLion
