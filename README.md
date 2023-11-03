@@ -31,6 +31,7 @@ What is not included
 * Developer tools (some functionality can be added back via an extension)
 * Lightweight Themes/Toolbar Backgrounds
 * Language Packs (English only)
+* MS Windows support
 
 
 Available Extensions for SeaLion
@@ -54,16 +55,18 @@ Available Extensions for SeaLion
 * https always - encrypt the web
 * menu wizard - customize your browsers menus
 * modhresponse - rewrite http response
+* mouse gestures suite - scroll wheel navigation, page scrolling, tab scrolling
 * multiple tab handler - manage your tabs
 * nicereader - similar to readerview
 * overbiteff - enables the gopher protocol
+* page navigation buttons - adds a few buttons to help with page navigation
 * palefill - injects polyfills for various web technologies
 * pdf-js - html5 pdf reader
 * private tab - opens a private browsing tab
 * quicknote - notes extension with advanced features
 * quick passwords - quickly login and get passwords
 * seatab - adds a close button to each tab
-* swarth - dark mode extension 
+* swarth - psuedo dark mode extension 
 * tab clicking options - assign tab related actions to clicking events
 * torrent tornado - torrent client
 * uBlock0rigin - ad blocker
