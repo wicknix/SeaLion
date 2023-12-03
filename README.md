@@ -66,6 +66,7 @@ Available Extensions for SeaLion
 * quicknote - notes extension with advanced features
 * quick passwords - quickly login and get passwords
 * seatab - adds a close button to each tab
+* secret-agent - enhances the privacy of your web surfing
 * swarth - psuedo dark mode extension 
 * tab clicking options - assign tab related actions to clicking events
 * torrent tornado - torrent client
