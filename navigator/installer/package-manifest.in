@@ -121,7 +121,11 @@
 #endif
 
 #ifdef MOZ_ICU_DATA_ARCHIVE
+#ifdef TARGET_ENDIAN_BIG
+@RESPATH@/@ICU_DATA_FILE_BIG@
+#else
 @RESPATH@/@ICU_DATA_FILE@
+#endif
 #endif
 
 #ifdef MOZ_SHARED_ICU
