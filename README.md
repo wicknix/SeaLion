@@ -76,6 +76,8 @@ Available Extensions for SeaLion
 * website navigation bar - reintroduces SeaMonkeys navigation bar
 * world ip - geo add-on with security features and advanced network tools
 
+* **All the extensions listed above are found in the SeaLion-Extras.zip**
+
 Available Extra Themes for SeaLion
 ======================
 * kilome
