@@ -217,8 +217,8 @@
 #endif
 #endif
 
-; shell icons - uncomment the next line for Linux builds
-;@RESPATH@/chrome/icons/default/*
+; shell icons - uncomment the next line for Linux builds or comment it out for Mac builds
+@RESPATH@/chrome/icons/default/*
 
 ; [Default Preferences]
 ; All the browser/general pref files must be part of base to prevent migration bugs
