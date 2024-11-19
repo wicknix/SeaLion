@@ -31,6 +31,8 @@ What is not included
 * Developer tools (some functionality can be added back via an extension)
 * Lightweight Themes/Toolbar Backgrounds
 * Language Packs (English only)
+* The full suite. If you want that check out [BrassMonkey]([
+](https://github.com/wicknix/brass-monkey)
 * MS Windows support
 
 
