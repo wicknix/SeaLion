@@ -63,8 +63,7 @@ Application.prototype = {
 
   // for steelIApplication
   platformIsMac: "nsILocalFileMac" in Ci,
-  platformIsLinux: (("@mozilla.org/gnome-gconf-service;1" in Cc) ||
-                   ("@mozilla.org/gio-service;1" in Cc) ||
+  platformIsLinux: (("@mozilla.org/gio-service;1" in Cc) ||
                     (Cc["@mozilla.org/system-info;1"].getService(Ci.nsIPropertyBag2)
                        .getProperty("name") == "Linux")),
   platformIsWindows: "@mozilla.org/windows-registry-key;1" in Cc
