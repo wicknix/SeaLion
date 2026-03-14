@@ -23,6 +23,7 @@ ac_add_options --disable-precompiled-startupcache
 ac_add_options --disable-necko-wifi
 ac_add_options --disable-safe-browsing
 ac_add_options --disable-devtools
+ac_add_options --disable-apple-media
 
 export MOZ_TELEMETRY_REPORTING=0
 export MOZ_ADDON_SIGNING=0
