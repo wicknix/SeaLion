@@ -14,7 +14,6 @@
 #include "nsIPrefService.h"
 #include "prenv.h"
 #include "nsStringAPI.h"
-#include "nsIGConfService.h"
 #include "nsIGIOService.h"
 #include "nsIGSettingsService.h"
 #include "nsIStringBundle.h"
@@ -66,14 +65,6 @@ static const MimeTypeAssociation appTypes[] = {
   { "application/xhtml+xml", "xhtml xht"      }
 };
 
-// GConf registry key constants
-#define DG_BACKGROUND "/desktop/gnome/background"
-
-static const char kDesktopImageKey[] = DG_BACKGROUND "/picture_filename";
-static const char kDesktopOptionsKey[] = DG_BACKGROUND "/picture_options";
-static const char kDesktopDrawBGKey[] = DG_BACKGROUND "/draw_background";
-static const char kDesktopColorKey[] = DG_BACKGROUND "/primary_color";
-
 static const char kDesktopBGSchema[] = "org.gnome.desktop.background";
 static const char kDesktopImageGSKey[] = "picture-uri";
 static const char kDesktopOptionGSKey[] = "picture-options";
@@ -85,16 +76,15 @@ nsGNOMEShellService::Init()
 {
   nsresult rv;
 
-  // GConf, GSettings or GIO _must_ be available, or we do not allow
+  // GSettings or GIO _must_ be available, or we do not allow
   // CreateInstance to succeed.
 
-  nsCOMPtr<nsIGConfService> gconf = do_GetService(NS_GCONFSERVICE_CONTRACTID);
   nsCOMPtr<nsIGIOService> giovfs =
     do_GetService(NS_GIOSERVICE_CONTRACTID);
   nsCOMPtr<nsIGSettingsService> gsettings =
     do_GetService(NS_GSETTINGSSERVICE_CONTRACTID);
 
-  if (!gconf && !giovfs && !gsettings)
+  if (!giovfs && !gsettings)
     return NS_ERROR_NOT_AVAILABLE;
 
   // Check G_BROKEN_FILENAMES.  If it's set, then filenames in glib use
@@ -201,7 +191,6 @@ nsGNOMEShellService::IsDefaultBrowser(bool aStartupCheck,
 {
   *aIsDefaultBrowser = false;
 
-  nsCOMPtr<nsIGConfService> gconf = do_GetService(NS_GCONFSERVICE_CONTRACTID);
   nsCOMPtr<nsIGIOService> giovfs = do_GetService(NS_GIOSERVICE_CONTRACTID);
 
   bool enabled;
@@ -211,15 +200,6 @@ nsGNOMEShellService::IsDefaultBrowser(bool aStartupCheck,
   for (unsigned int i = 0; i < ArrayLength(appProtocols); ++i) {
     if (!appProtocols[i].essential)
       continue;
-
-    if (gconf) {
-      handler.Truncate();
-      gconf->GetAppForProtocol(nsDependentCString(appProtocols[i].name),
-                               &enabled, handler);
-
-      if (!CheckHandlerMatchesAppName(handler) || !enabled)
-        return NS_OK; // the handler is disabled or set to another app
-    }
 
     if (giovfs) {
       handler.Truncate();
@@ -249,29 +229,7 @@ nsGNOMEShellService::SetDefaultBrowser(bool aClaimAllTypes,
     NS_WARNING("Setting the default browser for all users is not yet supported");
 #endif
 
-  nsCOMPtr<nsIGConfService> gconf = do_GetService(NS_GCONFSERVICE_CONTRACTID);
   nsCOMPtr<nsIGIOService> giovfs = do_GetService(NS_GIOSERVICE_CONTRACTID);
-  if (gconf) {
-    nsAutoCString appKeyValue;
-    if (mAppIsInPath) {
-      // mAppPath is in the users path, so use only the basename as the launcher
-      gchar *tmp = g_path_get_basename(mAppPath.get());
-      appKeyValue = tmp;
-      g_free(tmp);
-    } else {
-      appKeyValue = mAppPath;
-    }
-
-    appKeyValue.AppendLiteral(" %s");
-
-    for (unsigned int i = 0; i < ArrayLength(appProtocols); ++i) {
-      if (appProtocols[i].essential || aClaimAllTypes) {
-        gconf->SetAppForProtocol(nsDependentCString(appProtocols[i].name),
-                                 appKeyValue);
-      }
-    }
-  }
-
   if (giovfs) {
     nsresult rv;
     nsCOMPtr<nsIStringBundleService> bundleService =
@@ -326,7 +284,12 @@ NS_IMETHODIMP
 nsGNOMEShellService::GetCanSetDesktopBackground(bool* aResult)
 {
   // setting desktop background is currently only supported
-  // for Gnome or desktops using the same GSettings and GConf keys
+  // for Gnome or desktops using the same GSettings keys
+  const char *currentDesktop = getenv("XDG_CURRENT_DESKTOP");
+  if (currentDesktop && strstr(currentDesktop, "GNOME") != nullptr) {
+  *aResult = true;
+  return NS_OK;
+  }
   const char* gnomeSession = getenv("GNOME_DESKTOP_SESSION_ID");
   if (gnomeSession) {
     *aResult = true;
@@ -360,7 +323,7 @@ WriteImage(const nsCString& aPath, imgIContainer* aImage)
 }
 
 NS_IMETHODIMP
-nsGNOMEShellService::SetDesktopBackground(nsIDOMElement* aElement, 
+nsGNOMEShellService::SetDesktopBackground(nsIDOMElement* aElement,
                                           int32_t aPosition)
 {
   nsresult rv;
@@ -416,10 +379,7 @@ nsGNOMEShellService::SetDesktopBackground(nsIDOMElement* aElement,
   rv = WriteImage(filePath, container);
   NS_ENSURE_SUCCESS(rv, rv);
 
-  // Try GSettings first. If we don't have GSettings or the right schema, fall back
-  // to using GConf instead. Note that if GSettings works ok, the changes get
-  // mirrored to GConf by the gsettings->gconf bridge in gnome-settings-daemon
-  nsCOMPtr<nsIGSettingsService> gsettings = 
+  nsCOMPtr<nsIGSettingsService> gsettings =
     do_GetService(NS_GSETTINGSSERVICE_CONTRACTID);
   if (gsettings) {
     nsCOMPtr<nsIGSettingsCollection> background_settings;
@@ -442,23 +402,7 @@ nsGNOMEShellService::SetDesktopBackground(nsIDOMElement* aElement,
     }
   }
 
-  // if the file was written successfully, set it as the system wallpaper
-  nsCOMPtr<nsIGConfService> gconf = do_GetService(NS_GCONFSERVICE_CONTRACTID);
-
-  if (gconf) {
-    gconf->SetString(NS_LITERAL_CSTRING(kDesktopOptionsKey), options);
-
-    // Set the image to an empty string first to force a refresh
-    // (since we could be writing a new image on top of an existing
-    // Borealis_wallpaper.png and nautilus doesn't monitor the file for changes)
-    gconf->SetString(NS_LITERAL_CSTRING(kDesktopImageKey),
-                     EmptyCString());
-
-    gconf->SetString(NS_LITERAL_CSTRING(kDesktopImageKey), filePath);
-    gconf->SetBool(NS_LITERAL_CSTRING(kDesktopDrawBGKey), true);
-  }
-
-  return rv;
+  return NS_ERROR_FAILURE;
 }
 
 #define COLOR_16_TO_8_BIT(_c) ((_c) >> 8)
@@ -467,7 +411,7 @@ nsGNOMEShellService::SetDesktopBackground(nsIDOMElement* aElement,
 NS_IMETHODIMP
 nsGNOMEShellService::GetDesktopBackgroundColor(uint32_t *aColor)
 {
-  nsCOMPtr<nsIGSettingsService> gsettings = 
+  nsCOMPtr<nsIGSettingsService> gsettings =
     do_GetService(NS_GSETTINGSSERVICE_CONTRACTID);
   nsCOMPtr<nsIGSettingsCollection> background_settings;
   nsAutoCString background;
@@ -479,12 +423,6 @@ nsGNOMEShellService::GetDesktopBackgroundColor(uint32_t *aColor)
       background_settings->GetString(NS_LITERAL_CSTRING(kDesktopColorGSKey),
                                      background);
     }
-  }
-
-  if (!background_settings) {
-    nsCOMPtr<nsIGConfService> gconf = do_GetService(NS_GCONFSERVICE_CONTRACTID);
-    if (gconf)
-      gconf->GetString(NS_LITERAL_CSTRING(kDesktopColorKey), background);
   }
 
   if (background.IsEmpty()) {
@@ -538,13 +476,7 @@ nsGNOMEShellService::SetDesktopBackgroundColor(uint32_t aColor)
     }
   }
 
-  nsCOMPtr<nsIGConfService> gconf = do_GetService(NS_GCONFSERVICE_CONTRACTID);
-
-  if (gconf) {
-    gconf->SetString(NS_LITERAL_CSTRING(kDesktopColorKey), colorString);
-  }
-
-  return NS_OK;
+  return NS_ERROR_FAILURE;
 }
 
 NS_IMETHODIMP
@@ -566,60 +498,18 @@ nsGNOMEShellService::OpenApplication(int32_t aApplication)
       return gioApp->Launch(EmptyCString());
   }
 
-  nsCOMPtr<nsIGConfService> gconf = do_GetService(NS_GCONFSERVICE_CONTRACTID);
-  if (!gconf)
-    return NS_ERROR_FAILURE;
-
-  bool enabled;
-  nsAutoCString appCommand;
-  gconf->GetAppForProtocol(scheme, &enabled, appCommand);
-
-  if (!enabled)
-    return NS_ERROR_FAILURE;
-
-  // XXX we don't currently handle launching a terminal window.
-  // If the handler requires a terminal, bail.
-  bool requiresTerminal;
-  gconf->HandlerRequiresTerminal(scheme, &requiresTerminal);
-  if (requiresTerminal)
-    return NS_ERROR_FAILURE;
-
-  // Perform shell argument expansion
-  int argc;
-  char **argv;
-  if (!g_shell_parse_argv(appCommand.get(), &argc, &argv, nullptr))
-    return NS_ERROR_FAILURE;
-
-  char **newArgv = new char*[argc + 1];
-  int newArgc = 0;
-
-  // Run through the list of arguments.  Copy all of them to the new
-  // argv except for %s, which we skip.
-  for (int i = 0; i < argc; ++i) {
-    if (strcmp(argv[i], "%s") != 0)
-      newArgv[newArgc++] = argv[i];
-  }
-
-  newArgv[newArgc] = nullptr;
-
-  gboolean err = g_spawn_async(nullptr, newArgv, nullptr, G_SPAWN_SEARCH_PATH,
-                               nullptr, nullptr, nullptr, nullptr);
-
-  g_strfreev(argv);
-  delete[] newArgv;
-
-  return err ? NS_OK : NS_ERROR_FAILURE;
+  return NS_ERROR_FAILURE;
 }
 
 NS_IMETHODIMP
 nsGNOMEShellService::OpenApplicationWithURI(nsIFile* aApplication, const nsACString& aURI)
 {
   nsresult rv;
-  nsCOMPtr<nsIProcess> process = 
+  nsCOMPtr<nsIProcess> process =
     do_CreateInstance("@mozilla.org/process/util;1", &rv);
   if (NS_FAILED(rv))
     return rv;
-  
+
   rv = process->Init(aApplication);
   if (NS_FAILED(rv))
     return rv;
