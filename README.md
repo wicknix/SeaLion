@@ -1,7 +1,7 @@
 
 ![sealion_logotype_256_alpha](https://github.com/wicknix/SeaLion/assets/39230578/91143f53-c942-40ed-b5f8-7cb752ab9187)
 
-A web browser for Intel MacOS 10.7 - 14.1 & Linux.
+A web browser for Intel MacOS 10.7 - 14.8 & Linux.
 
 Built upon the [unified XUL platform](https://repo.palemoon.org/MoonchildProductions/UXP).
 
